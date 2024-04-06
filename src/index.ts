@@ -41,7 +41,7 @@ bot.command('start', async (ctx) => {
 
           for (const { user_id, price, id: sell_order_id } of goodsToBuy) {
             const nickname = data?.data?.user_infos[user_id]?.nickname ?? user_id
-            const message = `Bot purchased "${name}" item from ${nickname} for ${price}$`
+            const message = `[Bot] purchased "${name}" item from ${nickname} for ${price}$`
 
             const response = await postGoodsBuy({ sell_order_id, price: Number(price) })
 
@@ -53,6 +53,11 @@ bot.command('start', async (ctx) => {
 
             throw new Error(response.error ?? 'Purchase attempt has been failed')
           }
+
+          const briefAsset = await getBriefAsset()
+          const balanceMessage = `[Bot] Balance after transaction(s): ${briefAsset?.data?.total_amount}$`
+
+          await ctx.telegram.sendMessage(chatReferenceId, balanceMessage)
         }
 
         console.log(`${name}: ${currentPrice}$`)

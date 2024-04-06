@@ -1,0 +1,36 @@
+{
+  "name": "buff-market-bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "ts-node src/index.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/cookie": "^0.6.0",
+    "@types/node": "^20.12.4",
+    "@types/node-schedule": "^2.1.7",
+    "@types/node-telegram-bot-api": "^0.64.6",
+    "@typescript-eslint/eslint-plugin": "^7.5.0",
+    "@typescript-eslint/parser": "^7.5.0",
+    "axios": "^1.6.8",
+    "cookie": "^0.6.0",
+    "cookie-parser": "^1.4.6",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "interceptors": "^1.0.2",
+    "node-schedule": "^2.1.1",
+    "nodemon": "^3.1.0",
+    "prettier": "^3.2.5",
+    "set-cookie-parser": "^2.6.0",
+    "telegraf": "^4.16.3",
+    "ts-node": "^10.9.2",
+    "tslib": "^2.6.2",
+    "typescript": "^5.4.4"
+  },
+  "devDependencies": {
+    "@types/set-cookie-parser": "^2.4.7"
+  }
+}

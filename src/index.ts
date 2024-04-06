@@ -39,30 +39,30 @@ bot.command('start', async (ctx) => {
             continue
           }
 
-          const { user_id, price, id: sell_order_id } = goodsToBuy[0]
+          for (const { user_id, price, id: sell_order_id } of goodsToBuy) {
+            try {
+              const nickname = data?.data?.user_infos[user_id]?.nickname ?? user_id
+              const message = `Bot purchased "${name}" item from ${nickname} for ${price}$`
 
-          try {
-            const nickname = data?.data?.user_infos[user_id]?.nickname ?? user_id
-            const message = `Bot purchased "${name}" item from ${nickname} for ${price}$`
+              const response = await postGoodsBuy({ sell_order_id, price: Number(price) })
 
-            const response = await postGoodsBuy({ sell_order_id, price: Number(price) })
-
-            if (response.code === 'OK') {
-              await ctx.telegram.sendMessage(chatReferenceId, message)
-            } else {
-              await ctx.telegram.sendMessage(chatReferenceId, response.error)
+              if (response.code === 'OK') {
+                await ctx.telegram.sendMessage(chatReferenceId, message)
+              } else {
+                await ctx.telegram.sendMessage(chatReferenceId, response.error)
+              }
+            } catch (error) {
+              throw new Error(error.message ?? 'Purchase attempt has been failed')
             }
-          } catch (error) {
-            throw new Error('Purchase attempt has been failed')
           }
         }
 
         console.log(`${name}: ${currentPrice}$`)
       }
     } catch (error) {
-      console.log('Error: ', error)
+      JOBS[chatReferenceId]?.cancel()
 
-      await ctx.telegram.sendMessage(chatReferenceId, 'Something wrong..')
+      await ctx.telegram.sendMessage(chatReferenceId, error.message ?? 'Something went wrong')
 
       return
     }

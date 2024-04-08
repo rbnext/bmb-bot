@@ -1,5 +1,6 @@
 import { Telegraf } from 'telegraf'
 import schedule from 'node-schedule'
+import { format } from 'date-fns/format'
 
 import { getBriefAsset, getGoodsInfo, getGoodsSellOrder, postGoodsBuy } from './api'
 import { goodsConfig } from './config'
@@ -14,6 +15,8 @@ bot.command('start', async (ctx) => {
   JOBS[chatReferenceId]?.cancel()
 
   JOBS[chatReferenceId] = schedule.scheduleJob('*/5 * * * *', async () => {
+    const now = format(new Date(), 'dd MMM yyyy, HH:mm')
+
     try {
       const goods = await Promise.all(goodsConfig.map(({ goods_id }) => getGoodsInfo({ goods_id })))
 
@@ -51,7 +54,11 @@ bot.command('start', async (ctx) => {
               continue
             }
 
-            throw new Error(response.error ?? 'Purchase attempt has been failed')
+            const errorMessage = `[Bot] Purchase attempt has been failed: ${JSON.stringify(response)}`
+
+            await ctx.telegram.sendMessage(chatReferenceId, errorMessage)
+
+            throw new Error(errorMessage)
           }
 
           const briefAsset = await getBriefAsset()
@@ -60,18 +67,18 @@ bot.command('start', async (ctx) => {
           await ctx.telegram.sendMessage(chatReferenceId, balanceMessage)
         }
 
-        console.log(`${name}: ${currentPrice}$`)
+        console.log(`${now}: ${name} ${currentPrice}$/${limitOrder}$`)
       }
     } catch (error) {
       JOBS[chatReferenceId]?.cancel()
 
-      await ctx.telegram.sendMessage(chatReferenceId, error.message ?? 'Something went wrong')
+      await ctx.telegram.sendMessage(chatReferenceId, error?.message ?? '[Bot] Something went wrong')
 
       return
     }
   })
 
-  await ctx.telegram.sendMessage(chatReferenceId, `Bot started working..`)
+  await ctx.telegram.sendMessage(chatReferenceId, `[Bot] Started working`)
 })
 
 bot.command('stop', async (ctx) => {

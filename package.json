@@ -18,6 +18,7 @@
     "axios": "^1.6.8",
     "cookie": "^0.6.0",
     "cookie-parser": "^1.4.6",
+    "date-fns": "^3.6.0",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
     "interceptors": "^1.0.2",

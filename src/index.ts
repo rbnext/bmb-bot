@@ -2,10 +2,11 @@ import { Telegraf } from 'telegraf'
 import schedule from 'node-schedule'
 import { format } from 'date-fns/format'
 
-import { getBriefAsset, getGoodsInfo, getGoodsSellOrder, postGoodsBuy } from './api'
-import { goodsConfig } from './config'
+import { getGoodsSellOrder, getMarketGoods } from './api'
+import { getComparisonItems } from './api/pricempire'
 
-export const JOBS: Record<string, schedule.Job> = {}
+const SKIP_LIST: string[] = []
+const JOBS: Record<string, schedule.Job> = {}
 
 const bot = new Telegraf(process.env.BOT_TOKEN as string)
 
@@ -14,67 +15,50 @@ bot.command('start', async (ctx) => {
 
   JOBS[chatReferenceId]?.cancel()
 
-  JOBS[chatReferenceId] = schedule.scheduleJob('*/5 * * * *', async () => {
+  JOBS[chatReferenceId] = schedule.scheduleJob('*/10 * * * * *', async () => {
     const now = format(new Date(), 'dd MMM yyyy, HH:mm')
 
     try {
-      const goods = await Promise.all(goodsConfig.map(({ goods_id }) => getGoodsInfo({ goods_id })))
+      const comparison = await getComparisonItems()
 
-      for (const good of goods) {
-        const referenceId = good.data.id
-        const name = good.data.super_short_name
-        const currentPrice = +good.data.sell_min_price
+      for (const item of comparison.items) {
+        const hashName = item.hashName
+        const roi = +Number(item.roi).toFixed(2)
+        const fromPrice = item.fromPrice / 100
 
-        const limitOrder = goodsConfig.find(({ goods_id }) => goods_id === referenceId)?.limitOrder
+        if (SKIP_LIST.includes(hashName)) {
+          console.log(`${now}: ${hashName} item has been skipped`)
 
-        if (!limitOrder) {
-          throw new Error('Limit order is not found')
+          continue
         }
 
-        if (currentPrice <= limitOrder) {
-          const data = await getGoodsSellOrder({ goods_id: referenceId })
+        const response = await getMarketGoods({ search: hashName })
 
-          const goodsToBuy = data.data.items.filter((item) => Number(item.price) <= limitOrder)
+        const data = response.data.items.find(
+          (item) => hashName === item.market_hash_name && fromPrice === Number(item.sell_min_price)
+        )
 
-          if (goodsToBuy.length === 0) {
-            await ctx.telegram.sendMessage(chatReferenceId, `Attempting to purchase an item failed`)
+        if (data?.market_hash_name && data?.sell_min_price) {
+          const goods = await getGoodsSellOrder({ goods_id: data.id })
 
-            continue
+          const filteredGoods = goods.data.items.filter((item) => fromPrice >= Number(item.price))
+
+          for (const { user_id, price } of filteredGoods) {
+            const nickname = goods?.data?.user_infos[user_id]?.nickname ?? user_id
+            const message = `[Bot] Purchased "${hashName}" item from ${nickname} for ${price}$, ROI: ${roi}%`
+
+            await ctx.telegram.sendMessage(chatReferenceId, message)
           }
-
-          for (const { user_id, price, id: sell_order_id } of goodsToBuy) {
-            const nickname = data?.data?.user_infos[user_id]?.nickname ?? user_id
-            const message = `[Bot] purchased "${name}" item from ${nickname} for ${price}$`
-
-            const response = await postGoodsBuy({ sell_order_id, price: Number(price) })
-
-            if (response.code === 'OK') {
-              await ctx.telegram.sendMessage(chatReferenceId, message)
-
-              continue
-            }
-
-            const errorMessage = `[Bot] Purchase attempt has been failed: ${JSON.stringify(response)}`
-
-            await ctx.telegram.sendMessage(chatReferenceId, errorMessage)
-
-            throw new Error(errorMessage)
-          }
-
-          const briefAsset = await getBriefAsset()
-          const balanceMessage = `[Bot] Balance after transaction(s): ${briefAsset?.data?.total_amount}$`
-
-          await ctx.telegram.sendMessage(chatReferenceId, balanceMessage)
+        } else {
+          await ctx.telegram.sendMessage(chatReferenceId, `[Bot] Item "${hashName}" has been sold out`)
         }
 
-        console.log(`${now}: ${name} ${currentPrice}$/${limitOrder}$`)
+        SKIP_LIST.push(hashName)
       }
     } catch (error) {
-      JOBS[chatReferenceId]?.cancel()
+      await ctx.telegram.sendMessage(chatReferenceId, `[Bot] Something went wrong`)
 
-      await ctx.telegram.sendMessage(chatReferenceId, error?.message ?? '[Bot] Something went wrong')
-
-      return
+      console.log(`Something went wrong: `, error)
     }
   })
 

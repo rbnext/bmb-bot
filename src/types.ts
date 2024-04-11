@@ -36,3 +36,34 @@ export type GoodsBuyResponse = {
   code: 'OK' | 'CSRF Verification Error'
   data: unknown
 }
+
+export type MarketGoodsItem = {
+  id: number
+  market_hash_name: string
+  sell_min_price: string
+}
+
+export type MarketGoods = {
+  data: {
+    items: MarketGoodsItem[]
+  }
+}
+
+export type ComparisonItem = {
+  from: 'buffmarket'
+  fromPrice: number
+  hashName: string
+  liquidity: string
+  profit: string
+  roi: string
+  to: 'steam'
+  toCount: number
+  toPrice: number
+  toPriceFee: string
+  volume: string
+}
+
+export type ComparisonItems = {
+  count: number
+  items: ComparisonItem[]
+}

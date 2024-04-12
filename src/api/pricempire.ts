@@ -9,7 +9,7 @@ export const getComparisonItems = async (): Promise<ComparisonItems> => {
   )
 
   const response = await fetch(
-    'https://api.pricempire.com/v3/comparison/items?priceFrom=1&priceTo=100000&page=1&compareFrom=buffmarket&compareTo=steam&compareToFee=13&sort=roi:DESC&steamVolume=250&priceDays=10&qtyFrom=0&qtyTo=100&minRoi=35&maxRoi=1000&liquidity=0&myItems=false&refresh=0&appId=730',
+    'https://api.pricempire.com/v3/comparison/items?priceFrom=1&priceTo=100000&page=1&compareFrom=buffmarket&compareTo=steam&compareToFee=13&sort=roi:DESC&steamVolume=250&priceDays=10&qtyFrom=0&qtyTo=100&minRoi=30&maxRoi=1000&liquidity=0&myItems=false&refresh=0&appId=730',
     {
       method: 'GET',
       redirect: 'follow',

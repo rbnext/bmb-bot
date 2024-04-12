@@ -43,7 +43,8 @@ bot.command('start', async (ctx) => {
 
           const filteredGoods = goods.data.items.filter((item) => fromPrice >= Number(item.price))
 
-          for (const { user_id, price } of filteredGoods) {
+          if (filteredGoods.length !== 0) {
+            const { user_id, price } = filteredGoods[0]
             const nickname = goods?.data?.user_infos[user_id]?.nickname ?? user_id
             const message = `[Bot] Purchased "${hashName}" item from ${nickname} for ${price}$, ROI: ${roi}%`
 

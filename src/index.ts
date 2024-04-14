@@ -1,9 +1,7 @@
 import { Telegraf } from 'telegraf'
 import schedule from 'node-schedule'
-import { format } from 'date-fns/format'
 
 import { getMarketGoods } from './api/buff'
-import { getMarketPriceOverview } from './api/steam'
 import { weaponCases } from './config'
 import { sleep } from './utils'
 
@@ -20,28 +18,19 @@ bot.command('start', async (ctx) => {
     try {
       const response = await getMarketGoods({ category: 'csgo_type_weaponcase', itemset: weaponCases.join(',') })
 
-      for (const { sell_min_price, market_hash_name } of response.data.items) {
-        const now = format(new Date(), 'dd MMM yyyy, HH:mm')
+      for (const {
+        sell_min_price,
+        market_hash_name,
+        goods_info: { steam_price },
+      } of response.data.items) {
+        const roi = ((+steam_price * 0.87) / +sell_min_price - 1) * 100
 
-        const { lowest_price } = await getMarketPriceOverview({ market_hash_name })
-
-        if (!lowest_price) {
-          console.log(`${now}: Warning. ${market_hash_name} lowest price has not been found`)
-
-          continue
-        }
-
-        const buff = Number(sell_min_price)
-        const steam = Number(lowest_price.slice(1))
-        const roi = ((steam * 0.87) / buff - 1) * 100
-
-        const message = `Item "${market_hash_name}". Buff: ${buff}$ | Steam: ${steam}$ | ROI: ${roi.toFixed(2)}%`
+        const message = `Item "${market_hash_name}". Buff: ${sell_min_price}$ | Steam: ${steam_price}$ | ROI: ${roi.toFixed(2)}%`
 
         if (roi >= 30) {
           await ctx.telegram.sendMessage(chatReferenceId, message)
+          await sleep(5_000)
         }
-
-        await sleep(7_000)
       }
     } catch (error) {
       JOBS[chatReferenceId]?.cancel()

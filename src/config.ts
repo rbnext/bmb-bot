@@ -1,20 +1,44 @@
-export const goodsConfig = [
-  {
-    goods_id: 31, // Fracture Case
-    limitOrder: 0.18,
-  },
-  {
-    goods_id: 21831, // Dreams & Nightmares Case
-    limitOrder: 0.69,
-  },
-  {
-    goods_id: 23076, // Recoil Case
-    limitOrder: 0.12,
-  },
-  {
-    goods_id: 15229, // Prisma 2 Case
-    limitOrder: 0.45,
-  },
-]
+export const defaultCookies: Record<string, string> = {}
 
-export const defaultCookies = {}
+export const weaponCases = [
+  'set_community_33',
+  'set_community_32',
+  'set_community_30',
+  'set_community_29',
+  'set_community_28',
+  'set_community_27',
+  'set_community_26',
+  'set_community_25',
+  'set_community_23',
+  'set_community_24',
+  'set_community_22',
+  'set_community_21',
+  'set_community_20',
+  'set_community_19',
+  'set_community_18',
+  'set_community_17',
+  'set_community_16',
+  'set_community_15',
+  'set_gamma_2',
+  'set_community_13',
+  'set_community_12',
+  'set_community_11',
+  'set_community_10',
+  'set_community_9',
+  'set_community_8',
+  'set_community_7',
+  'set_community_6',
+  'set_community_5',
+  'set_esports_iii',
+  'set_community_4',
+  'set_community_3',
+  'set_community_2',
+  'set_esports_ii',
+  'set_community_1',
+  'set_weapons_iii',
+  'set_bravo_i',
+  'set_esports',
+  'set_weapons_ii',
+  'set_weapons_i',
+  'set_community_31',
+]

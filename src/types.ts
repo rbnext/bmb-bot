@@ -49,21 +49,9 @@ export type MarketGoods = {
   }
 }
 
-export type ComparisonItem = {
-  from: 'buffmarket'
-  fromPrice: number
-  hashName: string
-  liquidity: string
-  profit: string
-  roi: string
-  to: 'steam'
-  toCount: number
-  toPrice: number
-  toPriceFee: string
+export type MarketPriceOverview = {
+  lowest_price: string
+  median_price: string
+  success: boolean
   volume: string
-}
-
-export type ComparisonItems = {
-  count: number
-  items: ComparisonItem[]
 }

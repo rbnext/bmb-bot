@@ -1,8 +1,8 @@
 import axios from 'axios'
 import { parse } from 'set-cookie-parser'
+import { defaultCookies } from '../config'
 
-import { defaultCookies } from './config'
-import { BriefAsset, GoodsBuyResponse, GoodsInfo, GoodsSellOrder, MarketGoods } from './types'
+import { BriefAsset, GoodsBuyResponse, GoodsInfo, GoodsSellOrder, MarketGoods } from '../types'
 
 const http = axios.create({
   baseURL: 'https://api.buff.market/api',
@@ -59,14 +59,24 @@ export const getMarketGoods = async ({
   search,
   page_num = 1,
   page_size = 50,
+  category,
+  itemset,
+  min_price,
+  max_price,
+  category_group,
 }: {
   game?: string
-  search: string
+  search?: string
   page_num?: number
   page_size?: number
+  category?: string
+  itemset?: string
+  min_price?: number
+  max_price?: number
+  category_group?: string
 }): Promise<MarketGoods> => {
   const { data } = await http.get('/market/goods', {
-    params: { game, search, page_num, page_size },
+    params: { game, search, page_num, page_size, category, itemset, min_price, max_price, category_group },
     headers: {
       Cookie: getCookies(defaultCookies),
     },

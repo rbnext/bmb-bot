@@ -2,10 +2,11 @@ import { Telegraf } from 'telegraf'
 import schedule from 'node-schedule'
 import { format } from 'date-fns/format'
 
-import { getGoodsSellOrder, getMarketGoods } from './api'
-import { getComparisonItems } from './api/pricempire'
+import { getMarketGoods } from './api/buff'
+import { getMarketPriceOverview } from './api/steam'
+import { weaponCases } from './config'
+import { sleep } from './utils'
 
-const SKIP_LIST: string[] = []
 const JOBS: Record<string, schedule.Job> = {}
 
 const bot = new Telegraf(process.env.BOT_TOKEN as string)
@@ -15,51 +16,37 @@ bot.command('start', async (ctx) => {
 
   JOBS[chatReferenceId]?.cancel()
 
-  JOBS[chatReferenceId] = schedule.scheduleJob('*/10 * * * * *', async () => {
-    const now = format(new Date(), 'dd MMM yyyy, HH:mm')
-
+  JOBS[chatReferenceId] = schedule.scheduleJob('*/20 * * * *', async () => {
     try {
-      const comparison = await getComparisonItems()
+      const response = await getMarketGoods({ category: 'csgo_type_weaponcase', itemset: weaponCases.join(',') })
 
-      for (const item of comparison.items) {
-        const hashName = item.hashName
-        const roi = +Number(item.roi).toFixed(2)
-        const fromPrice = item.fromPrice / 100
+      for (const { sell_min_price, market_hash_name } of response.data.items) {
+        const now = format(new Date(), 'dd MMM yyyy, HH:mm')
 
-        if (SKIP_LIST.includes(hashName)) {
-          console.log(`${now}: ${hashName} item has been skipped`)
+        const { lowest_price } = await getMarketPriceOverview({ market_hash_name })
+
+        if (!lowest_price) {
+          console.log(`${now}: Warning. ${market_hash_name} lowest price has not been found`)
 
           continue
         }
 
-        const response = await getMarketGoods({ search: hashName })
+        const buff = Number(sell_min_price)
+        const steam = Number(lowest_price.slice(1))
+        const roi = ((steam * 0.87) / buff - 1) * 100
 
-        const data = response.data.items.find(
-          (item) => hashName === item.market_hash_name && fromPrice === Number(item.sell_min_price)
-        )
-
-        if (data?.market_hash_name && data?.sell_min_price) {
-          const goods = await getGoodsSellOrder({ goods_id: data.id })
-
-          const filteredGoods = goods.data.items.filter((item) => fromPrice >= Number(item.price))
-
-          if (filteredGoods.length !== 0) {
-            const { user_id, price } = filteredGoods[0]
-            const nickname = goods?.data?.user_infos[user_id]?.nickname ?? user_id
-            const message = `[Bot] Purchased "${hashName}" item from ${nickname} for ${price}$, ROI: ${roi}%`
-
-            await ctx.telegram.sendMessage(chatReferenceId, message)
-          }
-        } else {
-          await ctx.telegram.sendMessage(chatReferenceId, `[Bot] Item "${hashName}" has been sold out`)
+        if (roi >= 30) {
+          await ctx.telegram.sendMessage(chatReferenceId, `[Bot] "${market_hash_name}", ROI: ${roi.toFixed(2)}%`)
         }
 
-        SKIP_LIST.push(hashName)
+        await sleep(7_000)
       }
     } catch (error) {
-      await ctx.telegram.sendMessage(chatReferenceId, `[Bot] Something went wrong`)
+      JOBS[chatReferenceId]?.cancel()
 
-      console.log(`Something went wrong: `, error)
+      console.log('Something went wrong: ', error)
+
+      await ctx.telegram.sendMessage(chatReferenceId, error.message)
     }
   })
 

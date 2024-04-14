@@ -64,6 +64,7 @@ export const getMarketGoods = async ({
   min_price,
   max_price,
   category_group,
+  series,
 }: {
   game?: string
   search?: string
@@ -73,6 +74,7 @@ export const getMarketGoods = async ({
   itemset?: string
   min_price?: number
   max_price?: number
+  series?: string
   category_group?: string
 }): Promise<MarketGoods> => {
   const { data } = await http.get('/market/goods', {

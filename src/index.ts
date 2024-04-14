@@ -35,8 +35,10 @@ bot.command('start', async (ctx) => {
         const steam = Number(lowest_price.slice(1))
         const roi = ((steam * 0.87) / buff - 1) * 100
 
+        const message = `Item "${market_hash_name}". Buff: ${buff}$ | Steam: ${steam}$ | ROI: ${roi.toFixed(2)}%`
+
         if (roi >= 30) {
-          await ctx.telegram.sendMessage(chatReferenceId, `[Bot] "${market_hash_name}", ROI: ${roi.toFixed(2)}%`)
+          await ctx.telegram.sendMessage(chatReferenceId, message)
         }
 
         await sleep(7_000)
@@ -50,7 +52,7 @@ bot.command('start', async (ctx) => {
     }
   })
 
-  await ctx.telegram.sendMessage(chatReferenceId, `[Bot] Started working`)
+  await ctx.telegram.sendMessage(chatReferenceId, `Bot Started working`)
 })
 
 bot.command('stop', async (ctx) => {

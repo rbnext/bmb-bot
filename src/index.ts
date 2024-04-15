@@ -28,7 +28,7 @@ bot.command('start', async (ctx) => {
 
         const message = `Item "${market_hash_name}". Buff: ${sell_min_price}$ | Steam: ${steam_price}$ | ROI: ${roi.toFixed(2)}%\nhttps://buff.market/market/goods/${id}?game=csgo`
 
-        if (roi >= 30) {
+        if (roi >= 35) {
           await ctx.telegram.sendMessage(chatReferenceId, message)
           await sleep(5_000)
         }

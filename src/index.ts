@@ -19,13 +19,14 @@ bot.command('start', async (ctx) => {
       const response = await getMarketGoods({ category: 'csgo_type_weaponcase', itemset: weaponCases.join(',') })
 
       for (const {
+        id,
         sell_min_price,
         market_hash_name,
         goods_info: { steam_price },
       } of response.data.items) {
         const roi = ((+steam_price * 0.87) / +sell_min_price - 1) * 100
 
-        const message = `Item "${market_hash_name}". Buff: ${sell_min_price}$ | Steam: ${steam_price}$ | ROI: ${roi.toFixed(2)}%`
+        const message = `Item "${market_hash_name}". Buff: ${sell_min_price}$ | Steam: ${steam_price}$ | ROI: ${roi.toFixed(2)}%\nhttps://buff.market/market/goods/${id}?game=csgo`
 
         if (roi >= 30) {
           await ctx.telegram.sendMessage(chatReferenceId, message)

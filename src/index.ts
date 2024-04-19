@@ -1,7 +1,7 @@
 import { Telegraf } from 'telegraf'
 import schedule from 'node-schedule'
 
-import { getMarketGoods } from './api/buff'
+import { getBriefAsset, getGoodsSellOrder, getMarketGoods, postGoodsBuy } from './api/buff'
 import { weaponCases } from './config'
 import { sleep } from './utils'
 
@@ -10,11 +10,18 @@ const JOBS: Record<string, schedule.Job> = {}
 const bot = new Telegraf(process.env.BOT_TOKEN as string)
 
 bot.command('start', async (ctx) => {
+  const briefAsset = await getBriefAsset()
+
   const chatReferenceId = ctx.message.chat.id
+
+  let totalAmount = Number(briefAsset.data.total_amount)
+
+  await ctx.telegram.sendMessage(chatReferenceId, 'Starting...')
+  await ctx.telegram.sendMessage(chatReferenceId, `Buff account balance: ${totalAmount}$`)
 
   JOBS[chatReferenceId]?.cancel()
 
-  JOBS[chatReferenceId] = schedule.scheduleJob('*/20 * * * *', async () => {
+  JOBS[chatReferenceId] = schedule.scheduleJob('*/10 * * * *', async () => {
     try {
       const response = await getMarketGoods({ category: 'csgo_type_weaponcase', itemset: weaponCases.join(',') })
 
@@ -26,10 +33,35 @@ bot.command('start', async (ctx) => {
       } of response.data.items) {
         const roi = ((+steam_price * 0.87) / +sell_min_price - 1) * 100
 
-        const message = `Item "${market_hash_name}". Buff: ${sell_min_price}$ | Steam: ${steam_price}$ | ROI: ${roi.toFixed(2)}%\nhttps://buff.market/market/goods/${id}?game=csgo`
+        if (roi >= 50) {
+          const goods = await getGoodsSellOrder({ goods_id: id })
 
-        if (roi >= 35) {
-          await ctx.telegram.sendMessage(chatReferenceId, message)
+          const filteredGoods = goods.data.items.filter((good) => +good.price === +sell_min_price)
+
+          const successMessage = `Item "${market_hash_name}" has been bought. Buff: ${sell_min_price}$ | Steam: ${steam_price}$ | ROI: ${roi.toFixed(2)}%`
+          const failureMessage = `Not enough money to buy the good: "${market_hash_name}"`
+
+          await sleep(1_000)
+
+          for (const filteredGood of filteredGoods) {
+            if (totalAmount >= Number(filteredGood.price)) {
+              await postGoodsBuy({ sell_order_id: filteredGood.id, price: Number(filteredGood.price) })
+              await ctx.telegram.sendMessage(chatReferenceId, successMessage)
+
+              totalAmount -= Number(filteredGood.price)
+
+              await sleep(3_000)
+
+              continue
+            }
+
+            await ctx.telegram.sendMessage(chatReferenceId, failureMessage)
+
+            JOBS[chatReferenceId]?.cancel()
+
+            break
+          }
+
           await sleep(5_000)
         }
       }
@@ -41,8 +73,6 @@ bot.command('start', async (ctx) => {
       await ctx.telegram.sendMessage(chatReferenceId, error.message)
     }
   })
-
-  await ctx.telegram.sendMessage(chatReferenceId, `Bot Started working`)
 })
 
 bot.command('stop', async (ctx) => {

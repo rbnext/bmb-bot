@@ -34,16 +34,14 @@ bot.command('start', async (ctx) => {
         const roi = ((+steam_price * 0.87) / +sell_min_price - 1) * 100
 
         if (roi >= 50) {
-          const goods = await getGoodsSellOrder({ goods_id: id })
+          const goods = await getGoodsSellOrder({ goods_id: id, max_price: sell_min_price, exclude_current_user: 1 })
 
-          const filteredGoods = goods.data.items.filter((good) => +good.price === +sell_min_price)
-
-          const successMessage = `Item "${market_hash_name}" has been bought. Buff: ${sell_min_price}$ | Steam: ${steam_price}$ | ROI: ${roi.toFixed(2)}%`
           const failureMessage = `Not enough money to buy the good: "${market_hash_name}"`
+          const successMessage = `Item "${market_hash_name}" has been bought. Buff: ${sell_min_price}$ | Steam: ${steam_price}$ | ROI: ${roi.toFixed(2)}%`
 
           await sleep(1_000)
 
-          for (const filteredGood of filteredGoods) {
+          for (const filteredGood of goods.data.items) {
             if (totalAmount >= Number(filteredGood.price)) {
               await postGoodsBuy({ sell_order_id: filteredGood.id, price: Number(filteredGood.price) })
               await ctx.telegram.sendMessage(chatReferenceId, successMessage)

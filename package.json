@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "ts-node src/index.ts"
+    "start": "ts-node src/index2.ts",
+    "buff2steam": "ts-node src/buff2steam.ts"
   },
   "author": "",
   "license": "ISC",
@@ -16,7 +17,6 @@
     "@typescript-eslint/eslint-plugin": "^7.5.0",
     "@typescript-eslint/parser": "^7.5.0",
     "axios": "^1.6.8",
-    "axios-cookiejar-support": "^5.0.1",
     "cookie": "^0.6.0",
     "cookie-parser": "^1.4.6",
     "date-fns": "^3.6.0",

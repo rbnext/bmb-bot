@@ -60,6 +60,8 @@ bot.command('start', async (ctx) => {
             break
           }
 
+          await ctx.telegram.sendMessage(chatReferenceId, `Balance after transaction(s): ${totalAmount}$`)
+
           await sleep(5_000)
         }
       }

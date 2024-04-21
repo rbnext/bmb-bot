@@ -65,6 +65,7 @@ export const getMarketGoods = async ({
   max_price,
   category_group,
   series,
+  exterior,
 }: {
   game?: string
   search?: string
@@ -76,9 +77,22 @@ export const getMarketGoods = async ({
   max_price?: number
   series?: string
   category_group?: string
+  exterior?: string
 }): Promise<MarketGoods> => {
   const { data } = await http.get('/market/goods', {
-    params: { game, search, page_num, page_size, category, itemset, min_price, max_price, category_group },
+    params: {
+      game,
+      search,
+      page_num,
+      page_size,
+      category,
+      itemset,
+      min_price,
+      max_price,
+      category_group,
+      series,
+      exterior,
+    },
     headers: {
       Cookie: getCookies(defaultCookies),
     },
@@ -92,14 +106,18 @@ export const getGoodsSellOrder = async ({
   page_num = 1,
   goods_id,
   sort_by = 'default',
+  exclude_current_user,
+  max_price,
 }: {
   game?: string
   page_num?: number
   goods_id: number
   sort_by?: string
+  max_price?: string
+  exclude_current_user: number
 }): Promise<GoodsSellOrder> => {
   const { data } = await http.get('/market/goods/sell_order', {
-    params: { game, page_num, goods_id, sort_by },
+    params: { game, page_num, goods_id, sort_by, exclude_current_user, max_price },
     headers: {
       Cookie: getCookies(defaultCookies),
     },

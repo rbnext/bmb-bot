@@ -39,7 +39,8 @@ export const buff2steam = async ({
       const cache = MARKET_CACHE[market_hash_name]
       const overview = cache ?? (await getMarketPriceOverview({ market_hash_name }))
 
-      console.log(JSON.stringify(overview))
+      console.log(`${market_hash_name}, ROI${roi.toFixed(2)}%`)
+      console.log('Market overview: ', JSON.stringify(overview))
 
       if (!overview?.success || Number(overview.volume ?? '0') <= 50) {
         if (overview?.success) MARKET_CACHE[market_hash_name] = overview

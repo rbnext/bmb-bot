@@ -44,6 +44,7 @@ export type MarketGoodsItem = {
   goods_info: {
     steam_price: string
   }
+  sell_num: number
 }
 
 export type MarketGoods = {

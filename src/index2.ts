@@ -30,14 +30,14 @@ bot.command('start', async (ctx: Context) => {
     }
 
     try {
+      const all = { sort_by: 'sell_num.desc', min_price: 1, max_price: 4 }
       const cases = { category: 'csgo_type_weaponcase', itemset: weaponCases.join(',') }
-      const pistols = { category_group: 'pistol', exterior: 'wearcategory3,wearcategory2', min_price: 1, max_price: 3 }
 
-      await buff2steam({ params: cases, loadAllPages: false, logger })
+      await buff2steam({ params: cases, pagesToLoad: 1, logger })
 
-      await sleep(20_000)
+      await sleep(10_000)
 
-      await buff2steam({ params: pistols, loadAllPages: true, logger })
+      await buff2steam({ params: all, pagesToLoad: 25, logger })
     } catch (error) {
       JOBS[chatReferenceId]?.cancel()
 

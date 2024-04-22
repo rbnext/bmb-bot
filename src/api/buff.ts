@@ -66,6 +66,7 @@ export const getMarketGoods = async ({
   category_group,
   series,
   exterior,
+  sort_by,
 }: {
   game?: string
   search?: string
@@ -78,6 +79,7 @@ export const getMarketGoods = async ({
   series?: string
   category_group?: string
   exterior?: string
+  sort_by?: string
 }): Promise<MarketGoods> => {
   const { data } = await http.get('/market/goods', {
     params: {
@@ -92,6 +94,7 @@ export const getMarketGoods = async ({
       category_group,
       series,
       exterior,
+      sort_by,
     },
     headers: {
       Cookie: getCookies(defaultCookies),

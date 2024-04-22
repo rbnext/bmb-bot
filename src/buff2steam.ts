@@ -6,22 +6,22 @@ import { sleep } from './utils'
 const MARKET_CACHE: Record<string, MarketPriceOverview> = {}
 
 export const buff2steam = async ({
-  loadAllPages,
+  pagesToLoad,
   params,
   logger,
 }: {
-  loadAllPages: boolean
+  pagesToLoad: number
   params: Record<string, string | number>
   logger: (data: { message: string; error?: boolean }) => void
 }) => {
   let currentPage = 1
-  let hasNextPage = loadAllPages
+  let hasNextPage = pagesToLoad > 1
 
   do {
     const goods = await getMarketGoods({ ...params, page_num: currentPage })
 
-    if (loadAllPages) {
-      hasNextPage = goods.data.items.length === 50
+    if (hasNextPage) {
+      hasNextPage = currentPage < pagesToLoad
     }
 
     await sleep(3_000)
@@ -80,7 +80,7 @@ export const buff2steam = async ({
     }
 
     if (hasNextPage) {
-      await sleep(11_000)
+      await sleep(8_500)
     }
 
     currentPage += 1
@@ -88,8 +88,12 @@ export const buff2steam = async ({
 }
 
 // buff2steam({
-//   loadAllPages: true,
-//   params: { category_group: 'pistol', exterior: 'wearcategory3,wearcategory2', min_price: 1, max_price: 5 },
+//   pagesToLoad: 5,
+//   params: {
+//     min_price: 1,
+//     max_price: 4,
+//     sort_by: 'sell_num.desc',
+//   },
 //   logger: ({ message, error }) => {
 //     if (error) console.warn(message)
 //     else console.log(message)

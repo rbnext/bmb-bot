@@ -22,7 +22,11 @@ export const buff2steam = async ({
   do {
     const marketGoods = await getMarketGoods({ ...params, page_num: currentPage })
 
-    console.log(`Market goods request status: `, marketGoods.code)
+    if (marketGoods?.code === 'Internal Server Timeout') {
+      await logger({ message: marketGoods.code })
+
+      break
+    }
 
     if (hasNextPage) {
       hasNextPage = currentPage < pagesToLoad
@@ -65,15 +69,9 @@ export const buff2steam = async ({
 
       let totalAmount = Number(total_amount) ?? 0
 
-      const goodsSellOrder = await getGoodsSellOrder({
-        goods_id: id,
-        max_price: sell_min_price,
-        exclude_current_user: 1,
-      })
+      const sellOrders = await getGoodsSellOrder({ goods_id: id, max_price: sell_min_price, exclude_current_user: 1 })
 
-      console.log(`Goods sell order status: `, goodsSellOrder.code)
-
-      for (const filteredGood of goodsSellOrder.data.items) {
+      for (const filteredGood of sellOrders.data.items) {
         if (Number(filteredGood.price) > totalAmount) {
           await logger({ message: `No cash to buy "${market_hash_name}" for ${filteredGood.price}$`, error: true })
 

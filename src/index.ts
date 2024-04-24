@@ -1,6 +1,5 @@
 import { Context, Telegraf } from 'telegraf'
 import schedule from 'node-schedule'
-import { format } from 'date-fns'
 import { getBriefAsset } from './api/buff'
 import { buff2steam } from './buff2steam'
 import { weaponCases } from './config'
@@ -29,11 +28,7 @@ bot.command('start', async (ctx: Context) => {
     await ctx.telegram.sendMessage(chatReferenceId, message)
   }
 
-  const job_1 = schedule.scheduleJob('*/1 * * * *', async () => {
-    const now = format(new Date(), 'dd MMM yyyy, HH:mm')
-
-    console.log(`${now}: http request to csgo_type_weaponcase\n`)
-
+  const job_1 = schedule.scheduleJob('*/2 * * * *', async () => {
     try {
       const params = { category: 'csgo_type_weaponcase', itemset: weaponCases.join(',') }
       await buff2steam({ params, pagesToLoad: 1, logger })
@@ -46,10 +41,6 @@ bot.command('start', async (ctx: Context) => {
   JOBS[chatReferenceId].push(job_1)
 
   const job_2 = schedule.scheduleJob('*/10 * * * *', async () => {
-    const now = format(new Date(), 'dd MMM yyyy, HH:mm')
-
-    console.log(`${now}: http request to ${weaponGroups.join(', ')}\n`)
-
     try {
       const params = { category_group: weaponGroups.join(','), sort_by: 'sell_num.desc', min_price: 1, max_price: 4 }
       await buff2steam({ params, pagesToLoad: 15, logger })

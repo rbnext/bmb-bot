@@ -26,7 +26,7 @@ export const canMakePurchase = ({
     return false
   }
 
-  if (Number(marketOverview.volume) < minVolume) {
+  if (Number(marketOverview.volume.replace(/,/g, '')) < minVolume) {
     return false
   }
 

@@ -37,7 +37,7 @@ bot.command('start', async (ctx: Context) => {
 
       await sleep(10_000)
 
-      await buff2steam({ params: all, pagesToLoad: 25, logger })
+      await buff2steam({ params: all, pagesToLoad: 20, logger })
     } catch (error) {
       JOBS[chatReferenceId]?.cancel()
 

@@ -5,6 +5,8 @@ import { calculateROI, canMakePurchase, sleep } from './utils'
 
 const MARKET_CACHE: Record<string, MarketPriceOverview> = {}
 
+const MESSAGE_LOGS: string[] = []
+
 export const buff2steam = async ({
   pagesToLoad,
   params,
@@ -40,51 +42,55 @@ export const buff2steam = async ({
       if (initialRoi < 50) continue
 
       const cache = MARKET_CACHE[market_hash_name]
-      const marketOverview = cache ?? (await getMarketPriceOverview({ market_hash_name }))
+      const marketOverview = cache ? cache : await getMarketPriceOverview({ market_hash_name })
 
       if (!canMakePurchase({ marketOverview, sellMinPrice, minVolume: 50 })) {
-        console.log(
-          `Product ${market_hash_name} with initial ROI ${initialRoi.toFixed(2)}% and price ${sellMinPrice}$ has been skipped due to: ${JSON.stringify(marketOverview)}\n`
-        )
+        const message = `Product ${market_hash_name} with initial ROI ${initialRoi.toFixed(2)}% and price ${sellMinPrice}$ has been skipped due to: ${JSON.stringify(marketOverview)}\n`
+
+        if (!MESSAGE_LOGS.includes(message)) {
+          await logger({ message })
+
+          MESSAGE_LOGS.push(message)
+        }
 
         break
       }
 
-      await logger({
-        message: `Product ${market_hash_name} with initial ROI ${initialRoi.toFixed(2)}% and price ${sellMinPrice}$ has been bought. Market overview: ${JSON.stringify(marketOverview)}`,
-      })
+      const {
+        data: { total_amount },
+      } = await getBriefAsset()
 
-      // const {
-      //   data: { total_amount },
-      // } = await getBriefAsset()
+      let totalAmount = Number(total_amount) ?? 0
 
-      // let totalAmount = Number(total_amount) ?? 0
+      const goods = await getGoodsSellOrder({ goods_id: id, max_price: sell_min_price, exclude_current_user: 1 })
 
-      // const goods = await getGoodsSellOrder({ goods_id: id, max_price: sell_min_price, exclude_current_user: 1 })
+      for (const filteredGood of goods.data.items) {
+        if (Number(filteredGood.price) > totalAmount) {
+          await logger({ message: `No cash to buy "${market_hash_name}" for ${filteredGood.price}$`, error: true })
 
-      // for (const filteredGood of goods.data.items) {
-      // if (Number(filteredGood.price) > totalAmount) {
-      //   await logger({ message: `No cash to buy "${market_hash_name}" for ${filteredGood.price}$`, error: true })
+          break
+        }
 
-      //   break
-      // }
+        await postGoodsBuy({ sell_order_id: filteredGood.id, price: Number(filteredGood.price) })
 
-      // await postGoodsBuy({ sell_order_id: filteredGood.id, price: Number(filteredGood.price) })
-      // await logger({ message: `Item "${market_hash_name}" has been bought! ROI: ${initialRoi.toFixed(2)}` })
-      // await sleep(3_000)
+        await logger({
+          message: `Product ${market_hash_name} with initial ROI ${initialRoi.toFixed(2)}% and price ${sellMinPrice}$ has been bought. Market overview: ${JSON.stringify(marketOverview)}`,
+        })
 
-      // totalAmount -= Number(filteredGood.price)
-      // }
+        await sleep(3_000)
+
+        totalAmount -= Number(filteredGood.price)
+      }
 
       MARKET_CACHE[market_hash_name] = marketOverview
 
       await sleep(3_500)
 
-      // await logger({ message: `Balance after transaction(s): ${totalAmount}$` })
+      await logger({ message: `Balance after transaction(s): ${totalAmount}$` })
     }
 
     if (hasNextPage) {
-      await sleep(8_500)
+      await sleep(11_555)
     }
 
     currentPage += 1

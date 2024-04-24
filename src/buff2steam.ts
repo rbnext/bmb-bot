@@ -39,7 +39,7 @@ export const buff2steam = async ({
 
       const initialRoi = calculateROI(sellMaxPrice, sellMinPrice)
 
-      if (initialRoi < 50) continue
+      if (initialRoi < 50 || market_hash_name.includes('Sticker')) continue
 
       const cache = MARKET_CACHE[market_hash_name]
       const marketOverview = cache ? cache : await getMarketPriceOverview({ market_hash_name })

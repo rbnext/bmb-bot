@@ -6,6 +6,8 @@ import { sleep } from './utils'
 import { buff2steam } from './buff2steam'
 import { weaponCases } from './config'
 
+export const weaponGroups = ['knife', 'hands', 'rifle', 'pistol', 'smg', 'shotgun', 'machinegun', 'type_customplayer']
+
 const JOBS: Record<string, schedule.Job> = {}
 
 const bot = new Telegraf(process.env.BOT_TOKEN as string)
@@ -30,7 +32,7 @@ bot.command('start', async (ctx: Context) => {
     }
 
     try {
-      const all = { sort_by: 'sell_num.desc', min_price: 1, max_price: 4 }
+      const all = { category_group: weaponGroups.join(','), sort_by: 'sell_num.desc', min_price: 1, max_price: 4 }
       const cases = { category: 'csgo_type_weaponcase', itemset: weaponCases.join(',') }
 
       await buff2steam({ params: cases, pagesToLoad: 1, logger })

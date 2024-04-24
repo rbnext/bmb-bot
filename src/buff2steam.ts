@@ -39,10 +39,11 @@ export const buff2steam = async ({
 
       const initialRoi = calculateROI(sellMaxPrice, sellMinPrice)
 
-      if (initialRoi < 50 || market_hash_name.includes('Sticker')) continue
+      if (initialRoi < 50) continue
 
       const cache = MARKET_CACHE[market_hash_name]
       const marketOverview = cache ? cache : await getMarketPriceOverview({ market_hash_name })
+      MARKET_CACHE[market_hash_name] = { ...marketOverview }
 
       if (!canMakePurchase({ marketOverview, sellMinPrice, minVolume: 50 })) {
         const message = `Product ${market_hash_name} with initial ROI ${initialRoi.toFixed(2)}% and price ${sellMinPrice}$ has been skipped due to: ${JSON.stringify(marketOverview)}\n`
@@ -82,8 +83,6 @@ export const buff2steam = async ({
         totalAmount -= Number(filteredGood.price)
       }
 
-      MARKET_CACHE[market_hash_name] = marketOverview
-
       await sleep(3_500)
 
       await logger({ message: `Balance after transaction(s): ${totalAmount}$` })
@@ -98,11 +97,12 @@ export const buff2steam = async ({
 }
 
 // buff2steam({
-//   pagesToLoad: 5,
+//   pagesToLoad: 20,
 //   params: {
 //     min_price: 1,
 //     max_price: 4,
 //     sort_by: 'sell_num.desc',
+//     category_group: weaponGroups.join(','),
 //   },
 //   logger: ({ message, error }) => {
 //     if (error) console.warn(message)

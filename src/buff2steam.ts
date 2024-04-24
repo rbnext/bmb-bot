@@ -20,7 +20,9 @@ export const buff2steam = async ({
   let hasNextPage = pagesToLoad > 1
 
   do {
-    const goods = await getMarketGoods({ ...params, page_num: currentPage })
+    const marketGoods = await getMarketGoods({ ...params, page_num: currentPage })
+
+    console.log(`Market goods request status: `, marketGoods.code)
 
     if (hasNextPage) {
       hasNextPage = currentPage < pagesToLoad
@@ -33,7 +35,7 @@ export const buff2steam = async ({
       sell_min_price,
       market_hash_name,
       goods_info: { steam_price },
-    } of goods.data.items) {
+    } of marketGoods.data.items) {
       const sellMaxPrice = +steam_price
       const sellMinPrice = +sell_min_price
 
@@ -63,9 +65,15 @@ export const buff2steam = async ({
 
       let totalAmount = Number(total_amount) ?? 0
 
-      const goods = await getGoodsSellOrder({ goods_id: id, max_price: sell_min_price, exclude_current_user: 1 })
+      const goodsSellOrder = await getGoodsSellOrder({
+        goods_id: id,
+        max_price: sell_min_price,
+        exclude_current_user: 1,
+      })
 
-      for (const filteredGood of goods.data.items) {
+      console.log(`Goods sell order status: `, goodsSellOrder.code)
+
+      for (const filteredGood of goodsSellOrder.data.items) {
         if (Number(filteredGood.price) > totalAmount) {
           await logger({ message: `No cash to buy "${market_hash_name}" for ${filteredGood.price}$`, error: true })
 
@@ -78,12 +86,10 @@ export const buff2steam = async ({
           message: `Product ${market_hash_name} with initial ROI ${initialRoi.toFixed(2)}% and price ${sellMinPrice}$ has been bought. Market overview: ${JSON.stringify(marketOverview)}`,
         })
 
-        await sleep(3_000)
+        await sleep(2_500)
 
         totalAmount -= Number(filteredGood.price)
       }
-
-      await sleep(3_500)
 
       await logger({ message: `Balance after transaction(s): ${totalAmount}$` })
     }

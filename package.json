@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "ts-node src/index2.ts",
+    "start": "ts-node src/index.ts",
     "buff2steam": "ts-node src/buff2steam.ts"
   },
   "author": "",

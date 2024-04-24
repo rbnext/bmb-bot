@@ -23,6 +23,7 @@ export type GoodsSellOrder = {
       }
     }
   }
+  code: string
 }
 
 export type BriefAsset = {
@@ -51,6 +52,7 @@ export type MarketGoods = {
   data: {
     items: MarketGoodsItem[]
   }
+  code: string
 }
 
 export type MarketPriceOverview = {

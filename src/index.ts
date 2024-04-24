@@ -1,86 +1,73 @@
-import { Telegraf } from 'telegraf'
+import { Context, Telegraf } from 'telegraf'
 import schedule from 'node-schedule'
-
-import { getBriefAsset, getGoodsSellOrder, getMarketGoods, postGoodsBuy } from './api/buff'
+import { format } from 'date-fns'
+import { getBriefAsset } from './api/buff'
+import { buff2steam } from './buff2steam'
 import { weaponCases } from './config'
-import { sleep } from './utils'
 
-const JOBS: Record<string, schedule.Job> = {}
+export const weaponGroups = ['knife', 'hands', 'rifle', 'pistol', 'smg', 'shotgun', 'machinegun', 'type_customplayer']
+
+const JOBS: Record<string, schedule.Job[]> = {}
 
 const bot = new Telegraf(process.env.BOT_TOKEN as string)
 
-bot.command('start', async (ctx) => {
+bot.command('start', async (ctx: Context) => {
   const briefAsset = await getBriefAsset()
-
-  const chatReferenceId = ctx.message.chat.id
+  const chatReferenceId = ctx.message!.chat.id
 
   let totalAmount = Number(briefAsset.data.total_amount)
 
   await ctx.telegram.sendMessage(chatReferenceId, 'Starting...')
   await ctx.telegram.sendMessage(chatReferenceId, `Buff account balance: ${totalAmount}$`)
 
-  JOBS[chatReferenceId]?.cancel()
+  JOBS[chatReferenceId]?.forEach((job) => job.cancel())
+  JOBS[chatReferenceId] = []
 
-  JOBS[chatReferenceId] = schedule.scheduleJob('*/10 * * * *', async () => {
+  const logger = async ({ message, error }: { message: string; error?: boolean }) => {
+    if (error) JOBS[chatReferenceId]?.forEach((job) => job.cancel())
+
+    await ctx.telegram.sendMessage(chatReferenceId, message)
+  }
+
+  const job_1 = schedule.scheduleJob('*/1 * * * *', async () => {
+    const now = format(new Date(), 'dd MMM yyyy, HH:mm')
+
+    console.log(`${now}: http request to csgo_type_weaponcase\n`)
+
     try {
-      const response = await getMarketGoods({ category: 'csgo_type_weaponcase', itemset: weaponCases.join(',') })
-
-      for (const {
-        id,
-        sell_min_price,
-        market_hash_name,
-        goods_info: { steam_price },
-      } of response.data.items) {
-        const roi = ((+steam_price * 0.87) / +sell_min_price - 1) * 100
-
-        if (roi >= 50) {
-          const goods = await getGoodsSellOrder({ goods_id: id, max_price: sell_min_price, exclude_current_user: 1 })
-
-          const failureMessage = `Not enough money to buy the good: "${market_hash_name}"`
-          const successMessage = `Item "${market_hash_name}" has been bought. Buff: ${sell_min_price}$ | Steam: ${steam_price}$ | ROI: ${roi.toFixed(2)}%`
-
-          await sleep(1_000)
-
-          for (const filteredGood of goods.data.items) {
-            if (totalAmount >= Number(filteredGood.price)) {
-              await postGoodsBuy({ sell_order_id: filteredGood.id, price: Number(filteredGood.price) })
-              await ctx.telegram.sendMessage(chatReferenceId, successMessage)
-
-              totalAmount -= Number(filteredGood.price)
-
-              await sleep(3_000)
-
-              continue
-            }
-
-            await ctx.telegram.sendMessage(chatReferenceId, failureMessage)
-
-            JOBS[chatReferenceId]?.cancel()
-
-            break
-          }
-
-          await ctx.telegram.sendMessage(chatReferenceId, `Balance after transaction(s): ${totalAmount}$`)
-
-          await sleep(5_000)
-        }
-      }
+      const params = { category: 'csgo_type_weaponcase', itemset: weaponCases.join(',') }
+      await buff2steam({ params, pagesToLoad: 1, logger })
     } catch (error) {
-      JOBS[chatReferenceId]?.cancel()
-
-      console.log('Something went wrong: ', error)
-
-      await ctx.telegram.sendMessage(chatReferenceId, error.message)
+      console.log(error)
+      await logger({ message: error.message, error: true })
     }
   })
+
+  JOBS[chatReferenceId].push(job_1)
+
+  const job_2 = schedule.scheduleJob('*/10 * * * *', async () => {
+    const now = format(new Date(), 'dd MMM yyyy, HH:mm')
+
+    console.log(`${now}: http request to ${weaponGroups.join(', ')}\n`)
+
+    try {
+      const params = { category_group: weaponGroups.join(','), sort_by: 'sell_num.desc', min_price: 1, max_price: 4 }
+      await buff2steam({ params, pagesToLoad: 15, logger })
+    } catch (error) {
+      console.log(error)
+      await logger({ message: error.message, error: true })
+    }
+  })
+
+  JOBS[chatReferenceId].push(job_2)
 })
 
 bot.command('stop', async (ctx) => {
-  JOBS[ctx.message.chat.id]?.cancel()
+  JOBS[ctx.message.chat.id]?.forEach((job) => job.cancel())
 })
 
 bot.command('quit', async (ctx) => {
-  JOBS[ctx.message.chat.id]?.cancel()
+  JOBS[ctx.message.chat.id]?.forEach((job) => job.cancel())
 
   await ctx.telegram.leaveChat(ctx.message.chat.id)
 

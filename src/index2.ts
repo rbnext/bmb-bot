@@ -21,6 +21,7 @@ bot.command('start', async (ctx: Context) => {
   await ctx.telegram.sendMessage(chatReferenceId, `Buff account balance: ${totalAmount}$`)
 
   JOBS[chatReferenceId]?.forEach((job) => job.cancel())
+  JOBS[chatReferenceId] = []
 
   const logger = async ({ message, error }: { message: string; error?: boolean }) => {
     if (error) JOBS[chatReferenceId]?.forEach((job) => job.cancel())

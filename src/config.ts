@@ -1,4 +1,4 @@
-export const defaultCookies: Record<string, string> = {}
+export const weaponGroups = ['knife', 'hands', 'rifle', 'pistol', 'smg', 'shotgun', 'machinegun', 'type_customplayer']
 
 export const weaponCases = [
   'set_community_33',

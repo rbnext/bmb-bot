@@ -1,11 +1,18 @@
 import axios from 'axios'
 import { parse } from 'set-cookie-parser'
-import { defaultCookies } from '../config'
 
 import { BriefAsset, GoodsBuyResponse, GoodsInfo, GoodsSellOrder, MarketGoods } from '../types'
 
+export const defaultCookies: Record<string, string> = {
+  session: process.env.SESSION_TOKEN as string,
+}
+
 const http = axios.create({
   baseURL: 'https://api.buff.market/api',
+  headers: {
+    'User-Agent':
+      'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+  },
 })
 
 const getCookies = (cookies: Record<string, string>) => {

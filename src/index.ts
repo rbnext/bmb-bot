@@ -15,9 +15,6 @@ bot.command('start', async (ctx: Context) => {
   const briefAsset = await getBriefAsset()
   const chatReferenceId = ctx.message!.chat.id
 
-  console.log('briefAsset', briefAsset)
-  console.log('process.env.SESSION_TOKEN', process.env.SESSION_TOKEN)
-
   let totalAmount = Number(briefAsset.data.total_amount)
 
   await ctx.telegram.sendMessage(chatReferenceId, 'Starting...')

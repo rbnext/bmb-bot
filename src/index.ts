@@ -4,6 +4,9 @@ import { getBriefAsset } from './api/buff'
 import { buff2steam } from './buff2steam'
 import { weaponCases } from './config'
 
+if (!process.env.BOT_TOKEN) console.log('No BOT_TOKEN')
+if (!process.env.SESSION_TOKEN) console.log('No SESSION_TOKEN')
+
 const JOBS: Record<string, schedule.Job[]> = {}
 
 const bot = new Telegraf(process.env.BOT_TOKEN as string)

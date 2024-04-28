@@ -88,7 +88,7 @@ export const buff2steam = async ({
         totalAmount -= Number(filteredGood.price)
       }
 
-      await logger({ message: `Balance after transaction(s): ${totalAmount}$` })
+      await logger({ message: `Balance: ${totalAmount.toFixed(2)}$` })
     }
 
     if (hasNextPage) {

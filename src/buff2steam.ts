@@ -81,7 +81,7 @@ export const buff2steam = async ({
 
         await sleep(2_000)
         await postGoodsBuy({ sell_order_id: filteredGood.id, price: Number(filteredGood.price) })
-        await logger({ message: `Purchase "${market_hash_name}". Profit: ~${profit}$` })
+        await logger({ message: `Purchase "${market_hash_name}". Profit: ~${profit.toFixed(2)}$` })
 
         totalAmount -= Number(filteredGood.price)
       }

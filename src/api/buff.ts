@@ -4,7 +4,12 @@ import { parse } from 'set-cookie-parser'
 import { BriefAsset, GoodsBuyResponse, GoodsInfo, GoodsSellOrder, MarketGoods } from '../types'
 
 export const defaultCookies: Record<string, string> = {
+  'Locale-Supported': 'en',
+  'Device-Id': process.env.DEVICE_ID as string,
   session: process.env.SESSION_TOKEN as string,
+  remember_me: process.env.REMEMBER_ME as string,
+  csrf_token: process.env.CSRF_TOKEN as string,
+  forterToken: process.env.FORTER_TOKEN as string,
 }
 
 const http = axios.create({

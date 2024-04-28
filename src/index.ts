@@ -1,11 +1,10 @@
+import 'dotenv/config'
+
 import { Context, Telegraf } from 'telegraf'
 import schedule from 'node-schedule'
 import { getBriefAsset } from './api/buff'
 import { buff2steam } from './buff2steam'
 import { weaponCases } from './config'
-
-if (!process.env.BOT_TOKEN) throw new Error('No BOT_TOKEN')
-if (!process.env.SESSION_TOKEN) throw new Error('No SESSION_TOKEN')
 
 const JOBS: Record<string, schedule.Job[]> = {}
 

@@ -167,5 +167,7 @@ export const postGoodsBuy = async ({
     }
   )
 
+  console.log(data?.code)
+
   return data
 }

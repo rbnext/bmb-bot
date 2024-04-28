@@ -32,12 +32,11 @@ export const buff2steam = async ({
       hasNextPage = currentPage < pagesToLoad
     }
 
-    await sleep(3_000)
-
     for (const {
       id,
       sell_min_price,
       market_hash_name,
+      sell_reference_price,
       goods_info: { steam_price },
     } of marketGoods.data.items) {
       const sellMaxPrice = +steam_price
@@ -81,10 +80,10 @@ export const buff2steam = async ({
         await postGoodsBuy({ sell_order_id: filteredGood.id, price: Number(filteredGood.price) })
 
         await logger({
-          message: `Product ${market_hash_name} with initial ROI ${initialRoi.toFixed(2)}% and price ${sellMinPrice}$ has been bought. Market overview: ${JSON.stringify(marketOverview)}`,
+          message: `Purchase "${market_hash_name}". Profit: ~${Number(sell_reference_price) - Number(filteredGood.price)}$`,
         })
 
-        await sleep(2_500)
+        await sleep(2_000)
 
         totalAmount -= Number(filteredGood.price)
       }

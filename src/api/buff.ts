@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { parse } from 'set-cookie-parser'
 
-import { BriefAsset, GoodsBuyResponse, GoodsInfo, GoodsSellOrder, MarketGoods } from '../types'
+import { BriefAsset, GoodsBuyResponse, GoodsSellOrder, MarketGoods } from '../types'
 
 export const defaultCookies: Record<string, string> = {
   'Locale-Supported': 'en',
@@ -25,6 +25,18 @@ const getCookies = (cookies: Record<string, string>) => {
 
   return cookieList.join(' ')
 }
+
+http.interceptors.request.use(
+  (config) => {
+    config.headers['Cookie'] = getCookies(defaultCookies)
+    config.headers['X-Csrftoken'] = defaultCookies['csrf_token']
+
+    return config
+  },
+  (error) => {
+    return Promise.reject(error)
+  }
+)
 
 http.interceptors.response.use(
   (response) => {
@@ -51,20 +63,6 @@ http.interceptors.response.use(
     return Promise.reject(error)
   }
 )
-
-export const getGoodsInfo = async ({
-  game = 'csgo',
-  goods_id,
-}: {
-  game?: string
-  goods_id: number
-}): Promise<GoodsInfo> => {
-  const { data } = await http.get('/market/goods/info', {
-    params: { game, goods_id },
-  })
-
-  return data
-}
 
 export const getMarketGoods = async ({
   game = 'csgo',
@@ -108,9 +106,6 @@ export const getMarketGoods = async ({
       exterior,
       sort_by,
     },
-    headers: {
-      Cookie: getCookies(defaultCookies),
-    },
   })
 
   return data
@@ -133,20 +128,13 @@ export const getGoodsSellOrder = async ({
 }): Promise<GoodsSellOrder> => {
   const { data } = await http.get('/market/goods/sell_order', {
     params: { game, page_num, goods_id, sort_by, exclude_current_user, max_price },
-    headers: {
-      Cookie: getCookies(defaultCookies),
-    },
   })
 
   return data
 }
 
 export const getBriefAsset = async (): Promise<BriefAsset> => {
-  const { data } = await http.get('/asset/get_brief_asset', {
-    headers: {
-      Cookie: getCookies(defaultCookies),
-    },
-  })
+  const { data } = await http.get('/asset/get_brief_asset')
 
   return data
 }
@@ -161,16 +149,7 @@ export const postGoodsBuy = async ({
   price: number
   sell_order_id: string
 }): Promise<GoodsBuyResponse> => {
-  const { data } = await http.post(
-    '/market/goods/buy',
-    { game, pay_method, ...rest },
-    {
-      headers: {
-        Cookie: getCookies(defaultCookies),
-        'X-Csrftoken': defaultCookies['csrf_token'],
-      },
-    }
-  )
+  const { data } = await http.post('/market/goods/buy', { game, pay_method, ...rest })
 
   console.log(data?.code)
 

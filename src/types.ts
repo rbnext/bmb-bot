@@ -1,11 +1,3 @@
-export type GoodsInfo = {
-  data: {
-    id: number
-    sell_min_price: string
-    super_short_name: string
-  }
-}
-
 export type GoodsSellOrderItem = {
   id: string
   appid: number

@@ -71,19 +71,17 @@ export const buff2steam = async ({
       const sellOrders = await getGoodsSellOrder({ goods_id: id, max_price: sell_min_price, exclude_current_user: 1 })
 
       for (const filteredGood of sellOrders.data.items) {
+        const profit = Number(sell_reference_price) - Number(filteredGood.price)
+
         if (Number(filteredGood.price) > totalAmount) {
           await logger({ message: `No cash to buy "${market_hash_name}" for ${filteredGood.price}$`, error: true })
 
           break
         }
 
-        await postGoodsBuy({ sell_order_id: filteredGood.id, price: Number(filteredGood.price) })
-
-        await logger({
-          message: `Purchase "${market_hash_name}". Profit: ~${Number(sell_reference_price) - Number(filteredGood.price)}$`,
-        })
-
         await sleep(2_000)
+        await postGoodsBuy({ sell_order_id: filteredGood.id, price: Number(filteredGood.price) })
+        await logger({ message: `Purchase "${market_hash_name}". Profit: ~${profit}$` })
 
         totalAmount -= Number(filteredGood.price)
       }

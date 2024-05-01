@@ -6,8 +6,6 @@ import { calculateROI, canMakePurchase, sleep } from './utils'
 
 const MARKET_CACHE: Record<string, MarketPriceOverview> = {}
 
-const MESSAGE_LOGS: string[] = []
-
 export const buff2steam = async ({
   pagesToLoad,
   params,

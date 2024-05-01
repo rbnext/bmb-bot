@@ -56,7 +56,7 @@ export const buff2steam = async ({
         continue
       }
 
-      // Purchase "Recoil Case" if the price is equal or less then 0.25
+      // Purchase "Recoil Case" if the price is equal or less then 0.11
       if (purchaseConfig.goodsId === 23076 && +purchaseConfig.sellMinPrice <= 0.11) {
         await purchaseGoodsById(purchaseConfig)
 

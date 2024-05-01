@@ -1,5 +1,6 @@
-import { getBriefAsset, getGoodsSellOrder, getMarketGoods, postGoodsBuy } from './api/buff'
+import { getMarketGoods } from './api/buff'
 import { getMarketPriceOverview } from './api/steam'
+import { purchaseGoodsById } from './core'
 import { MarketPriceOverview } from './types'
 import { calculateROI, canMakePurchase, sleep } from './utils'
 
@@ -42,51 +43,30 @@ export const buff2steam = async ({
       const sellMaxPrice = +steam_price
       const sellMinPrice = +sell_min_price
 
-      const initialRoi = calculateROI(sellMaxPrice, sellMinPrice)
+      const purchaseConfig = {
+        goodsId: id,
+        sellMinPrice: sell_min_price,
+        sellReferencePrice: sell_reference_price,
+        marketHashName: market_hash_name,
+        logger,
+      }
 
-      if (initialRoi < 50) continue
+      // Purchase Revolution Case if the price is equal or less then 0.25
+      if (id === 24314 && sellMinPrice <= 0.25) {
+        await purchaseGoodsById(purchaseConfig)
+
+        continue
+      }
+
+      if (calculateROI(sellMaxPrice, sellMinPrice) < 50) continue
 
       const cache = MARKET_CACHE[market_hash_name]
       const marketOverview = cache ? cache : await getMarketPriceOverview({ market_hash_name })
       MARKET_CACHE[market_hash_name] = { ...marketOverview }
 
-      if (!canMakePurchase({ marketOverview, sellMinPrice, minVolume: 50 })) {
-        const message = `Product ${market_hash_name} with initial ROI ${initialRoi.toFixed(2)}% and price ${sellMinPrice}$ has been skipped due to: ${JSON.stringify(marketOverview)}\n`
-
-        if (!MESSAGE_LOGS.includes(message)) {
-          await logger({ message })
-
-          MESSAGE_LOGS.push(message)
-        }
-
-        break
+      if (canMakePurchase({ marketOverview, sellMinPrice, minVolume: 50 })) {
+        await purchaseGoodsById(purchaseConfig)
       }
-
-      const {
-        data: { total_amount },
-      } = await getBriefAsset()
-
-      let totalAmount = Number(total_amount) ?? 0
-
-      const sellOrders = await getGoodsSellOrder({ goods_id: id, max_price: sell_min_price, exclude_current_user: 1 })
-
-      for (const filteredGood of sellOrders.data.items) {
-        const profit = Number(sell_reference_price) - Number(filteredGood.price)
-
-        if (Number(filteredGood.price) > totalAmount) {
-          await logger({ message: `No cash to buy "${market_hash_name}" for ${filteredGood.price}$`, error: true })
-
-          break
-        }
-
-        await sleep(2_000)
-        await postGoodsBuy({ sell_order_id: filteredGood.id, price: Number(filteredGood.price) })
-        await logger({ message: `Purchase "${market_hash_name}". Profit: ~${profit.toFixed(2)}$` })
-
-        totalAmount -= Number(filteredGood.price)
-      }
-
-      await logger({ message: `Balance: ${totalAmount.toFixed(2)}$` })
     }
 
     if (hasNextPage) {

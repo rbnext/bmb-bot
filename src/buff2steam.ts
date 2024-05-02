@@ -35,19 +35,12 @@ export const buff2steam = async ({
       id,
       sell_min_price,
       market_hash_name,
-      sell_reference_price,
       goods_info: { steam_price },
     } of marketGoods.data.items) {
       const sellMaxPrice = +steam_price
       const sellMinPrice = +sell_min_price
 
-      const purchaseConfig = {
-        goodsId: id,
-        sellMinPrice: sell_min_price,
-        sellReferencePrice: sell_reference_price,
-        marketHashName: market_hash_name,
-        logger,
-      }
+      const purchaseConfig = { goodsId: id, sellMinPrice: sell_min_price, marketHashName: market_hash_name, logger }
 
       // Purchase "Revolution Case" if the price is equal or less then 0.25
       if (purchaseConfig.goodsId === 24314 && +purchaseConfig.sellMinPrice <= 0.25) {

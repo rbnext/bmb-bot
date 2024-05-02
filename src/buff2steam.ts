@@ -56,6 +56,13 @@ export const buff2steam = async ({
         continue
       }
 
+      // Purchase "Dreams & Nightmares Case" if the price is equal or less then 0.6
+      if (purchaseConfig.goodsId === 21831 && +purchaseConfig.sellMinPrice <= 0.6) {
+        await purchaseGoodsById(purchaseConfig)
+
+        continue
+      }
+
       if (calculateROI(sellMaxPrice, sellMinPrice) < 50) continue
 
       const cache = MARKET_CACHE[market_hash_name]

@@ -42,22 +42,22 @@ export const buff2steam = async ({
 
       const purchaseConfig = { goodsId: id, sellMinPrice: sell_min_price, marketHashName: market_hash_name, logger }
 
-      // Purchase "Revolution Case" if the price is equal or less then 0.25
-      if (purchaseConfig.goodsId === 24314 && +purchaseConfig.sellMinPrice <= 0.25) {
+      // Purchase "Revolution Case" if the price is equal or less then 0.23
+      if (purchaseConfig.goodsId === 24314 && +purchaseConfig.sellMinPrice <= 0.23) {
         await purchaseGoodsById(purchaseConfig)
 
         continue
       }
 
-      // Purchase "Recoil Case" if the price is equal or less then 0.11
-      if (purchaseConfig.goodsId === 23076 && +purchaseConfig.sellMinPrice <= 0.11) {
+      // Purchase "Recoil Case" if the price is equal or less then 0.12
+      if (purchaseConfig.goodsId === 23076 && +purchaseConfig.sellMinPrice <= 0.12) {
         await purchaseGoodsById(purchaseConfig)
 
         continue
       }
 
-      // Purchase "Dreams & Nightmares Case" if the price is equal or less then 0.6
-      if (purchaseConfig.goodsId === 21831 && +purchaseConfig.sellMinPrice <= 0.6) {
+      // Purchase "Dreams & Nightmares Case" if the price is equal or less then 0.62
+      if (purchaseConfig.goodsId === 21831 && +purchaseConfig.sellMinPrice <= 0.62) {
         await purchaseGoodsById(purchaseConfig)
 
         continue

@@ -21,6 +21,7 @@ export type GoodsSellOrder = {
 export type BriefAsset = {
   data: {
     total_amount: number
+    cash_amount: number
   }
 }
 

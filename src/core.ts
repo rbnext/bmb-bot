@@ -13,10 +13,10 @@ export const purchaseGoodsById = async ({
   logger: (data: { message: string; error?: boolean }) => void
 }) => {
   const {
-    data: { total_amount },
+    data: { cash_amount },
   } = await getBriefAsset()
 
-  let totalAmount = Number(total_amount) ?? 0
+  let totalAmount = Number(cash_amount) ?? 0
 
   const sellOrders = await getGoodsSellOrder({ goods_id: goodsId, max_price: sellMinPrice, exclude_current_user: 1 })
 

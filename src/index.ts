@@ -4,7 +4,7 @@ import { Context, Telegraf } from 'telegraf'
 import schedule from 'node-schedule'
 import { getBriefAsset } from './api/buff'
 import { buff2steam } from './buff2steam'
-import { weaponCases } from './config'
+import { weaponCases, weaponGroups } from './config'
 
 const JOBS: Record<string, schedule.Job[]> = {}
 
@@ -28,10 +28,10 @@ bot.command('start', async (ctx: Context) => {
     await ctx.telegram.sendMessage(chatReferenceId, message)
   }
 
-  const job_1 = schedule.scheduleJob('*/1 * * * *', async () => {
+  const job_1 = schedule.scheduleJob('*/2 * * * *', async () => {
     try {
       const params = { category: 'csgo_type_weaponcase', itemset: weaponCases.join(',') }
-      await buff2steam({ params, pagesToLoad: 1, logger })
+      await buff2steam({ params, pagesToLoad: 1, autoApproval: true, logger })
     } catch (error) {
       console.log(error)
       await logger({ message: error.message, error: true })
@@ -40,17 +40,17 @@ bot.command('start', async (ctx: Context) => {
 
   JOBS[chatReferenceId].push(job_1)
 
-  // const job_2 = schedule.scheduleJob('*/10 * * * *', async () => {
-  //   try {
-  //     const params = { category_group: weaponGroups.join(','), sort_by: 'sell_num.desc', min_price: 1, max_price: 4 }
-  //     await buff2steam({ params, pagesToLoad: 15, logger })
-  //   } catch (error) {
-  //     console.log(error)
-  //     await logger({ message: error.message, error: true })
-  //   }
-  // })
+  const job_2 = schedule.scheduleJob('*/10 * * * *', async () => {
+    try {
+      const params = { category_group: weaponGroups.join(','), sort_by: 'sell_num.desc', min_price: 1, max_price: 30 }
+      await buff2steam({ params, pagesToLoad: 20, autoApproval: false, logger })
+    } catch (error) {
+      console.log(error)
+      await logger({ message: error.message, error: true })
+    }
+  })
 
-  // JOBS[chatReferenceId].push(job_2)
+  JOBS[chatReferenceId].push(job_2)
 })
 
 bot.command('stop', async (ctx) => {

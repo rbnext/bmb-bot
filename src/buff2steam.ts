@@ -9,10 +9,12 @@ const MARKET_CACHE: Record<string, MarketPriceOverview> = {}
 export const buff2steam = async ({
   pagesToLoad,
   params,
+  autoApproval,
   logger,
 }: {
   pagesToLoad: number
   params: Record<string, string | number>
+  autoApproval: boolean
   logger: (data: { message: string; error?: boolean }) => void
 }) => {
   let currentPage = 1
@@ -77,7 +79,8 @@ export const buff2steam = async ({
       MARKET_CACHE[market_hash_name] = { ...marketOverview }
 
       if (canMakePurchase({ marketOverview, sellMinPrice, minVolume: 50 })) {
-        await purchaseGoodsById(purchaseConfig)
+        if (autoApproval) await purchaseGoodsById(purchaseConfig)
+        else await logger({ message: `https://buff.market/market/goods/${id}` })
       }
     }
 

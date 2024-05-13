@@ -78,6 +78,8 @@ export const buff2steam = async ({
       const marketOverview = cache ? cache : await getMarketPriceOverview({ market_hash_name })
       MARKET_CACHE[market_hash_name] = { ...marketOverview }
 
+      console.log(market_hash_name, +sell_min_price)
+
       if (canMakePurchase({ marketOverview, sellMinPrice, minVolume: 50 })) {
         if (autoApproval) await purchaseGoodsById(purchaseConfig)
         else await logger({ message: `https://buff.market/market/goods/${id}` })

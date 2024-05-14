@@ -63,7 +63,7 @@ export const buff2steam = async ({
       MARKET_CACHE[market_hash_name] = { ...marketOverview }
 
       const marketGoodsBillOrders = await getMarketGoodsBillOrder({ goods_id: id })
-      const has_lower_than_current_price = marketGoodsBillOrders.data.items.some((item) => sellMinPrice < +item.price)
+      const has_lower_than_current_price = marketGoodsBillOrders.data.items.some((item) => sellMinPrice > +item.price)
 
       console.log({ market_hash_name, sell_min_price, has_lower_than_current_price })
 

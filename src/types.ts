@@ -49,6 +49,17 @@ export type MarketGoods = {
   code: string
 }
 
+export type MarketGoodsBillOrderItem = {
+  price: string
+}
+
+export type MarketGoodsBillOrder = {
+  data: {
+    items: MarketGoodsBillOrderItem[]
+  }
+  code: string
+}
+
 export type MarketPriceOverview = {
   lowest_price: string
   median_price: string

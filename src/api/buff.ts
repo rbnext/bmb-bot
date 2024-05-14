@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { parse } from 'set-cookie-parser'
 
-import { BriefAsset, GoodsBuyResponse, GoodsSellOrder, MarketGoods } from '../types'
+import { BriefAsset, GoodsBuyResponse, GoodsSellOrder, MarketGoods, MarketGoodsBillOrder } from '../types'
 
 export const defaultCookies: Record<string, string> = {
   'Locale-Supported': 'en',
@@ -139,6 +139,18 @@ export const getBriefAsset = async (): Promise<BriefAsset> => {
   return data
 }
 
+export const getMarketGoodsBillOrder = async ({
+  game = 'csgo',
+  goods_id,
+}: {
+  game?: string
+  goods_id: number
+}): Promise<MarketGoodsBillOrder> => {
+  const { data } = await http.get('/market/goods/bill_order', { params: { game, goods_id } })
+
+  return data
+}
+
 export const postGoodsBuy = async ({
   game = 'csgo',
   pay_method = 12,
@@ -150,8 +162,6 @@ export const postGoodsBuy = async ({
   sell_order_id: string
 }): Promise<GoodsBuyResponse> => {
   const { data } = await http.post('/market/goods/buy', { game, pay_method, ...rest })
-
-  console.log(data?.code)
 
   return data
 }

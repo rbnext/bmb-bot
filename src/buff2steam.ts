@@ -1,4 +1,4 @@
-import { getMarketGoods } from './api/buff'
+import { getMarketGoods, getMarketGoodsBillOrder } from './api/buff'
 import { getMarketPriceOverview } from './api/steam'
 import { purchaseGoodsById } from './core'
 import { MarketPriceOverview } from './types'
@@ -9,12 +9,10 @@ const MARKET_CACHE: Record<string, MarketPriceOverview> = {}
 export const buff2steam = async ({
   pagesToLoad,
   params,
-  autoApproval,
   logger,
 }: {
   pagesToLoad: number
   params: Record<string, string | number>
-  autoApproval: boolean
   logger: (data: { message: string; error?: boolean }) => void
 }) => {
   let currentPage = 1
@@ -51,20 +49,6 @@ export const buff2steam = async ({
         continue
       }
 
-      // Purchase "Revolution Case" if the price is equal or less then 0.2
-      if (purchaseConfig.goodsId === 24314 && +purchaseConfig.sellMinPrice <= 0.2) {
-        await purchaseGoodsById(purchaseConfig)
-
-        continue
-      }
-
-      // Purchase "Recoil Case" if the price is equal or less then 0.1
-      if (purchaseConfig.goodsId === 23076 && +purchaseConfig.sellMinPrice <= 0.1) {
-        await purchaseGoodsById(purchaseConfig)
-
-        continue
-      }
-
       // Purchase "Dreams & Nightmares Case" if the price is equal or less then 0.62
       if (purchaseConfig.goodsId === 21831 && +purchaseConfig.sellMinPrice <= 0.62) {
         await purchaseGoodsById(purchaseConfig)
@@ -78,11 +62,13 @@ export const buff2steam = async ({
       const marketOverview = cache ? cache : await getMarketPriceOverview({ market_hash_name })
       MARKET_CACHE[market_hash_name] = { ...marketOverview }
 
-      console.log(market_hash_name, +sell_min_price)
+      const marketGoodsBillOrders = await getMarketGoodsBillOrder({ goods_id: id })
+      const has_lower_than_current_price = marketGoodsBillOrders.data.items.some((item) => sellMinPrice < +item.price)
 
-      if (canMakePurchase({ marketOverview, sellMinPrice, minVolume: 50 })) {
-        if (autoApproval) await purchaseGoodsById(purchaseConfig)
-        else await logger({ message: `https://buff.market/market/goods/${id}` })
+      console.log({ market_hash_name, sell_min_price, has_lower_than_current_price })
+
+      if (canMakePurchase({ marketOverview, sellMinPrice, minVolume: 100 }) && !has_lower_than_current_price) {
+        await purchaseGoodsById(purchaseConfig)
       }
     }
 

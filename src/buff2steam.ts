@@ -40,13 +40,7 @@ export const buff2steam = async ({
       const sellMaxPrice = +steam_price
       const sellMinPrice = +sell_min_price
 
-      const ROI = calculateROI(sellMaxPrice, sellMinPrice)
-
-      if (ROI >= 45 && ROI <= 50) {
-        console.log('INFO: ', market_hash_name, sell_min_price, ROI.toFixed(2))
-      }
-
-      if (ROI < 50) {
+      if (calculateROI(sellMaxPrice, sellMinPrice) < 47) {
         continue
       }
 
@@ -57,10 +51,10 @@ export const buff2steam = async ({
       const marketGoodsBillOrders = await getMarketGoodsBillOrder({ goods_id: id })
       const has_lower_than_current_price = marketGoodsBillOrders.data.items.some((item) => sellMinPrice > +item.price)
 
-      console.log(market_hash_name, sell_min_price, marketOverview.volume, has_lower_than_current_price)
-
       if (canMakePurchase({ marketOverview, sellMinPrice, minVolume: 100 }) && !has_lower_than_current_price) {
         await purchaseGoodsById({ goodsId: id, sellMinPrice: sell_min_price, marketHashName: market_hash_name, logger })
+      } else {
+        console.log('Skipped: ', market_hash_name, sell_min_price, marketOverview.volume, has_lower_than_current_price)
       }
     }
 

@@ -40,7 +40,13 @@ export const buff2steam = async ({
       const sellMaxPrice = +steam_price
       const sellMinPrice = +sell_min_price
 
-      if (calculateROI(sellMaxPrice, sellMinPrice) < 50) {
+      const ROI = calculateROI(sellMaxPrice, sellMinPrice)
+
+      if (ROI >= 45 && ROI <= 50) {
+        console.log('INFO: ', market_hash_name, sell_min_price, ROI.toFixed(2))
+      }
+
+      if (ROI < 50) {
         continue
       }
 

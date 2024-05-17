@@ -28,21 +28,9 @@ bot.command('start', async (ctx: Context) => {
     await ctx.telegram.sendMessage(chatReferenceId, message)
   }
 
-  // const job_1 = schedule.scheduleJob('*/2 * * * *', async () => {
-  //   try {
-  //     const params = { category: 'csgo_type_weaponcase', itemset: weaponCases.join(',') }
-  //     await buff2steam({ params, pagesToLoad: 1, logger })
-  //   } catch (error) {
-  //     console.log(error)
-  //     await logger({ message: error.message, error: true })
-  //   }
-  // })
-
-  // JOBS[chatReferenceId].push(job_1)
-
   const job_2 = schedule.scheduleJob('*/10 * * * *', async () => {
     try {
-      const params = { category_group: weaponGroups.join(','), sort_by: 'sell_num.desc', min_price: 1, max_price: 20 }
+      const params = { category_group: weaponGroups.join(','), sort_by: 'sell_num.desc', min_price: 1, max_price: 30 }
       await buff2steam({ params, pagesToLoad: 20, logger })
     } catch (error) {
       console.log(error)

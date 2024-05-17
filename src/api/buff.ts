@@ -71,12 +71,12 @@ export const getMarketGoods = async ({
   page_size = 50,
   category,
   itemset,
-  min_price,
-  max_price,
+  min_price = 1,
+  max_price = 30,
   category_group,
   series,
   exterior,
-  sort_by,
+  sort_by = 'sell_num.desc',
 }: {
   game?: string
   search?: string

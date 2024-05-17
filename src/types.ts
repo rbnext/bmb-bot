@@ -4,6 +4,9 @@ export type GoodsSellOrderItem = {
   goods_id: number
   price: string
   user_id: string
+  asset_info: {
+    paintwear: string
+  }
 }
 
 export type GoodsSellOrder = {
@@ -38,6 +41,7 @@ export type MarketGoodsItem = {
   sell_reference_price: string
   goods_info: {
     steam_price: string
+    icon_url: string
   }
   sell_num: number
 }

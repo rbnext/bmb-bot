@@ -1,87 +1,72 @@
+import { Context } from 'telegraf'
+import { JOBS } from '.'
 import { getMarketGoods, getMarketGoodsBillOrder } from './api/buff'
 import { getMarketPriceOverview } from './api/steam'
+import { weaponGroups } from './config'
 import { purchaseGoodsById } from './core'
 import { MarketPriceOverview } from './types'
 import { calculateROI, canMakePurchase, sleep } from './utils'
 
-const MARKET_CACHE: Record<string, MarketPriceOverview> = {}
+export const MARKET_CACHE: Record<string, MarketPriceOverview> = {}
 
-export const buff2steam = async ({
-  pagesToLoad,
-  params,
-  logger,
-}: {
-  pagesToLoad: number
-  params: Record<string, string | number>
-  logger: (data: { message: string; error?: boolean }) => void
-}) => {
+export const buff2steam = (ctx: Context) => async () => {
   let currentPage = 1
-  let hasNextPage = pagesToLoad > 1
+  let pagesToLoad = 20
+  let hasNextPage = true
 
-  do {
-    const marketGoods = await getMarketGoods({ ...params, page_num: currentPage })
+  try {
+    do {
+      const page_num = currentPage
+      const category_group = weaponGroups.join(',')
+      const marketGoods = await getMarketGoods({ category_group, page_num })
 
-    if (marketGoods?.code === 'Internal Server Timeout') {
-      await logger({ message: `Warning: ${marketGoods.code}` })
+      if (marketGoods?.code === 'Internal Server Timeout') {
+        await ctx.telegram.sendMessage(ctx.message!.chat.id, `Warning ${marketGoods.code}`)
 
-      break
-    }
-
-    if (hasNextPage) {
-      hasNextPage = currentPage < pagesToLoad
-    }
-
-    for (const {
-      id,
-      sell_min_price,
-      market_hash_name,
-      goods_info: { steam_price },
-    } of marketGoods.data.items) {
-      const sellMaxPrice = +steam_price
-      const sellMinPrice = +sell_min_price
-
-      if (calculateROI(sellMaxPrice, sellMinPrice) < 45) {
-        continue
+        break
       }
 
-      const cache = MARKET_CACHE[market_hash_name]
-      const marketOverview = cache ? cache : await getMarketPriceOverview({ market_hash_name })
-      MARKET_CACHE[market_hash_name] = { ...marketOverview }
-
-      if (!canMakePurchase({ marketOverview, sellMinPrice, minVolume: 100 })) {
-        console.log(
-          `Purchase '${market_hash_name}' has been skipped because of low market volume ${marketOverview.volume}`
-        )
-
-        continue
+      if (hasNextPage) {
+        hasNextPage = currentPage < pagesToLoad
       }
 
-      const marketGoodsBillOrders = await getMarketGoodsBillOrder({ goods_id: id })
-      const has_lower_than_current_price = marketGoodsBillOrders.data.items.some((item) => sellMinPrice > +item.price)
+      for (const item of marketGoods.data.items) {
+        const market_hash_name = item.market_hash_name
+        const sellMaxPrice = +item.goods_info.steam_price
+        const sellMinPrice = +item.sell_min_price
 
-      if (marketGoodsBillOrders.data.items.length !== 0 && !has_lower_than_current_price) {
-        await purchaseGoodsById({ goodsId: id, sellMinPrice: sell_min_price, marketHashName: market_hash_name, logger })
+        if (calculateROI(sellMaxPrice, sellMinPrice) < 45) {
+          continue
+        }
+
+        const cache = MARKET_CACHE[market_hash_name]
+        const marketOverview = cache ? cache : await getMarketPriceOverview({ market_hash_name })
+        MARKET_CACHE[market_hash_name] = { ...marketOverview }
+
+        if (!canMakePurchase({ marketOverview, sellMinPrice, minVolume: 100 })) {
+          console.log(market_hash_name, `steam volume: ${MARKET_CACHE[market_hash_name].volume}\n`)
+          continue
+        }
+
+        const marketGoodsBillOrders = await getMarketGoodsBillOrder({ goods_id: item.id })
+        const has_lower_than_current_price = marketGoodsBillOrders.data.items.some((item) => sellMinPrice > +item.price)
+
+        if (marketGoodsBillOrders.data.items.length !== 0 && !has_lower_than_current_price) {
+          await purchaseGoodsById(item, ctx)
+        } else {
+          console.log(market_hash_name, `has lower than current price: ${has_lower_than_current_price}`)
+        }
       }
-    }
 
-    if (hasNextPage) {
-      await sleep(10_000)
-    }
+      if (hasNextPage) {
+        await sleep(10_000)
+      }
 
-    currentPage += 1
-  } while (hasNextPage)
+      currentPage += 1
+    } while (hasNextPage)
+  } catch (error) {
+    console.log(error)
+
+    JOBS[ctx.message!.chat.id].cancel()
+  }
 }
-
-// buff2steam({
-//   pagesToLoad: 20,
-//   params: {
-//     min_price: 1,
-//     max_price: 4,
-//     sort_by: 'sell_num.desc',
-//     category_group: weaponGroups.join(','),
-//   },
-//   logger: ({ message, error }) => {
-//     if (error) console.warn(message)
-//     else console.log(message)
-//   },
-// })

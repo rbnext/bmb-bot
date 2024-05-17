@@ -22,7 +22,7 @@ export const buff2steam = async ({
     const marketGoods = await getMarketGoods({ ...params, page_num: currentPage })
 
     if (marketGoods?.code === 'Internal Server Timeout') {
-      await logger({ message: marketGoods.code })
+      await logger({ message: `Warning: ${marketGoods.code}` })
 
       break
     }
@@ -40,7 +40,7 @@ export const buff2steam = async ({
       const sellMaxPrice = +steam_price
       const sellMinPrice = +sell_min_price
 
-      if (calculateROI(sellMaxPrice, sellMinPrice) < 47) {
+      if (calculateROI(sellMaxPrice, sellMinPrice) < 45) {
         continue
       }
 
@@ -48,18 +48,24 @@ export const buff2steam = async ({
       const marketOverview = cache ? cache : await getMarketPriceOverview({ market_hash_name })
       MARKET_CACHE[market_hash_name] = { ...marketOverview }
 
+      if (!canMakePurchase({ marketOverview, sellMinPrice, minVolume: 100 })) {
+        console.log(
+          `Purchase '${market_hash_name}' has been skipped because of low market volume ${marketOverview.volume}`
+        )
+
+        continue
+      }
+
       const marketGoodsBillOrders = await getMarketGoodsBillOrder({ goods_id: id })
       const has_lower_than_current_price = marketGoodsBillOrders.data.items.some((item) => sellMinPrice > +item.price)
 
-      if (canMakePurchase({ marketOverview, sellMinPrice, minVolume: 100 }) && !has_lower_than_current_price) {
+      if (marketGoodsBillOrders.data.items.length !== 0 && !has_lower_than_current_price) {
         await purchaseGoodsById({ goodsId: id, sellMinPrice: sell_min_price, marketHashName: market_hash_name, logger })
-      } else {
-        console.log('Skipped: ', market_hash_name, sell_min_price, marketOverview.volume, has_lower_than_current_price)
       }
     }
 
     if (hasNextPage) {
-      await sleep(11_555)
+      await sleep(10_000)
     }
 
     currentPage += 1

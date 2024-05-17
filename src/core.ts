@@ -21,7 +21,7 @@ export const purchaseGoodsById = async (
     if (Number(filteredGood.price) > totalAmount) {
       JOBS[ctx.message!.chat.id].cancel()
 
-      await ctx.telegram.sendMessage(ctx.message!.chat.id, `"Oops! Not enough funds. Please add more to your account.`)
+      await ctx.telegram.sendMessage(ctx.message!.chat.id, 'Oops! Not enough funds. Please add more to your account.')
 
       break
     }

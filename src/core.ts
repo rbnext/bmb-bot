@@ -29,14 +29,15 @@ export const purchaseGoodsById = async (
     await sleep(1_000)
     await postGoodsBuy({ sell_order_id: filteredGood.id, price: Number(filteredGood.price) })
 
-    await ctx.telegram.sendPhoto(ctx.message!.chat.id, icon_url, {
-      caption:
-        `${market_hash_name}\n\n` +
-        `Buff Market price: ${sell_min_price}$\n` +
+    await ctx.telegram.sendMessage(
+      ctx.message!.chat.id,
+      `${market_hash_name}\n\n` +
+        `Buff market price: ${sell_min_price}$\n` +
         `Steam median price: ${MARKET_CACHE[market_hash_name].median_price}\n` +
         `Steam volume: ${MARKET_CACHE[market_hash_name].volume}\n` +
-        `Paintwear: ${filteredGood.asset_info?.paintwear ?? 'undefined'}`,
-    })
+        `Paintwear: ${filteredGood.asset_info?.paintwear ?? 'undefined'}\n` +
+        `Buff market link: https://buff.market/market/goods/${id}`
+    )
 
     totalAmount -= Number(filteredGood.price)
   }

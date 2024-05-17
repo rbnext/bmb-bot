@@ -4,7 +4,7 @@ import { Context, Telegraf } from 'telegraf'
 import schedule from 'node-schedule'
 import { getBriefAsset } from './api/buff'
 import { buff2steam } from './buff2steam'
-import { weaponCases, weaponGroups } from './config'
+import { weaponGroups } from './config'
 
 const JOBS: Record<string, schedule.Job[]> = {}
 

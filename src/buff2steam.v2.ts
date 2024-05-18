@@ -1,6 +1,6 @@
 import { Context } from 'telegraf'
 import { JOBS } from '.'
-import { getMarketPriceHistory, getTopBookmarked } from './api/buff'
+import { getMarketGoods, getMarketPriceHistory } from './api/buff'
 import { weaponGroups } from './config'
 import { MarketPriceOverview } from './types'
 import { median, sleep } from './utils'
@@ -17,7 +17,7 @@ export const buff2steam = (ctx: Context) => async () => {
     do {
       const page_num = currentPage
       const category_group = weaponGroups.join(',')
-      const marketGoods = await getTopBookmarked({ category_group, page_num })
+      const marketGoods = await getMarketGoods({ category_group, page_num })
 
       if (marketGoods?.code === 'Internal Server Timeout') {
         await ctx.telegram.sendMessage(ctx.message!.chat.id, `Warning ${marketGoods.code}`)
@@ -30,11 +30,11 @@ export const buff2steam = (ctx: Context) => async () => {
       }
 
       for (const item of marketGoods.data.items) {
-        const goods_id = item.goods_id
-        const steam_price = marketGoods.data.goods_infos[item.goods_id].steam_price
-        const market_hash_name = marketGoods.data.goods_infos[item.goods_id].market_hash_name
+        const goods_id = item.id
+        const steam_price = item.goods_info.steam_price
+        const market_hash_name = item.market_hash_name
 
-        const current_price = Number(item.price)
+        const current_price = Number(item.sell_min_price)
 
         if (goods_id in GOODS_CACHE && GOODS_CACHE[goods_id].price === current_price) {
           continue
@@ -42,8 +42,6 @@ export const buff2steam = (ctx: Context) => async () => {
 
         if (goods_id in GOODS_CACHE && GOODS_CACHE[goods_id].price !== current_price) {
           const history = await getMarketPriceHistory({ goods_id })
-
-          console.log(market_hash_name, current_price)
 
           if (history.data.price_history.length >= 10) {
             const median_price = median(history.data.price_history.map(([_, price]) => price))

@@ -21,6 +21,25 @@ export type GoodsSellOrder = {
   code: string
 }
 
+export type TopBookmarkedItem = {
+  goods_id: number
+  price: string
+}
+
+export type TopBookmarked = {
+  data: {
+    goods_infos: {
+      [key: number]: {
+        goods_id: number
+        market_hash_name: string
+        steam_price: string
+      }
+    }
+    items: TopBookmarkedItem[]
+  }
+  code: string
+}
+
 export type BriefAsset = {
   data: {
     total_amount: number
@@ -62,6 +81,14 @@ export type MarketGoodsBillOrder = {
     items: MarketGoodsBillOrderItem[]
   }
   code: string
+}
+
+export type PriceHistoryItem = [number, number]
+
+export type MarketPriceHistory = {
+  data: {
+    price_history: PriceHistoryItem[]
+  }
 }
 
 export type MarketPriceOverview = {

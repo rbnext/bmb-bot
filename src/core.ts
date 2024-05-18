@@ -5,10 +5,7 @@ import { MARKET_CACHE } from './buff2steam'
 import { MarketGoodsItem } from './types'
 import { sleep } from './utils'
 
-export const purchaseGoodsById = async (
-  { id, market_hash_name, sell_min_price, goods_info: { steam_price, icon_url } }: MarketGoodsItem,
-  ctx: Context
-) => {
+export const purchaseGoodsById = async ({ id, market_hash_name, sell_min_price }: MarketGoodsItem, ctx: Context) => {
   const {
     data: { cash_amount },
   } = await getBriefAsset()

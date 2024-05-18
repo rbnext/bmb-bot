@@ -1,7 +1,15 @@
 import axios from 'axios'
 import { parse } from 'set-cookie-parser'
 
-import { BriefAsset, GoodsBuyResponse, GoodsSellOrder, MarketGoods, MarketGoodsBillOrder } from '../types'
+import {
+  BriefAsset,
+  GoodsBuyResponse,
+  GoodsSellOrder,
+  MarketGoods,
+  MarketGoodsBillOrder,
+  MarketPriceHistory,
+  TopBookmarked,
+} from '../types'
 
 export const defaultCookies: Record<string, string> = {
   'Locale-Supported': 'en',
@@ -133,6 +141,28 @@ export const getGoodsSellOrder = async ({
   return data
 }
 
+export const getTopBookmarked = async ({
+  game = 'csgo',
+  page_num = 1,
+  page_size = 50,
+  category_group,
+  min_price = 5,
+  max_price = 40,
+}: {
+  game?: string
+  page_num?: number
+  page_size?: number
+  category_group?: string
+  min_price?: number
+  max_price?: number
+}): Promise<TopBookmarked> => {
+  const { data } = await http.get('/market/sell_order/top_bookmarked', {
+    params: { game, page_num, page_size, category_group, max_price, min_price },
+  })
+
+  return data
+}
+
 export const getBriefAsset = async (): Promise<BriefAsset> => {
   const { data } = await http.get('/asset/get_brief_asset')
 
@@ -147,6 +177,24 @@ export const getMarketGoodsBillOrder = async ({
   goods_id: number
 }): Promise<MarketGoodsBillOrder> => {
   const { data } = await http.get('/market/goods/bill_order', { params: { game, goods_id } })
+
+  return data
+}
+
+export const getMarketPriceHistory = async ({
+  game = 'csgo',
+  goods_id,
+  days = 7,
+  buff_price_type = 1,
+}: {
+  game?: string
+  goods_id: number
+  buff_price_type?: number
+  days?: number
+}): Promise<MarketPriceHistory> => {
+  const { data } = await http.get('market/goods/price_history/buff', {
+    params: { game, goods_id, days, buff_price_type },
+  })
 
   return data
 }

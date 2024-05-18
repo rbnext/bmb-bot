@@ -3,7 +3,7 @@ import 'dotenv/config'
 import { Context, Telegraf } from 'telegraf'
 import schedule from 'node-schedule'
 import { getBriefAsset } from './api/buff'
-import { buff2steam } from './buff2steam'
+import { buff2steam } from './buff2steam.v2'
 
 export const JOBS: Record<string, schedule.Job> = {}
 
@@ -20,7 +20,7 @@ bot.command('start', async (ctx: Context) => {
 
   JOBS[chatReferenceId]?.cancel()
 
-  JOBS[chatReferenceId] = schedule.scheduleJob('*/10 * * * *', buff2steam(ctx))
+  JOBS[chatReferenceId] = schedule.scheduleJob('*/3 * * * *', buff2steam(ctx))
 })
 
 bot.command('stop', async (ctx) => {

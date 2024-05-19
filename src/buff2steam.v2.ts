@@ -43,6 +43,8 @@ export const buff2steam = (ctx: Context) => async () => {
         if (goods_id in GOODS_CACHE && GOODS_CACHE[goods_id].price !== current_price) {
           const history = await getMarketPriceHistory({ goods_id })
 
+          console.log(market_hash_name, GOODS_CACHE[goods_id].price, '->', current_price)
+
           if (history.data.price_history.length >= 10) {
             const median_price = median(history.data.price_history.map(([_, price]) => price))
             const estimated_profit = (median_price / current_price - 1) * 100
@@ -56,11 +58,7 @@ export const buff2steam = (ctx: Context) => async () => {
                   `Estimated profit(%) ${estimated_profit.toFixed(2)}%\n` +
                   `Buff market link: https://buff.market/market/goods/${goods_id}`
               )
-            } else {
-              console.log(market_hash_name, 'estimated_profit value less then 10')
             }
-          } else {
-            console.log(market_hash_name, 'price_history data less then 10 items')
           }
 
           GOODS_CACHE[goods_id].price = current_price

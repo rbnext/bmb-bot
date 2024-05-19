@@ -4,6 +4,7 @@ import { getMarketGoods, getMarketPriceHistory } from './api/buff'
 import { weaponGroups } from './config'
 import { MarketPriceOverview } from './types'
 import { median, sleep } from './utils'
+import { format } from 'date-fns'
 
 export const GOODS_CACHE: Record<number, { price: number }> = {}
 export const MARKET_CACHE: Record<number, MarketPriceOverview> = {}
@@ -41,13 +42,16 @@ export const buff2steam = (ctx: Context) => async () => {
         }
 
         if (goods_id in GOODS_CACHE && GOODS_CACHE[goods_id].price !== current_price) {
+          const now = format(new Date(), 'dd MMM yyyy, HH:mm')
           const history = await getMarketPriceHistory({ goods_id })
 
-          console.log(market_hash_name, GOODS_CACHE[goods_id].price, '->', current_price)
+          console.log(
+            `${now}: The price for ${market_hash_name} changed from ${GOODS_CACHE[goods_id].price} to ${current_price}`
+          )
 
           if (history.data.price_history.length >= 10) {
             const median_price = median(history.data.price_history.map(([_, price]) => price))
-            const estimated_profit = (median_price / current_price - 1) * 100
+            const estimated_profit = ((median_price * 0.975) / current_price - 1) * 100
 
             if (estimated_profit > 10) {
               await ctx.telegram.sendMessage(

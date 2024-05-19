@@ -43,7 +43,7 @@ export const buff2steam = (ctx: Context) => async () => {
           continue
         }
 
-        if (goods_id in GOODS_CACHE && GOODS_CACHE[goods_id].price > current_price) {
+        if (goods_id in GOODS_CACHE && GOODS_CACHE[goods_id].price !== current_price) {
           console.log(`${now}: ${market_hash_name} ${GOODS_CACHE[goods_id].price}$ -> ${current_price}$`)
         }
 
@@ -65,6 +65,8 @@ export const buff2steam = (ctx: Context) => async () => {
               )
             }
           }
+
+          await sleep(2_000)
         }
 
         GOODS_CACHE[goods_id] = { price: current_price }

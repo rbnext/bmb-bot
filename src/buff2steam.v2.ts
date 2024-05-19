@@ -37,17 +37,18 @@ export const buff2steam = (ctx: Context) => async () => {
 
         const current_price = Number(item.sell_min_price)
 
+        const now = format(new Date(), 'dd MMM yyyy, HH:mm')
+
         if (goods_id in GOODS_CACHE && GOODS_CACHE[goods_id].price === current_price) {
           continue
         }
 
-        if (goods_id in GOODS_CACHE && GOODS_CACHE[goods_id].price !== current_price) {
-          const now = format(new Date(), 'dd MMM yyyy, HH:mm')
-          const history = await getMarketPriceHistory({ goods_id })
+        if (goods_id in GOODS_CACHE && GOODS_CACHE[goods_id].price > current_price) {
+          console.log(`${now}: ${market_hash_name} ${GOODS_CACHE[goods_id].price}$ -> ${current_price}$`)
+        }
 
-          console.log(
-            `${now}: The price for ${market_hash_name} changed from ${GOODS_CACHE[goods_id].price} to ${current_price}`
-          )
+        if (goods_id in GOODS_CACHE && GOODS_CACHE[goods_id].price > current_price) {
+          const history = await getMarketPriceHistory({ goods_id })
 
           if (history.data.price_history.length >= 10) {
             const median_price = median(history.data.price_history.map(([_, price]) => price))
@@ -64,10 +65,6 @@ export const buff2steam = (ctx: Context) => async () => {
               )
             }
           }
-
-          GOODS_CACHE[goods_id].price = current_price
-
-          continue
         }
 
         GOODS_CACHE[goods_id] = { price: current_price }

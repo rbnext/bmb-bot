@@ -3,7 +3,7 @@ import { JOBS } from '.'
 import { getMarketGoods, getMarketPriceHistory } from './api/buff'
 import { weaponGroups } from './config'
 import { MarketPriceOverview } from './types'
-import { median, sleep } from './utils'
+import { isLessThanThreshold, median, sleep } from './utils'
 import { format } from 'date-fns'
 
 export const GOODS_CACHE: Record<number, { price: number }> = {}
@@ -39,7 +39,9 @@ export const buff2steam = (ctx: Context) => async () => {
 
         const now = format(new Date(), 'dd MMM yyyy, HH:mm')
 
-        if (goods_id in GOODS_CACHE && GOODS_CACHE[goods_id].price === current_price) {
+        if (goods_id in GOODS_CACHE && isLessThanThreshold(GOODS_CACHE[goods_id].price, current_price)) {
+          GOODS_CACHE[goods_id].price = current_price
+
           continue
         }
 

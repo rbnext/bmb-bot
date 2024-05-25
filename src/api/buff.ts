@@ -124,7 +124,7 @@ export const getGoodsSellOrder = async ({
   page_num = 1,
   goods_id,
   sort_by = 'default',
-  exclude_current_user,
+  exclude_current_user = 1,
   max_price,
 }: {
   game?: string
@@ -132,7 +132,7 @@ export const getGoodsSellOrder = async ({
   goods_id: number
   sort_by?: string
   max_price?: string
-  exclude_current_user: number
+  exclude_current_user?: number
 }): Promise<GoodsSellOrder> => {
   const { data } = await http.get('/market/goods/sell_order', {
     params: { game, page_num, goods_id, sort_by, exclude_current_user, max_price },

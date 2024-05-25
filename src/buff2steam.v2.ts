@@ -56,14 +56,15 @@ export const buff2steam = (ctx: Context) => async () => {
           const history = await getMarketPriceHistory({ goods_id })
 
           if (history.data.price_history.length >= 5) {
-            const sellOrders = await getGoodsSellOrder({ goods_id, max_price: sell_min_price, exclude_current_user: 1 })
-            const marketOverview = await getMarketPriceOverview({ market_hash_name })
-
-            const [lowestPricedItem] = sellOrders.data.items
             const median_price = median(history.data.price_history.map(([_, price]) => price))
             const estimated_profit = ((median_price * 0.975) / current_price - 1) * 100
 
-            if (median_price > 0) {
+            if (estimated_profit > 0) {
+              const sellOrders = await getGoodsSellOrder({ goods_id, max_price: sell_min_price })
+              const marketOverview = await getMarketPriceOverview({ market_hash_name })
+
+              const [lowestPricedItem] = sellOrders.data.items
+
               await ctx.telegram.sendMessage(
                 ctx.message!.chat.id,
                 `${market_hash_name}\n\n` +
@@ -74,6 +75,8 @@ export const buff2steam = (ctx: Context) => async () => {
                   `Estimated profit(%) ${estimated_profit.toFixed(2)}%\n` +
                   `Buff market link: https://buff.market/market/goods/${goods_id}`
               )
+            } else {
+              console.log(`${now}: ${market_hash_name} estimated profit(%): ${estimated_profit.toFixed(2)}`)
             }
           }
 

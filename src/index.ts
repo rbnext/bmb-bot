@@ -13,7 +13,7 @@ bot.command('start', async (ctx: Context) => {
   const briefAsset = await getBriefAsset()
   const chatReferenceId = ctx.message!.chat.id
 
-  let totalAmount = Number(briefAsset.data.cash_amount)
+  const totalAmount = Number(briefAsset.data.cash_amount)
 
   await ctx.telegram.sendMessage(chatReferenceId, 'Starting...')
   await ctx.telegram.sendMessage(chatReferenceId, `Buff account balance: ${totalAmount}$`)

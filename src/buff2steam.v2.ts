@@ -1,10 +1,11 @@
 import { Context } from 'telegraf'
 import { JOBS } from '.'
-import { getMarketGoods, getMarketPriceHistory } from './api/buff'
-import { weaponGroups } from './config'
+import { getGoodsSellOrder, getMarketGoods, getMarketPriceHistory } from './api/buff'
+import { exteriorGroups, weaponGroups } from './config'
 import { MarketPriceOverview } from './types'
 import { isLessThanThreshold, median, sleep } from './utils'
 import { format } from 'date-fns'
+import { getMarketPriceOverview } from './api/steam'
 
 export const GOODS_CACHE: Record<number, { price: number }> = {}
 export const MARKET_CACHE: Record<number, MarketPriceOverview> = {}
@@ -17,8 +18,9 @@ export const buff2steam = (ctx: Context) => async () => {
   try {
     do {
       const page_num = currentPage
+      const exterior = exteriorGroups.join(',')
       const category_group = weaponGroups.join(',')
-      const marketGoods = await getMarketGoods({ category_group, page_num })
+      const marketGoods = await getMarketGoods({ category_group, page_num, exterior })
 
       if (marketGoods?.code === 'Internal Server Timeout') {
         await ctx.telegram.sendMessage(ctx.message!.chat.id, `Warning ${marketGoods.code}`)
@@ -34,8 +36,9 @@ export const buff2steam = (ctx: Context) => async () => {
         const goods_id = item.id
         const steam_price = item.goods_info.steam_price
         const market_hash_name = item.market_hash_name
+        const sell_min_price = item.sell_min_price
 
-        const current_price = Number(item.sell_min_price)
+        const current_price = Number(sell_min_price)
 
         const now = format(new Date(), 'dd MMM yyyy, HH:mm')
 
@@ -52,20 +55,24 @@ export const buff2steam = (ctx: Context) => async () => {
         if (goods_id in GOODS_CACHE && GOODS_CACHE[goods_id].price > current_price) {
           const history = await getMarketPriceHistory({ goods_id })
 
-          if (history.data.price_history.length >= 10) {
+          if (history.data.price_history.length >= 5) {
+            const sellOrders = await getGoodsSellOrder({ goods_id, max_price: sell_min_price, exclude_current_user: 1 })
+            const marketOverview = await getMarketPriceOverview({ market_hash_name })
+
+            const [lowestPricedItem] = sellOrders.data.items
             const median_price = median(history.data.price_history.map(([_, price]) => price))
             const estimated_profit = ((median_price * 0.975) / current_price - 1) * 100
 
-            if (estimated_profit > 10) {
-              await ctx.telegram.sendMessage(
-                ctx.message!.chat.id,
-                `${market_hash_name}\n\n` +
-                  `Buff market price: ${current_price}$\n` +
-                  `Steam market price: ${steam_price}$\n` +
-                  `Estimated profit(%) ${estimated_profit.toFixed(2)}%\n` +
-                  `Buff market link: https://buff.market/market/goods/${goods_id}`
-              )
-            }
+            await ctx.telegram.sendMessage(
+              ctx.message!.chat.id,
+              `${market_hash_name}\n\n` +
+                `Item float: ${lowestPricedItem?.asset_info?.paintwear ?? 'unknown'}` +
+                `Buff market price: ${current_price}$\n` +
+                `Steam market price: ${steam_price}$\n` +
+                `Steam market volume: ${marketOverview?.volume ?? 'unknown'}$\n` +
+                `Estimated profit(%) ${estimated_profit.toFixed(2)}%\n` +
+                `Buff market link: https://buff.market/market/goods/${goods_id}`
+            )
           }
 
           await sleep(2_000)

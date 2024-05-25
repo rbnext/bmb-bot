@@ -44,7 +44,7 @@ export const median = (array: number[]): number => {
   return sorted[middle]
 }
 
-export const isLessThanThreshold = (aPrice: number, bPrice: number, threshold = 0.05) => {
+export const isLessThanThreshold = (aPrice: number, bPrice: number, threshold = 1) => {
   const priceDifference = Math.abs(aPrice - bPrice)
   const roundedDifference = Math.round(priceDifference * 100) / 100
 

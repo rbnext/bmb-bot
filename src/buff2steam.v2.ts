@@ -76,7 +76,7 @@ export const buff2steam = (ctx: Context) => async () => {
                   `Buff market link: https://buff.market/market/goods/${goods_id}`
               )
             } else {
-              console.log(`${now}: ${market_hash_name} estimated profit: ${estimated_profit.toFixed(2)}%`)
+              console.log(`${now}: ${market_hash_name} estimated profit ${estimated_profit.toFixed(2)}%`)
             }
           }
 

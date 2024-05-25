@@ -63,16 +63,18 @@ export const buff2steam = (ctx: Context) => async () => {
             const median_price = median(history.data.price_history.map(([_, price]) => price))
             const estimated_profit = ((median_price * 0.975) / current_price - 1) * 100
 
-            await ctx.telegram.sendMessage(
-              ctx.message!.chat.id,
-              `${market_hash_name}\n\n` +
-                `Item float: ${lowestPricedItem?.asset_info?.paintwear ?? 'unknown'}\n` +
-                `Buff market price: ${current_price}$\n` +
-                `Steam market price: ${steam_price}$\n` +
-                `Steam market volume: ${marketOverview?.volume ?? 'unknown'}$\n` +
-                `Estimated profit(%) ${estimated_profit.toFixed(2)}%\n` +
-                `Buff market link: https://buff.market/market/goods/${goods_id}`
-            )
+            if (median_price > 0) {
+              await ctx.telegram.sendMessage(
+                ctx.message!.chat.id,
+                `${market_hash_name}\n\n` +
+                  `Buff price: ${current_price}$\n` +
+                  `Float: ${lowestPricedItem?.asset_info?.paintwear ?? 'unknown'}\n` +
+                  `Steam price: ${steam_price}$\n` +
+                  `Steam volume: ${marketOverview?.volume ?? 'unknown'}\n` +
+                  `Estimated profit(%) ${estimated_profit.toFixed(2)}%\n` +
+                  `Buff market link: https://buff.market/market/goods/${goods_id}`
+              )
+            }
           }
 
           await sleep(2_000)

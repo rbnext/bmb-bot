@@ -66,7 +66,7 @@ export const buff2steam = (ctx: Context) => async () => {
             await ctx.telegram.sendMessage(
               ctx.message!.chat.id,
               `${market_hash_name}\n\n` +
-                `Item float: ${lowestPricedItem?.asset_info?.paintwear ?? 'unknown'}` +
+                `Item float: ${lowestPricedItem?.asset_info?.paintwear ?? 'unknown'}\n` +
                 `Buff market price: ${current_price}$\n` +
                 `Steam market price: ${steam_price}$\n` +
                 `Steam market volume: ${marketOverview?.volume ?? 'unknown'}$\n` +

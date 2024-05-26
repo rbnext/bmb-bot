@@ -82,6 +82,7 @@ export const getMarketGoods = async ({
   min_price = 5,
   max_price = 100,
   category_group,
+  quality = 'normal',
   series,
   exterior,
   sort_by = 'sell_num.desc',
@@ -90,6 +91,7 @@ export const getMarketGoods = async ({
   search?: string
   page_num?: number
   page_size?: number
+  quality?: string
   category?: string
   itemset?: string
   min_price?: number
@@ -109,6 +111,7 @@ export const getMarketGoods = async ({
       itemset,
       min_price,
       max_price,
+      quality,
       category_group,
       series,
       exterior,

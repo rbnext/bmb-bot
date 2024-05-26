@@ -1,10 +1,10 @@
 import { Context } from 'telegraf'
 import { JOBS } from '.'
-import { getGoodsSellOrder, getMarketGoods, getMarketPriceHistory } from './api/buff'
+import { getGoodsSellOrder, getMarketGoods, getMarketGoodsBillOrder, getMarketPriceHistory } from './api/buff'
 import { exteriorGroups, weaponGroups } from './config'
 import { MarketPriceOverview } from './types'
 import { isLessThanThreshold, median, sleep } from './utils'
-import { format } from 'date-fns'
+import { format, differenceInDays } from 'date-fns'
 import { getMarketPriceOverview } from './api/steam'
 
 export const GOODS_CACHE: Record<number, { price: number }> = {}
@@ -53,10 +53,14 @@ export const buff2steam = (ctx: Context) => async () => {
         }
 
         if (goods_id in GOODS_CACHE && GOODS_CACHE[goods_id].price > current_price) {
-          const history = await getMarketPriceHistory({ goods_id })
+          const history = await getMarketGoodsBillOrder({ goods_id })
 
-          if (history.data.price_history.length >= 5) {
-            const median_price = median(history.data.price_history.map(([_, price]) => price))
+          const salesLastWeek = history.data.items.filter(({ updated_at }) => {
+            return differenceInDays(new Date(), new Date(updated_at * 1000)) <= 7
+          })
+
+          if (salesLastWeek.length >= 5) {
+            const median_price = median(salesLastWeek.map(({ price }) => Number(price)))
             const estimated_profit = ((median_price * 0.975) / current_price - 1) * 100
 
             if (estimated_profit > 0) {

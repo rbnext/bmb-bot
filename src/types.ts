@@ -74,6 +74,7 @@ export type MarketGoods = {
 
 export type MarketGoodsBillOrderItem = {
   price: string
+  updated_at: number
 }
 
 export type MarketGoodsBillOrder = {

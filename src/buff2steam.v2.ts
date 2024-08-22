@@ -1,6 +1,6 @@
 import { Context } from 'telegraf'
 import { JOBS } from '.'
-import { getGoodsSellOrder, getMarketGoods, getMarketGoodsBillOrder, getMarketPriceHistory } from './api/buff'
+import { getGoodsInfo, getGoodsSellOrder, getMarketGoods, getMarketGoodsBillOrder } from './api/buff'
 import { exteriorGroups, weaponGroups } from './config'
 import { MarketPriceOverview } from './types'
 import { isLessThanThreshold, median, sleep } from './utils'
@@ -12,7 +12,7 @@ export const MARKET_CACHE: Record<number, MarketPriceOverview> = {}
 
 export const buff2steam = (ctx: Context) => async () => {
   let currentPage = 1
-  let pagesToLoad = 5
+  const pagesToLoad = 5
   let hasNextPage = true
 
   try {
@@ -53,10 +53,12 @@ export const buff2steam = (ctx: Context) => async () => {
         }
 
         if (goods_id in GOODS_CACHE && GOODS_CACHE[goods_id].price > current_price) {
+          // Get all the most recent sales from the 'Sale History' tab.
           const history = await getMarketGoodsBillOrder({ goods_id })
 
-          const salesLastWeek = history.data.items.filter(({ updated_at }) => {
-            return differenceInDays(new Date(), new Date(updated_at * 1000)) <= 7
+          // Exclude global supply and items sold more than 7 days ago.
+          const salesLastWeek = history.data.items.filter(({ updated_at, type }) => {
+            return differenceInDays(new Date(), new Date(updated_at * 1000)) <= 7 && type !== 2
           })
 
           if (salesLastWeek.length >= 5) {
@@ -66,6 +68,7 @@ export const buff2steam = (ctx: Context) => async () => {
             if (estimated_profit > 0) {
               const sellOrders = await getGoodsSellOrder({ goods_id, max_price: sell_min_price })
               const marketOverview = await getMarketPriceOverview({ market_hash_name })
+              const goodsInfo = await getGoodsInfo({ goods_id })
 
               const [lowestPricedItem] = sellOrders.data.items
 
@@ -73,8 +76,9 @@ export const buff2steam = (ctx: Context) => async () => {
                 ctx.message!.chat.id,
                 `${market_hash_name}\n\n` +
                   `Buff price: ${current_price}$\n` +
-                  `Float: ${lowestPricedItem?.asset_info?.paintwear ?? 'unknown'}\n` +
                   `Steam price: ${steam_price}$\n` +
+                  `Buff163 price: ${goodsInfo?.data?.goods_info?.goods_ref_price}$\n` +
+                  `Float: ${lowestPricedItem?.asset_info?.paintwear ?? 'unknown'}\n` +
                   `Steam volume: ${marketOverview?.volume ?? 'unknown'}\n` +
                   `Estimated profit(%) ${estimated_profit.toFixed(2)}%\n` +
                   `Buff market link: https://buff.market/market/goods/${goods_id}`

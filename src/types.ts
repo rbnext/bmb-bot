@@ -75,11 +75,21 @@ export type MarketGoods = {
 export type MarketGoodsBillOrderItem = {
   price: string
   updated_at: number
+  type: number
 }
 
 export type MarketGoodsBillOrder = {
   data: {
     items: MarketGoodsBillOrderItem[]
+  }
+  code: string
+}
+
+export type GoodsInfo = {
+  data: {
+    goods_info: {
+      goods_ref_price: string
+    }
   }
   code: string
 }

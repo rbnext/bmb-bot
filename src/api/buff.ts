@@ -4,6 +4,7 @@ import { parse } from 'set-cookie-parser'
 import {
   BriefAsset,
   GoodsBuyResponse,
+  GoodsInfo,
   GoodsSellOrder,
   MarketGoods,
   MarketGoodsBillOrder,
@@ -180,6 +181,18 @@ export const getMarketGoodsBillOrder = async ({
   goods_id: number
 }): Promise<MarketGoodsBillOrder> => {
   const { data } = await http.get('/market/goods/bill_order', { params: { game, goods_id } })
+
+  return data
+}
+
+export const getGoodsInfo = async ({
+  game = 'csgo',
+  goods_id,
+}: {
+  game?: string
+  goods_id: number
+}): Promise<GoodsInfo> => {
+  const { data } = await http.get('/market/goods/info', { params: { game, goods_id } })
 
   return data
 }

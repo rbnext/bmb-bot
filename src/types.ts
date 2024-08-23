@@ -4,8 +4,16 @@ export type GoodsSellOrderItem = {
   goods_id: number
   price: string
   user_id: string
+
   asset_info: {
+    classid: string
+    assetid: string
+    instanceid: string
+    contextid: number
     paintwear: string
+    info: {
+      stickers: unknown[]
+    }
   }
 }
 
@@ -44,6 +52,23 @@ export type BriefAsset = {
   data: {
     total_amount: number
     cash_amount: number
+  }
+}
+
+export type Sticker = {
+  category: 'sticker'
+  goods_id: number
+  img_url: string
+  name: string
+  sell_reference_price: string
+  sticker_name: string
+}
+
+export type MarketItemDetail = {
+  data: {
+    asset_info: {
+      stickers: Sticker[]
+    }
   }
 }
 

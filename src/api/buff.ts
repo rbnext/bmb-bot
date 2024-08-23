@@ -8,6 +8,7 @@ import {
   GoodsSellOrder,
   MarketGoods,
   MarketGoodsBillOrder,
+  MarketItemDetail,
   MarketPriceHistory,
   TopBookmarked,
 } from '../types'
@@ -181,6 +182,27 @@ export const getMarketGoodsBillOrder = async ({
   goods_id: number
 }): Promise<MarketGoodsBillOrder> => {
   const { data } = await http.get('/market/goods/bill_order', { params: { game, goods_id } })
+
+  return data
+}
+export const getMarketItemDetail = async ({
+  game = 'csgo',
+  classid,
+  instanceid,
+  assetid,
+  contextid,
+  sell_order_id,
+}: {
+  game?: string
+  classid: string
+  instanceid: string
+  assetid: string
+  contextid: number
+  sell_order_id: string
+}): Promise<MarketItemDetail> => {
+  const { data } = await http.get('/market/item_detail', {
+    params: { game, classid, instanceid, assetid, contextid, sell_order_id },
+  })
 
   return data
 }

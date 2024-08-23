@@ -81,7 +81,8 @@ export const buff2steam = (ctx: Context) => async () => {
                   `Float: ${lowestPricedItem?.asset_info?.paintwear ?? 'unknown'}\n` +
                   `Steam volume: ${marketOverview?.volume ?? 'unknown'}\n` +
                   `Estimated profit(%) ${estimated_profit.toFixed(2)}%\n` +
-                  `Buff market link: https://buff.market/market/goods/${goods_id}`
+                  `Buff market link: https://buff.market/market/goods/${goods_id}` +
+                  `Stickers: ${lowestPricedItem.asset_info.info.stickers.length}`
               )
             } else {
               console.log(`${now}: ${market_hash_name} estimated profit ${estimated_profit.toFixed(2)}%`)

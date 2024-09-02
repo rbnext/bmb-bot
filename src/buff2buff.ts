@@ -1,16 +1,22 @@
 import { Context } from 'telegraf'
 import { JOBS } from '.'
-import { getGoodsInfo, getGoodsSellOrder, getMarketGoods, getMarketGoodsBillOrder } from './api/buff'
+import {
+  getGoodsInfo,
+  getGoodsSellOrder,
+  getMarketGoods,
+  getMarketGoodsBillOrder,
+  getMarketItemDetail,
+} from './api/buff'
 import { exteriorGroups, weaponGroups } from './config'
 import { MarketPriceOverview } from './types'
-import { isLessThanThreshold, median, sleep } from './utils'
+import { isLessThanThreshold, median, priceDiff, sleep } from './utils'
 import { format, differenceInDays } from 'date-fns'
 import { getMarketPriceOverview } from './api/steam'
 
 export const GOODS_CACHE: Record<number, { price: number }> = {}
 export const MARKET_CACHE: Record<number, MarketPriceOverview> = {}
 
-export const buff2steam = (ctx: Context) => async () => {
+export const buff2buff = (ctx: Context) => async () => {
   let currentPage = 1
   const pagesToLoad = 5
   let hasNextPage = true
@@ -70,19 +76,41 @@ export const buff2steam = (ctx: Context) => async () => {
               const marketOverview = await getMarketPriceOverview({ market_hash_name })
               const goodsInfo = await getGoodsInfo({ goods_id })
 
+              const volume = Number(marketOverview?.volume ?? 0)
+
+              const refPrice = Number(goodsInfo.data.goods_info.goods_ref_price)
+              const referenceDiff = priceDiff(refPrice, current_price)
+
               const [lowestPricedItem] = sellOrders.data.items
+
+              const {
+                data: {
+                  asset_info: { stickers },
+                },
+              } = await getMarketItemDetail({
+                sell_order_id: lowestPricedItem.id,
+                classid: lowestPricedItem.asset_info.classid,
+                instanceid: lowestPricedItem.asset_info.instanceid,
+                assetid: lowestPricedItem.asset_info.assetid,
+                contextid: lowestPricedItem.asset_info.contextid,
+              })
+
+              const isProfitable = estimated_profit >= 14 && volume >= 100 && referenceDiff >= 5
+
+              const stickersTotalPrice = stickers.reduce((acc, st) => acc + +st.sell_reference_price, 0)
 
               await ctx.telegram.sendMessage(
                 ctx.message!.chat.id,
-                `${market_hash_name}\n\n` +
+                `${isProfitable ? '✅' : '❗'} ${market_hash_name}\n\n` +
                   `Buff price: ${current_price}$\n` +
                   `Steam price: ${steam_price}$\n` +
-                  `Buff163 price: ${goodsInfo?.data?.goods_info?.goods_ref_price}$\n` +
-                  `Float: ${lowestPricedItem?.asset_info?.paintwear ?? 'unknown'}\n` +
-                  `Steam volume: ${marketOverview?.volume ?? 'unknown'}\n` +
-                  `Estimated profit(%) ${estimated_profit.toFixed(2)}%\n` +
-                  `Buff market link: https://buff.market/market/goods/${goods_id}` +
-                  `Stickers: ${lowestPricedItem.asset_info.info.stickers.length}`
+                  `Reference price: ${refPrice}$\n` +
+                  `Float: ${lowestPricedItem?.asset_info?.paintwear}\n` +
+                  `Steam volume: ${volume}\n` +
+                  `Estimated profit(%) **${estimated_profit.toFixed(2)}%** if sale for **${median_price}$**\n` +
+                  `Stickers total price: ${stickersTotalPrice}$\n` +
+                  `Lowest bargain price: ${lowestPricedItem.lowest_bargain_price}$\n` +
+                  `Buff market link: https://buff.market/market/goods/${goods_id}`
               )
             } else {
               console.log(`${now}: ${market_hash_name} estimated profit ${estimated_profit.toFixed(2)}%`)

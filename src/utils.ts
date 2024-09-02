@@ -17,3 +17,9 @@ export const isLessThanThreshold = (aPrice: number, bPrice: number, threshold = 
 
   return roundedDifference < threshold
 }
+
+export const priceDiff = (reference: number, current: number) => {
+  const difference = ((reference - current) / reference) * 100
+
+  return Number(difference.toFixed(2))
+}

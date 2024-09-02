@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "ts-node src/index.ts",
-    "buff2steam": "ts-node src/buff2steam.ts"
+    "buff2buff": "ts-node src/buff2buff.ts"
   },
   "author": "",
   "license": "ISC",

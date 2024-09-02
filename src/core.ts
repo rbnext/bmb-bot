@@ -1,7 +1,6 @@
 import { Context } from 'telegraf'
 import { JOBS } from '.'
 import { getBriefAsset, getGoodsSellOrder, postGoodsBuy } from './api/buff'
-import { MARKET_CACHE } from './buff2steam'
 import { MarketGoodsItem } from './types'
 import { sleep } from './utils'
 
@@ -30,8 +29,6 @@ export const purchaseGoodsById = async ({ id, market_hash_name, sell_min_price }
       ctx.message!.chat.id,
       `${market_hash_name}\n\n` +
         `Buff market price: ${sell_min_price}$\n` +
-        `Steam median price: ${MARKET_CACHE[market_hash_name].median_price}\n` +
-        `Steam volume: ${MARKET_CACHE[market_hash_name].volume}\n` +
         `Paintwear: ${filteredGood.asset_info?.paintwear ?? 'undefined'}\n` +
         `Buff market link: https://buff.market/market/goods/${id}`
     )

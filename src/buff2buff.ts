@@ -18,7 +18,7 @@ export const MARKET_CACHE: Record<number, MarketPriceOverview> = {}
 
 export const buff2buff = (ctx: Context) => async () => {
   let currentPage = 1
-  const pagesToLoad = 5
+  const pagesToLoad = 10
   let hasNextPage = true
 
   try {
@@ -95,7 +95,7 @@ export const buff2buff = (ctx: Context) => async () => {
                 contextid: lowestPricedItem.asset_info.contextid,
               })
 
-              const isProfitable = estimated_profit >= 14 && volume >= 100 && referenceDiff >= 5
+              const isProfitable = estimated_profit >= 10 && volume >= 50 && referenceDiff >= 5
 
               const stickersTotalPrice = stickers.reduce((acc, st) => acc + +st.sell_reference_price, 0)
 
@@ -108,7 +108,7 @@ export const buff2buff = (ctx: Context) => async () => {
                   `Float: ${lowestPricedItem?.asset_info?.paintwear}\n` +
                   `Steam volume: ${volume}\n` +
                   `Estimated profit(%) **${estimated_profit.toFixed(2)}%** if sale for **${median_price}$**\n` +
-                  `Stickers total price: ${stickersTotalPrice}$\n` +
+                  `Stickers total price: ${stickersTotalPrice.toFixed(2)}$\n` +
                   `Lowest bargain price: ${lowestPricedItem.lowest_bargain_price}$\n` +
                   `Buff market link: https://buff.market/market/goods/${goods_id}`
               )

@@ -1,17 +1,18 @@
 import { Context } from 'telegraf'
 import { JOBS } from '.'
 import {
+  getBriefAsset,
   getGoodsInfo,
   getGoodsSellOrder,
   getMarketGoods,
   getMarketGoodsBillOrder,
   getMarketItemDetail,
+  postGoodsBuy,
 } from './api/buff'
 import { exteriorGroups, weaponGroups } from './config'
 import { MarketPriceOverview } from './types'
 import { isLessThanThreshold, median, priceDiff, sleep } from './utils'
 import { format, differenceInDays } from 'date-fns'
-import { getMarketPriceOverview } from './api/steam'
 
 export const GOODS_CACHE: Record<number, { price: number }> = {}
 export const MARKET_CACHE: Record<number, MarketPriceOverview> = {}
@@ -72,11 +73,8 @@ export const buff2buff = (ctx: Context) => async () => {
             const estimated_profit = ((median_price * 0.975) / current_price - 1) * 100
 
             if (estimated_profit > 0) {
-              const sellOrders = await getGoodsSellOrder({ goods_id, max_price: sell_min_price })
-              const marketOverview = await getMarketPriceOverview({ market_hash_name })
               const goodsInfo = await getGoodsInfo({ goods_id })
-
-              const volume = Number(marketOverview?.volume ?? 0)
+              const sellOrders = await getGoodsSellOrder({ goods_id, max_price: sell_min_price })
 
               const refPrice = Number(goodsInfo.data.goods_info.goods_ref_price)
               const referenceDiff = priceDiff(refPrice, current_price)
@@ -95,9 +93,23 @@ export const buff2buff = (ctx: Context) => async () => {
                 contextid: lowestPricedItem.asset_info.contextid,
               })
 
-              const isProfitable = estimated_profit >= 10 && volume >= 50 && referenceDiff >= 5
+              const isProfitable = estimated_profit >= 10 && referenceDiff >= 5
 
               const stickersTotalPrice = stickers.reduce((acc, st) => acc + +st.sell_reference_price, 0)
+
+              if (isProfitable) {
+                const briefAsset = await getBriefAsset()
+
+                if (+lowestPricedItem.price > +briefAsset.data.cash_amount) {
+                  JOBS[ctx.message!.chat.id].cancel()
+
+                  await ctx.telegram.sendMessage(ctx.message!.chat.id, 'Oops! Not enough funds.')
+
+                  break
+                }
+
+                await postGoodsBuy({ sell_order_id: lowestPricedItem.id, price: +lowestPricedItem.price })
+              }
 
               await ctx.telegram.sendMessage(
                 ctx.message!.chat.id,
@@ -106,7 +118,6 @@ export const buff2buff = (ctx: Context) => async () => {
                   `Steam price: ${steam_price}$\n` +
                   `Reference price: ${refPrice}$\n` +
                   `Float: ${lowestPricedItem?.asset_info?.paintwear}\n` +
-                  `Steam volume: ${volume}\n` +
                   `Estimated profit(%) **${estimated_profit.toFixed(2)}%** if sale for **${median_price}$**\n` +
                   `Stickers total price: ${stickersTotalPrice.toFixed(2)}$\n` +
                   `Lowest bargain price: ${lowestPricedItem.lowest_bargain_price}$\n` +

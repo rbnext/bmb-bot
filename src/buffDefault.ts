@@ -3,6 +3,7 @@ import 'dotenv/config'
 import { format, differenceInDays } from 'date-fns'
 import { getMarketGoods, getMarketGoodsBillOrder } from './api/buff'
 import { median, sleep } from './utils'
+import { sendMessage } from './api/telegram'
 
 let lastMarketHashName: string | null = null
 
@@ -12,12 +13,14 @@ const buffDefault = async () => {
   try {
     const marketGoods = await getMarketGoods({ min_price: 5, max_price: 100 })
 
+    const items = marketGoods.data.items.slice(0, 4)
+
     if (!lastMarketHashName) {
       lastMarketHashName = marketGoods.data.items[0].market_hash_name
     }
 
     if (lastMarketHashName) {
-      for (const item of marketGoods.data.items) {
+      for (const item of items) {
         if (item.market_hash_name === lastMarketHashName) {
           break
         }
@@ -35,11 +38,13 @@ const buffDefault = async () => {
           const median_price = median(salesLastWeek.map(({ price }) => Number(price)))
           const estimated_profit = ((median_price * 0.975) / current_price - 1) * 100
 
-          console.log(`${now}: ${item.market_hash_name}. Estimated profit: ${estimated_profit.toFixed(2)}%`)
+          await sendMessage(`${now}: ${item.market_hash_name}. Estimated profit: ${estimated_profit.toFixed(2)}%`)
+
+          await sleep(1_000)
         }
       }
 
-      lastMarketHashName = marketGoods.data.items[0].market_hash_name
+      lastMarketHashName = items[0].market_hash_name
     }
   } catch (error) {
     return

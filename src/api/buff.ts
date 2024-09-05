@@ -87,7 +87,7 @@ export const getMarketGoods = async ({
   quality = 'normal',
   series,
   exterior,
-  sort_by = 'sell_num.desc',   //сортировка по популярности
+  sort_by,
 }: {
   game?: string
   search?: string

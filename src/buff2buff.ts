@@ -27,7 +27,7 @@ export const buff2buff = (ctx: Context) => async () => {
       const page_num = currentPage
       const exterior = exteriorGroups.join(',')
       const category_group = weaponGroups.join(',')
-      const marketGoods = await getMarketGoods({ category_group, page_num, exterior })
+      const marketGoods = await getMarketGoods({ category_group, page_num, exterior, sort_by: 'sell_num.desc' })
 
       if (marketGoods?.code === 'Internal Server Timeout') {
         await ctx.telegram.sendMessage(ctx.message!.chat.id, `Warning ${marketGoods.code}`)

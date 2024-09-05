@@ -33,7 +33,8 @@ const buffDefault = async () => {
         })
 
         if (salesLastWeek.length >= 5) {
-          const median_price = median(salesLastWeek.map(({ price }) => Number(price)))
+          const sales = salesLastWeek.map(({ price }) => Number(price))
+          const median_price = median(sales.filter((price) => current_price * 2 > price))
           const estimated_profit = ((median_price * 0.975) / current_price - 1) * 100
 
           await sendMessage(`${item.market_hash_name}. Estimated profit: ${estimated_profit.toFixed(2)}%`)

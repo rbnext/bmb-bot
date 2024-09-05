@@ -1,6 +1,6 @@
 import 'dotenv/config'
 
-import { differenceInDays } from 'date-fns'
+import { differenceInDays , format } from 'date-fns'
 import { getMarketGoods, getMarketGoodsBillOrder } from './api/buff'
 import { median, sleep } from './utils'
 import { sendMessage } from './api/telegram'
@@ -8,8 +8,10 @@ import { sendMessage } from './api/telegram'
 let lastMarketHashName: string | null = null
 
 const buffDefault = async () => {
+// await sendMessage(`🤖 I am working!`)
   try {
     const marketGoods = await getMarketGoods({ min_price: 5, max_price: 100 })
+    const now = format(new Date(), 'dd MMM yyyy, HH:mm')
 
     const items = marketGoods.data.items.slice(0, 4)
 
@@ -36,8 +38,13 @@ const buffDefault = async () => {
           const sales = salesLastWeek.map(({ price }) => Number(price))
           const median_price = median(sales.filter((price) => current_price * 2 > price))
           const estimated_profit = ((median_price * 0.975) / current_price - 1) * 100
-
-          await sendMessage(`${item.market_hash_name}. Estimated profit: ${estimated_profit.toFixed(2)}%`)
+          if (estimated_profit > 4) {
+            await sendMessage(`🤖 *bold MAIN PAGE BOT\n${now}\n\n` + 
+            `${item.market_hash_name}.\n` +
+            `Buff price: ${current_price}$\n` +
+            `Estimated profit: ${estimated_profit.toFixed(2)}% if sale for ${median_price}$\n` +
+            `Buff market link: https://buff.market/market/goods/${goods_id}`)
+          }
 
           await sleep(1_000)
         }

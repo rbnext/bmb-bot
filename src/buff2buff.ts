@@ -119,7 +119,7 @@ export const buff2buff = (ctx: Context) => async () => {
                   `Steam price: ${steam_price}$\n` +
                   `Reference price: ${refPrice}$\n` +
                   `Float: ${lowestPricedItem?.asset_info?.paintwear}\n` +
-                  `Estimated profit(%) **${estimated_profit.toFixed(2)}%** if sale for **${median_price}$**\n` +
+                  `Estimated profit(%) **${estimated_profit.toFixed(2)}% if sale for ${median_price}$**\n` +
                   `Stickers total price: ${stickersTotalPrice.toFixed(2)}$\n` +
                   `Lowest bargain price: ${lowestPricedItem.lowest_bargain_price}$\n` +
                   `Buff market link: https://buff.market/market/goods/${goods_id}`

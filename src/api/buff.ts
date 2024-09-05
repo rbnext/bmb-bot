@@ -81,13 +81,13 @@ export const getMarketGoods = async ({
   page_size = 50,
   category,
   itemset,
-  min_price = 5,
+  min_price = 2,
   max_price = 100,
   category_group,
   quality = 'normal',
   series,
   exterior,
-  sort_by = 'sell_num.desc',
+  sort_by = 'sell_num.desc',   //сортировка по популярности
 }: {
   game?: string
   search?: string
@@ -152,7 +152,7 @@ export const getTopBookmarked = async ({
   page_size = 50,
   category_group,
   min_price = 5,
-  max_price = 40,
+  max_price = 100,
 }: {
   game?: string
   page_num?: number

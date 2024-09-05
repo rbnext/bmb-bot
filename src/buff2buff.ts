@@ -12,29 +12,30 @@ import {
 import { exteriorGroups, weaponGroups } from './config'
 import { MarketPriceOverview } from './types'
 import { isLessThanThreshold, median, priceDiff, sleep } from './utils'
-import { format, differenceInDays } from 'date-fns'
+import { format, differenceInDays, getTime } from 'date-fns'
 
 export const GOODS_CACHE: Record<number, { price: number }> = {}
 export const MARKET_CACHE: Record<number, MarketPriceOverview> = {}
 
 export const buff2buff = (ctx: Context) => async () => {
   let currentPage = 1
-  const pagesToLoad = 10
+  const pagesToLoad = 13
   let hasNextPage = true
+  const start = performance.now()
 
   try {
     do {
       const page_num = currentPage
-      const exterior = exteriorGroups.join(',')
+      //const exterior = exteriorGroups.join(',')
       const category_group = weaponGroups.join(',')
-      const marketGoods = await getMarketGoods({ category_group, page_num, exterior })
+      const marketGoods = await getMarketGoods({ category_group, page_num })
 
       if (marketGoods?.code === 'Internal Server Timeout') {
         await ctx.telegram.sendMessage(ctx.message!.chat.id, `Warning ${marketGoods.code}`)
 
         break
       }
-
+      //console.log('Items: ', marketGoods.data.items.length, ' Page Number:',page_num)
       if (hasNextPage) {
         hasNextPage = currentPage < pagesToLoad
       }
@@ -93,7 +94,7 @@ export const buff2buff = (ctx: Context) => async () => {
                 contextid: lowestPricedItem.asset_info.contextid,
               })
 
-              const isProfitable = estimated_profit >= 10 && referenceDiff >= 5
+              const isProfitable = estimated_profit >= 9 && referenceDiff >= 4
 
               const stickersTotalPrice = stickers.reduce((acc, st) => acc + +st.sell_reference_price, 0)
 
@@ -135,9 +136,9 @@ export const buff2buff = (ctx: Context) => async () => {
       }
 
       if (hasNextPage) {
-        await sleep(7_000)
+        await sleep(4_000)
       }
-
+     console.log(format(new Date(), 'HH:mm:ss') +  ' Page Nubmer: ' + currentPage + ', Items: ' + marketGoods.data.items.length) 
       currentPage += 1
     } while (hasNextPage)
   } catch (error) {
@@ -145,4 +146,13 @@ export const buff2buff = (ctx: Context) => async () => {
 
     JOBS[ctx.message!.chat.id].cancel()
   }
+
+  const end = performance.now()
+  const timeTaken = end - start
+  const minutes = Math.floor(timeTaken / 60000)
+  const seconds = ((timeTaken % 60000) / 1000).toFixed(2)
+
+  console.log(`Время выполнения: ${minutes} минут(ы) и ${seconds} секунд(ы)`)
+
+
 }

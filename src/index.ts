@@ -20,7 +20,7 @@ bot.command('start', async (ctx: Context) => {
 
   JOBS[chatReferenceId]?.cancel()
 
-  JOBS[chatReferenceId] = schedule.scheduleJob('*/3 * * * *', buff2buff(ctx))
+  JOBS[chatReferenceId] = schedule.scheduleJob('*/1,8 * * * *', buff2buff(ctx))
 })
 
 bot.command('stop', async (ctx) => {

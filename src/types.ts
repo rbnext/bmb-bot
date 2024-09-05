@@ -4,7 +4,7 @@ export type GoodsSellOrderItem = {
   goods_id: number
   price: string
   user_id: string
-  lowest_bargain_price: string
+
 
   asset_info: {
     classid: string
@@ -16,6 +16,8 @@ export type GoodsSellOrderItem = {
       stickers: unknown[]
     }
   }
+  allow_bargain: boolean 
+  lowest_bargain_price: string
 }
 
 export type GoodsSellOrder = {

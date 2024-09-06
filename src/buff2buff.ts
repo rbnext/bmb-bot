@@ -9,10 +9,10 @@ import {
   getMarketItemDetail,
   postGoodsBuy,
 } from './api/buff'
-import { exteriorGroups, weaponGroups } from './config'
+import { weaponGroups } from './config'
 import { MarketPriceOverview } from './types'
 import { isLessThanThreshold, median, priceDiff, sleep } from './utils'
-import { format, differenceInDays, getTime } from 'date-fns'
+import { format, differenceInDays } from 'date-fns'
 
 export const GOODS_CACHE: Record<number, { price: number }> = {}
 export const MARKET_CACHE: Record<number, MarketPriceOverview> = {}
@@ -70,7 +70,8 @@ export const buff2buff = (ctx: Context) => async () => {
           })
 
           if (salesLastWeek.length >= 5) {
-            const median_price = median(salesLastWeek.map(({ price }) => Number(price)))
+            const sales = salesLastWeek.map(({ price }) => Number(price))
+            const median_price = median(sales.filter((price) => current_price * 2 > price))
             const estimated_profit = ((median_price * 0.975) / current_price - 1) * 100
 
             if (estimated_profit > 0) {
@@ -138,7 +139,9 @@ export const buff2buff = (ctx: Context) => async () => {
       if (hasNextPage) {
         await sleep(4_000)
       }
-     console.log(format(new Date(), 'HH:mm:ss') +  ' Page Nubmer: ' + currentPage + ', Items: ' + marketGoods.data.items.length) 
+      console.log(
+        format(new Date(), 'HH:mm:ss') + ' Page Nubmer: ' + currentPage + ', Items: ' + marketGoods.data.items.length
+      )
       currentPage += 1
     } while (hasNextPage)
   } catch (error) {
@@ -153,6 +156,4 @@ export const buff2buff = (ctx: Context) => async () => {
   const seconds = ((timeTaken % 60000) / 1000).toFixed(2)
 
   console.log(`Время выполнения: ${minutes} минут(ы) и ${seconds} секунд(ы)`)
-
-
 }

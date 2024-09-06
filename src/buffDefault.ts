@@ -4,15 +4,13 @@ import { differenceInDays, format } from 'date-fns'
 import { getMarketGoods, getMarketGoodsBillOrder } from './api/buff'
 import { median, sleep } from './utils'
 import { sendMessage } from './api/telegram'
-import { weaponGroups } from './config'
 
 let lastMarketHashName: string | null = null
 
 const buffDefault = async () => {
   // await sendMessage(`🤖 I am working!`)
   try {
-    const category_group = weaponGroups.join(',')
-    const marketGoods = await getMarketGoods({ category_group, min_price: 5, max_price: 100 })
+    const marketGoods = await getMarketGoods({ min_price: 5, max_price: 100 })
     const now = format(new Date(), 'dd MMM yyyy, HH:mm')
 
     const items = marketGoods.data.items.slice(0, 4)

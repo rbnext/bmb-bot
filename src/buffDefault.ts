@@ -41,20 +41,21 @@ const buffDefault = async () => {
 
           console.log(`${now}: ${item.market_hash_name} estimated profit ${estimated_profit.toFixed(2)}%`)
 
-          if (estimated_profit > (current_price >= 5 ? 10 : 20)) {
+          if (estimated_profit >= (current_price >= 5 ? 10 : 20)) {
             const goodsInfo = await getGoodsInfo({ goods_id })
 
             const goods_ref_price = Number(goodsInfo.data.goods_info.goods_ref_price)
 
-            if (goods_ref_price >= current_price) {
-              await sendMessage(
-                `🤖 <b>MAIN PAGE BOT</b>\n\n` +
-                  `${item.market_hash_name}\n` +
-                  `<b>Buff price</b>: ${current_price}$\n` +
-                  `<b>Estimated profit</b>: ${estimated_profit.toFixed(2)}% if sold for ${median_price.toFixed(2)}$\n` +
-                  `<a href="https://buff.market/market/goods/${goods_id}">Buff market link</a>`
-              )
-            }
+            if (current_price >= goods_ref_price) continue
+
+            await sendMessage(
+              `🤖 <b>MAIN PAGE BOT</b>\n\n` +
+                `${item.market_hash_name}\n` +
+                `<b>Buff price</b>: ${current_price}$\n` +
+                `<b>Estimated profit</b>: ${estimated_profit.toFixed(2)}% if sold for ${median_price.toFixed(2)}$\n` +
+                `<a href="https://buff.market/market/goods/${goods_id}">Buff market link</a>
+              `
+            )
           }
         }
 

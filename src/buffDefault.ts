@@ -43,15 +43,15 @@ const buffDefault = async () => {
 
           console.log(`${now}: ${item.market_hash_name} estimated profit ${estimated_profit.toFixed(2)}%`)
 
-          // if (estimated_profit > 4) {
-          await sendMessage(
-            `🤖 **MAIN PAGE BOT**\n\n` +
-              `${item.market_hash_name}.\n` +
-              `**Buff price**: ${current_price}$\n` +
-              `**Estimated profit**: ${estimated_profit.toFixed(2)}% if sold for ${median_price}$\n` +
-              `[Buff market link](https://buff.market/market/goods/${goods_id})`
-          )
-          // }
+          if (estimated_profit > 4) {
+            await sendMessage(
+              `🤖 <b>MAIN PAGE BOT</b>\n\n` +
+                `${item.market_hash_name}\n` +
+                `<b>Buff price</b>: ${current_price}$\n` +
+                `<b>Estimated profit</b>: ${estimated_profit.toFixed(2)}% if sold for ${median_price.toFixed(2)}$\n` +
+                `<a href="https://buff.market/market/goods/${goods_id}">Buff market link</a>`
+            )
+          }
         }
 
         await sleep(1_000)

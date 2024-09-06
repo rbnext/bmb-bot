@@ -8,9 +8,10 @@ import { sendMessage } from './api/telegram'
 let lastMarketHashName: string | null = null
 
 const buffDefault = async () => {
+  const now = format(new Date(), 'dd MMM yyyy, HH:mm')
+
   try {
-    const marketGoods = await getMarketGoods({ min_price: 5, max_price: 100 })
-    const now = format(new Date(), 'dd MMM yyyy, HH:mm')
+    const marketGoods = await getMarketGoods({ quality: 'normal,strange,tournament', min_price: 1, max_price: 100 })
 
     const items = marketGoods.data.items.slice(0, 4)
 
@@ -40,7 +41,7 @@ const buffDefault = async () => {
 
           console.log(`${now}: ${item.market_hash_name} estimated profit ${estimated_profit.toFixed(2)}%`)
 
-          if (estimated_profit > 4) {
+          if (estimated_profit > (current_price >= 5 ? 10 : 20)) {
             await sendMessage(
               `🤖 <b>MAIN PAGE BOT</b>\n\n` +
                 `${item.market_hash_name}\n` +
@@ -57,7 +58,9 @@ const buffDefault = async () => {
       lastMarketHashName = items[0].market_hash_name
     }
   } catch (error) {
-    console.log(error)
+    console.log('Something went wrong', error)
+
+    await sendMessage('Buff default bot is stopped working.')
 
     return
   }

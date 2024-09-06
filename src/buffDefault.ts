@@ -35,24 +35,26 @@ const buffDefault = async () => {
         })
 
         if (salesLastWeek.length >= 5) {
-          const goodsInfo = await getGoodsInfo({ goods_id })
-
           const sales = salesLastWeek.map(({ price }) => Number(price))
           const median_price = median(sales.filter((price) => current_price * 2 > price))
           const estimated_profit = ((median_price * 0.975) / current_price - 1) * 100
 
-          const goods_ref_price = Number(goodsInfo.data.goods_info.goods_ref_price)
-
           console.log(`${now}: ${item.market_hash_name} estimated profit ${estimated_profit.toFixed(2)}%`)
 
-          if (goods_ref_price >= current_price && estimated_profit > (current_price >= 5 ? 10 : 20)) {
-            await sendMessage(
-              `🤖 <b>MAIN PAGE BOT</b>\n\n` +
-                `${item.market_hash_name}\n` +
-                `<b>Buff price</b>: ${current_price}$\n` +
-                `<b>Estimated profit</b>: ${estimated_profit.toFixed(2)}% if sold for ${median_price.toFixed(2)}$\n` +
-                `<a href="https://buff.market/market/goods/${goods_id}">Buff market link</a>`
-            )
+          if (estimated_profit > (current_price >= 5 ? 10 : 20)) {
+            const goodsInfo = await getGoodsInfo({ goods_id })
+
+            const goods_ref_price = Number(goodsInfo.data.goods_info.goods_ref_price)
+
+            if (goods_ref_price >= current_price) {
+              await sendMessage(
+                `🤖 <b>MAIN PAGE BOT</b>\n\n` +
+                  `${item.market_hash_name}\n` +
+                  `<b>Buff price</b>: ${current_price}$\n` +
+                  `<b>Estimated profit</b>: ${estimated_profit.toFixed(2)}% if sold for ${median_price.toFixed(2)}$\n` +
+                  `<a href="https://buff.market/market/goods/${goods_id}">Buff market link</a>`
+              )
+            }
           }
         }
 

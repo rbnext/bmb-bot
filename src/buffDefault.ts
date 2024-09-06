@@ -8,7 +8,6 @@ import { sendMessage } from './api/telegram'
 let lastMarketHashName: string | null = null
 
 const buffDefault = async () => {
-  // await sendMessage(`🤖 I am working!`)
   try {
     const marketGoods = await getMarketGoods({ min_price: 5, max_price: 100 })
     const now = format(new Date(), 'dd MMM yyyy, HH:mm')
@@ -16,7 +15,7 @@ const buffDefault = async () => {
     const items = marketGoods.data.items.slice(0, 4)
 
     if (!lastMarketHashName) {
-      lastMarketHashName = marketGoods.data.items[0].market_hash_name
+      lastMarketHashName = items[0].market_hash_name
     }
 
     if (lastMarketHashName) {

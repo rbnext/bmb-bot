@@ -9,6 +9,7 @@ export const sendMessage = async (message: string): Promise<unknown> => {
     params: {
       parse_mode: 'HTML',
       chat_id: process.env.TELEGRAM_CHAT_ID,
+      link_preview_options: JSON.stringify({ is_disabled: true }),
       text: message,
     },
   })

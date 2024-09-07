@@ -108,9 +108,7 @@ export const buff2buff = () => async () => {
                 const briefAsset = await getBriefAsset()
 
                 if (+lowestPricedItem.price > +briefAsset.data.cash_amount) {
-                  await sendMessage('Oops! Not enough funds.')
-
-                  break
+                  throw new Error('Oops! Not enough funds.')
                 }
 
                 await postGoodsBuy({ sell_order_id: lowestPricedItem.id, price: +lowestPricedItem.price })

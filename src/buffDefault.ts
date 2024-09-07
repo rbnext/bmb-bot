@@ -1,7 +1,14 @@
 import 'dotenv/config'
 
 import { differenceInDays, format } from 'date-fns'
-import { getGoodsInfo, getMarketGoods, getMarketGoodsBillOrder } from './api/buff'
+import {
+  getBriefAsset,
+  getGoodsInfo,
+  getGoodsSellOrder,
+  getMarketGoods,
+  getMarketGoodsBillOrder,
+  postGoodsBuy,
+} from './api/buff'
 import { median, priceDiff, sleep } from './utils'
 import { sendMessage } from './api/telegram'
 
@@ -44,17 +51,45 @@ const buffDefault = async () => {
           if (estimated_profit >= (current_price >= 5 ? 10 : 20)) {
             const goodsInfo = await getGoodsInfo({ goods_id })
 
-            const refPrice = Number(goodsInfo.data.goods_info.goods_ref_price)
-            const referenceDiff = priceDiff(refPrice, current_price)
+            const goods_ref_price = Number(goodsInfo.data.goods_info.goods_ref_price)
+            const referenceDiff = priceDiff(goods_ref_price, current_price)
 
             if (referenceDiff >= 4) {
+              const {
+                data: {
+                  items: [lowestPricedItem],
+                },
+              } = await getGoodsSellOrder({ goods_id, max_price: item.sell_min_price })
+
+              if (lowestPricedItem) {
+                const briefAsset = await getBriefAsset()
+
+                if (+lowestPricedItem.price > +briefAsset.data.cash_amount) {
+                  throw new Error('Oops! Not enough funds.')
+                }
+
+                await postGoodsBuy({
+                  price: +lowestPricedItem.price,
+                  sell_order_id: lowestPricedItem.id,
+                })
+
+                await sendMessage(
+                  '✅ ' +
+                    `<b>[PURCHASED]</b> <a href="https://buff.market/market/goods/${goods_id}">${item.market_hash_name}</a>\n\n` +
+                    `<b>Price</b>: $${current_price}\n` +
+                    `<b>Reference price</b>: $${goods_ref_price}\n` +
+                    `<b>Estimated profit</b>: ${estimated_profit.toFixed(2)}% (if sold for $${median_price.toFixed(2)})\n`
+                )
+              } else {
+                await sendMessage(`Someone bought the ${item.market_hash_name} faster than the bot.`)
+              }
+            } else {
               await sendMessage(
-                `🤖 <b>MAIN PAGE BOT</b>\n\n` +
-                  `${item.market_hash_name}\n` +
-                  `<b>Buff price</b>: ${current_price}$\n` +
-                  `<b>Estimated profit</b>: ${estimated_profit.toFixed(2)}% if sold for ${median_price.toFixed(2)}$\n` +
-                  `<a href="https://buff.market/market/goods/${goods_id}">Buff market link</a>
-                  `
+                '🔶 ' +
+                  `<b>[REVIEW]</b> <a href="https://buff.market/market/goods/${goods_id}">${item.market_hash_name}</a>\n\n` +
+                  `<b>Price</b>: $${current_price}\n` +
+                  `<b>Reference price</b>: $${goods_ref_price}\n` +
+                  `<b>Estimated profit</b>: ${estimated_profit.toFixed(2)}% (if sold for $${median_price.toFixed(2)})\n`
               )
             }
           }

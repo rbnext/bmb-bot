@@ -146,12 +146,10 @@ export const buff2buff = () => async () => {
   } catch (error) {
     console.log('Something went wrong', error)
 
-    await sendMessage('Buff2buff bot is stopped working.')
+    await sendMessage(error?.message ?? 'Something went wrong.')
 
     return
   }
-
-  await sleep(10_000)
 
   buff2buff()
 }

@@ -68,7 +68,7 @@ const buffDefault = async () => {
   } catch (error) {
     console.log('Something went wrong', error)
 
-    await sendMessage('Buff default bot is stopped working.')
+    await sendMessage(error?.message ?? 'Something went wrong.')
 
     return
   }

@@ -9,7 +9,7 @@ import {
 } from './api/buff'
 import { weaponGroups } from './config'
 import { MarketPriceOverview } from './types'
-import { isLessThanThreshold, median, priceDiff, sleep } from './utils'
+import { addIfTrue, isLessThanThreshold, median, priceDiff, sleep } from './utils'
 import { format, differenceInDays } from 'date-fns'
 import { sendMessage } from './api/telegram'
 
@@ -81,6 +81,8 @@ export const buff2buff = () => async () => {
 
               const [lowestPricedItem] = sellOrders.data.items
 
+              const paintwear = lowestPricedItem?.asset_info?.paintwear
+
               const {
                 data: {
                   asset_info: { stickers },
@@ -95,7 +97,9 @@ export const buff2buff = () => async () => {
 
               const isProfitable = estimated_profit >= 9 && referenceDiff >= 4
 
-              const stickersTotalPrice = stickers.reduce((acc, st) => acc + +st.sell_reference_price, 0)
+              const stickersTotalPrice = stickers.reduce((acc, { wear, sell_reference_price }) => {
+                return wear === 0 ? acc + Number(sell_reference_price) : acc
+              }, 0)
 
               if (isProfitable) {
                 const briefAsset = await getBriefAsset()
@@ -111,14 +115,14 @@ export const buff2buff = () => async () => {
 
               await sendMessage(
                 `${isProfitable ? '✅' : '❗'} ${market_hash_name}\n\n` +
-                  `Buff price: ${current_price}$\n` +
-                  `Steam price: ${steam_price}$\n` +
-                  `Reference price: ${refPrice}$\n` +
-                  `Float: ${lowestPricedItem?.asset_info?.paintwear}\n` +
-                  `Estimated profit(%) **${estimated_profit.toFixed(2)}% if sale for ${median_price}$**\n` +
-                  `Stickers total price: ${stickersTotalPrice.toFixed(2)}$\n` +
-                  `Lowest bargain price: ${lowestPricedItem.lowest_bargain_price}$\n` +
-                  `Buff market link: https://buff.market/market/goods/${goods_id}`
+                  `<b>Buff price</b>: $${current_price}\n` +
+                  `<b>Steam price</b>: $${steam_price}\n` +
+                  `<b>Reference price</b>: $${refPrice}\n` +
+                  addIfTrue(`<b>Sticker Value</b>: $${stickersTotalPrice.toFixed(2)}\n`, !!stickersTotalPrice) +
+                  addIfTrue(`<b>Float</b>: ${paintwear}\n`, !!paintwear) +
+                  `<b>Estimated profit</b>: <b>${estimated_profit.toFixed(2)}%</b> (if sold for <b>$${median_price}</b>)\n` +
+                  `<b>Lowest bargain price</b>: ${lowestPricedItem.lowest_bargain_price}$\n` +
+                  `<b>Buff market link</b>: https://buff.market/market/goods/${goods_id}`
               )
             } else {
               console.log(`${now}: ${market_hash_name} estimated profit ${estimated_profit.toFixed(2)}%`)

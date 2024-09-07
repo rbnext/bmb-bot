@@ -21,3 +21,5 @@ export const isLessThanThreshold = (aPrice: number, bPrice: number, threshold = 
 export const priceDiff = (reference: number, current: number) => {
   return Number((((reference - current) / reference) * 100).toFixed(2))
 }
+
+export const addIfTrue = (message: string, condition: boolean) => (condition ? message : '')

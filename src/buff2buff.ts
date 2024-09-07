@@ -1,5 +1,3 @@
-import { Context } from 'telegraf'
-import { JOBS } from '.'
 import {
   getBriefAsset,
   getGoodsInfo,
@@ -13,15 +11,15 @@ import { weaponGroups } from './config'
 import { MarketPriceOverview } from './types'
 import { isLessThanThreshold, median, priceDiff, sleep } from './utils'
 import { format, differenceInDays } from 'date-fns'
+import { sendMessage } from './api/telegram'
 
 export const GOODS_CACHE: Record<number, { price: number }> = {}
 export const MARKET_CACHE: Record<number, MarketPriceOverview> = {}
 
-export const buff2buff = (ctx: Context) => async () => {
+export const buff2buff = () => async () => {
   let currentPage = 1
   const pagesToLoad = 13
   let hasNextPage = true
-  const start = performance.now()
 
   try {
     do {
@@ -31,7 +29,7 @@ export const buff2buff = (ctx: Context) => async () => {
       const marketGoods = await getMarketGoods({ category_group, page_num, sort_by: 'sell_num.desc' })
 
       if (marketGoods?.code === 'Internal Server Timeout') {
-        await ctx.telegram.sendMessage(ctx.message!.chat.id, `Warning ${marketGoods.code}`)
+        await sendMessage(`Warning ${marketGoods.code}`)
 
         break
       }
@@ -74,7 +72,7 @@ export const buff2buff = (ctx: Context) => async () => {
             const median_price = median(sales.filter((price) => current_price * 2 > price))
             const estimated_profit = ((median_price * 0.975) / current_price - 1) * 100
 
-            if (estimated_profit > 0) {
+            if (estimated_profit > 2) {
               const goodsInfo = await getGoodsInfo({ goods_id })
               const sellOrders = await getGoodsSellOrder({ goods_id, max_price: sell_min_price })
 
@@ -103,9 +101,7 @@ export const buff2buff = (ctx: Context) => async () => {
                 const briefAsset = await getBriefAsset()
 
                 if (+lowestPricedItem.price > +briefAsset.data.cash_amount) {
-                  JOBS[ctx.message!.chat.id].cancel()
-
-                  await ctx.telegram.sendMessage(ctx.message!.chat.id, 'Oops! Not enough funds.')
+                  await sendMessage('Oops! Not enough funds.')
 
                   break
                 }
@@ -113,8 +109,7 @@ export const buff2buff = (ctx: Context) => async () => {
                 await postGoodsBuy({ sell_order_id: lowestPricedItem.id, price: +lowestPricedItem.price })
               }
 
-              await ctx.telegram.sendMessage(
-                ctx.message!.chat.id,
+              await sendMessage(
                 `${isProfitable ? '✅' : '❗'} ${market_hash_name}\n\n` +
                   `Buff price: ${current_price}$\n` +
                   `Steam price: ${steam_price}$\n` +
@@ -140,20 +135,21 @@ export const buff2buff = (ctx: Context) => async () => {
         await sleep(4_000)
       }
       console.log(
-        format(new Date(), 'HH:mm:ss') + ' Page Nubmer: ' + currentPage + ', Items: ' + marketGoods.data.items.length
+        format(new Date(), 'HH:mm:ss') + ' Page Number: ' + currentPage + ', Items: ' + marketGoods.data.items.length
       )
       currentPage += 1
     } while (hasNextPage)
   } catch (error) {
-    console.log(error)
+    console.log('Something went wrong', error)
 
-    JOBS[ctx.message!.chat.id].cancel()
+    await sendMessage('Buff2buff bot is stopped working.')
+
+    return
   }
 
-  const end = performance.now()
-  const timeTaken = end - start
-  const minutes = Math.floor(timeTaken / 60000)
-  const seconds = ((timeTaken % 60000) / 1000).toFixed(2)
+  await sleep(10_000)
 
-  console.log(`Время выполнения: ${minutes} минут(ы) и ${seconds} секунд(ы)`)
+  buff2buff()
 }
+
+buff2buff()

@@ -4,7 +4,6 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "ts-node src/index.ts",
     "buff2buff": "ts-node src/buff2buff.ts",
     "buffDefault": "ts-node src/buffDefault.ts",
     "buff2steam": "ts-node src/buff2steam.ts"

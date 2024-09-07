@@ -2,7 +2,7 @@ import 'dotenv/config'
 
 import { differenceInDays, format } from 'date-fns'
 import { getGoodsInfo, getMarketGoods, getMarketGoodsBillOrder } from './api/buff'
-import { median, sleep } from './utils'
+import { median, priceDiff, sleep } from './utils'
 import { sendMessage } from './api/telegram'
 
 let lastMarketHashName: string | null = null
@@ -44,18 +44,19 @@ const buffDefault = async () => {
           if (estimated_profit >= (current_price >= 5 ? 10 : 20)) {
             const goodsInfo = await getGoodsInfo({ goods_id })
 
-            const goods_ref_price = Number(goodsInfo.data.goods_info.goods_ref_price)
+            const refPrice = Number(goodsInfo.data.goods_info.goods_ref_price)
+            const referenceDiff = priceDiff(refPrice, current_price)
 
-            if (current_price >= goods_ref_price) continue
-
-            await sendMessage(
-              `🤖 <b>MAIN PAGE BOT</b>\n\n` +
-                `${item.market_hash_name}\n` +
-                `<b>Buff price</b>: ${current_price}$\n` +
-                `<b>Estimated profit</b>: ${estimated_profit.toFixed(2)}% if sold for ${median_price.toFixed(2)}$\n` +
-                `<a href="https://buff.market/market/goods/${goods_id}">Buff market link</a>
-              `
-            )
+            if (referenceDiff >= 4) {
+              await sendMessage(
+                `🤖 <b>MAIN PAGE BOT</b>\n\n` +
+                  `${item.market_hash_name}\n` +
+                  `<b>Buff price</b>: ${current_price}$\n` +
+                  `<b>Estimated profit</b>: ${estimated_profit.toFixed(2)}% if sold for ${median_price.toFixed(2)}$\n` +
+                  `<a href="https://buff.market/market/goods/${goods_id}">Buff market link</a>
+                  `
+              )
+            }
           }
         }
 

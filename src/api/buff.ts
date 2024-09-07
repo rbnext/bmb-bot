@@ -249,5 +249,7 @@ export const postGoodsBuy = async ({
 }): Promise<GoodsBuyResponse> => {
   const { data } = await http.post('/market/goods/buy', { game, pay_method, ...rest })
 
+  console.log('/market/goods/buy', data)
+
   return data
 }

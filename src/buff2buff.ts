@@ -81,6 +81,9 @@ export const buff2buff = () => async () => {
 
               const [lowestPricedItem] = sellOrders.data.items
 
+              // Check if the product is available, if not skip code below
+              if (!lowestPricedItem) continue
+
               const paintwear = lowestPricedItem?.asset_info?.paintwear
 
               const {

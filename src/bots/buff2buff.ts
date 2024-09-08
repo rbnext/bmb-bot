@@ -46,7 +46,7 @@ const buff2buff = async () => {
 
         const current_price = Number(sell_min_price)
 
-        const now = format(new Date(), 'dd MMM yyyy, HH:mm')
+        const now = format(new Date(), 'HH:mm')
 
         if (goods_id in GOODS_CACHE && isLessThanThreshold(GOODS_CACHE[goods_id].price, current_price)) {
           GOODS_CACHE[goods_id].price = current_price

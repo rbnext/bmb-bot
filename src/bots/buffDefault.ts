@@ -18,7 +18,7 @@ import { REFERENCE_DIFF_THRESHOLD } from '../config'
 let lastMarketHashName: string | null = null
 
 const buffDefault = async () => {
-  const now = format(new Date(), 'HH:mm')
+  const now = format(new Date(), 'HH:mm:ss')
 
   try {
     const marketGoods = await getMarketGoods({ quality: 'normal,strange,tournament', min_price: 1, max_price: 100 })

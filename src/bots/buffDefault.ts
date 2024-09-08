@@ -102,12 +102,7 @@ const buffDefault = async () => {
                 return wear === 0 ? acc + Number(sell_reference_price) : acc
               }, 0)
 
-              if (stickerValue > current_price) {
-                await postGoodsBuy({ price: current_price, sell_order_id: lowestPricedItem.id })
-                await sendMessage(generateMessage({ type: MessageType.Purchased, stickerValue, ...payload }))
-              } else {
-                await sendMessage(generateMessage({ type: MessageType.Review, stickerValue, ...payload }))
-              }
+              await sendMessage(generateMessage({ type: MessageType.Review, stickerValue, ...payload }))
             } else {
               await sendMessage(generateMessage({ type: MessageType.Review, ...payload }))
             }

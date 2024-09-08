@@ -13,6 +13,7 @@ import {
 import { generateMessage, getTotalStickerPrice, median, priceDiff, sleep } from '../utils'
 import { sendMessage } from '../api/telegram'
 import { MessageType } from '../types'
+import { REFERENCE_DIFF_THRESHOLD } from '../config'
 
 let lastMarketHashName: string | null = null
 
@@ -76,7 +77,7 @@ const buffDefault = async () => {
               float: lowestPricedItem.asset_info.paintwear,
             }
 
-            if (currentReferencePriceDiff >= 4) {
+            if (currentReferencePriceDiff >= REFERENCE_DIFF_THRESHOLD) {
               const briefAsset = await getBriefAsset()
 
               if (current_price > +briefAsset.data.cash_amount) {

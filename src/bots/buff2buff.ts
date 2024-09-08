@@ -7,7 +7,7 @@ import {
   getMarketItemDetail,
   postGoodsBuy,
 } from '../api/buff'
-import { weaponGroups } from '../config'
+import { REFERENCE_DIFF_THRESHOLD, weaponGroups } from '../config'
 import { MarketPriceOverview, MessageType } from '../types'
 import { generateMessage, getTotalStickerPrice, isLessThanThreshold, median, priceDiff, sleep } from '../utils'
 import { format, differenceInDays } from 'date-fns'
@@ -24,7 +24,6 @@ export const buff2buff = () => async () => {
   try {
     do {
       const page_num = currentPage
-      //const exterior = exteriorGroups.join(',')
       const category_group = weaponGroups.join(',')
       const marketGoods = await getMarketGoods({ category_group, page_num, sort_by: 'sell_num.desc' })
 
@@ -97,7 +96,7 @@ export const buff2buff = () => async () => {
                 float: lowestPricedItem.asset_info.paintwear,
               }
 
-              if (currentReferencePriceDiff >= 4) {
+              if (currentReferencePriceDiff >= REFERENCE_DIFF_THRESHOLD) {
                 const briefAsset = await getBriefAsset()
 
                 if (current_price > +briefAsset.data.cash_amount) {

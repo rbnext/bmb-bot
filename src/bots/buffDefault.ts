@@ -10,7 +10,7 @@ import {
   getMarketItemDetail,
   postGoodsBuy,
 } from '../api/buff'
-import { generateMessage, median, priceDiff, sleep } from '../utils'
+import { generateMessage, getTotalStickerPrice, median, priceDiff, sleep } from '../utils'
 import { sendMessage } from '../api/telegram'
 import { MessageType } from '../types'
 
@@ -86,11 +86,7 @@ const buffDefault = async () => {
               await postGoodsBuy({ price: current_price, sell_order_id: lowestPricedItem.id })
               await sendMessage(generateMessage({ type: MessageType.Purchased, ...payload }))
             } else if (lowestPricedItem.asset_info.info.stickers.length !== 0) {
-              const {
-                data: {
-                  asset_info: { stickers },
-                },
-              } = await getMarketItemDetail({
+              const details = await getMarketItemDetail({
                 sell_order_id: lowestPricedItem.id,
                 classid: lowestPricedItem.asset_info.classid,
                 instanceid: lowestPricedItem.asset_info.instanceid,
@@ -98,14 +94,16 @@ const buffDefault = async () => {
                 contextid: lowestPricedItem.asset_info.contextid,
               })
 
-              const stickerValue = stickers.reduce((acc, { wear, sell_reference_price }) => {
-                return wear === 0 ? acc + Number(sell_reference_price) : acc
-              }, 0)
+              const stickerValue = getTotalStickerPrice(details.data.asset_info.stickers)
 
               await sendMessage(generateMessage({ type: MessageType.Review, stickerValue, ...payload }))
             } else {
               await sendMessage(generateMessage({ type: MessageType.Review, ...payload }))
             }
+          } else if (estimated_profit > 0 && current_price > 20) {
+            // TODO: Bargain
+          } else {
+            // TODO: Other cases
           }
         }
 

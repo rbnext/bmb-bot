@@ -1,4 +1,4 @@
-import { MessageType } from './types'
+import { MessageType, Sticker } from './types'
 
 export const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms))
 
@@ -24,7 +24,11 @@ export const priceDiff = (reference: number, current: number) => {
   return Number((((reference - current) / reference) * 100).toFixed(2))
 }
 
-export const addIfTrue = (message: string, condition: boolean) => (condition ? message : '')
+export const getTotalStickerPrice = (stickers: Sticker[], start = 0): number => {
+  return stickers.reduce((acc, { wear, sell_reference_price }) => {
+    return wear === 0 ? acc + Number(sell_reference_price) : acc
+  }, start)
+}
 
 export const generateMessage = ({
   id,

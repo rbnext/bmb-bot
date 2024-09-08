@@ -9,7 +9,7 @@ import {
 } from '../api/buff'
 import { weaponGroups } from '../config'
 import { MarketPriceOverview, MessageType } from '../types'
-import { generateMessage, isLessThanThreshold, median, priceDiff, sleep } from '../utils'
+import { generateMessage, getTotalStickerPrice, isLessThanThreshold, median, priceDiff, sleep } from '../utils'
 import { format, differenceInDays } from 'date-fns'
 import { sendMessage } from '../api/telegram'
 
@@ -40,7 +40,6 @@ export const buff2buff = () => async () => {
 
       for (const item of marketGoods.data.items) {
         const goods_id = item.id
-        const steam_price = item.goods_info.steam_price
         const market_hash_name = item.market_hash_name
         const sell_min_price = item.sell_min_price
 
@@ -72,62 +71,60 @@ export const buff2buff = () => async () => {
             const median_price = median(sales.filter((price) => current_price * 2 > price))
             const estimated_profit = ((median_price * 0.975) / current_price - 1) * 100
 
-            if (estimated_profit > 2) {
+            if (estimated_profit >= (current_price >= 5 ? 9 : 20)) {
               const goodsInfo = await getGoodsInfo({ goods_id })
-              const sellOrders = await getGoodsSellOrder({ goods_id, max_price: sell_min_price })
 
               const goods_ref_price = Number(goodsInfo.data.goods_info.goods_ref_price)
-              const referenceDiff = priceDiff(goods_ref_price, current_price)
-
-              const [lowestPricedItem] = sellOrders.data.items
-
-              // Check if the product is available, if not skip code below
-              if (!lowestPricedItem) continue
+              const currentReferencePriceDiff = priceDiff(goods_ref_price, current_price)
 
               const {
                 data: {
-                  asset_info: { stickers },
+                  items: [lowestPricedItem],
                 },
-              } = await getMarketItemDetail({
-                sell_order_id: lowestPricedItem.id,
-                classid: lowestPricedItem.asset_info.classid,
-                instanceid: lowestPricedItem.asset_info.instanceid,
-                assetid: lowestPricedItem.asset_info.assetid,
-                contextid: lowestPricedItem.asset_info.contextid,
-              })
+              } = await getGoodsSellOrder({ goods_id, max_price: item.sell_min_price })
 
-              const isProfitable = estimated_profit >= 9 && referenceDiff >= 4
-
-              const stickersTotalPrice = stickers.reduce((acc, { wear, sell_reference_price }) => {
-                return wear === 0 ? acc + Number(sell_reference_price) : acc
-              }, 0)
-
-              if (isProfitable) {
-                const briefAsset = await getBriefAsset()
-
-                if (+lowestPricedItem.price > +briefAsset.data.cash_amount) {
-                  throw new Error('Oops! Not enough funds.')
-                }
-
-                await postGoodsBuy({ sell_order_id: lowestPricedItem.id, price: +lowestPricedItem.price })
+              if (!lowestPricedItem) {
+                throw new Error('Oops! Someone already bought this item!')
               }
 
-              await sendMessage(
-                generateMessage({
-                  id: goods_id,
-                  type: isProfitable ? MessageType.Purchased : MessageType.Review,
-                  name: item.market_hash_name,
-                  price: current_price,
-                  referencePrice: goods_ref_price,
-                  estimatedProfit: estimated_profit,
-                  medianPrice: median_price,
-                  float: lowestPricedItem.asset_info.paintwear,
-                  stickerValue: stickersTotalPrice,
-                  bargainPrice: lowestPricedItem.lowest_bargain_price,
+              const payload = {
+                id: goods_id,
+                name: item.market_hash_name,
+                price: current_price,
+                referencePrice: goods_ref_price,
+                estimatedProfit: estimated_profit,
+                medianPrice: median_price,
+                float: lowestPricedItem.asset_info.paintwear,
+              }
+
+              if (currentReferencePriceDiff >= 4) {
+                const briefAsset = await getBriefAsset()
+
+                if (current_price > +briefAsset.data.cash_amount) {
+                  throw new Error('Oops! Not enough funds on your account.')
+                }
+
+                await postGoodsBuy({ price: current_price, sell_order_id: lowestPricedItem.id })
+                await sendMessage(generateMessage({ type: MessageType.Purchased, ...payload }))
+              } else if (lowestPricedItem.asset_info.info.stickers.length !== 0) {
+                const details = await getMarketItemDetail({
+                  sell_order_id: lowestPricedItem.id,
+                  classid: lowestPricedItem.asset_info.classid,
+                  instanceid: lowestPricedItem.asset_info.instanceid,
+                  assetid: lowestPricedItem.asset_info.assetid,
+                  contextid: lowestPricedItem.asset_info.contextid,
                 })
-              )
+
+                const stickerValue = getTotalStickerPrice(details.data.asset_info.stickers)
+
+                await sendMessage(generateMessage({ type: MessageType.Review, stickerValue, ...payload }))
+              } else {
+                await sendMessage(generateMessage({ type: MessageType.Review, ...payload }))
+              }
+            } else if (estimated_profit >= 2 && current_price > 20) {
+              // TODO: Bargain
             } else {
-              console.log(`${now}: ${market_hash_name} estimated profit ${estimated_profit.toFixed(2)}%`)
+              // TODO: Other cases
             }
           }
 

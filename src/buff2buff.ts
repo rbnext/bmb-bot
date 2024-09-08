@@ -8,8 +8,8 @@ import {
   postGoodsBuy,
 } from './api/buff'
 import { weaponGroups } from './config'
-import { MarketPriceOverview } from './types'
-import { addIfTrue, isLessThanThreshold, median, priceDiff, sleep } from './utils'
+import { MarketPriceOverview, MessageType } from './types'
+import { generateMessage, isLessThanThreshold, median, priceDiff, sleep } from './utils'
 import { format, differenceInDays } from 'date-fns'
 import { sendMessage } from './api/telegram'
 
@@ -76,15 +76,13 @@ export const buff2buff = () => async () => {
               const goodsInfo = await getGoodsInfo({ goods_id })
               const sellOrders = await getGoodsSellOrder({ goods_id, max_price: sell_min_price })
 
-              const refPrice = Number(goodsInfo.data.goods_info.goods_ref_price)
-              const referenceDiff = priceDiff(refPrice, current_price)
+              const goods_ref_price = Number(goodsInfo.data.goods_info.goods_ref_price)
+              const referenceDiff = priceDiff(goods_ref_price, current_price)
 
               const [lowestPricedItem] = sellOrders.data.items
 
               // Check if the product is available, if not skip code below
               if (!lowestPricedItem) continue
-
-              const paintwear = lowestPricedItem?.asset_info?.paintwear
 
               const {
                 data: {
@@ -115,15 +113,18 @@ export const buff2buff = () => async () => {
               }
 
               await sendMessage(
-                `${isProfitable ? '✅' : '❗'} ${market_hash_name}\n\n` +
-                  `<b>Buff price</b>: $${current_price}\n` +
-                  `<b>Steam price</b>: $${steam_price}\n` +
-                  `<b>Reference price</b>: $${refPrice}\n` +
-                  addIfTrue(`<b>Sticker Value</b>: $${stickersTotalPrice.toFixed(2)}\n`, !!stickersTotalPrice) +
-                  addIfTrue(`<b>Float</b>: ${paintwear}\n`, !!paintwear) +
-                  `<b>Estimated profit</b>: <b>${estimated_profit.toFixed(2)}%</b> (if sold for <b>$${median_price}</b>)\n` +
-                  `<b>Lowest bargain price</b>: ${lowestPricedItem.lowest_bargain_price}$\n` +
-                  `<b>Buff market link</b>: https://buff.market/market/goods/${goods_id}`
+                generateMessage({
+                  id: goods_id,
+                  type: isProfitable ? MessageType.Purchased : MessageType.Review,
+                  name: item.market_hash_name,
+                  price: current_price,
+                  referencePrice: goods_ref_price,
+                  estimatedProfit: estimated_profit,
+                  medianPrice: median_price,
+                  float: lowestPricedItem.asset_info.paintwear,
+                  stickerValue: stickersTotalPrice,
+                  bargainPrice: lowestPricedItem.lowest_bargain_price,
+                })
               )
             } else {
               console.log(`${now}: ${market_hash_name} estimated profit ${estimated_profit.toFixed(2)}%`)

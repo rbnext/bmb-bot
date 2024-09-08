@@ -9,8 +9,9 @@ import {
   getMarketGoodsBillOrder,
   postGoodsBuy,
 } from './api/buff'
-import { median, priceDiff, sleep } from './utils'
+import { generateMessage, median, priceDiff, sleep } from './utils'
 import { sendMessage } from './api/telegram'
+import { MessageType } from './types'
 
 let lastMarketHashName: string | null = null
 
@@ -74,22 +75,30 @@ const buffDefault = async () => {
                 })
 
                 await sendMessage(
-                  '✅ ' +
-                    `<b>[PURCHASED]</b> <a href="https://buff.market/market/goods/${goods_id}">${item.market_hash_name}</a>\n\n` +
-                    `<b>Price</b>: $${current_price}\n` +
-                    `<b>Reference price</b>: $${goods_ref_price}\n` +
-                    `<b>Estimated profit</b>: ${estimated_profit.toFixed(2)}% (if sold for $${median_price.toFixed(2)})\n`
+                  generateMessage({
+                    id: goods_id,
+                    type: MessageType.Purchased,
+                    name: item.market_hash_name,
+                    price: current_price,
+                    referencePrice: goods_ref_price,
+                    estimatedProfit: estimated_profit,
+                    medianPrice: median_price,
+                  })
                 )
               } else {
                 await sendMessage(`Someone bought the ${item.market_hash_name} faster than the bot.`)
               }
             } else {
               await sendMessage(
-                '🔶 ' +
-                  `<b>[REVIEW]</b> <a href="https://buff.market/market/goods/${goods_id}">${item.market_hash_name}</a>\n\n` +
-                  `<b>Price</b>: $${current_price}\n` +
-                  `<b>Reference price</b>: $${goods_ref_price}\n` +
-                  `<b>Estimated profit</b>: ${estimated_profit.toFixed(2)}% (if sold for $${median_price.toFixed(2)})\n`
+                generateMessage({
+                  id: goods_id,
+                  type: MessageType.Review,
+                  name: item.market_hash_name,
+                  price: current_price,
+                  referencePrice: goods_ref_price,
+                  estimatedProfit: estimated_profit,
+                  medianPrice: median_price,
+                })
               )
             }
           }

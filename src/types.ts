@@ -136,3 +136,8 @@ export type MarketPriceOverview = {
   success: boolean
   volume: string
 }
+
+export enum MessageType {
+  Purchased = 'PURCHASED',
+  Review = 'REVIEW',
+}

@@ -7,6 +7,7 @@ import {
   getGoodsSellOrder,
   getMarketGoods,
   getMarketGoodsBillOrder,
+  getMarketItemDetail,
   postGoodsBuy,
 } from './api/buff'
 import { generateMessage, median, priceDiff, sleep } from './utils'
@@ -53,53 +54,57 @@ const buffDefault = async () => {
             const goodsInfo = await getGoodsInfo({ goods_id })
 
             const goods_ref_price = Number(goodsInfo.data.goods_info.goods_ref_price)
-            const referenceDiff = priceDiff(goods_ref_price, current_price)
+            const currentReferencePriceDiff = priceDiff(goods_ref_price, current_price)
 
-            if (referenceDiff >= 4) {
+            const {
+              data: {
+                items: [lowestPricedItem],
+              },
+            } = await getGoodsSellOrder({ goods_id, max_price: item.sell_min_price })
+
+            if (!lowestPricedItem) {
+              throw new Error('Oops! Someone already bought this item!')
+            }
+
+            const payload = {
+              id: goods_id,
+              price: current_price,
+              name: item.market_hash_name,
+              referencePrice: goods_ref_price,
+              estimatedProfit: estimated_profit,
+              medianPrice: median_price,
+              float: lowestPricedItem.asset_info.paintwear,
+            }
+
+            if (currentReferencePriceDiff >= 4) {
+              const briefAsset = await getBriefAsset()
+
+              if (current_price > +briefAsset.data.cash_amount) {
+                throw new Error('Oops! Not enough funds on your account.')
+              }
+
+              await postGoodsBuy({ price: current_price, sell_order_id: lowestPricedItem.id })
+              await sendMessage(generateMessage({ type: MessageType.Purchased, ...payload }))
+            } else if (lowestPricedItem.asset_info.info.stickers.length !== 0) {
               const {
                 data: {
-                  items: [lowestPricedItem],
+                  asset_info: { stickers },
                 },
-              } = await getGoodsSellOrder({ goods_id, max_price: item.sell_min_price })
+              } = await getMarketItemDetail({
+                sell_order_id: lowestPricedItem.id,
+                classid: lowestPricedItem.asset_info.classid,
+                instanceid: lowestPricedItem.asset_info.instanceid,
+                assetid: lowestPricedItem.asset_info.assetid,
+                contextid: lowestPricedItem.asset_info.contextid,
+              })
 
-              if (lowestPricedItem) {
-                const briefAsset = await getBriefAsset()
+              const stickerValue = stickers.reduce((acc, { wear, sell_reference_price }) => {
+                return wear === 0 ? acc + Number(sell_reference_price) : acc
+              }, 0)
 
-                if (+lowestPricedItem.price > +briefAsset.data.cash_amount) {
-                  throw new Error('Oops! Not enough funds.')
-                }
-
-                await postGoodsBuy({
-                  price: +lowestPricedItem.price,
-                  sell_order_id: lowestPricedItem.id,
-                })
-
-                await sendMessage(
-                  generateMessage({
-                    id: goods_id,
-                    type: MessageType.Purchased,
-                    name: item.market_hash_name,
-                    price: current_price,
-                    referencePrice: goods_ref_price,
-                    estimatedProfit: estimated_profit,
-                    medianPrice: median_price,
-                  })
-                )
-              } else {
-                await sendMessage(`Someone bought the ${item.market_hash_name} faster than the bot.`)
-              }
+              await sendMessage(generateMessage({ type: MessageType.Review, stickerValue, ...payload }))
             } else {
-              await sendMessage(
-                generateMessage({
-                  id: goods_id,
-                  type: MessageType.Review,
-                  name: item.market_hash_name,
-                  price: current_price,
-                  referencePrice: goods_ref_price,
-                  estimatedProfit: estimated_profit,
-                  medianPrice: median_price,
-                })
-              )
+              await sendMessage(generateMessage({ type: MessageType.Review, ...payload }))
             }
           }
         }

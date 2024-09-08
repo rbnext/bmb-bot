@@ -1,3 +1,5 @@
+import 'dotenv/config'
+
 import {
   getBriefAsset,
   getGoodsInfo,
@@ -16,7 +18,7 @@ import { sendMessage } from '../api/telegram'
 export const GOODS_CACHE: Record<number, { price: number }> = {}
 export const MARKET_CACHE: Record<number, MarketPriceOverview> = {}
 
-export const buff2buff = () => async () => {
+const buff2buff = async () => {
   let currentPage = 1
   const pagesToLoad = 13
   let hasNextPage = true
@@ -32,7 +34,7 @@ export const buff2buff = () => async () => {
 
         break
       }
-      //console.log('Items: ', marketGoods.data.items.length, ' Page Number:',page_num)
+
       if (hasNextPage) {
         hasNextPage = currentPage < pagesToLoad
       }

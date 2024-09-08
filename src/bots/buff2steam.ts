@@ -1,9 +1,9 @@
 import 'dotenv/config'
 
 import { format } from 'date-fns'
-import { getMarketGoods } from './api/buff'
-import { sleep } from './utils'
-import { sendMessage } from './api/telegram'
+import { getMarketGoods } from '../api/buff'
+import { sleep } from '../utils'
+import { sendMessage } from '../api/telegram'
 
 let lastMarketHashName: string | null = null
 

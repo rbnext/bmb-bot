@@ -6,12 +6,12 @@ import {
   getMarketGoodsBillOrder,
   getMarketItemDetail,
   postGoodsBuy,
-} from './api/buff'
-import { weaponGroups } from './config'
-import { MarketPriceOverview, MessageType } from './types'
-import { generateMessage, isLessThanThreshold, median, priceDiff, sleep } from './utils'
+} from '../api/buff'
+import { weaponGroups } from '../config'
+import { MarketPriceOverview, MessageType } from '../types'
+import { generateMessage, isLessThanThreshold, median, priceDiff, sleep } from '../utils'
 import { format, differenceInDays } from 'date-fns'
-import { sendMessage } from './api/telegram'
+import { sendMessage } from '../api/telegram'
 
 export const GOODS_CACHE: Record<number, { price: number }> = {}
 export const MARKET_CACHE: Record<number, MarketPriceOverview> = {}

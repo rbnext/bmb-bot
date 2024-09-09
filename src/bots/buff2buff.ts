@@ -177,7 +177,10 @@ const buff2buff = async () => {
                 }
 
                 if (estimated_bargain_profit > 10 && currentReferencePriceDiff >= REFERENCE_DIFF_THRESHOLD) {
-                  const response = await postCreateBargain({ price: current_price, sell_order_id: lowestPricedItem.id })
+                  const response = await postCreateBargain({
+                    price: lowest_bargain_price,
+                    sell_order_id: lowestPricedItem.id,
+                  })
 
                   if (response.code === 'OK') {
                     await sendMessage(generateMessage({ type: MessageType.Bargain, ...payload }))

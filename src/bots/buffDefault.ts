@@ -77,7 +77,7 @@ const buffDefault = async () => {
               estimatedProfit: estimated_profit,
               medianPrice: median_price,
               float: lowestPricedItem.asset_info.paintwear,
-              source: Source.BUFF2BUFF,
+              source: Source.BUFF_DEFAULT,
             }
 
             if (currentReferencePriceDiff >= REFERENCE_DIFF_THRESHOLD) {
@@ -87,8 +87,13 @@ const buffDefault = async () => {
                 throw new Error('Oops! Not enough funds on your account.')
               }
 
-              await postGoodsBuy({ price: current_price, sell_order_id: lowestPricedItem.id })
-              await sendMessage(generateMessage({ type: MessageType.Purchased, ...payload }))
+              const response = await postGoodsBuy({ price: current_price, sell_order_id: lowestPricedItem.id })
+
+              if (response.code === 'OK') {
+                await sendMessage(generateMessage({ type: MessageType.Purchased, ...payload }))
+              } else {
+                await sendMessage(`Failed to purchase the item ${item.market_hash_name}. Reason: ${response.code}`)
+              }
             } else if (lowestPricedItem.asset_info.info.stickers.length !== 0) {
               const details = await getMarketItemDetail({
                 sell_order_id: lowestPricedItem.id,

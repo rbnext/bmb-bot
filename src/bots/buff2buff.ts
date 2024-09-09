@@ -85,7 +85,11 @@ const buff2buff = async () => {
               } = await getGoodsSellOrder({ goods_id, max_price: item.sell_min_price })
 
               if (!lowestPricedItem) {
-                throw new Error('Oops! Someone already bought this item!')
+                await sendMessage(
+                  `Oops! Someone already bought the ${item.market_hash_name} item for $${current_price}!`
+                )
+
+                continue
               }
 
               const payload = {

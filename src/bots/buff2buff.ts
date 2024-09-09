@@ -132,7 +132,7 @@ const buff2buff = async () => {
               } else {
                 await sendMessage(generateMessage({ type: MessageType.Review, ...payload }))
               }
-            } else if (estimated_profit >= 1 && current_price > 20 && current_price <= 40) {
+            } else if (estimated_profit > 0 && current_price >= 15 && current_price <= 45) {
               // TODO: Bargain
               const briefAsset = await getBriefAsset()
 

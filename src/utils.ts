@@ -30,6 +30,12 @@ export const getTotalStickerPrice = (stickers: Sticker[], start = 0): number => 
   }, start)
 }
 
+const messageTypeMapper = {
+  [MessageType.Purchased]: '✅',
+  [MessageType.Review]: '🔶',
+  [MessageType.Bargain]: '🤝',
+}
+
 export const generateMessage = ({
   id,
   name,
@@ -57,7 +63,7 @@ export const generateMessage = ({
 }) => {
   const message: string[] = []
 
-  message.push(type === MessageType.Purchased ? '✅ ' : '🔶 ')
+  message.push(messageTypeMapper[type] + ' ')
   message.push(`<b>[${type}][${source}]</b> <a href="https://buff.market/market/goods/${id}">${name}</a>\n\n`)
 
   message.push(`<b>Price</b>: $${price}\n`)

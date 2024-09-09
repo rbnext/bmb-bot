@@ -81,6 +81,21 @@ export type GoodsBuyResponse = {
   data: unknown
 }
 
+export type CreateBargainResponse = {
+  code: 'OK' | 'CSRF Verification Error'
+  data: unknown
+}
+
+export type SentBargainItem = {
+  buyer_id: string
+}
+
+export type SentBargain = {
+  data: {
+    items: SentBargainItem[]
+  }
+}
+
 export type MarketGoodsItem = {
   id: number
   market_hash_name: string
@@ -140,6 +155,7 @@ export type MarketPriceOverview = {
 export enum MessageType {
   Purchased = 'PURCHASED',
   Review = 'REVIEW',
+  Bargain = 'BARGAIN',
 }
 
 export enum Source {

@@ -7,6 +7,7 @@ import {
   getMarketGoods,
   getMarketGoodsBillOrder,
   getMarketItemDetail,
+  postCreateBargain,
   postGoodsBuy,
 } from '../api/buff'
 import { REFERENCE_DIFF_THRESHOLD, weaponGroups } from '../config'
@@ -132,8 +133,59 @@ const buff2buff = async () => {
               } else {
                 await sendMessage(generateMessage({ type: MessageType.Review, ...payload }))
               }
-            } else if (estimated_profit >= 2 && current_price > 20) {
+            } else if (estimated_profit >= 4 && current_price > 20 && current_price <= 40) {
               // TODO: Bargain
+              const briefAsset = await getBriefAsset()
+
+              if (+briefAsset.data.cash_amount >= 60) {
+                const {
+                  data: {
+                    items: [lowestPricedItem],
+                  },
+                } = await getGoodsSellOrder({ goods_id, max_price: item.sell_min_price })
+
+                if (!lowestPricedItem) {
+                  await sendMessage(
+                    `Oops! Someone already bought the ${item.market_hash_name} item for $${current_price}!`
+                  )
+
+                  continue
+                }
+
+                if (!lowestPricedItem.allow_bargain) {
+                  await sendMessage(`Bargaining for this ${item.market_hash_name} is not allowed.`)
+
+                  continue
+                }
+
+                const goodsInfo = await getGoodsInfo({ goods_id })
+
+                const lowest_bargain_price = +lowestPricedItem.lowest_bargain_price
+                const estimated_bargain_profit = ((median_price * 0.975) / lowest_bargain_price - 1) * 100
+
+                const goods_ref_price = Number(goodsInfo.data.goods_info.goods_ref_price)
+                const currentReferencePriceDiff = priceDiff(goods_ref_price, lowest_bargain_price)
+
+                const payload = {
+                  id: goods_id,
+                  name: item.market_hash_name,
+                  medianPrice: median_price,
+                  referencePrice: goods_ref_price,
+                  price: lowest_bargain_price,
+                  estimatedProfit: estimated_bargain_profit,
+                  source: Source.BUFF2BUFF,
+                }
+
+                if (estimated_bargain_profit > 10 && currentReferencePriceDiff >= REFERENCE_DIFF_THRESHOLD) {
+                  const response = await postCreateBargain({ price: current_price, sell_order_id: lowestPricedItem.id })
+
+                  if (response.code === 'OK') {
+                    await sendMessage(generateMessage({ type: MessageType.Bargain, ...payload }))
+                  } else {
+                    await sendMessage(`Failed to send bargain to seller. Item ${item.market_hash_name}.`)
+                  }
+                }
+              }
             } else {
               // TODO: Other cases
             }

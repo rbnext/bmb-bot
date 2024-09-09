@@ -3,6 +3,7 @@ import { parse } from 'set-cookie-parser'
 
 import {
   BriefAsset,
+  CreateBargainResponse,
   GoodsBuyResponse,
   GoodsInfo,
   GoodsSellOrder,
@@ -10,6 +11,7 @@ import {
   MarketGoodsBillOrder,
   MarketItemDetail,
   MarketPriceHistory,
+  SentBargainItem,
   TopBookmarked,
 } from '../types'
 
@@ -237,6 +239,20 @@ export const getMarketPriceHistory = async ({
   return data
 }
 
+export const getSentBargain = async ({
+  game = 'csgo',
+  page_num = 1,
+  page_size = 20,
+}: {
+  game?: string
+  page_num?: number
+  page_size?: number
+}): Promise<SentBargainItem> => {
+  const { data } = await http.post('/market/buy_order/sent_bargain', { game, page_num, page_size })
+
+  return data
+}
+
 export const postGoodsBuy = async ({
   game = 'csgo',
   pay_method = 12,
@@ -250,6 +266,21 @@ export const postGoodsBuy = async ({
   const { data } = await http.post('/market/goods/buy', { game, pay_method, ...rest })
 
   console.log('/market/goods/buy', data)
+
+  return data
+}
+
+export const postCreateBargain = async ({
+  game = 'csgo',
+  pay_method = 12,
+  ...rest
+}: {
+  game?: string
+  pay_method?: number
+  price: number
+  sell_order_id: string
+}): Promise<CreateBargainResponse> => {
+  const { data } = await http.post('/market/buyer_bargain/create', { game, pay_method, ...rest })
 
   return data
 }

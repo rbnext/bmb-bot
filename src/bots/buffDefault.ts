@@ -83,10 +83,10 @@ const buffDefault = async () => {
               const briefAsset = await getBriefAsset()
 
               if (current_price > +briefAsset.data.cash_amount) {
-                throw new Error('Oops! Not enough funds on your account.')
+                // throw new Error('Oops! Not enough funds on your account.')
               }
 
-              await postGoodsBuy({ price: current_price, sell_order_id: lowestPricedItem.id })
+              // await postGoodsBuy({ price: current_price, sell_order_id: lowestPricedItem.id })
               await sendMessage(generateMessage({ type: MessageType.Purchased, ...payload }))
             } else if (lowestPricedItem.asset_info.info.stickers.length !== 0) {
               const details = await getMarketItemDetail({

@@ -286,7 +286,7 @@ export const postCreateBargain = async ({
   return data
 }
 
-export const postCancelBargain = async ({ bargain_id }: { bargain_id: number }): Promise<CancelBargainResponse> => {
+export const postCancelBargain = async ({ bargain_id }: { bargain_id: string }): Promise<CancelBargainResponse> => {
   const { data } = await http.post('/market/buyer_bargain/cancel', { bargain_id })
 
   return data

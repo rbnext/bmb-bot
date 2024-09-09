@@ -7,13 +7,15 @@ import {
   getMarketGoods,
   getMarketGoodsBillOrder,
   getMarketItemDetail,
+  getSentBargain,
+  postCancelBargain,
   postCreateBargain,
   postGoodsBuy,
 } from '../api/buff'
 import { REFERENCE_DIFF_THRESHOLD, weaponGroups } from '../config'
 import { MessageType, Source } from '../types'
 import { generateMessage, getTotalStickerPrice, isLessThanThreshold, median, priceDiff, sleep } from '../utils'
-import { format, differenceInDays } from 'date-fns'
+import { format, differenceInDays, isAfter, fromUnixTime } from 'date-fns'
 import { sendMessage } from '../api/telegram'
 
 export const GOODS_CACHE: Record<number, { price: number }> = {}
@@ -134,6 +136,14 @@ const buff2buff = async () => {
               }
             } else if (estimated_profit > 0 && current_price >= 15 && current_price <= 45) {
               // TODO: Bargain
+              const response = await getSentBargain({})
+
+              for (const bargain of response.data.items) {
+                if (bargain.state === 1 && isAfter(new Date(), fromUnixTime(bargain.can_cancel_time))) {
+                  await postCancelBargain({ bargain_id: bargain.id })
+                }
+              }
+
               const briefAsset = await getBriefAsset()
 
               if (+briefAsset.data.cash_amount >= 60) {

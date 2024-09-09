@@ -11,13 +11,12 @@ import {
   postGoodsBuy,
 } from '../api/buff'
 import { REFERENCE_DIFF_THRESHOLD, weaponGroups } from '../config'
-import { MarketPriceOverview, MessageType, Source } from '../types'
+import { MessageType, Source } from '../types'
 import { generateMessage, getTotalStickerPrice, isLessThanThreshold, median, priceDiff, sleep } from '../utils'
 import { format, differenceInDays } from 'date-fns'
 import { sendMessage } from '../api/telegram'
 
 export const GOODS_CACHE: Record<number, { price: number }> = {}
-export const MARKET_CACHE: Record<number, MarketPriceOverview> = {}
 
 const buff2buff = async () => {
   let currentPage = 1

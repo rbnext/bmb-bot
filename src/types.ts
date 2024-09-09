@@ -86,8 +86,16 @@ export type CreateBargainResponse = {
   data: unknown
 }
 
+export type CancelBargainResponse = {
+  code: 'OK' | 'CSRF Verification Error'
+  data: unknown
+}
+
 export type SentBargainItem = {
-  buyer_id: string
+  id: string
+  state: number
+  created_at: number
+  can_cancel_time: number
 }
 
 export type SentBargain = {

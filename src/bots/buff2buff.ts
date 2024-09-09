@@ -153,7 +153,7 @@ const buff2buff = async () => {
                 }
 
                 if (!lowestPricedItem.allow_bargain) {
-                  await sendMessage(`Bargaining for this ${item.market_hash_name} is not allowed.`)
+                  await sendMessage(`Bargaining for the ${item.market_hash_name} item is not allowed.`)
 
                   continue
                 }
@@ -185,7 +185,7 @@ const buff2buff = async () => {
                   if (response.code === 'OK') {
                     await sendMessage(generateMessage({ type: MessageType.Bargain, ...payload }))
                   } else {
-                    await sendMessage(`Failed to send bargain to seller. Item ${item.market_hash_name}.`)
+                    await sendMessage(`Failed to send bargain to seller. Reason: ${response.code}`)
                   }
                 }
               }

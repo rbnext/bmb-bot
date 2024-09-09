@@ -141,3 +141,8 @@ export enum MessageType {
   Purchased = 'PURCHASED',
   Review = 'REVIEW',
 }
+
+export enum Source {
+  BUFF_DEFAULT = 'BUFF_DEFAULT',
+  BUFF2BUFF = 'BUFF2BUFF',
+}

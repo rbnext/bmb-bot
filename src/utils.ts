@@ -1,4 +1,4 @@
-import { MessageType, Sticker } from './types'
+import { MessageType, Source, Sticker } from './types'
 
 export const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms))
 
@@ -38,6 +38,7 @@ export const generateMessage = ({
   referencePrice,
   medianPrice,
   estimatedProfit,
+  source,
   stickerValue = 0,
   float,
   bargainPrice,
@@ -49,6 +50,7 @@ export const generateMessage = ({
   referencePrice: number
   medianPrice: number
   estimatedProfit: number
+  source: Source
   stickerValue?: number
   float?: string
   bargainPrice?: string
@@ -56,7 +58,7 @@ export const generateMessage = ({
   const message: string[] = []
 
   message.push(type === MessageType.Purchased ? '✅ ' : '🔶 ')
-  message.push(`<b>[${type.toUpperCase()}]</b> <a href="https://buff.market/market/goods/${id}">${name}</a>\n\n`)
+  message.push(`<b>[${type}][${source}]</b> <a href="https://buff.market/market/goods/${id}">${name}</a>\n\n`)
 
   message.push(`<b>Price</b>: $${price}\n`)
   message.push(`<b>Reference price</b>: $${referencePrice}\n`)

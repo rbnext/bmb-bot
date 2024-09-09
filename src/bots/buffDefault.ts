@@ -12,7 +12,7 @@ import {
 } from '../api/buff'
 import { generateMessage, getTotalStickerPrice, median, priceDiff, sleep } from '../utils'
 import { sendMessage } from '../api/telegram'
-import { MessageType } from '../types'
+import { MessageType, Source } from '../types'
 import { REFERENCE_DIFF_THRESHOLD } from '../config'
 
 let lastMarketHashName: string | null = null
@@ -77,6 +77,7 @@ const buffDefault = async () => {
               estimatedProfit: estimated_profit,
               medianPrice: median_price,
               float: lowestPricedItem.asset_info.paintwear,
+              source: Source.BUFF2BUFF,
             }
 
             if (currentReferencePriceDiff >= REFERENCE_DIFF_THRESHOLD) {

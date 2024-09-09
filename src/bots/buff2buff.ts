@@ -10,7 +10,7 @@ import {
   postGoodsBuy,
 } from '../api/buff'
 import { REFERENCE_DIFF_THRESHOLD, weaponGroups } from '../config'
-import { MarketPriceOverview, MessageType } from '../types'
+import { MarketPriceOverview, MessageType, Source } from '../types'
 import { generateMessage, getTotalStickerPrice, isLessThanThreshold, median, priceDiff, sleep } from '../utils'
 import { format, differenceInDays } from 'date-fns'
 import { sendMessage } from '../api/telegram'
@@ -100,6 +100,7 @@ const buff2buff = async () => {
                 estimatedProfit: estimated_profit,
                 medianPrice: median_price,
                 float: lowestPricedItem.asset_info.paintwear,
+                source: Source.BUFF2BUFF,
               }
 
               if (currentReferencePriceDiff >= REFERENCE_DIFF_THRESHOLD) {

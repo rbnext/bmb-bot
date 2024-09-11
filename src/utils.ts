@@ -41,6 +41,7 @@ export const generateMessage = ({
   name,
   type,
   price,
+  steamPrice,
   referencePrice,
   medianPrice,
   estimatedProfit,
@@ -53,9 +54,10 @@ export const generateMessage = ({
   name: string
   type: MessageType
   price: number
-  referencePrice: number
-  medianPrice: number
-  estimatedProfit: number
+  steamPrice?: number
+  referencePrice?: number
+  medianPrice?: number
+  estimatedProfit?: number
   source: Source
   stickerValue?: number
   float?: string
@@ -67,8 +69,18 @@ export const generateMessage = ({
   message.push(`<b>[${type}][${source}]</b> <a href="https://buff.market/market/goods/${id}">${name}</a>\n\n`)
 
   message.push(`<b>Price</b>: $${price}\n`)
-  message.push(`<b>Reference price</b>: $${referencePrice}\n`)
-  message.push(`<b>Estimated profit</b>: ${estimatedProfit.toFixed(2)}% (if sold for $${medianPrice.toFixed(2)})\n`)
+
+  if (steamPrice) {
+    message.push(`<b>Steam price</b>: $${steamPrice}\n`)
+  }
+
+  if (referencePrice) {
+    message.push(`<b>Reference price</b>: $${referencePrice}\n`)
+  }
+
+  if (estimatedProfit && medianPrice) {
+    message.push(`<b>Estimated profit</b>: ${estimatedProfit.toFixed(2)}% (if sold for $${medianPrice.toFixed(2)})\n`)
+  }
 
   if (float) {
     message.push(`<b>Float</b>: ${float}\n`)

@@ -102,7 +102,7 @@ const buff2buff = async () => {
                 estimatedProfit: estimated_profit,
                 medianPrice: median_price,
                 float: lowestPricedItem.asset_info.paintwear,
-                source: Source.BUFF2BUFF,
+                source: Source.BUFF_BUFF,
               }
 
               if (currentReferencePriceDiff >= REFERENCE_DIFF_THRESHOLD) {
@@ -134,7 +134,7 @@ const buff2buff = async () => {
               } else {
                 await sendMessage(generateMessage({ type: MessageType.Review, ...payload }))
               }
-            } else if (estimated_profit > 0 && current_price >= 15 && current_price <= 45) {
+            } else if (estimated_profit > 0 && current_price >= 100_000) {
               // TODO: Bargain
               const response = await getSentBargain({})
 
@@ -182,7 +182,7 @@ const buff2buff = async () => {
                   referencePrice: goods_ref_price,
                   price: lowest_bargain_price,
                   estimatedProfit: estimated_bargain_profit,
-                  source: Source.BUFF2BUFF,
+                  source: Source.BUFF_BUFF,
                 }
 
                 if (estimated_bargain_profit > 10 && currentReferencePriceDiff >= REFERENCE_DIFF_THRESHOLD) {

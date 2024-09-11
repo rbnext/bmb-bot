@@ -37,6 +37,8 @@ const buffDefault = async () => {
 
         const goods_id = item.id
         const current_price = +item.sell_min_price
+        const steam_price = +item.goods_info.steam_price
+        const diff = ((steam_price - current_price) / current_price) * 100
 
         const history = await getMarketGoodsBillOrder({ goods_id })
 
@@ -114,6 +116,21 @@ const buffDefault = async () => {
           } else {
             // TODO: Other cases
           }
+        } else if (item.sell_num >= 3 && diff >= 50) {
+          const payload = {
+            id: goods_id,
+            price: current_price,
+            stemPrice: steam_price,
+            estimatedProfit: diff,
+            medianPrice: steam_price,
+            name: item.market_hash_name,
+            source: Source.BUFF_STEAM,
+            type: MessageType.Review,
+          }
+
+          await sendMessage(generateMessage(payload))
+        } else {
+          // TODO
         }
 
         await sleep(1_000)

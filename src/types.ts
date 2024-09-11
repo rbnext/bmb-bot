@@ -167,6 +167,7 @@ export enum MessageType {
 }
 
 export enum Source {
+  BUFF_BUFF = 'BUFF_BUFF',
   BUFF_DEFAULT = 'BUFF_DEFAULT',
-  BUFF2BUFF = 'BUFF2BUFF',
+  BUFF_STEAM = 'BUFF_STEAM',
 }

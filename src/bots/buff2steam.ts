@@ -12,7 +12,7 @@ const buff2steam = async () => {
   const now = format(new Date(), 'HH:mm:ss')
 
   try {
-    const marketGoods = await getMarketGoods({ quality: 'normal,strange,tournament', min_price: 0.5, max_price: 50 })
+    const marketGoods = await getMarketGoods({ quality: 'normal,strange,tournament', min_price: 1, max_price: 200 })
 
     const items = marketGoods.data.items.slice(0, 4)
 

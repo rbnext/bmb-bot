@@ -2,16 +2,17 @@ import 'dotenv/config'
 
 import { format } from 'date-fns'
 import { getMarketGoods } from '../api/buff'
-import { sleep } from '../utils'
+import { generateMessage, sleep } from '../utils'
 import { sendMessage } from '../api/telegram'
+import { MessageType, Source } from '../types'
 
 let lastMarketHashName: string | null = null
 
 const buff2steam = async () => {
-  const now = format(new Date(), 'dd MMM yyyy, HH:mm')
+  const now = format(new Date(), 'HH:mm:ss')
 
   try {
-    const marketGoods = await getMarketGoods({ quality: 'normal,strange,tournament', min_price: 1, max_price: 100 })
+    const marketGoods = await getMarketGoods({ quality: 'normal,strange,tournament', min_price: 0.5, max_price: 50 })
 
     const items = marketGoods.data.items.slice(0, 4)
 
@@ -33,12 +34,19 @@ const buff2steam = async () => {
 
         console.log(`${now}: ${item.market_hash_name} diff ${diff.toFixed(2)}%`)
 
-        if (item.sell_num >= 5 && diff > 50) {
-          await sendMessage(
-            `${item.market_hash_name}\n\n` +
-              `Difference with steam: ${diff.toFixed(2)}\n` +
-              `https://buff.market/market/goods/${goods_id}`
-          )
+        if (diff >= 55) {
+          const payload = {
+            id: goods_id,
+            price: current_price,
+            stemPrice: steam_price,
+            estimatedProfit: diff,
+            medianPrice: steam_price,
+            name: item.market_hash_name,
+            source: Source.BUFF_STEAM,
+            type: MessageType.Review,
+          }
+
+          await sendMessage(generateMessage(payload))
         }
 
         await sleep(1_000)
@@ -49,7 +57,7 @@ const buff2steam = async () => {
   } catch (error) {
     console.log('Something went wrong', error)
 
-    await sendMessage('Buff default bot is stopped working.')
+    await sendMessage(error?.message ?? 'Something went wrong.')
 
     return
   }

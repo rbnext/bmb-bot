@@ -212,9 +212,7 @@ const buff2buff = async () => {
       if (hasNextPage) {
         await sleep(4_000)
       }
-      console.log(
-        format(new Date(), 'HH:mm:ss') + ' Page Number: ' + currentPage + ', Items: ' + marketGoods.data.items.length
-      )
+
       currentPage += 1
     } while (hasNextPage)
   } catch (error) {

@@ -29,13 +29,7 @@ const buff2buff = async () => {
     do {
       const page_num = currentPage
       const category_group = weaponGroups.join(',')
-      const marketGoods = await getMarketGoods({
-        category_group,
-        page_num,
-        sort_by: 'sell_num.desc',
-        min_price: 2,
-        max_price: 18,
-      })
+      const marketGoods = await getMarketGoods({ category_group, page_num, sort_by: 'sell_num.desc' })
 
       if (marketGoods?.code === 'Internal Server Timeout') {
         await sendMessage(`Warning ${marketGoods.code}`)

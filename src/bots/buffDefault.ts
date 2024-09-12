@@ -21,7 +21,7 @@ const buffDefault = async () => {
   const now = format(new Date(), 'HH:mm:ss')
 
   try {
-    const marketGoods = await getMarketGoods({ quality: 'normal,strange,tournament', min_price: 2, max_price: 18 })
+    const marketGoods = await getMarketGoods({ quality: 'normal,strange,tournament' })
 
     const items = marketGoods.data.items.slice(0, 4)
 
@@ -116,7 +116,7 @@ const buffDefault = async () => {
           } else {
             // TODO: Other cases
           }
-        } else if (item.sell_num >= 3 && diff >= 60) {
+        } else if (diff >= 60) {
           const payload = {
             id: goods_id,
             price: current_price,

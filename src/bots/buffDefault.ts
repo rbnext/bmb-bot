@@ -21,7 +21,7 @@ const buffDefault = async () => {
   const now = format(new Date(), 'HH:mm:ss')
 
   try {
-    const marketGoods = await getMarketGoods({ quality: 'normal,strange,tournament', min_price: 0.4, max_price: 2 })
+    const marketGoods = await getMarketGoods({ quality: 'normal,strange,tournament' })
 
     const items = marketGoods.data.items.slice(0, 4)
 
@@ -53,8 +53,7 @@ const buffDefault = async () => {
 
           console.log(`${now}: ${item.market_hash_name} estimated profit ${estimated_profit.toFixed(2)}%`)
 
-          // if (estimated_profit >= (current_price >= 5 ? 10 : 20)) {
-          if (estimated_profit >= 50) {
+          if (estimated_profit >= (current_price >= 5 ? 15 : 25)) {
             const goodsInfo = await getGoodsInfo({ goods_id })
 
             const goods_ref_price = Number(goodsInfo.data.goods_info.goods_ref_price)

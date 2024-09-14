@@ -74,7 +74,7 @@ const buff2buff = async () => {
             const median_price = median(sales.filter((price) => current_price * 2 > price))
             const estimated_profit = ((median_price * 0.975) / current_price - 1) * 100
 
-            if (estimated_profit >= (current_price >= 5 ? 10 : 20)) {
+            if (estimated_profit >= (current_price >= 5 ? 9 : 20)) {
               const goodsInfo = await getGoodsInfo({ goods_id })
 
               const goods_ref_price = Number(goodsInfo.data.goods_info.goods_ref_price)

@@ -53,7 +53,7 @@ const buffDefault = async () => {
 
           console.log(`${now}: ${item.market_hash_name} estimated profit ${estimated_profit.toFixed(2)}%`)
 
-          if (estimated_profit >= (current_price >= 5 ? 15 : 25)) {
+          if (estimated_profit >= (current_price >= 5 ? 10 : 20)) {
             const goodsInfo = await getGoodsInfo({ goods_id })
 
             const goods_ref_price = Number(goodsInfo.data.goods_info.goods_ref_price)

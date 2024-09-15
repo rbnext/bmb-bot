@@ -13,7 +13,8 @@ import {
 import { generateMessage, getTotalStickerPrice, median, priceDiff, sleep } from '../utils'
 import { sendMessage } from '../api/telegram'
 import { MessageType, Source } from '../types'
-import { REFERENCE_DIFF_THRESHOLD } from '../config'
+import { REFERENCE_DIFF_THRESHOLD, STEAM_PURCHASE_THRESHOLD } from '../config'
+import { getMaxPricesForXDays } from '../helpers/getMaxPricesForXDays'
 
 let lastMarketHashName: string | null = null
 
@@ -116,13 +117,23 @@ const buffDefault = async () => {
           } else {
             // TODO: Other cases
           }
-        } else if (diff >= 60) {
+        } else if (salesLastWeek.length > 0 && diff >= STEAM_PURCHASE_THRESHOLD) {
+          const sales = await getMaxPricesForXDays(item.market_hash_name)
+
+          const estimated_steam_price = median(sales)
+          const estimated_profit = ((estimated_steam_price - current_price) / current_price) * 100
+
+          if (sales.length === 0 || STEAM_PURCHASE_THRESHOLD > estimated_profit) {
+            console.log(`[${now}] ${item.market_hash_name} is not liquid. Skipping purchase.`)
+
+            continue
+          }
+
           const payload = {
             id: goods_id,
             price: current_price,
-            stemPrice: steam_price,
-            estimatedProfit: diff,
-            medianPrice: steam_price,
+            estimatedProfit: estimated_profit,
+            medianPrice: estimated_steam_price,
             name: item.market_hash_name,
             source: Source.BUFF_STEAM,
             type: MessageType.Review,

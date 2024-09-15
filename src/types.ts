@@ -153,11 +153,18 @@ export type MarketPriceHistory = {
   }
 }
 
-export type MarketPriceOverview = {
+export type SteamMarketPriceOverview = {
   lowest_price: string
   median_price: string
   success: boolean
   volume: string
+}
+
+export type SteamMarketPriceHistoryItem = [string, number, string]
+
+export type SteamMarketPriceHistory = {
+  success: boolean
+  prices: SteamMarketPriceHistoryItem[]
 }
 
 export enum MessageType {

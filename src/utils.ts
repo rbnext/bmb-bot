@@ -6,9 +6,8 @@ export const median = (array: number[]): number => {
   const sorted = Array.from(array).sort((a, b) => a - b)
   const middle = Math.floor(sorted.length / 2)
 
-  if (sorted.length % 2 === 0) {
-    return (sorted[middle - 1] + sorted[middle]) / 2
-  }
+  if (array.length === 0) return 0
+  if (sorted.length % 2 === 0) (sorted[middle - 1] + sorted[middle]) / 2
 
   return sorted[middle]
 }

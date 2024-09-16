@@ -8,6 +8,7 @@ import {
   GoodsBuyResponse,
   GoodsInfo,
   GoodsSellOrder,
+  ItemsOnSale,
   MarketGoods,
   MarketGoodsBillOrder,
   MarketItemDetail,
@@ -254,6 +255,32 @@ export const getSentBargain = async ({
   return data
 }
 
+export const getItemsOnSale = async ({
+  game = 'csgo',
+  page_num = 1,
+  page_size = 40,
+}: {
+  game?: string
+  page_num?: number
+  page_size?: number
+}): Promise<ItemsOnSale> => {
+  const { data } = await http.post('/market/sell_order/on_sale', { game, page_num, page_size })
+
+  return data
+}
+
+export const postSellOrderCancel = async ({
+  game = 'csgo',
+  sell_orders,
+}: {
+  game?: string
+  sell_orders: string[]
+}): Promise<GoodsBuyResponse> => {
+  const { data } = await http.post('/market/sell_order/cancel', { game, sell_orders })
+
+  return data
+}
+
 export const postGoodsBuy = async ({
   game = 'csgo',
   pay_method = 12,
@@ -265,8 +292,6 @@ export const postGoodsBuy = async ({
   sell_order_id: string
 }): Promise<GoodsBuyResponse> => {
   const { data } = await http.post('/market/goods/buy', { game, pay_method, ...rest })
-
-  console.log('/market/goods/buy', data)
 
   return data
 }

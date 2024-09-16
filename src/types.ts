@@ -104,6 +104,18 @@ export type SentBargain = {
   }
 }
 
+export type OnSaleItem = {
+  id: string
+  price: string
+  is_cheapest: boolean
+}
+
+export type ItemsOnSale = {
+  data: {
+    items: OnSaleItem[]
+  }
+}
+
 export type MarketGoodsItem = {
   id: number
   market_hash_name: string

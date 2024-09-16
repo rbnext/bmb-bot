@@ -72,7 +72,9 @@ const buff2steam = async () => {
             const briefAsset = await getBriefAsset()
 
             if (current_price > +briefAsset.data.cash_amount) {
-              await sendMessage(`Oops! Not enough funds on your account. ${estimated_profit}%`)
+              await sendMessage(
+                `Oops! You don't have enough funds to buy ${item.market_hash_name} for ${current_price}, profit ${estimated_profit}%.`
+              )
 
               continue
             }

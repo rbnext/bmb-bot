@@ -1,15 +1,15 @@
 import { getPriceHistory } from '../api/steam'
-import { parse, format, differenceInDays } from 'date-fns'
+import { parse, format, differenceInDays, isToday } from 'date-fns'
 import { sendMessage } from '../api/telegram'
 
-export const getMaxPricesForXDays = async (market_hash_name: string, days: number = 7): Promise<number[]> => {
+export const getMaxPricesForXDays = async (market_hash_name: string, days: number = 5): Promise<number[]> => {
   try {
     const response = await getPriceHistory({ market_hash_name })
 
     const history = response.prices.reduce<Record<string, number[]>>((acc, [date, price]) => {
       const formattedDate = format(parse(date.replace(': +0', ''), 'MMM dd yyyy HH', new Date()), 'MM-dd-yyyy')
 
-      if (differenceInDays(new Date(), new Date(formattedDate)) >= days) {
+      if (isToday(formattedDate) || differenceInDays(new Date(), new Date(formattedDate)) >= days + 1) {
         return acc
       }
 

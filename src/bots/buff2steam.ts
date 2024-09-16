@@ -1,10 +1,12 @@
 import 'dotenv/config'
 
 import { format } from 'date-fns'
-import { getMarketGoods } from '../api/buff'
+import { getBriefAsset, getGoodsSellOrder, getMarketGoods, postGoodsBuy } from '../api/buff'
 import { generateMessage, sleep } from '../utils'
 import { sendMessage } from '../api/telegram'
 import { MessageType, Source } from '../types'
+import { STEAM_PURCHASE_THRESHOLD } from '../config'
+import { getMaxPricesForXDays } from '../helpers/getMaxPricesForXDays'
 
 let lastMarketHashName: string | null = null
 
@@ -29,24 +31,62 @@ const buff2steam = async () => {
         const goods_id = item.id
         const current_price = +item.sell_min_price
         const steam_price = +item.goods_info.steam_price
-
         const diff = ((steam_price - current_price) / current_price) * 100
 
         console.log(`${now}: ${item.market_hash_name} diff ${diff.toFixed(2)}%`)
 
-        if (diff >= 55) {
+        if (diff >= STEAM_PURCHASE_THRESHOLD) {
+          const sales = await getMaxPricesForXDays(item.market_hash_name)
+
+          const min_steam_price = sales.length === 0 ? 0 : Math.min(...sales)
+          const estimated_profit = ((min_steam_price - current_price) / current_price) * 100
+
+          if (sales.length === 0 || STEAM_PURCHASE_THRESHOLD > estimated_profit) {
+            console.log(`[${now}] ${item.market_hash_name} is not liquid. Skipping purchase.`)
+
+            continue
+          }
+
           const payload = {
             id: goods_id,
             price: current_price,
-            stemPrice: steam_price,
-            estimatedProfit: diff,
-            medianPrice: steam_price,
+            estimatedProfit: estimated_profit,
+            medianPrice: min_steam_price,
             name: item.market_hash_name,
             source: Source.BUFF_STEAM,
-            type: MessageType.Review,
           }
 
-          await sendMessage(generateMessage(payload))
+          if (estimated_profit > 70) {
+            const {
+              data: {
+                items: [lowestPricedItem],
+              },
+            } = await getGoodsSellOrder({ goods_id, max_price: item.sell_min_price })
+
+            if (!lowestPricedItem) {
+              await sendMessage(`Oops! Someone already bought the ${item.market_hash_name} item for $${current_price}!`)
+
+              continue
+            }
+
+            const briefAsset = await getBriefAsset()
+
+            if (current_price > +briefAsset.data.cash_amount) {
+              await sendMessage(`Oops! Not enough funds on your account. ${estimated_profit}%`)
+
+              continue
+            }
+
+            const response = await postGoodsBuy({ price: current_price, sell_order_id: lowestPricedItem.id })
+
+            if (response.code === 'OK') {
+              await sendMessage(generateMessage({ type: MessageType.Purchased, ...payload }))
+            } else {
+              await sendMessage(`Failed to purchase the item ${item.market_hash_name}. Reason: ${response.code}`)
+            }
+          } else {
+            await sendMessage(generateMessage({ type: MessageType.Review, ...payload }))
+          }
         }
 
         await sleep(1_000)

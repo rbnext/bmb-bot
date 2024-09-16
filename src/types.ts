@@ -91,6 +91,11 @@ export type CancelBargainResponse = {
   data: unknown
 }
 
+export type PostResponse = {
+  code: 'OK' | 'CSRF Verification Error'
+  data: unknown
+}
+
 export type SentBargainItem = {
   id: string
   state: number
@@ -107,12 +112,24 @@ export type SentBargain = {
 export type OnSaleItem = {
   id: string
   price: string
+  income: string
   is_cheapest: boolean
+  goods_id: number
+  asset_info: {
+    assetid: string
+    classid: string
+    instanceid: string
+  }
 }
 
 export type ItemsOnSale = {
   data: {
     items: OnSaleItem[]
+    goods_infos: {
+      [key: number]: {
+        market_hash_name: string
+      }
+    }
   }
 }
 

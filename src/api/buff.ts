@@ -13,6 +13,7 @@ import {
   MarketGoodsBillOrder,
   MarketItemDetail,
   MarketPriceHistory,
+  PostResponse,
   SentBargain,
   TopBookmarked,
 } from '../types'
@@ -241,20 +242,6 @@ export const getMarketPriceHistory = async ({
   return data
 }
 
-export const getSentBargain = async ({
-  game = 'csgo',
-  page_num = 1,
-  page_size = 20,
-}: {
-  game?: string
-  page_num?: number
-  page_size?: number
-}): Promise<SentBargain> => {
-  const { data } = await http.post('/market/buy_order/sent_bargain', { game, page_num, page_size })
-
-  return data
-}
-
 export const getItemsOnSale = async ({
   game = 'csgo',
   page_num = 1,
@@ -264,7 +251,25 @@ export const getItemsOnSale = async ({
   page_num?: number
   page_size?: number
 }): Promise<ItemsOnSale> => {
-  const { data } = await http.post('/market/sell_order/on_sale', { game, page_num, page_size })
+  const { data } = await http.get('/market/sell_order/on_sale', {
+    params: { game, page_num, page_size },
+  })
+
+  return data
+}
+
+export const getSentBargain = async ({
+  game = 'csgo',
+  page_num = 1,
+  page_size = 20,
+}: {
+  game?: string
+  page_num?: number
+  page_size?: number
+}): Promise<SentBargain> => {
+  const { data } = await http.get('/market/buy_order/sent_bargain', {
+    params: { game, page_num, page_size },
+  })
 
   return data
 }
@@ -275,8 +280,20 @@ export const postSellOrderCancel = async ({
 }: {
   game?: string
   sell_orders: string[]
-}): Promise<GoodsBuyResponse> => {
+}): Promise<PostResponse> => {
   const { data } = await http.post('/market/sell_order/cancel', { game, sell_orders })
+
+  return data
+}
+
+export const postSellOrderManualPlus = async ({
+  game = 'csgo',
+  assets,
+}: {
+  game?: string
+  assets: { assetid: string; game: string; income: number; price: string }[]
+}): Promise<PostResponse> => {
+  const { data } = await http.post('/market/sell_order/create/manual_plus', { game, assets })
 
   return data
 }

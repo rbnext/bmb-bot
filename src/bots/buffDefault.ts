@@ -62,7 +62,7 @@ const buffDefault = async () => {
             source: Source.BUFF_STEAM,
           }
 
-          if (estimated_profit > 70) {
+          if (estimated_profit >= (current_price >= 5 ? 70 : 100)) {
             const {
               data: {
                 items: [lowestPricedItem],
@@ -112,7 +112,7 @@ const buffDefault = async () => {
 
           console.log(`${now}: ${item.market_hash_name} estimated profit ${estimated_profit.toFixed(2)}%`)
 
-          if (estimated_profit >= (current_price >= 5 ? 15 : 20)) {
+          if (estimated_profit >= (current_price >= 5 ? 15 : 25)) {
             const goodsInfo = await getGoodsInfo({ goods_id })
 
             const goods_ref_price = Number(goodsInfo.data.goods_info.goods_ref_price)

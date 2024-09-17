@@ -9,11 +9,12 @@ import {
   getMarketItemDetail,
   postGoodsBuy,
 } from '../api/buff'
-import { REFERENCE_DIFF_THRESHOLD, weaponGroups } from '../config'
+import { REFERENCE_DIFF_THRESHOLD, STEAM_CHECK_THRESHOLD, weaponGroups } from '../config'
 import { MessageType, Source } from '../types'
 import { generateMessage, getTotalStickerPrice, isLessThanThreshold, median, priceDiff, sleep } from '../utils'
 import { format, differenceInDays } from 'date-fns'
 import { sendMessage } from '../api/telegram'
+import { executeBuffToSteamTrade } from '../helpers/executeBuffToSteamTrade'
 
 export const GOODS_CACHE: Record<number, { price: number }> = {}
 
@@ -28,12 +29,6 @@ const buff2buff = async () => {
       const category_group = weaponGroups.join(',')
       const marketGoods = await getMarketGoods({ category_group, page_num, sort_by: 'sell_num.desc' })
 
-      if (marketGoods?.code === 'Internal Server Timeout') {
-        await sendMessage(`Warning ${marketGoods.code}`)
-
-        break
-      }
-
       if (hasNextPage) {
         hasNextPage = currentPage < pagesToLoad
       }
@@ -42,8 +37,9 @@ const buff2buff = async () => {
         const goods_id = item.id
         const market_hash_name = item.market_hash_name
         const sell_min_price = item.sell_min_price
-
         const current_price = Number(sell_min_price)
+        const steam_price = +item.goods_info.steam_price
+        const diff = ((steam_price - current_price) / current_price) * 100
 
         const now = format(new Date(), 'HH:mm:ss')
 
@@ -58,6 +54,14 @@ const buff2buff = async () => {
         }
 
         if (goods_id in GOODS_CACHE && GOODS_CACHE[goods_id].price > current_price) {
+          if (diff >= STEAM_CHECK_THRESHOLD) {
+            await executeBuffToSteamTrade(item).catch((error) => {
+              console.log(`[${Source.BUFF_BUFF}]: ${error.message}`)
+            })
+
+            continue
+          }
+
           // Get all the most recent sales from the 'Sale History' tab.
           const history = await getMarketGoodsBillOrder({ goods_id })
 

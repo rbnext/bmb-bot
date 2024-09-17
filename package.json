@@ -6,7 +6,8 @@
   "scripts": {
     "buff2buff": "ts-node src/bots/buff2buff.ts",
     "buffDefault": "ts-node src/bots/buffDefault.ts",
-    "buff2steam": "ts-node src/bots/buff2steam.ts"
+    "buff2steam": "ts-node src/bots/buff2steam.ts",
+    "playground": "ts-node src/playground.ts"
   },
   "author": "",
   "license": "ISC",

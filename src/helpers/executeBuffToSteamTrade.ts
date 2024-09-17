@@ -11,11 +11,7 @@ export const executeBuffToSteamTrade = async (item: MarketGoodsItem) => {
 
   const prices = await getMaxPricesForXDays(item.market_hash_name)
 
-  if (prices.length === 0) {
-    throw new Error(`Oops! Item ${item.market_hash_name} is not liquid.`)
-  }
-
-  const min_steam_price = Math.min(...prices)
+  const min_steam_price = prices.length !== 0 ? Math.min(...prices) : 0
   const estimated_profit = ((min_steam_price - current_price) / current_price) * 100
 
   if (STEAM_CHECK_THRESHOLD > estimated_profit) {

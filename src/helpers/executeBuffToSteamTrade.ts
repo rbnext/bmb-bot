@@ -7,19 +7,19 @@ import { getMaxPricesForXDays } from './getMaxPricesForXDays'
 
 export const executeBuffToSteamTrade = async (item: MarketGoodsItem) => {
   const goods_id = item.id
-  const current_price = +item.sell_min_price
+  const current_price = Number(item.sell_min_price)
 
-  const sales = await getMaxPricesForXDays(item.market_hash_name)
+  const prices = await getMaxPricesForXDays(item.market_hash_name)
 
-  if (sales.length === 0) {
+  if (prices.length === 0) {
     throw new Error(`Oops! Item ${item.market_hash_name} is not liquid.`)
   }
 
-  const min_steam_price = Math.min(...sales)
+  const min_steam_price = Math.min(...prices)
   const estimated_profit = ((min_steam_price - current_price) / current_price) * 100
 
   if (STEAM_CHECK_THRESHOLD > estimated_profit) {
-    throw new Error(`Oops! Item ${item.market_hash_name} does not meet the profitability threshold.`)
+    throw new Error(`Item ${item.market_hash_name} does not meet the profitability threshold.`)
   }
 
   const payload = {
@@ -46,7 +46,7 @@ export const executeBuffToSteamTrade = async (item: MarketGoodsItem) => {
       throw new Error(`Oops! Someone already bought the ${item.market_hash_name} item.`)
     }
 
-    if (current_price > +cash_amount) {
+    if (current_price > Number(cash_amount)) {
       throw new Error(`Oops! You don't have enough funds to buy ${item.market_hash_name} item.`)
     }
 

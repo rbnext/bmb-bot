@@ -7,15 +7,12 @@ import {
   getMarketGoods,
   getMarketGoodsBillOrder,
   getMarketItemDetail,
-  getSentBargain,
-  postCancelBargain,
-  postCreateBargain,
   postGoodsBuy,
 } from '../api/buff'
 import { REFERENCE_DIFF_THRESHOLD, weaponGroups } from '../config'
 import { MessageType, Source } from '../types'
 import { generateMessage, getTotalStickerPrice, isLessThanThreshold, median, priceDiff, sleep } from '../utils'
-import { format, differenceInDays, isAfter, fromUnixTime } from 'date-fns'
+import { format, differenceInDays } from 'date-fns'
 import { sendMessage } from '../api/telegram'
 
 export const GOODS_CACHE: Record<number, { price: number }> = {}
@@ -74,7 +71,7 @@ const buff2buff = async () => {
             const median_price = median(sales.filter((price) => current_price * 2 > price))
             const estimated_profit = ((median_price * 0.975) / current_price - 1) * 100
 
-            if (estimated_profit >= (current_price >= 5 ? 9 : 20)) {
+            if (estimated_profit >= (current_price >= 5 ? 15 : 20)) {
               const goodsInfo = await getGoodsInfo({ goods_id })
 
               const goods_ref_price = Number(goodsInfo.data.goods_info.goods_ref_price)
@@ -134,72 +131,6 @@ const buff2buff = async () => {
               } else {
                 await sendMessage(generateMessage({ type: MessageType.Review, ...payload }))
               }
-            } else if (estimated_profit > 0 && current_price >= 100_000) {
-              // TODO: Bargain
-              const response = await getSentBargain({})
-
-              for (const bargain of response.data.items) {
-                if (bargain.state === 1 && isAfter(new Date(), fromUnixTime(bargain.can_cancel_time))) {
-                  await postCancelBargain({ bargain_id: bargain.id })
-                }
-              }
-
-              const briefAsset = await getBriefAsset()
-
-              if (+briefAsset.data.cash_amount >= 60) {
-                const {
-                  data: {
-                    items: [lowestPricedItem],
-                  },
-                } = await getGoodsSellOrder({ goods_id, max_price: item.sell_min_price })
-
-                if (!lowestPricedItem) {
-                  await sendMessage(
-                    `Oops! Someone already bought the ${item.market_hash_name} item for $${current_price}!`
-                  )
-
-                  continue
-                }
-
-                if (!lowestPricedItem.allow_bargain) {
-                  await sendMessage(`Bargaining for the ${item.market_hash_name} item is not allowed.`)
-
-                  continue
-                }
-
-                const goodsInfo = await getGoodsInfo({ goods_id })
-
-                const lowest_bargain_price = +lowestPricedItem.lowest_bargain_price
-                const estimated_bargain_profit = ((median_price * 0.975) / lowest_bargain_price - 1) * 100
-
-                const goods_ref_price = Number(goodsInfo.data.goods_info.goods_ref_price)
-                const currentReferencePriceDiff = priceDiff(goods_ref_price, lowest_bargain_price)
-
-                const payload = {
-                  id: goods_id,
-                  name: item.market_hash_name,
-                  medianPrice: median_price,
-                  referencePrice: goods_ref_price,
-                  price: lowest_bargain_price,
-                  estimatedProfit: estimated_bargain_profit,
-                  source: Source.BUFF_BUFF,
-                }
-
-                if (estimated_bargain_profit > 10 && currentReferencePriceDiff >= REFERENCE_DIFF_THRESHOLD) {
-                  const response = await postCreateBargain({
-                    price: lowest_bargain_price,
-                    sell_order_id: lowestPricedItem.id,
-                  })
-
-                  if (response.code === 'OK') {
-                    await sendMessage(generateMessage({ type: MessageType.Bargain, ...payload }))
-                  } else {
-                    await sendMessage(`Failed to send bargain to seller. Reason: ${response.code}`)
-                  }
-                }
-              }
-            } else {
-              // TODO: Other cases
             }
           }
 

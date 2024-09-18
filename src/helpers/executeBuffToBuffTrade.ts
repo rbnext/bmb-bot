@@ -23,7 +23,7 @@ export const executeBuffToBuffTrade = async (item: MarketGoodsItem) => {
   })
 
   if (salesLastWeek.length < GOODS_SALES_THRESHOLD) {
-    throw new Error(`Not enough sales for ${item.market_hash_name}.`)
+    return
   }
 
   const sales = salesLastWeek.map(({ price }) => Number(price))
@@ -43,7 +43,9 @@ export const executeBuffToBuffTrade = async (item: MarketGoodsItem) => {
     } = await getGoodsSellOrder({ goods_id, max_price: item.sell_min_price })
 
     if (!lowestPricedItem) {
-      throw new Error(`Someone already bought the ${item.market_hash_name} item.`)
+      await sendMessage(`Oops! Someone already bought the ${item.market_hash_name} item.`)
+
+      return
     }
 
     const payload = {
@@ -63,13 +65,17 @@ export const executeBuffToBuffTrade = async (item: MarketGoodsItem) => {
       } = await getBriefAsset()
 
       if (current_price > Number(cash_amount)) {
-        throw new Error(`Oops! You don't have enough funds to buy ${item.market_hash_name} item.`)
+        await sendMessage(`Oops! You don't have enough funds to buy ${item.market_hash_name} item.`)
+
+        return
       }
 
       const response = await postGoodsBuy({ price: current_price, sell_order_id: lowestPricedItem.id })
 
       if (response.code !== 'OK') {
-        throw new Error(`Failed to purchase the item ${item.market_hash_name}. Reason: ${response.code}`)
+        await sendMessage(`Failed to purchase the item ${item.market_hash_name}. Reason: ${response.code}`)
+
+        return
       }
 
       await sendMessage(generateMessage({ type: MessageType.Purchased, ...payload }))

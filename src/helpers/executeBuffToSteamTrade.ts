@@ -8,6 +8,13 @@ import { getMaxPricesForXDays } from './getMaxPricesForXDays'
 export const executeBuffToSteamTrade = async (item: MarketGoodsItem) => {
   const goods_id = item.id
   const current_price = Number(item.sell_min_price)
+  const steam_price = Number(item.goods_info.steam_price)
+
+  const diffWithSteam = ((steam_price - current_price) / current_price) * 100
+
+  if (STEAM_CHECK_THRESHOLD > diffWithSteam) {
+    return
+  }
 
   const prices = await getMaxPricesForXDays(item.market_hash_name)
 
@@ -15,7 +22,7 @@ export const executeBuffToSteamTrade = async (item: MarketGoodsItem) => {
   const estimated_profit = ((min_steam_price - current_price) / current_price) * 100
 
   if (STEAM_CHECK_THRESHOLD > estimated_profit) {
-    throw new Error(`Item ${item.market_hash_name} does not meet the profitability threshold.`)
+    return
   }
 
   const payload = {
@@ -39,17 +46,23 @@ export const executeBuffToSteamTrade = async (item: MarketGoodsItem) => {
     } = await getGoodsSellOrder({ goods_id, max_price: item.sell_min_price })
 
     if (!lowestPricedItem) {
-      throw new Error(`Oops! Someone already bought the ${item.market_hash_name} item.`)
+      await sendMessage(`Oops! Someone already bought the ${item.market_hash_name} item.`)
+
+      return
     }
 
     if (current_price > Number(cash_amount)) {
-      throw new Error(`Oops! You don't have enough funds to buy ${item.market_hash_name} item.`)
+      await sendMessage(`Oops! You don't have enough funds to buy ${item.market_hash_name} item.`)
+
+      return
     }
 
     const response = await postGoodsBuy({ price: current_price, sell_order_id: lowestPricedItem.id })
 
     if (response.code !== 'OK') {
-      throw new Error(`Failed to purchase the item ${item.market_hash_name}. Reason: ${response.code}`)
+      await sendMessage(`Failed to purchase the item ${item.market_hash_name}. Reason: ${response.code}`)
+
+      return
     }
 
     await sendMessage(generateMessage({ type: MessageType.Purchased, ...payload }))

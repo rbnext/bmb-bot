@@ -4,7 +4,6 @@ import { format } from 'date-fns'
 import { getMarketGoods } from '../api/buff'
 import { isLessThanThreshold, sleep } from '../utils'
 import { sendMessage } from '../api/telegram'
-import { GOODS_BLACK_LIST, STEAM_CHECK_THRESHOLD } from '../config'
 import { executeBuffToSteamTrade } from '../helpers/executeBuffToSteamTrade'
 import { executeBuffToBuffTrade } from '../helpers/executeBuffToBuffTrade'
 
@@ -20,10 +19,7 @@ const buffDefault = async () => {
 
     for (const item of items) {
       const goods_id = item.id
-      const steam_price = Number(item.goods_info.steam_price)
       const current_price = Number(item.sell_min_price)
-
-      const diffWithSteam = ((steam_price - current_price) / current_price) * 100
 
       if (goods_id in GOODS_CACHE && isLessThanThreshold(GOODS_CACHE[goods_id].price, current_price, 0.1)) {
         GOODS_CACHE[goods_id].price = current_price
@@ -31,17 +27,12 @@ const buffDefault = async () => {
         continue
       }
 
-      if (GOODS_BLACK_LIST.includes(goods_id)) {
-        continue
-      }
-
       if (goods_id in GOODS_CACHE) {
         console.log(`${now}: ${item.market_hash_name} $${GOODS_CACHE[goods_id].price} -> $${current_price}`)
       }
 
-      const executeTrade = diffWithSteam >= STEAM_CHECK_THRESHOLD ? executeBuffToSteamTrade : executeBuffToBuffTrade
-
-      await executeTrade(item).catch((error) => console.warn(`${now}: ${error.message}`))
+      await executeBuffToBuffTrade(item)
+      await executeBuffToSteamTrade(item)
 
       GOODS_CACHE[goods_id] = { price: current_price }
 

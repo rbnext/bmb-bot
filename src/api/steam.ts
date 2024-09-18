@@ -1,10 +1,13 @@
 import axios from 'axios'
+import { setupCache } from 'axios-cache-interceptor'
 
 import { SteamMarketPriceHistory, SteamMarketPriceOverview } from '../types'
 
-const http = axios.create({
+const instance = axios.create({
   baseURL: 'https://steamcommunity.com',
 })
+
+const http = setupCache(instance)
 
 export const getMarketPriceOverview = async ({
   appid = 730,
@@ -19,6 +22,9 @@ export const getMarketPriceOverview = async ({
 }): Promise<SteamMarketPriceOverview> => {
   const { data } = await http.get<SteamMarketPriceOverview>('/market/priceoverview/', {
     params: { appid, country, currency, market_hash_name },
+    cache: {
+      ttl: 1000 * 60 * 60, // 1 hour
+    },
   })
 
   return data
@@ -39,6 +45,9 @@ export const getPriceHistory = async ({
     params: { appid, country, currency, market_hash_name },
     headers: {
       Cookie: `steamLoginSecure=${process.env.STEAM_LOGIN_SECURE}`,
+    },
+    cache: {
+      ttl: 1000 * 60 * 60, // 1 hour
     },
   })
 

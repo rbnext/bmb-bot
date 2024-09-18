@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { parse } from 'set-cookie-parser'
+import { setupCache } from 'axios-cache-interceptor'
 
 import {
   BriefAsset,
@@ -27,13 +28,15 @@ export const defaultCookies: Record<string, string> = {
   forterToken: process.env.FORTER_TOKEN as string,
 }
 
-const http = axios.create({
+const instance = axios.create({
   baseURL: 'https://api.buff.market/api',
   headers: {
     'User-Agent':
       'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
   },
 })
+
+const http = setupCache(instance)
 
 const getCookies = (cookies: Record<string, string>) => {
   const cookieList = Object.keys(cookies).map((k) => `${k}=${cookies[k]};`)
@@ -81,18 +84,12 @@ http.interceptors.response.use(
 
 export const getMarketGoods = async ({
   game = 'csgo',
-  search,
   page_num = 1,
   page_size = 50,
-  category,
-  itemset,
   min_price = 2,
   max_price = 60,
-  category_group,
   quality = 'normal',
-  series,
-  exterior,
-  sort_by,
+  ...rest
 }: {
   game?: string
   search?: string
@@ -111,19 +108,14 @@ export const getMarketGoods = async ({
   const { data } = await http.get('/market/goods', {
     params: {
       game,
-      search,
       page_num,
       page_size,
-      category,
-      itemset,
       min_price,
       max_price,
       quality,
-      category_group,
-      series,
-      exterior,
-      sort_by,
+      ...rest,
     },
+    cache: false,
   })
 
   return data
@@ -132,10 +124,9 @@ export const getMarketGoods = async ({
 export const getGoodsSellOrder = async ({
   game = 'csgo',
   page_num = 1,
-  goods_id,
   sort_by = 'default',
   exclude_current_user = 1,
-  max_price,
+  ...rest
 }: {
   game?: string
   page_num?: number
@@ -145,7 +136,8 @@ export const getGoodsSellOrder = async ({
   exclude_current_user?: number
 }): Promise<GoodsSellOrder> => {
   const { data } = await http.get('/market/goods/sell_order', {
-    params: { game, page_num, goods_id, sort_by, exclude_current_user, max_price },
+    params: { game, page_num, sort_by, exclude_current_user, ...rest },
+    cache: false,
   })
 
   return data
@@ -168,13 +160,16 @@ export const getTopBookmarked = async ({
 }): Promise<TopBookmarked> => {
   const { data } = await http.get('/market/sell_order/top_bookmarked', {
     params: { game, page_num, page_size, category_group, max_price, min_price },
+    cache: false,
   })
 
   return data
 }
 
 export const getBriefAsset = async (): Promise<BriefAsset> => {
-  const { data } = await http.get('/asset/get_brief_asset')
+  const { data } = await http.get('/asset/get_brief_asset', {
+    cache: false,
+  })
 
   return data
 }
@@ -186,7 +181,12 @@ export const getMarketGoodsBillOrder = async ({
   game?: string
   goods_id: number
 }): Promise<MarketGoodsBillOrder> => {
-  const { data } = await http.get('/market/goods/bill_order', { params: { game, goods_id } })
+  const { data } = await http.get('/market/goods/bill_order', {
+    params: { game, goods_id },
+    cache: {
+      ttl: 1000 * 60 * 60 * 5, // 5 hours
+    },
+  })
 
   return data
 }
@@ -207,6 +207,7 @@ export const getMarketItemDetail = async ({
 }): Promise<MarketItemDetail> => {
   const { data } = await http.get('/market/item_detail', {
     params: { game, classid, instanceid, assetid, contextid, sell_order_id },
+    cache: false,
   })
 
   return data
@@ -219,7 +220,7 @@ export const getGoodsInfo = async ({
   game?: string
   goods_id: number
 }): Promise<GoodsInfo> => {
-  const { data } = await http.get('/market/goods/info', { params: { game, goods_id } })
+  const { data } = await http.get('/market/goods/info', { params: { game, goods_id }, cache: false })
 
   return data
 }
@@ -237,6 +238,7 @@ export const getMarketPriceHistory = async ({
 }): Promise<MarketPriceHistory> => {
   const { data } = await http.get('market/goods/price_history/buff', {
     params: { game, goods_id, days, buff_price_type },
+    cache: false,
   })
 
   return data
@@ -253,6 +255,7 @@ export const getItemsOnSale = async ({
 }): Promise<ItemsOnSale> => {
   const { data } = await http.get('/market/sell_order/on_sale', {
     params: { game, page_num, page_size },
+    cache: false,
   })
 
   return data
@@ -269,6 +272,7 @@ export const getSentBargain = async ({
 }): Promise<SentBargain> => {
   const { data } = await http.get('/market/buy_order/sent_bargain', {
     params: { game, page_num, page_size },
+    cache: false,
   })
 
   return data

@@ -9,7 +9,7 @@ import {
 } from '../api/buff'
 import { MarketGoodsItem, MessageType, Source } from '../types'
 import { generateMessage, getTotalStickerPrice, median, priceDiff } from '../utils'
-import { GOODS_SALES_THRESHOLD, REFERENCE_DIFF_THRESHOLD } from '../config'
+import { BUFF_PURCHASE_THRESHOLD, GOODS_SALES_THRESHOLD, REFERENCE_DIFF_THRESHOLD } from '../config'
 import { sendMessage } from '../api/telegram'
 
 export const executeBuffToBuffTrade = async (item: MarketGoodsItem) => {
@@ -30,7 +30,7 @@ export const executeBuffToBuffTrade = async (item: MarketGoodsItem) => {
   const median_price = median(sales.filter((price) => current_price * 2 > price))
   const estimated_profit = ((median_price * 0.975) / current_price - 1) * 100
 
-  if (estimated_profit >= (current_price >= 5 ? 10 : 20)) {
+  if (estimated_profit >= BUFF_PURCHASE_THRESHOLD) {
     const goodsInfo = await getGoodsInfo({ goods_id })
 
     const goods_ref_price = Number(goodsInfo.data.goods_info.goods_ref_price)

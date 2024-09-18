@@ -4,7 +4,7 @@ import { format } from 'date-fns'
 import { getMarketGoods } from '../api/buff'
 import { isLessThanThreshold, sleep } from '../utils'
 import { sendMessage } from '../api/telegram'
-import { STEAM_CHECK_THRESHOLD } from '../config'
+import { GOODS_BLACK_LIST, STEAM_CHECK_THRESHOLD } from '../config'
 import { executeBuffToSteamTrade } from '../helpers/executeBuffToSteamTrade'
 import { executeBuffToBuffTrade } from '../helpers/executeBuffToBuffTrade'
 
@@ -28,6 +28,10 @@ const buffDefault = async () => {
       if (goods_id in GOODS_CACHE && isLessThanThreshold(GOODS_CACHE[goods_id].price, current_price, 0.1)) {
         GOODS_CACHE[goods_id].price = current_price
 
+        continue
+      }
+
+      if (GOODS_BLACK_LIST.includes(goods_id)) {
         continue
       }
 

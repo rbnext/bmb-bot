@@ -9,7 +9,7 @@ import {
   getMarketItemDetail,
   postGoodsBuy,
 } from '../api/buff'
-import { REFERENCE_DIFF_THRESHOLD, STEAM_CHECK_THRESHOLD, weaponGroups } from '../config'
+import { GOODS_BLACK_LIST, REFERENCE_DIFF_THRESHOLD, STEAM_CHECK_THRESHOLD, weaponGroups } from '../config'
 import { MessageType, Source } from '../types'
 import { generateMessage, getTotalStickerPrice, isLessThanThreshold, median, priceDiff, sleep } from '../utils'
 import { format, differenceInDays } from 'date-fns'
@@ -46,6 +46,10 @@ const buff2buff = async () => {
         if (goods_id in GOODS_CACHE && isLessThanThreshold(GOODS_CACHE[goods_id].price, current_price)) {
           GOODS_CACHE[goods_id].price = current_price
 
+          continue
+        }
+
+        if (GOODS_BLACK_LIST.includes(goods_id)) {
           continue
         }
 

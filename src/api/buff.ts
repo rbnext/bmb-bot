@@ -304,7 +304,7 @@ export const postSellOrderChange = async ({
   sell_orders,
 }: {
   game?: string
-  sell_orders: { desc: string; income: number; price: string; sell_order_id: string }[]
+  sell_orders: { desc: string; income: string; price: string; sell_order_id: string }[]
 }): Promise<PostResponse> => {
   const { data } = await http.post('/market/sell_order/change', { game, sell_orders })
 

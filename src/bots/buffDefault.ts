@@ -31,8 +31,8 @@ const buffDefault = async () => {
         console.log(`${now}: ${item.market_hash_name} $${GOODS_CACHE[goods_id].price} -> $${current_price}`)
       }
 
-      await executeBuffToBuffTrade(item)
       await executeBuffToSteamTrade(item)
+      await executeBuffToBuffTrade(item)
 
       GOODS_CACHE[goods_id] = { price: current_price }
 

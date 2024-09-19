@@ -21,10 +21,6 @@ export const executeBuffToSteamTrade = async (item: MarketGoodsItem) => {
   const min_steam_price = prices.length !== 0 ? Math.min(...prices) : 0
   const estimated_profit = ((min_steam_price - current_price) / current_price) * 100
 
-  if (STEAM_CHECK_THRESHOLD > estimated_profit) {
-    return
-  }
-
   const payload = {
     id: goods_id,
     price: current_price,
@@ -66,7 +62,5 @@ export const executeBuffToSteamTrade = async (item: MarketGoodsItem) => {
     }
 
     await sendMessage(generateMessage({ type: MessageType.Purchased, ...payload }))
-  } else {
-    await sendMessage(generateMessage({ type: MessageType.Review, ...payload }))
   }
 }

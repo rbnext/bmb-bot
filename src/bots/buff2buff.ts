@@ -1,7 +1,6 @@
 import 'dotenv/config'
 
 import { getMarketGoods } from '../api/buff'
-import { weaponGroups } from '../config'
 import { isLessThanThreshold, sleep } from '../utils'
 import { format } from 'date-fns'
 import { sendMessage } from '../api/telegram'
@@ -18,8 +17,7 @@ const buff2buff = async () => {
   try {
     do {
       const page_num = currentPage
-      const category_group = weaponGroups.join(',')
-      const marketGoods = await getMarketGoods({ category_group, page_num, sort_by: 'sell_num.desc' })
+      const marketGoods = await getMarketGoods({ page_num, sort_by: 'sell_num.desc' })
 
       const now = format(new Date(), 'HH:mm:ss')
 

@@ -1,5 +1,5 @@
 import 'dotenv/config'
 
-import { updateBuffSellingList } from './helpers/updateBuffSellingList'
+import { generateBuffSellingReport } from './helpers/generateBuffSellingReport'
 
-updateBuffSellingList()
+generateBuffSellingReport()

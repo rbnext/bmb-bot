@@ -2,7 +2,11 @@ import { getPriceHistory } from '../api/steam'
 import { parse, format, differenceInDays, isToday } from 'date-fns'
 import { sendMessage } from '../api/telegram'
 
-export const getMaxPricesForXDays = async (market_hash_name: string, days: number = 5): Promise<number[]> => {
+export const getMaxPricesForXDays = async (
+  market_hash_name: string,
+  operation: 'max' | 'min' = 'max',
+  days: number = 5
+): Promise<number[]> => {
   try {
     const response = await getPriceHistory({ market_hash_name })
 
@@ -22,7 +26,7 @@ export const getMaxPricesForXDays = async (market_hash_name: string, days: numbe
       return []
     }
 
-    return Object.keys(history).map((date) => Math.max(...history[date]))
+    return Object.keys(history).map((date) => Math[operation](...history[date]))
   } catch (error) {
     await sendMessage('Error fetching price history from steam.')
 

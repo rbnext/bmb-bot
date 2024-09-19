@@ -10,6 +10,7 @@ import {
   GoodsInfo,
   GoodsSellOrder,
   ItemsOnSale,
+  MarketBatchFee,
   MarketGoods,
   MarketGoodsBillOrder,
   MarketItemDetail,
@@ -274,6 +275,38 @@ export const getSentBargain = async ({
     params: { game, page_num, page_size },
     cache: false,
   })
+
+  return data
+}
+
+export const getMarketBatchFee = async ({
+  game = 'csgo',
+  check_price = 0,
+  is_change = 0,
+  ...rest
+}: {
+  game?: string
+  prices: string
+  check_price?: number
+  goods_ids: string
+  is_change?: number
+}): Promise<MarketBatchFee> => {
+  const { data } = await http.get('/market/batch/fee?', {
+    params: { game, check_price, is_change, ...rest },
+    cache: false,
+  })
+
+  return data
+}
+
+export const postSellOrderChange = async ({
+  game = 'csgo',
+  sell_orders,
+}: {
+  game?: string
+  sell_orders: { desc: string; income: number; price: string; sell_order_id: string }[]
+}): Promise<PostResponse> => {
+  const { data } = await http.post('/market/sell_order/change', { game, sell_orders })
 
   return data
 }

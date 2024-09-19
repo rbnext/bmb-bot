@@ -96,6 +96,12 @@ export type PostResponse = {
   data: unknown
 }
 
+export type MarketBatchFee = {
+  data: {
+    total_fee: string
+  }
+}
+
 export type SentBargainItem = {
   id: string
   state: number

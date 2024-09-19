@@ -43,7 +43,7 @@ export const executeBuffToBuffTrade = async (item: MarketGoodsItem) => {
     } = await getGoodsSellOrder({ goods_id, max_price: item.sell_min_price })
 
     if (!lowestPricedItem) {
-      await sendMessage(`Oops! Someone already bought the ${item.market_hash_name} item.`)
+      await sendMessage(`[${Source.BUFF_BUFF}] Someone already bought the ${item.market_hash_name} item.`)
 
       return
     }
@@ -65,7 +65,7 @@ export const executeBuffToBuffTrade = async (item: MarketGoodsItem) => {
       } = await getBriefAsset()
 
       if (current_price > Number(cash_amount)) {
-        await sendMessage(`Oops! You don't have enough funds to buy ${item.market_hash_name} item.`)
+        await sendMessage(`[${Source.BUFF_BUFF}] You don't have enough funds to buy ${item.market_hash_name} item.`)
 
         return
       }
@@ -73,7 +73,9 @@ export const executeBuffToBuffTrade = async (item: MarketGoodsItem) => {
       const response = await postGoodsBuy({ price: current_price, sell_order_id: lowestPricedItem.id })
 
       if (response.code !== 'OK') {
-        await sendMessage(`Failed to purchase the item ${item.market_hash_name}. Reason: ${response.code}`)
+        await sendMessage(
+          `[${Source.BUFF_BUFF}] Failed to purchase the item ${item.market_hash_name}. Reason: ${response.code}`
+        )
 
         return
       }

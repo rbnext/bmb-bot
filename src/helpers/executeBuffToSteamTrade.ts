@@ -42,13 +42,13 @@ export const executeBuffToSteamTrade = async (item: MarketGoodsItem) => {
     } = await getGoodsSellOrder({ goods_id, max_price: item.sell_min_price })
 
     if (!lowestPricedItem) {
-      await sendMessage(`Oops! Someone already bought the ${item.market_hash_name} item.`)
+      await sendMessage(`[${Source.BUFF_STEAM}] Someone already bought the ${item.market_hash_name} item.`)
 
       return
     }
 
     if (current_price > Number(cash_amount)) {
-      await sendMessage(`Oops! You don't have enough funds to buy ${item.market_hash_name} item.`)
+      await sendMessage(`[${Source.BUFF_STEAM}] You don't have enough funds to buy ${item.market_hash_name} item.`)
 
       return
     }
@@ -56,7 +56,9 @@ export const executeBuffToSteamTrade = async (item: MarketGoodsItem) => {
     const response = await postGoodsBuy({ price: current_price, sell_order_id: lowestPricedItem.id })
 
     if (response.code !== 'OK') {
-      await sendMessage(`Failed to purchase the item ${item.market_hash_name}. Reason: ${response.code}`)
+      await sendMessage(
+        `[${Source.BUFF_STEAM}] Failed to purchase the item ${item.market_hash_name}. Reason: ${response.code}`
+      )
 
       return
     }

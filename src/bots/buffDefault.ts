@@ -13,7 +13,7 @@ const buffDefault = async () => {
   const now = format(new Date(), 'HH:mm:ss')
 
   try {
-    const marketGoods = await getMarketGoods({ quality: 'normal,strange,tournament' })
+    const marketGoods = await getMarketGoods({})
 
     const items = marketGoods.data.items.slice(0, 5)
 

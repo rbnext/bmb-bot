@@ -36,7 +36,7 @@ export const executeBuffToBuffTrade = async (item: MarketGoodsItem) => {
     const goods_ref_price = Number(goodsInfo.data.goods_info.goods_ref_price)
     const currentReferencePriceDiff = priceDiff(goods_ref_price, current_price)
 
-    const orders = await getGoodsSellOrder({ goods_id, exclude_current_user: 1 })
+    const orders = await getGoodsSellOrder({ goods_id })
 
     const lowestPricedItem = orders.data.items.find((el) => el.price === item.sell_min_price)
 

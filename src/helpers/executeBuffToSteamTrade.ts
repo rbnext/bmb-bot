@@ -39,7 +39,7 @@ export const executeBuffToSteamTrade = async (item: MarketGoodsItem) => {
       data: {
         items: [lowestPricedItem],
       },
-    } = await getGoodsSellOrder({ goods_id, max_price: item.sell_min_price })
+    } = await getGoodsSellOrder({ goods_id, max_price: item.sell_min_price, exclude_current_user: 1 })
 
     if (!lowestPricedItem) {
       await sendMessage(`[${Source.BUFF_STEAM}] Someone already bought the ${item.market_hash_name} item.`)

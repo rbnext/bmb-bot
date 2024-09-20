@@ -1,5 +1,6 @@
 import { getGoodsSellOrder, getItemsOnSale, getMarketBatchFee, postSellOrderChange } from '../api/buff'
 import { sendMessage } from '../api/telegram'
+import { CURRENT_USER_ID } from '../config'
 import { sleep } from '../utils'
 
 export const generateBuffSellingReport = async () => {
@@ -9,7 +10,7 @@ export const generateBuffSellingReport = async () => {
     for (const item of itemsOnSale.data.items) {
       const sellingList = await getGoodsSellOrder({ goods_id: item.goods_id })
 
-      const index = sellingList.data.items.findIndex((el) => el.user_id === 'U1092757843')
+      const index = sellingList.data.items.findIndex((el) => el.user_id === CURRENT_USER_ID)
 
       if (index === 0) {
         const price = (Number(sellingList.data.items[1].price) - 0.01).toFixed(2)

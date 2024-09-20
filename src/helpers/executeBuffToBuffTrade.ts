@@ -9,7 +9,7 @@ import {
 } from '../api/buff'
 import { MarketGoodsItem, MessageType, Source } from '../types'
 import { generateMessage, getTotalStickerPrice, median, priceDiff } from '../utils'
-import { BUFF_PURCHASE_THRESHOLD, GOODS_SALES_THRESHOLD, REFERENCE_DIFF_THRESHOLD } from '../config'
+import { BUFF_PURCHASE_THRESHOLD, CURRENT_USER_ID, GOODS_SALES_THRESHOLD, REFERENCE_DIFF_THRESHOLD } from '../config'
 import { sendMessage } from '../api/telegram'
 
 export const executeBuffToBuffTrade = async (item: MarketGoodsItem) => {
@@ -36,17 +36,23 @@ export const executeBuffToBuffTrade = async (item: MarketGoodsItem) => {
     const goods_ref_price = Number(goodsInfo.data.goods_info.goods_ref_price)
     const currentReferencePriceDiff = priceDiff(goods_ref_price, current_price)
 
-    const {
-      data: {
-        items: [lowestPricedItem],
-      },
-    } = await getGoodsSellOrder({ goods_id, max_price: item.sell_min_price })
+    const orders = await getGoodsSellOrder({ goods_id, exclude_current_user: 1 })
+
+    const lowestPricedItem = orders.data.items.find((el) => el.price === item.sell_min_price)
 
     if (!lowestPricedItem) {
       await sendMessage(`[${Source.BUFF_BUFF}] Someone already bought the ${item.market_hash_name} item.`)
 
       return
     }
+
+    if (lowestPricedItem.user_id === CURRENT_USER_ID) {
+      return
+    }
+
+    const positions = orders.data.items.filter((el) => {
+      return Number(el.price) > current_price && Number(el.price) < median_price
+    })
 
     const payload = {
       id: goods_id,
@@ -55,6 +61,7 @@ export const executeBuffToBuffTrade = async (item: MarketGoodsItem) => {
       referencePrice: goods_ref_price,
       estimatedProfit: estimated_profit,
       medianPrice: median_price,
+      positions: positions.length,
       float: lowestPricedItem.asset_info.paintwear,
       source: Source.BUFF_DEFAULT,
     }
@@ -81,19 +88,7 @@ export const executeBuffToBuffTrade = async (item: MarketGoodsItem) => {
       }
 
       await sendMessage(generateMessage({ type: MessageType.Purchased, ...payload }))
-    } else if (lowestPricedItem.asset_info.info.stickers.length !== 0) {
-      const details = await getMarketItemDetail({
-        sell_order_id: lowestPricedItem.id,
-        classid: lowestPricedItem.asset_info.classid,
-        instanceid: lowestPricedItem.asset_info.instanceid,
-        assetid: lowestPricedItem.asset_info.assetid,
-        contextid: lowestPricedItem.asset_info.contextid,
-      })
-
-      const stickerValue = getTotalStickerPrice(details.data.asset_info.stickers)
-
-      await sendMessage(generateMessage({ type: MessageType.Review, stickerValue, ...payload }))
-    } else {
+    } else if (currentReferencePriceDiff >= 0) {
       await sendMessage(generateMessage({ type: MessageType.Review, ...payload }))
     }
   }

@@ -48,6 +48,7 @@ export const generateMessage = ({
   stickerValue = 0,
   float,
   bargainPrice,
+  positions,
 }: {
   id: number
   name: string
@@ -61,6 +62,7 @@ export const generateMessage = ({
   stickerValue?: number
   float?: string
   bargainPrice?: string
+  positions?: number
 }) => {
   const message: string[] = []
 
@@ -79,6 +81,10 @@ export const generateMessage = ({
 
   if (estimatedProfit && medianPrice) {
     message.push(`<b>Estimated profit</b>: ${estimatedProfit.toFixed(2)}% (if sold for $${medianPrice.toFixed(2)})\n`)
+  }
+
+  if (typeof positions === 'number') {
+    message.push(`<b>Positions between median and current price</b>: ${positions}\n`)
   }
 
   if (float) {

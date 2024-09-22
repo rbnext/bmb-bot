@@ -1,14 +1,7 @@
 import { differenceInDays } from 'date-fns'
-import {
-  getBriefAsset,
-  getGoodsInfo,
-  getGoodsSellOrder,
-  getMarketGoodsBillOrder,
-  getMarketItemDetail,
-  postGoodsBuy,
-} from '../api/buff'
+import { getBriefAsset, getGoodsInfo, getGoodsSellOrder, getMarketGoodsBillOrder, postGoodsBuy } from '../api/buff'
 import { MarketGoodsItem, MessageType, Source } from '../types'
-import { generateMessage, getTotalStickerPrice, median, priceDiff } from '../utils'
+import { generateMessage, median, priceDiff } from '../utils'
 import { BUFF_PURCHASE_THRESHOLD, CURRENT_USER_ID, GOODS_SALES_THRESHOLD, REFERENCE_DIFF_THRESHOLD } from '../config'
 import { sendMessage } from '../api/telegram'
 
@@ -46,13 +39,13 @@ export const executeBuffToBuffTrade = async (item: MarketGoodsItem) => {
       return
     }
 
-    if (lowestPricedItem.user_id === CURRENT_USER_ID) {
-      return
-    }
-
     const positions = orders.data.items.filter((el) => {
       return Number(el.price) > current_price && Number(el.price) < median_price
     })
+
+    if (lowestPricedItem.user_id === CURRENT_USER_ID || positions.length > 5) {
+      return
+    }
 
     const payload = {
       id: goods_id,

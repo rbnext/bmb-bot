@@ -88,7 +88,7 @@ export const getMarketGoods = async ({
   page_num = 1,
   page_size = 50,
   min_price = 2,
-  max_price = 70,
+  max_price = 100,
   quality = 'normal',
   ...rest
 }: {

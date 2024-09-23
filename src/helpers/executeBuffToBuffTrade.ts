@@ -2,13 +2,7 @@ import { differenceInDays } from 'date-fns'
 import { getBriefAsset, getGoodsInfo, getGoodsSellOrder, getMarketGoodsBillOrder, postGoodsBuy } from '../api/buff'
 import { MarketGoodsItem, MessageType, Source } from '../types'
 import { generateMessage, median } from '../utils'
-import {
-  BUFF_PURCHASE_THRESHOLD,
-  CURRENT_USER_ID,
-  FIRST_AND_SECOND_PRICE_DIFF,
-  GOODS_SALES_THRESHOLD,
-  REFERENCE_DIFF_THRESHOLD,
-} from '../config'
+import { BUFF_PURCHASE_THRESHOLD, CURRENT_USER_ID, GOODS_SALES_THRESHOLD, REFERENCE_DIFF_THRESHOLD } from '../config'
 import { sendMessage } from '../api/telegram'
 
 export const executeBuffToBuffTrade = async (item: MarketGoodsItem) => {
@@ -53,8 +47,6 @@ export const executeBuffToBuffTrade = async (item: MarketGoodsItem) => {
       return
     }
 
-    const firstAndSecondPriceDiff = Number(orders.data.items[1].price) - Number(orders.data.items[0].price)
-
     const payload = {
       id: goods_id,
       price: current_price,
@@ -67,10 +59,7 @@ export const executeBuffToBuffTrade = async (item: MarketGoodsItem) => {
       source: Source.BUFF_DEFAULT,
     }
 
-    if (
-      currentReferencePriceDiff >= REFERENCE_DIFF_THRESHOLD &&
-      firstAndSecondPriceDiff >= FIRST_AND_SECOND_PRICE_DIFF
-    ) {
+    if (currentReferencePriceDiff >= REFERENCE_DIFF_THRESHOLD) {
       const {
         data: { cash_amount },
       } = await getBriefAsset()
@@ -92,7 +81,7 @@ export const executeBuffToBuffTrade = async (item: MarketGoodsItem) => {
       }
 
       await sendMessage(generateMessage({ type: MessageType.Purchased, ...payload }))
-    } else if (firstAndSecondPriceDiff >= FIRST_AND_SECOND_PRICE_DIFF) {
+    } else if (currentReferencePriceDiff > 4) {
       await sendMessage(generateMessage({ type: MessageType.Review, ...payload }))
     }
   }

@@ -43,7 +43,7 @@ export const executeBuffToBuffTrade = async (item: MarketGoodsItem) => {
       return Number(el.price) > current_price && Number(el.price) < median_price
     })
 
-    if (lowestPricedItem.user_id === CURRENT_USER_ID || positions.length > 5) {
+    if (lowestPricedItem.user_id === CURRENT_USER_ID) {
       return
     }
 
@@ -59,7 +59,7 @@ export const executeBuffToBuffTrade = async (item: MarketGoodsItem) => {
       source: Source.BUFF_DEFAULT,
     }
 
-    if (currentReferencePriceDiff >= REFERENCE_DIFF_THRESHOLD) {
+    if (currentReferencePriceDiff > REFERENCE_DIFF_THRESHOLD) {
       const {
         data: { cash_amount },
       } = await getBriefAsset()
@@ -81,8 +81,6 @@ export const executeBuffToBuffTrade = async (item: MarketGoodsItem) => {
       }
 
       await sendMessage(generateMessage({ type: MessageType.Purchased, ...payload }))
-    } else if (currentReferencePriceDiff > REFERENCE_DIFF_THRESHOLD - 5) {
-      await sendMessage(generateMessage({ type: MessageType.Review, ...payload }))
     }
   }
 }

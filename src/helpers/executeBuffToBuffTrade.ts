@@ -81,7 +81,7 @@ export const executeBuffToBuffTrade = async (item: MarketGoodsItem) => {
       }
 
       await sendMessage(generateMessage({ type: MessageType.Purchased, ...payload }))
-    } else if (currentReferencePriceDiff > 4) {
+    } else if (currentReferencePriceDiff > REFERENCE_DIFF_THRESHOLD - 5) {
       await sendMessage(generateMessage({ type: MessageType.Review, ...payload }))
     }
   }

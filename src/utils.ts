@@ -19,10 +19,6 @@ export const isLessThanThreshold = (aPrice: number, bPrice: number, threshold = 
   return roundedDifference < threshold
 }
 
-export const priceDiff = (reference: number, current: number) => {
-  return Number((((reference - current) / reference) * 100).toFixed(2))
-}
-
 export const getTotalStickerPrice = (stickers: Sticker[], start = 0): number => {
   return stickers.reduce((acc, { wear, sell_reference_price }) => {
     return wear === 0 ? acc + Number(sell_reference_price) : acc

@@ -64,7 +64,7 @@ export const executeBuffToSteamTrade = async (item: MarketGoodsItem) => {
     }
 
     await sendMessage(generateMessage({ type: MessageType.Purchased, ...payload }))
-  } else {
+  } else if (prices.length !== 0) {
     await sendMessage(generateMessage({ type: MessageType.Review, ...payload }))
   }
 }

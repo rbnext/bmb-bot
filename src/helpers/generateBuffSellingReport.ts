@@ -7,6 +7,8 @@ export const generateBuffSellingReport = async () => {
   try {
     const itemsOnSale = await getItemsOnSale({})
 
+    const messages: string[] = []
+
     for (const item of itemsOnSale.data.items) {
       const sellingList = await getGoodsSellOrder({ goods_id: item.goods_id })
 
@@ -64,7 +66,15 @@ export const generateBuffSellingReport = async () => {
         }
       }
 
+      // messages.push(
+      //   `<a href="https://buff.market/market/goods/${item.goods_id}">${itemsOnSale.data.goods_infos[item.goods_id].market_hash_name}</a> - ${index + 1}`
+      // )
+
       await sleep(2_000)
+    }
+
+    if (messages.length !== 0) {
+      await sendMessage(messages.join('\n'))
     }
   } catch (error) {
     console.log(error)

@@ -12,15 +12,13 @@ export const generateStemBuyingReport = async () => {
   const pagesToLoad = 1
   let hasNextPage = true
 
-  const messages: string[] = []
-
   do {
     const page_num = currentPage
     const marketGoods = await getMarketGoods({
       page_num,
       sort_by: 'sell_num.desc',
-      max_price: 40,
-      min_price: 21,
+      max_price: 100,
+      min_price: 50,
     })
 
     if (hasNextPage) {
@@ -48,20 +46,29 @@ export const generateStemBuyingReport = async () => {
 
       const prices = await getMaxPricesForXDays(item.market_hash_name, 'min')
 
-      const min_steam_price = prices.length !== 0 ? Math.max(...prices) : 0
-      const estimated_profit = ((min_steam_price - median_buff_price) / median_buff_price) * 100
+      if (prices.length === 0) {
+        continue
+      }
 
-      console.log(
-        item.market_hash_name,
-        JSON.stringify({
-          steam: min_steam_price,
-          buff: median_buff_price,
-          diff: estimated_profit.toFixed(2) + '%',
-          sales: sales.length,
-        })
-      )
+      const min_steam_price = prices.sort()[1]
+      const estimated_profit = (min_steam_price / median_buff_price - 1) * 100
 
-      await sleep(3_000)
+      if (estimated_profit < 15) {
+        const message: string[] = []
+
+        message.push(
+          `<a href="https://buff.market/market/goods/${item.id}">${item.market_hash_name}</a> (<a href="https://steamcommunity.com/market/listings/730/${item.market_hash_name}">steam</a>): `
+        )
+
+        message.push(`<strong>Steam price</strong> - ${min_steam_price}$, `)
+        message.push(`<strong>Buff price</strong> - ${median_buff_price}$, `)
+        message.push(`<strong>ROI</strong> - ${estimated_profit.toFixed(2) + '%'}, `)
+        message.push(`<strong>Sales last week</strong> - ${sales.length}.`)
+
+        await sendMessage(message.join(''))
+      }
+
+      await sleep(5_000)
     }
 
     if (hasNextPage) {
@@ -70,8 +77,4 @@ export const generateStemBuyingReport = async () => {
 
     currentPage += 1
   } while (hasNextPage)
-
-  if (messages.length !== 0) {
-    await sendMessage(messages.join())
-  }
 }

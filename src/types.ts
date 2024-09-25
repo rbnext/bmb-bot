@@ -86,6 +86,11 @@ export type CreateBargainResponse = {
   data: unknown
 }
 
+export type CreatePreviewBargainResponse = {
+  code: 'OK' | 'CSRF Verification Error'
+  data: unknown
+}
+
 export type CancelBargainResponse = {
   code: 'OK' | 'CSRF Verification Error'
   data: unknown
@@ -99,6 +104,16 @@ export type PostResponse = {
 export type MarketBatchFee = {
   data: {
     total_fee: string
+  }
+}
+
+export type UserStorePopup = {
+  data: {
+    bookmark_count: number
+    desc: string
+    user: {
+      nickname: string
+    }
   }
 }
 
@@ -212,4 +227,5 @@ export enum Source {
   BUFF_BUFF = 'BUFF_BUFF',
   BUFF_DEFAULT = 'BUFF_DEFAULT',
   BUFF_STEAM = 'BUFF_STEAM',
+  BUFF_BARGAIN = 'BUFF_BARGAIN',
 }

@@ -6,6 +6,7 @@ import {
   BriefAsset,
   CancelBargainResponse,
   CreateBargainResponse,
+  CreatePreviewBargainResponse,
   GoodsBuyResponse,
   GoodsInfo,
   GoodsSellOrder,
@@ -18,6 +19,7 @@ import {
   PostResponse,
   SentBargain,
   TopBookmarked,
+  UserStorePopup,
 } from '../types'
 
 export const defaultCookies: Record<string, string> = {
@@ -87,8 +89,8 @@ export const getMarketGoods = async ({
   game = 'csgo',
   page_num = 1,
   page_size = 50,
-  min_price = 2,
-  max_price = 100,
+  min_price = 15,
+  max_price = 44,
   quality = 'normal',
   ...rest
 }: {
@@ -278,6 +280,22 @@ export const getSentBargain = async ({
   return data
 }
 
+export const getCreatePreviewBargain = async ({
+  game = 'csgo',
+  sell_order_id,
+  price,
+}: {
+  game?: string
+  price: number
+  sell_order_id: string
+}): Promise<CreatePreviewBargainResponse> => {
+  const { data } = await http.get('/market/buyer_bargain/create/preview', {
+    params: { game, sell_order_id, price },
+  })
+
+  return data
+}
+
 export const getMarketBatchFee = async ({
   game = 'csgo',
   check_price = 0,
@@ -293,6 +311,20 @@ export const getMarketBatchFee = async ({
   const { data } = await http.get('/market/batch/fee?', {
     params: { game, check_price, is_change, ...rest },
     cache: false,
+  })
+
+  return data
+}
+
+export const getUserStorePopup = async ({
+  game = 'csgo',
+  user_id,
+}: {
+  game?: string
+  user_id: string
+}): Promise<UserStorePopup> => {
+  const { data } = await http.get('/market/user_store/popup', {
+    params: { game, user_id },
   })
 
   return data
@@ -363,6 +395,8 @@ export const postCreateBargain = async ({
 
   return data
 }
+
+// https://api.buff.market/api/market/buyer_bargain/create/preview?sell_order_id=1077043663-84AA-138298259&price=14
 
 export const postCancelBargain = async ({ bargain_id }: { bargain_id: string }): Promise<CancelBargainResponse> => {
   const { data } = await http.post('/market/buyer_bargain/cancel', { bargain_id })

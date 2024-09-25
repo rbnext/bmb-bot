@@ -4,8 +4,7 @@ import { format } from 'date-fns'
 import { getMarketGoods } from '../api/buff'
 import { isLessThanThreshold, sleep } from '../utils'
 import { sendMessage } from '../api/telegram'
-import { executeBuffToSteamTrade } from '../helpers/executeBuffToSteamTrade'
-import { executeBuffToBuffTrade } from '../helpers/executeBuffToBuffTrade'
+import { executeBuffToBuffBargain } from '../helpers/executeBuffToBuffBargain'
 
 export const GOODS_CACHE: Record<number, { price: number }> = {}
 
@@ -29,14 +28,13 @@ const buffDefault = async () => {
 
       if (goods_id in GOODS_CACHE) {
         console.log(`${now}: ${item.market_hash_name} $${GOODS_CACHE[goods_id].price} -> $${current_price}`)
+
+        if (GOODS_CACHE[goods_id].price > current_price) {
+          await executeBuffToBuffBargain(item)
+        }
       }
 
-      await executeBuffToSteamTrade(item)
-      await executeBuffToBuffTrade(item)
-
       GOODS_CACHE[goods_id] = { price: current_price }
-
-      await sleep(1_000)
     }
   } catch (error) {
     console.log('Something went wrong', error)

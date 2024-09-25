@@ -20,7 +20,7 @@ const buffDefault = async () => {
       const goods_id = item.id
       const current_price = Number(item.sell_min_price)
 
-      if (goods_id in GOODS_CACHE && isLessThanThreshold(GOODS_CACHE[goods_id].price, current_price, 0.1)) {
+      if (goods_id in GOODS_CACHE && isLessThanThreshold(GOODS_CACHE[goods_id].price, current_price, 0.2)) {
         GOODS_CACHE[goods_id].price = current_price
 
         continue

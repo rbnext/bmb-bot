@@ -36,7 +36,7 @@ export const executeBuffToBuffBargain = async (item: MarketGoodsItem) => {
 
       const sales = salesLastWeek.map(({ price }) => Number(price))
       const median_price = median(sales.filter((price) => current_price * 2 > price))
-      const desired_price = median_price - (median_price * 20) / 100
+      const desired_price = Number((median_price - (median_price * 20) / 100).toFixed(2))
 
       if (
         lowestPricedItem &&
@@ -46,12 +46,12 @@ export const executeBuffToBuffBargain = async (item: MarketGoodsItem) => {
         const user = await getUserStorePopup({ user_id: lowestPricedItem.user_id })
 
         if (user.data.bookmark_count === 0) {
-          const payload = { sell_order_id: lowestPricedItem.id, price: current_price }
+          const payload = { sell_order_id: lowestPricedItem.id, price: desired_price }
 
           const previewBargain = await getCreatePreviewBargain(payload)
           if (previewBargain.code !== 'OK') {
             await sendMessage(
-              `Something went wrong! Failed to create bargain preview for ${item.market_hash_name} item. Price: ${current_price}`
+              `Something went wrong! Failed to create bargain preview for ${item.market_hash_name} item. Current/desired price: ${current_price}/${desired_price}. Reason: ${previewBargain.code}`
             )
 
             return
@@ -60,7 +60,7 @@ export const executeBuffToBuffBargain = async (item: MarketGoodsItem) => {
           const createBargain = await postCreateBargain(payload)
           if (createBargain.code !== 'OK') {
             await sendMessage(
-              `Something went wrong! Failed to create bargain for ${item.market_hash_name} item. Price: ${current_price}`
+              `Something went wrong! Failed to create bargain for ${item.market_hash_name} item. Current/desired price: ${current_price}/${desired_price}. Reason: ${createBargain.code}`
             )
 
             return
@@ -84,7 +84,7 @@ export const executeBuffToBuffBargain = async (item: MarketGoodsItem) => {
         }
       } else {
         await sendMessage(
-          `Unable to initiate a bargain for "${item.market_hash_name}". Desired price (${desired_price.toFixed(2)}) is lower than the required bargain price (${lowestPricedItem ? lowestPricedItem.lowest_bargain_price : 'N/A'}).`
+          `Unable to initiate a bargain for "${item.market_hash_name}". Desired price (${desired_price}) is lower than the required bargain price (${lowestPricedItem ? lowestPricedItem.lowest_bargain_price : 'N/A'}).`
         )
       }
     }

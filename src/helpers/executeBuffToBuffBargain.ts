@@ -41,7 +41,8 @@ export const executeBuffToBuffBargain = async (item: MarketGoodsItem) => {
       if (
         lowestPricedItem &&
         lowestPricedItem.allow_bargain &&
-        desired_price > Number(lowestPricedItem.lowest_bargain_price)
+        desired_price > Number(lowestPricedItem.lowest_bargain_price) &&
+        current_price > desired_price
       ) {
         const user = await getUserStorePopup({ user_id: lowestPricedItem.user_id })
 

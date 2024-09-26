@@ -49,4 +49,18 @@ const buffDefault = async () => {
   buffDefault()
 }
 
-buffDefault()
+;(async () => {
+  const pages = Array.from({ length: 10 }, (_, i) => i + 1)
+
+  for (const page_num of pages) {
+    const goods = await getMarketGoods({ page_num, sort_by: 'sell_num.desc' })
+
+    for (const item of goods.data.items) {
+      GOODS_CACHE[item.id] = { price: Number(item.sell_min_price) }
+    }
+
+    await sleep(5_000)
+  }
+
+  buffDefault()
+})()

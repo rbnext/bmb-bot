@@ -1,3 +1,4 @@
+export const BARGAIN_THRESHOLD = 15
 export const GOODS_SALES_THRESHOLD = 4
 export const REFERENCE_DIFF_THRESHOLD = 10
 export const STEAM_PURCHASE_THRESHOLD = 70

@@ -9,7 +9,7 @@ import {
 } from '../api/buff'
 import { MarketGoodsItem, MessageType, Source } from '../types'
 import { generateMessage, median, sleep } from '../utils'
-import { GOODS_SALES_THRESHOLD } from '../config'
+import { BARGAIN_THRESHOLD, GOODS_SALES_THRESHOLD } from '../config'
 import { sendMessage } from '../api/telegram'
 
 export const executeBuffToBuffBargain = async (item: MarketGoodsItem) => {
@@ -36,7 +36,7 @@ export const executeBuffToBuffBargain = async (item: MarketGoodsItem) => {
 
       const sales = salesLastWeek.map(({ price }) => Number(price))
       const median_price = median(sales.filter((price) => current_price * 2 > price))
-      const desired_price = Number((median_price - (median_price * 20) / 100).toFixed(2))
+      const desired_price = Number((median_price - (median_price * BARGAIN_THRESHOLD) / 100).toFixed(2))
 
       if (
         lowestPricedItem &&
@@ -74,7 +74,7 @@ export const executeBuffToBuffBargain = async (item: MarketGoodsItem) => {
               type: MessageType.Bargain,
               source: Source.BUFF_BARGAIN,
               medianPrice: median_price,
-              estimatedProfit: 20,
+              estimatedProfit: BARGAIN_THRESHOLD,
             })
           )
         } else {

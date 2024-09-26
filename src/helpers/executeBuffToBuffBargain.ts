@@ -12,6 +12,8 @@ import { generateMessage, median, sleep } from '../utils'
 import { BARGAIN_PROFIT_THRESHOLD, GOODS_SALES_THRESHOLD } from '../config'
 import { sendMessage } from '../api/telegram'
 
+const BARGAIN_OFFER_IDS_CACHE: string[] = []
+
 export const executeBuffToBuffBargain = async (item: MarketGoodsItem) => {
   const goods_id = item.id
   const current_price = Number(item.sell_min_price)
@@ -42,7 +44,8 @@ export const executeBuffToBuffBargain = async (item: MarketGoodsItem) => {
         lowestPricedItem &&
         lowestPricedItem.allow_bargain &&
         desired_price > Number(lowestPricedItem.lowest_bargain_price) &&
-        current_price > desired_price
+        current_price > desired_price &&
+        !BARGAIN_OFFER_IDS_CACHE.includes(lowestPricedItem.id)
       ) {
         const user = await getUserStorePopup({ user_id: lowestPricedItem.user_id })
 
@@ -78,6 +81,8 @@ export const executeBuffToBuffBargain = async (item: MarketGoodsItem) => {
               estimatedProfit: BARGAIN_PROFIT_THRESHOLD,
             })
           )
+
+          BARGAIN_OFFER_IDS_CACHE.push(lowestPricedItem.id)
         } else {
           await sendMessage(
             `Unable to initiate a bargain for "${item.market_hash_name}". The buyer with the nickname @${user.data.user.nickname} has ${user.data.bookmark_count} subscribers.`

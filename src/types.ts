@@ -130,6 +130,20 @@ export type SentBargain = {
   }
 }
 
+export type BuyOrderHistoryItem = {
+  asset_info: {
+    assetid: string
+    classid: string
+  }
+  price: string
+}
+
+export type BuyOrderHistory = {
+  data: {
+    items: BuyOrderHistoryItem[]
+  }
+}
+
 export type OnSaleItem = {
   id: string
   price: string

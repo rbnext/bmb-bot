@@ -4,6 +4,7 @@ import { setupCache } from 'axios-cache-interceptor'
 
 import {
   BriefAsset,
+  BuyOrderHistory,
   CancelBargainResponse,
   CreateBargainResponse,
   CreatePreviewBargainResponse,
@@ -275,6 +276,24 @@ export const getSentBargain = async ({
   const { data } = await http.get('/market/buy_order/sent_bargain', {
     params: { game, page_num, page_size },
     cache: false,
+  })
+
+  return data
+}
+
+export const getBuyOrderHistory = async ({
+  game = 'csgo',
+  page_num = 1,
+  page_size = 20,
+  search,
+}: {
+  game?: string
+  page_num?: number
+  page_size?: number
+  search?: string
+}): Promise<BuyOrderHistory> => {
+  const { data } = await http.get('/market/buy_order/history', {
+    params: { game, page_num, page_size, search },
   })
 
   return data

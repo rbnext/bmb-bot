@@ -8,7 +8,7 @@ import { executeBuffToBuffBargain } from '../helpers/executeBuffToBuffBargain'
 import { executeBuffToBuffTrade } from '../helpers/executeBuffToBuffTrade'
 import { BARGAIN_MIN_PRICE } from '../config'
 
-export const GOODS_CACHE: Record<number, { price: number }> = {}
+const GOODS_CACHE: Record<number, { price: number }> = {}
 
 const buffDefault = async () => {
   const now = format(new Date(), 'HH:mm:ss')

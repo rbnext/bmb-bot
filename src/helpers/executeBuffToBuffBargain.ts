@@ -25,7 +25,7 @@ export const executeBuffToBuffBargain = async (item: MarketGoodsItem) => {
   if (salesLastWeek.length > GOODS_SALES_THRESHOLD) {
     const assets = await getBriefAsset()
 
-    await sleep(5_000)
+    await sleep(3_000)
 
     if (Number(assets.data.cash_amount) > current_price) {
       const {

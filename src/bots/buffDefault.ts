@@ -7,6 +7,7 @@ import { sendMessage } from '../api/telegram'
 import { executeBuffToBuffBargain } from '../helpers/executeBuffToBuffBargain'
 import { executeBuffToBuffTrade } from '../helpers/executeBuffToBuffTrade'
 import { BARGAIN_MIN_PRICE } from '../config'
+import { generateBuffSellingReport } from '../helpers/generateBuffSellingReport'
 
 const GOODS_CACHE: Record<number, { price: number }> = {}
 
@@ -34,6 +35,8 @@ const buffDefault = async () => {
         if (GOODS_CACHE[goods_id].price > current_price) {
           if (current_price >= BARGAIN_MIN_PRICE) await executeBuffToBuffBargain(item)
           else await executeBuffToBuffTrade(item)
+
+          await generateBuffSellingReport()
         }
       }
 

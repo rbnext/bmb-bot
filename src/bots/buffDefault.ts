@@ -5,6 +5,8 @@ import { getMarketGoods } from '../api/buff'
 import { isLessThanThreshold, sleep } from '../utils'
 import { sendMessage } from '../api/telegram'
 import { executeBuffToBuffBargain } from '../helpers/executeBuffToBuffBargain'
+import { executeBuffToBuffTrade } from '../helpers/executeBuffToBuffTrade'
+import { BARGAIN_MIN_PRICE } from '../config'
 
 export const GOODS_CACHE: Record<number, { price: number }> = {}
 
@@ -30,7 +32,8 @@ const buffDefault = async () => {
         console.log(`${now}: ${item.market_hash_name} $${GOODS_CACHE[goods_id].price} -> $${current_price}`)
 
         if (GOODS_CACHE[goods_id].price > current_price) {
-          await executeBuffToBuffBargain(item)
+          if (current_price >= BARGAIN_MIN_PRICE) await executeBuffToBuffBargain(item)
+          else await executeBuffToBuffTrade(item)
         }
       }
 
@@ -50,7 +53,7 @@ const buffDefault = async () => {
 }
 
 ;(async () => {
-  const pages = Array.from({ length: 10 }, (_, i) => i + 1)
+  const pages = Array.from({ length: 15 }, (_, i) => i + 1)
 
   for (const page_num of pages) {
     const goods = await getMarketGoods({ page_num, sort_by: 'sell_num.desc' })

@@ -81,6 +81,8 @@ export const executeBuffToBuffBargain = async (item: MarketGoodsItem) => {
       }
     }
 
+    await sleep(3_000)
+
     const goodsInfo = await getGoodsInfo({ goods_id })
 
     const goods_ref_price = Number(goodsInfo.data.goods_info.goods_ref_price)
@@ -101,6 +103,8 @@ export const executeBuffToBuffBargain = async (item: MarketGoodsItem) => {
 
       return
     }
+
+    await sleep(2_000)
 
     const previewBargain = await getCreatePreviewBargain({ sell_order_id: lowestPricedItem.id, price: desired_price })
 

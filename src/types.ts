@@ -86,12 +86,20 @@ export type CreateBargainResponse = {
   data: unknown
 }
 
+export type PayMethodItem = {
+  balance: string
+  enough: boolean
+  error: string
+  value: number
+}
+
 export type CreatePreviewBargainResponse = {
   code: 'OK' | 'CSRF Verification Error'
   data?: {
-    pay_confirm: {
+    pay_confirm?: {
       id: 'bargain_higher_price'
     }
+    pay_methods: PayMethodItem[]
   }
 }
 

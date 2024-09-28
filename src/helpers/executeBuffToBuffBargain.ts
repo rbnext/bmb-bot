@@ -1,6 +1,5 @@
 import { differenceInDays } from 'date-fns'
 import {
-  getBriefAsset,
   getCreatePreviewBargain,
   getGoodsInfo,
   getGoodsSellOrder,
@@ -103,18 +102,6 @@ export const executeBuffToBuffBargain = async (item: MarketGoodsItem) => {
       return
     }
 
-    await sleep(2_000) // We need to implement this delay to prevent the backend from blocking our requests.
-
-    const assets = await getBriefAsset()
-
-    if (Number(assets.data.cash_amount) < desired_price) {
-      await sendMessage(
-        `${errorPrefix}. Not enough money to bargain the item for ${desired_price}. Desired price: ${desired_price}. Current balance: ${assets.data.cash_amount}.`
-      )
-
-      return
-    }
-
     const previewBargain = await getCreatePreviewBargain({ sell_order_id: lowestPricedItem.id, price: desired_price })
 
     if (previewBargain.code !== 'OK') {
@@ -126,6 +113,17 @@ export const executeBuffToBuffBargain = async (item: MarketGoodsItem) => {
     if (previewBargain?.data?.pay_confirm?.id === 'bargain_higher_price') {
       await sendMessage(
         `${errorPrefix}. Your bargain offer is lower than the other pending offers for this item. Desired price: ${desired_price}. Current price: ${current_price}.`
+      )
+
+      return
+    }
+
+    const pay_methods = previewBargain?.data?.pay_methods ?? []
+    const desired_pay_method = pay_methods.find((item) => item.value === 12)
+
+    if (desired_pay_method && !desired_pay_method.enough) {
+      await sendMessage(
+        `${errorPrefix}. Reason: ${desired_pay_method.error}. Balance: ${desired_pay_method.balance}. Desired price: ${desired_price}.`
       )
 
       return

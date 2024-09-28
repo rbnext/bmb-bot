@@ -97,7 +97,7 @@ export const executeBuffToBuffBargain = async (item: MarketGoodsItem) => {
 
     const user = await getUserStorePopup({ user_id: lowestPricedItem.user_id })
 
-    if (user.data.bookmark_count < 2) {
+    if (user.data.bookmark_count >= 2) {
       await sendMessage(`${errorPrefix}. User ${user.data.user.nickname} has ${user.data.bookmark_count} subscribers.`)
 
       return

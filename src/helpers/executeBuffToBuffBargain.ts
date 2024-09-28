@@ -149,7 +149,7 @@ export const executeBuffToBuffBargain = async (item: MarketGoodsItem) => {
       source: Source.BUFF_BARGAIN,
       medianPrice: median_price,
       estimatedProfit: BARGAIN_PROFIT_THRESHOLD,
-      referencePrice: referencePriceDiff,
+      referencePrice: goods_ref_price,
       float: lowestPricedItem.asset_info.paintwear,
     }
 

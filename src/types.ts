@@ -88,7 +88,11 @@ export type CreateBargainResponse = {
 
 export type CreatePreviewBargainResponse = {
   code: 'OK' | 'CSRF Verification Error'
-  data: unknown
+  data?: {
+    pay_confirm: {
+      id: 'bargain_higher_price'
+    }
+  }
 }
 
 export type CancelBargainResponse = {

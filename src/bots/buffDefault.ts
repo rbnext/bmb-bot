@@ -23,7 +23,7 @@ const buffDefault = async () => {
       const goods_id = item.id
       const current_price = Number(item.sell_min_price)
 
-      if (goods_id in GOODS_CACHE && isLessThanThreshold(GOODS_CACHE[goods_id].price, current_price, 0.1)) {
+      if (goods_id in GOODS_CACHE && isLessThanThreshold(GOODS_CACHE[goods_id].price, current_price, 0.05)) {
         GOODS_CACHE[goods_id].price = current_price
 
         continue
@@ -33,10 +33,10 @@ const buffDefault = async () => {
         console.log(`${now}: ${item.market_hash_name} $${GOODS_CACHE[goods_id].price} -> $${current_price}`)
 
         if (GOODS_CACHE[goods_id].price > current_price) {
-          if (current_price >= BARGAIN_MIN_PRICE) await executeBuffToBuffBargain(item)
-          else await executeBuffToBuffTrade(item)
-
-          await generateBuffSellingReport()
+          if (current_price >= BARGAIN_MIN_PRICE) {
+            await executeBuffToBuffBargain(item)
+            await generateBuffSellingReport()
+          } else await executeBuffToBuffTrade(item)
         }
       }
 

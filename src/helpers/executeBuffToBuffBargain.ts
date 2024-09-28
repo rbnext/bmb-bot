@@ -147,6 +147,8 @@ export const executeBuffToBuffBargain = async (item: MarketGoodsItem) => {
       source: Source.BUFF_BARGAIN,
       medianPrice: median_price,
       estimatedProfit: BARGAIN_PROFIT_THRESHOLD,
+      referencePrice: referencePriceDiff,
+      float: lowestPricedItem.asset_info.paintwear,
     }
 
     await sendMessage(generateMessage(payload))

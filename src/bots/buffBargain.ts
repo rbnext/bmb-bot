@@ -18,26 +18,23 @@ import { sendMessage } from '../api/telegram'
 import { BARGAIN_MIN_PRICE, BARGAIN_PROFIT_THRESHOLD, GOODS_SALES_THRESHOLD, REFERENCE_DIFF_THRESHOLD } from '../config'
 import { MessageType, Source } from '../types'
 
+const SENT_BARGAINS: string[] = []
+
 const buffBargain = async () => {
-  const sentBargains: string[] = []
   const pages = Array.from({ length: 3 }, (_, i) => i + 1)
 
   try {
-    for (const page_num of pages) {
-      const bargains = await getSentBargain({ page_num })
+    const bargains = await getSentBargain({})
 
-      for (const bargain of bargains.data.items) {
-        if (bargain.state === 1 && bargain.can_cancel_timeout <= -1) {
-          await sleep(2_000)
+    for (const bargain of bargains.data.items) {
+      if (bargain.state === 1 && bargain.can_cancel_timeout <= -1) {
+        await postCancelBargain({ bargain_id: bargain.id })
 
-          await postCancelBargain({ bargain_id: bargain.id })
-        }
-
-        sentBargains.push(bargain.sell_order_id)
+        await sleep(4_000)
       }
-
-      await sleep(5_000)
     }
+
+    await sleep(5_000)
 
     for (const page_num of pages) {
       const goods = await getMarketGoods({ page_num, sort_by: 'sell_num.desc' })
@@ -79,7 +76,7 @@ const buffBargain = async () => {
             current_price < BARGAIN_MIN_PRICE ||
             lowest_bargain_price > desired_price ||
             reference_price_diff < REFERENCE_DIFF_THRESHOLD ||
-            sentBargains.includes(item.id)
+            SENT_BARGAINS.includes(item.id)
           ) {
             continue
           }
@@ -148,6 +145,8 @@ const buffBargain = async () => {
           }
 
           await sendMessage(generateMessage(payload))
+
+          SENT_BARGAINS.push(item.id)
         }
 
         await sleep(2_000)
@@ -169,4 +168,18 @@ const buffBargain = async () => {
   buffBargain()
 }
 
-buffBargain()
+;(async () => {
+  const pages = Array.from({ length: 5 }, (_, i) => i + 1)
+
+  for (const page_num of pages) {
+    const bargains = await getSentBargain({ page_num })
+
+    for (const bargain of bargains.data.items) {
+      SENT_BARGAINS.push(bargain.sell_order_id)
+    }
+
+    await sleep(10_000)
+  }
+
+  buffBargain()
+})()

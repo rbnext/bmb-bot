@@ -90,7 +90,7 @@ export const getMarketGoods = async ({
   game = 'csgo',
   page_num = 1,
   page_size = 50,
-  min_price = 10,
+  min_price = 15,
   max_price = 100,
   quality = 'normal',
   ...rest
@@ -187,7 +187,7 @@ export const getMarketGoodsBillOrder = async ({
   const { data } = await http.get('/market/goods/bill_order', {
     params: { game, goods_id },
     cache: {
-      ttl: 1000 * 60 * 60 * 5, // 5 hours
+      ttl: 1000 * 60 * 60 * 12, // 5 hours
     },
   })
 
@@ -327,7 +327,7 @@ export const getMarketBatchFee = async ({
   goods_ids: string
   is_change?: number
 }): Promise<MarketBatchFee> => {
-  const { data } = await http.get('/market/batch/fee?', {
+  const { data } = await http.get('/market/batch/fee', {
     params: { game, check_price, is_change, ...rest },
     cache: false,
   })
@@ -344,6 +344,9 @@ export const getUserStorePopup = async ({
 }): Promise<UserStorePopup> => {
   const { data } = await http.get('/market/user_store/popup', {
     params: { game, user_id },
+    cache: {
+      ttl: 1000 * 60 * 60 * 24, //24 hours
+    },
   })
 
   return data
@@ -414,8 +417,6 @@ export const postCreateBargain = async ({
 
   return data
 }
-
-// https://api.buff.market/api/market/buyer_bargain/create/preview?sell_order_id=1077043663-84AA-138298259&price=14
 
 export const postCancelBargain = async ({ bargain_id }: { bargain_id: string }): Promise<CancelBargainResponse> => {
   const { data } = await http.post('/market/buyer_bargain/cancel', { bargain_id })

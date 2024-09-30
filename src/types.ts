@@ -134,6 +134,8 @@ export type SentBargainItem = {
   state: number
   created_at: number
   can_cancel_time: number
+  can_cancel_timeout: number
+  sell_order_id: string
 }
 
 export type SentBargain = {

@@ -111,6 +111,7 @@ const buffBargain = async () => {
 
           if (previewBargain.code !== 'OK' || pay_confirm === 'bargain_higher_price') {
             console.log(`${now}: Failed. Reason(preview): ${previewBargain.code ?? pay_confirm}`)
+            SENT_BARGAINS.push(item.id)
 
             continue
           }

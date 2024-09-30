@@ -21,14 +21,15 @@ import { MessageType, Source } from '../types'
 const buffBargain = async () => {
   const sentBargains: string[] = []
   const pages = Array.from({ length: 2 }, (_, i) => i + 1)
-  const bargainPages = Array.from({ length: 3 }, (_, i) => i + 1)
 
   try {
-    for (const page_num of bargainPages) {
+    for (const page_num of pages) {
       const bargains = await getSentBargain({ page_num })
 
       for (const bargain of bargains.data.items) {
         if (bargain.state === 1 && bargain.can_cancel_timeout <= -1) {
+          await sleep(2_000)
+
           await postCancelBargain({ bargain_id: bargain.id })
         }
 
@@ -160,7 +161,7 @@ const buffBargain = async () => {
     }
   }
 
-  await sleep(60_0000 * 20)
+  await sleep(60_0000 * 15)
 
   buffBargain()
 }

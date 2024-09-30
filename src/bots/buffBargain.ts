@@ -161,7 +161,7 @@ const buffBargain = async () => {
     }
   }
 
-  await sleep(60_0000 * 15)
+  await sleep(1_000 * 60 * 15)
 
   buffBargain()
 }

@@ -1,6 +1,6 @@
 import 'dotenv/config'
 
-import { differenceInDays } from 'date-fns'
+import { differenceInDays, format } from 'date-fns'
 
 import {
   getCreatePreviewBargain,
@@ -72,6 +72,7 @@ const buffBargain = async () => {
           const desired_price = Number((median_price - (median_price * BARGAIN_PROFIT_THRESHOLD) / 100).toFixed(2))
           const reference_price_diff = (goods_ref_price / desired_price - 1) * 100
           const lowest_bargain_price = Number(item.lowest_bargain_price)
+          const now = format(new Date(), 'HH:mm:ss')
 
           if (
             !item.allow_bargain ||
@@ -109,8 +110,10 @@ const buffBargain = async () => {
             price: desired_price,
           })
 
-          if (previewBargain.code !== 'OK' || previewBargain?.data?.pay_confirm?.id === 'bargain_higher_price') {
-            console.log(JSON.stringify(previewBargain))
+          const pay_confirm = previewBargain?.data?.pay_confirm?.id
+
+          if (previewBargain.code !== 'OK' || pay_confirm === 'bargain_higher_price') {
+            console.log(`${now}: Failed. Reason(preview): ${previewBargain.code ?? pay_confirm}`)
 
             continue
           }
@@ -119,7 +122,7 @@ const buffBargain = async () => {
           const desired_pay_method = pay_methods.find((item) => item.value === 12)
 
           if (desired_pay_method && !desired_pay_method.enough) {
-            console.log(JSON.stringify(previewBargain))
+            console.log(`${now}: Failed. Reason(preview): ${desired_pay_method.error}`)
 
             throw new Error('deposit')
           }
@@ -127,7 +130,7 @@ const buffBargain = async () => {
           const createBargain = await postCreateBargain({ sell_order_id: item.id, price: desired_price })
 
           if (createBargain.code !== 'OK') {
-            console.log(JSON.stringify(createBargain))
+            console.log(`${now}: Failed. Reason(create): ${createBargain.code}`)
 
             continue
           }
@@ -161,7 +164,7 @@ const buffBargain = async () => {
     }
   }
 
-  await sleep(1_000 * 60 * 15)
+  await sleep(1_000 * 60 * 10)
 
   buffBargain()
 }

@@ -223,7 +223,12 @@ export const getGoodsInfo = async ({
   game?: string
   goods_id: number
 }): Promise<GoodsInfo> => {
-  const { data } = await http.get('/market/goods/info', { params: { game, goods_id }, cache: false })
+  const { data } = await http.get('/market/goods/info', {
+    params: { game, goods_id },
+    cache: {
+      ttl: 1000 * 60 * 60, // 1 hour
+    },
+  })
 
   return data
 }

@@ -20,7 +20,7 @@ import { MessageType, Source } from '../types'
 
 const buffBargain = async () => {
   const sentBargains: string[] = []
-  const pages = Array.from({ length: 2 }, (_, i) => i + 1)
+  const pages = Array.from({ length: 3 }, (_, i) => i + 1)
 
   try {
     for (const page_num of pages) {
@@ -66,8 +66,6 @@ const buffBargain = async () => {
         const items = response.data.items.slice(0, 3)
 
         for (const item of items) {
-          await sleep(5_000)
-
           const float = Number(item.asset_info.paintwear)
           const sales = salesLastWeek.map(({ price }) => Number(price))
           const median_price = median(sales.filter((price) => current_price * 2 > price))
@@ -95,6 +93,8 @@ const buffBargain = async () => {
               continue
             }
           }
+
+          await sleep(5_000)
 
           const user = await getUserStorePopup({ user_id: item.user_id })
 

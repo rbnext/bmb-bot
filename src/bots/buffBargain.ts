@@ -28,15 +28,15 @@ const buffBargain = async () => {
 
     for (const bargain of bargains.data.items) {
       if (bargain.state === 1 && bargain.can_cancel_timeout <= -1) {
+        await sleep(5_000)
         await postCancelBargain({ bargain_id: bargain.id })
-
-        await sleep(4_000)
       }
     }
 
-    await sleep(5_000)
+    await sleep(20_000)
 
     for (const page_num of pages) {
+      await sleep(20_000)
       const goods = await getMarketGoods({ page_num, sort_by: 'sell_num.desc' })
 
       for (const item of goods.data.items) {
@@ -44,6 +44,7 @@ const buffBargain = async () => {
         const name = item.market_hash_name
         const current_price = Number(item.sell_min_price)
 
+        await sleep(5_000)
         const history = await getMarketGoodsBillOrder({ goods_id: item.id })
 
         const salesLastWeek = history.data.items.filter(({ updated_at, type }) => {
@@ -54,11 +55,11 @@ const buffBargain = async () => {
           continue
         }
 
-        await sleep(3_000)
-
+        await sleep(5_000)
         const goodsInfo = await getGoodsInfo({ goods_id })
         const goods_ref_price = Number(goodsInfo.data.goods_info.goods_ref_price)
 
+        await sleep(5_000)
         const response = await getGoodsSellOrder({ goods_id, exclude_current_user: 1 })
         const items = response.data.items.slice(0, 3)
 
@@ -93,7 +94,6 @@ const buffBargain = async () => {
           }
 
           await sleep(5_000)
-
           const user = await getUserStorePopup({ user_id: item.user_id })
 
           if (user.data.bookmark_count > 2) {
@@ -101,7 +101,6 @@ const buffBargain = async () => {
           }
 
           await sleep(5_000)
-
           const previewBargain = await getCreatePreviewBargain({
             sell_order_id: item.id,
             price: desired_price,
@@ -125,6 +124,7 @@ const buffBargain = async () => {
             throw new Error('deposit')
           }
 
+          await sleep(5_000)
           const createBargain = await postCreateBargain({ sell_order_id: item.id, price: desired_price })
 
           if (createBargain.code !== 'OK') {
@@ -149,8 +149,6 @@ const buffBargain = async () => {
 
           SENT_BARGAINS.push(item.id)
         }
-
-        await sleep(2_000)
       }
 
       await sleep(5_000)

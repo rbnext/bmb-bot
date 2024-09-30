@@ -127,6 +127,7 @@ export type UserStorePopup = {
       nickname: string
     }
   }
+  code: 'OK'
 }
 
 export type SentBargainItem = {

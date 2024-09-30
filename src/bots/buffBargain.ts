@@ -96,6 +96,12 @@ const buffBargain = async () => {
           await sleep(5_000)
           const user = await getUserStorePopup({ user_id: item.user_id })
 
+          if (user.code !== 'OK') {
+            await sendMessage(JSON.stringify(user))
+
+            continue
+          }
+
           if (user.data.bookmark_count > 2) {
             continue
           }

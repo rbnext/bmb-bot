@@ -46,7 +46,6 @@ const buffBargain = async () => {
       for (const item of goods.data.items) {
         const goods_id = item.id
         const name = item.market_hash_name
-        const current_price = Number(item.sell_min_price)
 
         await sleep(5_000)
         const history = await getMarketGoodsBillOrder({ goods_id: item.id })
@@ -68,6 +67,7 @@ const buffBargain = async () => {
         const items = response.data.items.slice(0, 3)
 
         for (const item of items) {
+          const current_price = Number(item.price)
           const float = Number(item.asset_info.paintwear)
           const sales = salesLastWeek.map(({ price }) => Number(price))
           const median_price = median(sales.filter((price) => current_price * 2 > price))
@@ -81,7 +81,8 @@ const buffBargain = async () => {
             current_price < BARGAIN_MIN_PRICE ||
             lowest_bargain_price > desired_price ||
             reference_price_diff < REFERENCE_DIFF_THRESHOLD ||
-            SENT_BARGAINS.includes(item.id)
+            SENT_BARGAINS.includes(item.id) ||
+            current_price - desired_price < 2
           ) {
             continue
           }

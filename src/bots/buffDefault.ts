@@ -15,7 +15,9 @@ const buffDefault = async () => {
   const now = format(new Date(), 'HH:mm:ss')
 
   try {
-    const marketGoods = await getMarketGoods({})
+    const marketGoods = await getMarketGoods({
+      category_group: 'pistol,smg,shotgun,machinegun',
+    })
 
     const items = marketGoods.data.items.slice(0, 5)
 
@@ -56,10 +58,14 @@ const buffDefault = async () => {
 }
 
 ;(async () => {
-  const pages = Array.from({ length: 15 }, (_, i) => i + 1)
+  const pages = Array.from({ length: 20 }, (_, i) => i + 1)
 
   for (const page_num of pages) {
-    const goods = await getMarketGoods({ page_num, sort_by: 'sell_num.desc' })
+    const goods = await getMarketGoods({
+      page_num,
+      sort_by: 'sell_num.desc',
+      category_group: 'pistol,smg,shotgun,machinegun',
+    })
 
     for (const item of goods.data.items) {
       GOODS_CACHE[item.id] = { price: Number(item.sell_min_price) }

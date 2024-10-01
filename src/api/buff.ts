@@ -90,8 +90,8 @@ export const getMarketGoods = async ({
   game = 'csgo',
   page_num = 1,
   page_size = 50,
-  min_price = 15,
-  max_price = 100,
+  min_price = 3,
+  max_price = 25,
   quality = 'normal',
   ...rest
 }: {

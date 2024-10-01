@@ -37,7 +37,11 @@ const buffBargain = async () => {
 
     for (const page_num of pages) {
       await sleep(20_000)
-      const goods = await getMarketGoods({ page_num, sort_by: 'sell_num.desc' })
+      const goods = await getMarketGoods({
+        page_num,
+        sort_by: 'sell_num.desc',
+        category_group: 'pistol,smg,shotgun,machinegun',
+      })
 
       for (const item of goods.data.items) {
         const goods_id = item.id

@@ -4,7 +4,7 @@ import { getMarketGoods } from '../api/buff'
 import { isLessThanThreshold, sleep } from '../utils'
 import { format } from 'date-fns'
 import { sendMessage } from '../api/telegram'
-import { executeBuffToSteamTrade } from '../helpers/executeBuffToSteamTrade'
+import { generateBuffSellingReport } from '../helpers/generateBuffSellingReport'
 import { executeBuffToBuffTrade } from '../helpers/executeBuffToBuffTrade'
 
 export const GOODS_CACHE: Record<number, { price: number }> = {}
@@ -29,18 +29,21 @@ const buff2buff = async () => {
         const goods_id = item.id
         const current_price = Number(item.sell_min_price)
 
-        if (goods_id in GOODS_CACHE && isLessThanThreshold(GOODS_CACHE[goods_id].price, current_price)) {
+        if (goods_id in GOODS_CACHE && isLessThanThreshold(GOODS_CACHE[goods_id].price, current_price, 0.5)) {
           GOODS_CACHE[goods_id].price = current_price
 
           continue
         }
 
-        if (goods_id in GOODS_CACHE && GOODS_CACHE[goods_id].price !== current_price) {
-          console.log(`${now}: ${item.market_hash_name} ${GOODS_CACHE[goods_id].price}$ -> ${current_price}$`)
-        }
+        if (goods_id in GOODS_CACHE) {
+          console.log(`${now}: ${item.market_hash_name} $${GOODS_CACHE[goods_id].price} -> $${current_price}`)
 
-        await executeBuffToSteamTrade(item)
-        await executeBuffToBuffTrade(item)
+          if (GOODS_CACHE[goods_id].price > current_price) {
+            await executeBuffToBuffTrade(item)
+
+            await generateBuffSellingReport()
+          }
+        }
 
         GOODS_CACHE[goods_id] = { price: current_price }
 

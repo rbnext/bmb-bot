@@ -5,6 +5,7 @@ import { getMarketGoods } from '../api/buff'
 import { isLessThanThreshold, sleep } from '../utils'
 import { sendMessage } from '../api/telegram'
 import { executeBuffToBuffTrade } from '../helpers/executeBuffToBuffTrade'
+import { executeBuffToSteamTrade } from '../helpers/executeBuffToSteamTrade'
 
 const GOODS_CACHE: Record<number, { price: number }> = {}
 
@@ -33,6 +34,7 @@ const buffDefault = async () => {
 
         if (GOODS_CACHE[goods_id].price > current_price) {
           await executeBuffToBuffTrade(item)
+          await executeBuffToSteamTrade(item)
         }
       }
 

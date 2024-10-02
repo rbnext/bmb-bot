@@ -48,16 +48,16 @@ export const executeBuffToBuffTrade = async (item: MarketGoodsItem) => {
       return
     }
 
-    if (lowestPricedItem.asset_info.paintwear) {
-      if (
-        (float > 0.12 && float < 0.15) ||
-        (float > 0.3 && float < 0.38) ||
-        (float > 0.41 && float < 0.45) ||
-        float > 0.5
-      ) {
-        return
-      }
-    }
+    // if (lowestPricedItem.asset_info.paintwear) {
+    //   if (
+    //     (float > 0.12 && float < 0.15) ||
+    //     (float > 0.3 && float < 0.38) ||
+    //     (float > 0.41 && float < 0.45) ||
+    //     float > 0.5
+    //   ) {
+    //     return
+    //   }
+    // }
 
     const payload = {
       id: goods_id,

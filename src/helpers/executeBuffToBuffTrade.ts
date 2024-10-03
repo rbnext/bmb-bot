@@ -1,5 +1,12 @@
 import { differenceInDays } from 'date-fns'
-import { getBriefAsset, getGoodsInfo, getGoodsSellOrder, getMarketGoodsBillOrder, postGoodsBuy } from '../api/buff'
+import {
+  getBriefAsset,
+  getGoodsInfo,
+  getGoodsSellOrder,
+  getMarketGoodsBillOrder,
+  getMarketItemDetail,
+  postGoodsBuy,
+} from '../api/buff'
 import { MarketGoodsItem, MessageType, Source } from '../types'
 import { generateMessage, median } from '../utils'
 import { BUFF_PURCHASE_THRESHOLD, CURRENT_USER_ID, GOODS_SALES_THRESHOLD, REFERENCE_DIFF_THRESHOLD } from '../config'
@@ -39,7 +46,6 @@ export const executeBuffToBuffTrade = async (item: MarketGoodsItem) => {
       return
     }
 
-    // const float = Number(lowestPricedItem.asset_info.paintwear)
     const positions = orders.data.items.filter((el) => {
       return Number(el.price) > current_price && Number(el.price) < median_price
     })
@@ -47,17 +53,6 @@ export const executeBuffToBuffTrade = async (item: MarketGoodsItem) => {
     if (lowestPricedItem.user_id === CURRENT_USER_ID) {
       return
     }
-
-    // if (lowestPricedItem.asset_info.paintwear) {
-    //   if (
-    //     (float > 0.12 && float < 0.15) ||
-    //     (float > 0.3 && float < 0.38) ||
-    //     (float > 0.41 && float < 0.45) ||
-    //     float > 0.5
-    //   ) {
-    //     return
-    //   }
-    // }
 
     const payload = {
       id: goods_id,
@@ -93,6 +88,20 @@ export const executeBuffToBuffTrade = async (item: MarketGoodsItem) => {
       }
 
       await sendMessage(generateMessage({ type: MessageType.Purchased, ...payload }))
+    } else if (currentReferencePriceDiff > 0 && lowestPricedItem.asset_info.info.stickers.length !== 0) {
+      const details = await getMarketItemDetail({
+        classid: lowestPricedItem.asset_info.classid,
+        instanceid: lowestPricedItem.asset_info.instanceid,
+        assetid: lowestPricedItem.asset_info.assetid,
+        contextid: lowestPricedItem.asset_info.contextid,
+        sell_order_id: lowestPricedItem.id,
+      })
+
+      const stickerValue = details.data.asset_info.stickers.reduce((acc, current) => {
+        return current.wear === 0 ? Number(current.sell_reference_price) + acc : acc
+      }, 0)
+
+      await sendMessage(generateMessage({ type: MessageType.Purchased, stickerValue, ...payload }))
     }
   }
 }

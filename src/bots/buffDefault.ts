@@ -13,9 +13,7 @@ const buffDefault = async () => {
   const now = format(new Date(), 'HH:mm:ss')
 
   try {
-    const marketGoods = await getMarketGoods({
-      category_group: 'pistol,smg,shotgun,machinegun',
-    })
+    const marketGoods = await getMarketGoods({})
 
     const items = marketGoods.data.items.slice(0, 5)
 
@@ -34,7 +32,6 @@ const buffDefault = async () => {
 
         if (GOODS_CACHE[goods_id].price > current_price) {
           await executeBuffToBuffTrade(item)
-          await executeBuffToSteamTrade(item)
         }
       }
 
@@ -60,7 +57,6 @@ const buffDefault = async () => {
     const goods = await getMarketGoods({
       page_num,
       sort_by: 'sell_num.desc',
-      category_group: 'pistol,smg,shotgun,machinegun',
     })
 
     for (const item of goods.data.items) {

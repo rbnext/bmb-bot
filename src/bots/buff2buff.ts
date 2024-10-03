@@ -17,11 +17,7 @@ const buff2buff = async () => {
   try {
     do {
       const page_num = currentPage
-      const marketGoods = await getMarketGoods({
-        page_num,
-        sort_by: 'sell_num.desc',
-        category_group: 'pistol,smg,shotgun,machinegun',
-      })
+      const marketGoods = await getMarketGoods({ page_num, sort_by: 'sell_num.desc' })
 
       const now = format(new Date(), 'HH:mm:ss')
 

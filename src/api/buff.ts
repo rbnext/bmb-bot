@@ -92,7 +92,6 @@ export const getMarketGoods = async ({
   page_size = 50,
   min_price = 3,
   max_price = 50,
-  quality = 'normal',
   ...rest
 }: {
   game?: string
@@ -116,7 +115,6 @@ export const getMarketGoods = async ({
       page_size,
       min_price,
       max_price,
-      quality,
       ...rest,
     },
     cache: false,

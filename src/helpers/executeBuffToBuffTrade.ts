@@ -101,7 +101,7 @@ export const executeBuffToBuffTrade = async (item: MarketGoodsItem) => {
         return current.wear === 0 ? Number(current.sell_reference_price) + acc : acc
       }, 0)
 
-      await sendMessage(generateMessage({ type: MessageType.Purchased, stickerValue, ...payload }))
+      await sendMessage(generateMessage({ type: MessageType.Review, stickerValue, ...payload }))
     }
   }
 }

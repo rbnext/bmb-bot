@@ -39,7 +39,7 @@ export const executeBuffToBuffTrade = async (item: MarketGoodsItem) => {
       return
     }
 
-    const float = Number(lowestPricedItem.asset_info.paintwear)
+    // const float = Number(lowestPricedItem.asset_info.paintwear)
     const positions = orders.data.items.filter((el) => {
       return Number(el.price) > current_price && Number(el.price) < median_price
     })

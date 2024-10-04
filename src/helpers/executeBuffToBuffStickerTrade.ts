@@ -61,9 +61,9 @@ export const executeBuffToBuffStickerTrade = async (
           stickerValue,
         })
       )
-
-      GOODS_IDS_CACHE.push(goodsItem.id)
     }
+
+    GOODS_IDS_CACHE.push(goodsItem.id)
 
     await sleep(3_000)
   }

@@ -12,7 +12,12 @@ import { generateMessage, median, sleep } from '../utils'
 import { BUFF_PURCHASE_THRESHOLD, CURRENT_USER_ID, GOODS_SALES_THRESHOLD, REFERENCE_DIFF_THRESHOLD } from '../config'
 import { sendMessage } from '../api/telegram'
 
-export const executeBuffToBuffTrade = async (item: MarketGoodsItem) => {
+export const executeBuffToBuffTrade = async (
+  item: MarketGoodsItem,
+  options: {
+    source: Source
+  }
+) => {
   const goods_id = item.id
   const current_price = Number(item.sell_min_price)
 
@@ -63,7 +68,7 @@ export const executeBuffToBuffTrade = async (item: MarketGoodsItem) => {
       medianPrice: median_price,
       positions: positions.length,
       float: lowestPricedItem.asset_info.paintwear,
-      source: Source.BUFF_DEFAULT,
+      source: options.source,
     }
 
     if (currentReferencePriceDiff > REFERENCE_DIFF_THRESHOLD) {
@@ -128,12 +133,12 @@ export const executeBuffToBuffTrade = async (item: MarketGoodsItem) => {
 
           await sendMessage(
             generateMessage({
-              type: MessageType.Review,
               ...payload,
               stickerValue,
               price: current_price,
               medianPrice: median_price,
               estimatedProfit: estimated_profit,
+              type: MessageType.Review,
             })
           )
         }

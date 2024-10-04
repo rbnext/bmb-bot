@@ -6,6 +6,7 @@ import { format } from 'date-fns'
 import { sendMessage } from '../api/telegram'
 import { generateBuffSellingReport } from '../helpers/generateBuffSellingReport'
 import { executeBuffToBuffTrade } from '../helpers/executeBuffToBuffTrade'
+import { Source } from '../types'
 
 export const GOODS_CACHE: Record<number, { price: number }> = {}
 
@@ -29,7 +30,7 @@ const buff2buff = async () => {
         const goods_id = item.id
         const current_price = Number(item.sell_min_price)
 
-        if (goods_id in GOODS_CACHE && isLessThanThreshold(GOODS_CACHE[goods_id].price, current_price, 0.5)) {
+        if (goods_id in GOODS_CACHE && isLessThanThreshold(GOODS_CACHE[goods_id].price, current_price, 0.1)) {
           GOODS_CACHE[goods_id].price = current_price
 
           continue
@@ -39,7 +40,9 @@ const buff2buff = async () => {
           console.log(`${now}: ${item.market_hash_name} $${GOODS_CACHE[goods_id].price} -> $${current_price}`)
 
           if (GOODS_CACHE[goods_id].price > current_price) {
-            await executeBuffToBuffTrade(item)
+            await executeBuffToBuffTrade(item, {
+              source: Source.BUFF_BUFF,
+            })
 
             await generateBuffSellingReport()
           }

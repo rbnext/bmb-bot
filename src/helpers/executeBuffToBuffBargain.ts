@@ -12,7 +12,7 @@ import { generateMessage, median, sleep } from '../utils'
 import { BARGAIN_PROFIT_THRESHOLD, GOODS_SALES_THRESHOLD, REFERENCE_DIFF_THRESHOLD } from '../config'
 import { sendMessage } from '../api/telegram'
 
-const BARGAIN_OFFER_IDS_CACHE: string[] = []
+const GOODS_IDS_CACHE: string[] = []
 
 export const executeBuffToBuffBargain = async (item: MarketGoodsItem) => {
   const goods_id = item.id

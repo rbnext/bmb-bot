@@ -8,7 +8,7 @@ import {
   postGoodsBuy,
 } from '../api/buff'
 import { MarketGoodsItem, MessageType, Source } from '../types'
-import { generateMessage, median, sleep } from '../utils'
+import { generateMessage, median } from '../utils'
 import { BUFF_PURCHASE_THRESHOLD, CURRENT_USER_ID, GOODS_SALES_THRESHOLD, REFERENCE_DIFF_THRESHOLD } from '../config'
 import { sendMessage } from '../api/telegram'
 
@@ -107,44 +107,6 @@ export const executeBuffToBuffTrade = async (
       }, 0)
 
       await sendMessage(generateMessage({ type: MessageType.Review, stickerValue, ...payload }))
-    } else {
-      const items = orders.data.items.filter(
-        (item) => goods_ref_price >= Number(item.price) && item.asset_info.info.stickers.length !== 0
-      )
-
-      for (const item of items) {
-        const current_price = Number(item.price)
-
-        const details = await getMarketItemDetail({
-          classid: item.asset_info.classid,
-          instanceid: item.asset_info.instanceid,
-          assetid: item.asset_info.assetid,
-          contextid: item.asset_info.contextid,
-          sell_order_id: item.id,
-        })
-
-        const stickerValue = details.data.asset_info.stickers.reduce((acc, current) => {
-          return current.wear === 0 ? Number(current.sell_reference_price) + acc : acc
-        }, 0)
-
-        if (stickerValue > Number(item.price) * 2) {
-          const median_price = median(sales.filter((price) => current_price * 2 > price))
-          const estimated_profit = ((median_price * 0.975) / current_price - 1) * 100
-
-          await sendMessage(
-            generateMessage({
-              ...payload,
-              stickerValue,
-              price: current_price,
-              medianPrice: median_price,
-              estimatedProfit: estimated_profit,
-              type: MessageType.Review,
-            })
-          )
-        }
-
-        await sleep(3_000)
-      }
     }
   }
 }

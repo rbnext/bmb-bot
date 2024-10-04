@@ -6,6 +6,7 @@ import { sleep } from '../utils'
 import { sendMessage } from '../api/telegram'
 import { executeBuffToBuffTrade } from '../helpers/executeBuffToBuffTrade'
 import { Source } from '../types'
+import { executeBuffToBuffStickerTrade } from '../helpers/executeBuffToBuffStickerTrade'
 
 const GOODS_CACHE: Record<number, { sell_num: number }> = {}
 
@@ -19,11 +20,14 @@ const buffDefault = async () => {
 
     for (const item of items) {
       if (item.id in GOODS_CACHE && GOODS_CACHE[item.id].sell_num !== item.sell_num) {
-        console.log(`${now}: ${item.market_hash_name} $${GOODS_CACHE[item.id].sell_num} -> $${item.sell_num}`)
+        console.log(`${now}: ${item.market_hash_name} ${GOODS_CACHE[item.id].sell_num} -> ${item.sell_num}`)
 
-        await executeBuffToBuffTrade(item, { source: Source.BUFF_DEFAULT })
+        if (GOODS_CACHE[item.id].sell_num < item.sell_num && item.sell_num >= 15) {
+          await executeBuffToBuffTrade(item, { source: Source.BUFF_DEFAULT })
+          await executeBuffToBuffStickerTrade(item, { source: Source.BUFF_DEFAULT })
 
-        await sleep(3_000)
+          await sleep(3_000)
+        }
       }
 
       GOODS_CACHE[item.id] = { sell_num: item.sell_num }

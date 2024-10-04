@@ -121,7 +121,18 @@ export const executeBuffToBuffTrade = async (item: MarketGoodsItem) => {
         }, 0)
 
         if (stickerValue > Number(item.price) * 2) {
-          await sendMessage(generateMessage({ type: MessageType.Review, stickerValue, ...payload }))
+          const median_price = median(sales.filter((price) => Number(item.price) * 2 > price))
+          const estimated_profit = ((median_price * 0.975) / Number(item.price) - 1) * 100
+
+          await sendMessage(
+            generateMessage({
+              type: MessageType.Review,
+              ...payload,
+              stickerValue,
+              medianPrice: median_price,
+              estimatedProfit: estimated_profit,
+            })
+          )
         }
 
         await sleep(3_000)

@@ -1,3 +1,4 @@
+import { formatDistance } from 'date-fns'
 import { MessageType, Source, Sticker } from './types'
 
 export const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms))
@@ -42,6 +43,8 @@ export const generateMessage = ({
   estimatedProfit,
   source,
   stickerValue = 0,
+  createdAt,
+  updatedAt,
   float,
   bargainPrice,
   positions,
@@ -55,12 +58,16 @@ export const generateMessage = ({
   medianPrice?: number
   estimatedProfit?: number
   source: Source
+  createdAt?: number
+  updatedAt?: number
   stickerValue?: number
   float?: string
   bargainPrice?: string
   positions?: number
 }) => {
   const message: string[] = []
+
+  const options = { addSuffix: true, includeSeconds: true }
 
   message.push(messageTypeMapper[type] + ' ')
   message.push(`<b>[${type}][${source}]</b> <a href="https://buff.market/market/goods/${id}">${name}</a>\n\n`)
@@ -73,6 +80,14 @@ export const generateMessage = ({
 
   if (referencePrice) {
     message.push(`<b>Reference price</b>: $${referencePrice}\n`)
+  }
+
+  if (createdAt) {
+    message.push(`<b>Created at</b>: ${formatDistance(new Date(createdAt * 1000), new Date(), options)}\n`)
+  }
+
+  if (updatedAt) {
+    message.push(`<b>Updated at</b>: ${formatDistance(new Date(updatedAt * 1000), new Date(), options)}\n`)
   }
 
   if (estimatedProfit && medianPrice) {

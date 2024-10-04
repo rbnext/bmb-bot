@@ -58,6 +58,8 @@ export const executeBuffToBuffStickerTrade = async (
           referencePrice: refPrice,
           price: Number(goodsItem.price),
           float: goodsItem.asset_info.paintwear,
+          createdAt: goodsItem.created_at,
+          updatedAt: goodsItem.updated_at,
           stickerValue,
         })
       )

@@ -6,6 +6,8 @@ export type GoodsSellOrderItem = {
   user_id: string
   allow_bargain: boolean
   lowest_bargain_price: string
+  created_at: number
+  updated_at: number
 
   asset_info: {
     classid: string

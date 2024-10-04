@@ -69,6 +69,8 @@ export const executeBuffToBuffTrade = async (
       positions: positions.length,
       float: lowestPricedItem.asset_info.paintwear,
       source: options.source,
+      createdAt: lowestPricedItem.created_at,
+      updatedAt: lowestPricedItem.updated_at,
     }
 
     if (currentReferencePriceDiff > REFERENCE_DIFF_THRESHOLD) {

@@ -57,6 +57,7 @@ export const executeBuffToBuffStickerTrade = async (
           source: options.source,
           referencePrice: refPrice,
           price: Number(goodsItem.price),
+          float: goodsItem.asset_info.paintwear,
           stickerValue,
         })
       )

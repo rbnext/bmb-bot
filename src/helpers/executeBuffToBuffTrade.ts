@@ -46,7 +46,7 @@ export const executeBuffToBuffTrade = async (
     const lowestPricedItem = orders.data.items.find((el) => el.price === item.sell_min_price)
 
     if (!lowestPricedItem) {
-      await sendMessage(`[${Source.BUFF_BUFF}] Someone already bought the ${item.market_hash_name} item.`)
+      await sendMessage(`[${options.source}] Someone already bought the ${item.market_hash_name} item.`)
 
       return
     }
@@ -77,7 +77,7 @@ export const executeBuffToBuffTrade = async (
       } = await getBriefAsset()
 
       if (current_price > Number(cash_amount)) {
-        await sendMessage(`[${Source.BUFF_BUFF}] You don't have enough funds to buy ${item.market_hash_name} item.`)
+        await sendMessage(`[${options.source}] You don't have enough funds to buy ${item.market_hash_name} item.`)
 
         return
       }
@@ -86,7 +86,7 @@ export const executeBuffToBuffTrade = async (
 
       if (response.code !== 'OK') {
         await sendMessage(
-          `[${Source.BUFF_BUFF}] Failed to purchase the item ${item.market_hash_name}. Reason: ${response.code}`
+          `[${options.source}] Failed to purchase the item ${item.market_hash_name}. Reason: ${response.code}`
         )
 
         return

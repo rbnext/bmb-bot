@@ -8,7 +8,7 @@ import {
   postGoodsBuy,
 } from '../api/buff'
 import { MarketGoodsItem, MessageType, Source } from '../types'
-import { generateMessage, median } from '../utils'
+import { generateMessage, median, sleep } from '../utils'
 import { BUFF_PURCHASE_THRESHOLD, CURRENT_USER_ID, GOODS_SALES_THRESHOLD, REFERENCE_DIFF_THRESHOLD } from '../config'
 import { sendMessage } from '../api/telegram'
 
@@ -102,6 +102,30 @@ export const executeBuffToBuffTrade = async (item: MarketGoodsItem) => {
       }, 0)
 
       await sendMessage(generateMessage({ type: MessageType.Review, stickerValue, ...payload }))
+    } else {
+      const items = orders.data.items.filter(
+        (item) => goods_ref_price >= Number(item.price) && item.asset_info.info.stickers.length !== 0
+      )
+
+      for (const item of items) {
+        const details = await getMarketItemDetail({
+          classid: item.asset_info.classid,
+          instanceid: item.asset_info.instanceid,
+          assetid: item.asset_info.assetid,
+          contextid: item.asset_info.contextid,
+          sell_order_id: item.id,
+        })
+
+        const stickerValue = details.data.asset_info.stickers.reduce((acc, current) => {
+          return current.wear === 0 ? Number(current.sell_reference_price) + acc : acc
+        }, 0)
+
+        if (stickerValue > Number(item.price) * 2) {
+          await sendMessage(generateMessage({ type: MessageType.Review, stickerValue, ...payload }))
+        }
+
+        await sleep(3_000)
+      }
     }
   }
 }

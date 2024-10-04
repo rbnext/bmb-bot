@@ -208,7 +208,9 @@ export const getMarketItemDetail = async ({
 }): Promise<MarketItemDetail> => {
   const { data } = await http.get('/market/item_detail', {
     params: { game, classid, instanceid, assetid, contextid, sell_order_id },
-    cache: false,
+    cache: {
+      ttl: 1000 * 60 * 60 * 24,
+    },
   })
 
   return data

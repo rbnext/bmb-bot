@@ -5,6 +5,8 @@ import { generateMessage, sleep } from '../utils'
 import { GOODS_SALES_THRESHOLD } from '../config'
 import { sendMessage } from '../api/telegram'
 
+const GOODS_IDS_CACHE: string[] = []
+
 export const executeBuffToBuffStickerTrade = async (
   item: MarketGoodsItem,
   options: {
@@ -30,6 +32,10 @@ export const executeBuffToBuffStickerTrade = async (
   const goodsItems = orders.data.items.filter((item) => item.asset_info.info.stickers.length !== 0)
 
   for (const goodsItem of goodsItems) {
+    if (GOODS_IDS_CACHE.includes(goodsItem.id)) {
+      continue
+    }
+
     const details = await getMarketItemDetail({
       classid: goodsItem.asset_info.classid,
       instanceid: goodsItem.asset_info.instanceid,
@@ -42,7 +48,7 @@ export const executeBuffToBuffStickerTrade = async (
       return current.wear === 0 ? Number(current.sell_reference_price) + acc : acc
     }, 0)
 
-    if (stickerValue > Number(goodsItem.price)) {
+    if (stickerValue >= 50) {
       await sendMessage(
         generateMessage({
           id: goods_id,
@@ -54,6 +60,8 @@ export const executeBuffToBuffStickerTrade = async (
           stickerValue,
         })
       )
+
+      GOODS_IDS_CACHE.push(goodsItem.id)
     }
 
     await sleep(3_000)

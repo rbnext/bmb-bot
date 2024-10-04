@@ -2,12 +2,12 @@ import 'dotenv/config'
 
 import { format } from 'date-fns'
 import { getMarketGoods } from '../api/buff'
-import { isLessThanThreshold, sleep } from '../utils'
+import { sleep } from '../utils'
 import { sendMessage } from '../api/telegram'
 import { executeBuffToBuffTrade } from '../helpers/executeBuffToBuffTrade'
 import { Source } from '../types'
 
-const GOODS_CACHE: Record<number, { price: number }> = {}
+const GOODS_CACHE: Record<number, { sell_num: number }> = {}
 
 const buffDefault = async () => {
   const now = format(new Date(), 'HH:mm:ss')
@@ -18,26 +18,15 @@ const buffDefault = async () => {
     const items = marketGoods.data.items.slice(0, 5)
 
     for (const item of items) {
-      const goods_id = item.id
-      const current_price = Number(item.sell_min_price)
+      if (item.id in GOODS_CACHE && GOODS_CACHE[item.id].sell_num !== item.sell_num) {
+        console.log(`${now}: ${item.market_hash_name} $${GOODS_CACHE[item.id].sell_num} -> $${item.sell_num}`)
 
-      if (goods_id in GOODS_CACHE && isLessThanThreshold(GOODS_CACHE[goods_id].price, current_price, 0.1)) {
-        GOODS_CACHE[goods_id].price = current_price
+        await executeBuffToBuffTrade(item, { source: Source.BUFF_DEFAULT })
 
-        continue
+        await sleep(3_000)
       }
 
-      if (goods_id in GOODS_CACHE) {
-        console.log(`${now}: ${item.market_hash_name} $${GOODS_CACHE[goods_id].price} -> $${current_price}`)
-
-        if (GOODS_CACHE[goods_id].price > current_price) {
-          await executeBuffToBuffTrade(item, {
-            source: Source.BUFF_DEFAULT,
-          })
-        }
-      }
-
-      GOODS_CACHE[goods_id] = { price: current_price }
+      GOODS_CACHE[item.id] = { sell_num: item.sell_num }
     }
   } catch (error) {
     console.log('Something went wrong', error)
@@ -53,7 +42,7 @@ const buffDefault = async () => {
 }
 
 ;(async () => {
-  const pages = Array.from({ length: 15 }, (_, i) => i + 1)
+  const pages = Array.from({ length: 20 }, (_, i) => i + 1)
 
   for (const page_num of pages) {
     const goods = await getMarketGoods({
@@ -62,7 +51,7 @@ const buffDefault = async () => {
     })
 
     for (const item of goods.data.items) {
-      GOODS_CACHE[item.id] = { price: Number(item.sell_min_price) }
+      GOODS_CACHE[item.id] = { sell_num: item.sell_num }
     }
 
     await sleep(5_000)

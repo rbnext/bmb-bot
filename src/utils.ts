@@ -1,4 +1,4 @@
-import { formatDistance, isAfter, subHours } from 'date-fns'
+import { formatDistance, isAfter, subHours, subMinutes } from 'date-fns'
 import { MessageType, Source, Sticker } from './types'
 
 export const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms))
@@ -15,6 +15,10 @@ export const median = (array: number[]): number => {
 
 export const isLessThanXHours = (date: number, hours = 24) => {
   return isAfter(new Date(date * 1000), subHours(new Date(), hours))
+}
+
+export const isLessThanXMinutes = (date: number, minutes = 1) => {
+  return isAfter(new Date(date * 1000), subMinutes(new Date(), minutes))
 }
 
 export const isLessThanThreshold = (aPrice: number, bPrice: number, threshold = 1) => {

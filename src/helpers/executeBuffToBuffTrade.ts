@@ -9,7 +9,7 @@ import {
 } from '../api/buff'
 import { MarketGoodsItem, MessageType, Source } from '../types'
 import { generateMessage, median } from '../utils'
-import { BUFF_PURCHASE_THRESHOLD, CURRENT_USER_ID, GOODS_SALES_THRESHOLD, REFERENCE_DIFF_THRESHOLD } from '../config'
+import { BUFF_PURCHASE_THRESHOLD, GOODS_SALES_THRESHOLD, REFERENCE_DIFF_THRESHOLD } from '../config'
 import { sendMessage } from '../api/telegram'
 
 export const executeBuffToBuffTrade = async (
@@ -41,7 +41,7 @@ export const executeBuffToBuffTrade = async (
     const goods_ref_price = Number(goodsInfo.data.goods_info.goods_ref_price)
     const currentReferencePriceDiff = (goods_ref_price / current_price - 1) * 100
 
-    const orders = await getGoodsSellOrder({ goods_id })
+    const orders = await getGoodsSellOrder({ goods_id, exclude_current_user: 1 })
 
     const lowestPricedItem = orders.data.items.find((el) => el.price === item.sell_min_price)
 
@@ -54,10 +54,6 @@ export const executeBuffToBuffTrade = async (
     const positions = orders.data.items.filter((el) => {
       return Number(el.price) > current_price && Number(el.price) < median_price
     })
-
-    if (lowestPricedItem.user_id === CURRENT_USER_ID) {
-      return
-    }
 
     const payload = {
       id: goods_id,

@@ -7,6 +7,8 @@ import { sendMessage } from '../api/telegram'
 import { executeBuffToBuffTrade } from '../helpers/executeBuffToBuffTrade'
 import { Source } from '../types'
 import { executeBuffToBuffStickerTrade } from '../helpers/executeBuffToBuffStickerTrade'
+import { executeBuffToBuffBargain } from '../helpers/executeBuffToBuffBargain'
+import { BARGAIN_MIN_PRICE } from '../config'
 
 const GOODS_CACHE: Record<number, { sell_num: number }> = {}
 
@@ -25,6 +27,10 @@ const buffDefault = async () => {
         if (GOODS_CACHE[item.id].sell_num < item.sell_num && item.sell_num >= 10) {
           await executeBuffToBuffTrade(item, { source: Source.BUFF_DEFAULT })
           await executeBuffToBuffStickerTrade(item, { source: Source.BUFF_DEFAULT })
+
+          if (Number(item.sell_min_price) >= BARGAIN_MIN_PRICE) {
+            await executeBuffToBuffBargain(item, { source: Source.BUFF_DEFAULT })
+          }
 
           await sleep(3_000)
         }

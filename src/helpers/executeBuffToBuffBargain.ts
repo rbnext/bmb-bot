@@ -8,16 +8,24 @@ import {
   postCreateBargain,
 } from '../api/buff'
 import { MarketGoodsItem, MessageType, Source } from '../types'
-import { generateMessage, median, sleep } from '../utils'
-import { BARGAIN_PROFIT_THRESHOLD, GOODS_SALES_THRESHOLD, REFERENCE_DIFF_THRESHOLD } from '../config'
+import { generateMessage, isLessThanXMinutes, median } from '../utils'
+import {
+  BARGAIN_PROFIT_THRESHOLD,
+  BUFF_PURCHASE_THRESHOLD,
+  GOODS_SALES_THRESHOLD,
+  REFERENCE_DIFF_THRESHOLD,
+} from '../config'
 import { sendMessage } from '../api/telegram'
 
 const BARGAIN_OFFER_IDS_CACHE: string[] = []
 
-export const executeBuffToBuffBargain = async (item: MarketGoodsItem) => {
+export const executeBuffToBuffBargain = async (
+  item: MarketGoodsItem,
+  options: {
+    source: Source
+  }
+) => {
   const goods_id = item.id
-  const name = item.market_hash_name
-  const current_price = Number(item.sell_min_price)
 
   const history = await getMarketGoodsBillOrder({ goods_id })
 
@@ -25,138 +33,78 @@ export const executeBuffToBuffBargain = async (item: MarketGoodsItem) => {
     return differenceInDays(new Date(), new Date(updated_at * 1000)) <= 7 && type !== 2
   })
 
-  if (salesLastWeek.length > GOODS_SALES_THRESHOLD) {
-    const buffLink = `https://buff.market/market/goods/${goods_id}`
-    const errorPrefix = `Unable to initiate a bargain for <a href="${buffLink}">${name}</a>`
+  if (salesLastWeek.length < GOODS_SALES_THRESHOLD) {
+    return
+  }
 
-    const {
-      data: {
-        items: [lowestPricedItem],
-      },
-    } = await getGoodsSellOrder({ goods_id, exclude_current_user: 1, max_price: item.sell_min_price })
+  const orders = await getGoodsSellOrder({ goods_id, exclude_current_user: 1 })
 
+  const lastAddedItem = orders.data.items.sort((a, b) => b.created_at - a.created_at)[0]
+
+  if (
+    lastAddedItem &&
+    lastAddedItem.allow_bargain &&
+    isLessThanXMinutes(lastAddedItem.created_at) &&
+    !BARGAIN_OFFER_IDS_CACHE.includes(lastAddedItem.id)
+  ) {
+    const current_price = Number(lastAddedItem.price)
     const sales = salesLastWeek.map(({ price }) => Number(price))
     const median_price = median(sales.filter((price) => current_price * 2 > price))
+    const estimated_profit = ((median_price * 0.975) / current_price - 1) * 100
     const desired_price = Number((median_price - (median_price * BARGAIN_PROFIT_THRESHOLD) / 100).toFixed(2))
-    const lowest_bargain_price = Number(lowestPricedItem.lowest_bargain_price)
+    const lowest_bargain_price = Number(lastAddedItem.lowest_bargain_price)
 
-    if (!lowestPricedItem) {
-      await sendMessage(`${errorPrefix}. Someone has already purchased this item for ${current_price}.`)
+    if (estimated_profit >= 5 && estimated_profit < BUFF_PURCHASE_THRESHOLD && desired_price > lowest_bargain_price) {
+      const goodsInfo = await getGoodsInfo({ goods_id })
+      const user = await getUserStorePopup({ user_id: lastAddedItem.user_id })
 
-      return
-    }
+      const goods_ref_price = Number(goodsInfo.data.goods_info.goods_ref_price)
+      const referencePriceDiff = (goods_ref_price / desired_price - 1) * 100
 
-    if (!lowestPricedItem.allow_bargain) {
-      await sendMessage(`${errorPrefix}. User ${lowestPricedItem.user_id} has disabled accepting bargains.`)
+      if (referencePriceDiff < REFERENCE_DIFF_THRESHOLD || user.code !== 'OK' || user.data.bookmark_count >= 2) {
+        return
+      }
 
-      return
-    }
+      const previewBargain = await getCreatePreviewBargain({ sell_order_id: lastAddedItem.id, price: desired_price })
 
-    if (lowest_bargain_price > desired_price) {
-      await sendMessage(
-        `${errorPrefix}. Desired price ${desired_price} is lower than the required bargain price ${lowest_bargain_price}`
-      )
+      if (previewBargain.code !== 'OK' || previewBargain?.data?.pay_confirm?.id === 'bargain_higher_price') {
+        return
+      }
 
-      return
-    }
+      const pay_methods = previewBargain?.data?.pay_methods ?? []
+      const desired_pay_method = pay_methods.find((item) => item.value === 12)
 
-    if (BARGAIN_OFFER_IDS_CACHE.includes(lowestPricedItem.id)) {
-      await sendMessage(`${errorPrefix}. This item has already been offered a bargain.`)
-
-      return
-    }
-
-    if (lowestPricedItem.asset_info.paintwear) {
-      const float = Number(lowestPricedItem.asset_info.paintwear)
-
-      if (
-        (float > 0.12 && float < 0.15) ||
-        (float > 0.3 && float < 0.38) ||
-        (float > 0.41 && float < 0.45) ||
-        float > 0.5
-      ) {
-        await sendMessage(`${errorPrefix}. Float value not allowed: ${float}.`)
+      if (desired_pay_method && !desired_pay_method.enough) {
+        await sendMessage(`[${options.source}] Reason(preview bargain): ${desired_pay_method.error}.`)
 
         return
       }
+
+      const createBargain = await postCreateBargain({ sell_order_id: lastAddedItem.id, price: desired_price })
+
+      if (createBargain.code !== 'OK') {
+        await sendMessage(`[${options.source}] Reason(create bargain): ${createBargain.code}.`)
+
+        return
+      }
+
+      const payload = {
+        id: goods_id,
+        price: desired_price,
+        name: item.market_hash_name,
+        type: MessageType.Bargain,
+        source: options.source,
+        medianPrice: median_price,
+        estimatedProfit: BARGAIN_PROFIT_THRESHOLD,
+        referencePrice: goods_ref_price,
+        float: lastAddedItem.asset_info.paintwear,
+        createdAt: lastAddedItem.created_at,
+        updatedAt: lastAddedItem.updated_at,
+      }
+
+      await sendMessage(generateMessage(payload))
+
+      BARGAIN_OFFER_IDS_CACHE.push(lastAddedItem.id)
     }
-
-    await sleep(3_000)
-
-    const goodsInfo = await getGoodsInfo({ goods_id })
-
-    const goods_ref_price = Number(goodsInfo.data.goods_info.goods_ref_price)
-    const referencePriceDiff = (goods_ref_price / desired_price - 1) * 100
-
-    if (referencePriceDiff < REFERENCE_DIFF_THRESHOLD) {
-      await sendMessage(
-        `${errorPrefix}. The difference from the reference price is ${referencePriceDiff.toFixed(2)}%. Desired price: ${desired_price}. Current price: ${current_price}. Reference price: ${goods_ref_price}`
-      )
-
-      return
-    }
-
-    const user = await getUserStorePopup({ user_id: lowestPricedItem.user_id })
-
-    if (user.data.bookmark_count >= 2) {
-      await sendMessage(`${errorPrefix}. User ${user.data.user.nickname} has ${user.data.bookmark_count} subscribers.`)
-
-      return
-    }
-
-    await sleep(2_000)
-
-    const previewBargain = await getCreatePreviewBargain({ sell_order_id: lowestPricedItem.id, price: desired_price })
-
-    if (previewBargain.code !== 'OK') {
-      await sendMessage(`${errorPrefix}. Reason(preview): ${previewBargain.code}`)
-
-      return
-    }
-
-    if (previewBargain?.data?.pay_confirm?.id === 'bargain_higher_price') {
-      await sendMessage(
-        `${errorPrefix}. Your bargain offer is lower than the other pending offers for this item. Desired price: ${desired_price}. Current price: ${current_price}.`
-      )
-
-      return
-    }
-
-    const pay_methods = previewBargain?.data?.pay_methods ?? []
-    const desired_pay_method = pay_methods.find((item) => item.value === 12)
-
-    if (desired_pay_method && !desired_pay_method.enough) {
-      await sendMessage(
-        `${errorPrefix}. Reason: ${desired_pay_method.error}. Balance: ${desired_pay_method.balance}. Desired price: ${desired_price}.`
-      )
-
-      return
-    }
-
-    const createBargain = await postCreateBargain({ sell_order_id: lowestPricedItem.id, price: desired_price })
-
-    if (createBargain.code !== 'OK') {
-      await sendMessage(`${errorPrefix}. Reason(create): ${createBargain.code}`)
-
-      return
-    }
-
-    const payload = {
-      id: goods_id,
-      price: desired_price,
-      name: item.market_hash_name,
-      type: MessageType.Bargain,
-      source: Source.BUFF_BARGAIN,
-      medianPrice: median_price,
-      estimatedProfit: BARGAIN_PROFIT_THRESHOLD,
-      referencePrice: goods_ref_price,
-      float: lowestPricedItem.asset_info.paintwear,
-    }
-
-    await sendMessage(generateMessage(payload))
-
-    BARGAIN_OFFER_IDS_CACHE.push(lowestPricedItem.id)
   }
-
-  await sleep(5_000)
 }

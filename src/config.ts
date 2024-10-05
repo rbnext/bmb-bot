@@ -1,5 +1,5 @@
 export const BARGAIN_MIN_PRICE = 15
-export const BARGAIN_PROFIT_THRESHOLD = 10
+export const BARGAIN_PROFIT_THRESHOLD = 15
 
 export const GOODS_SALES_THRESHOLD = 4
 export const REFERENCE_DIFF_THRESHOLD = 10

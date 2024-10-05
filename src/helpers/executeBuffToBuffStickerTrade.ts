@@ -53,7 +53,7 @@ export const executeBuffToBuffStickerTrade = async (
       return current.wear === 0 ? Number(current.sell_reference_price) + acc : acc
     }, 0)
 
-    if (stickerValue >= 50) {
+    if ((stickerValue >= 50 && refPrice >= Number(goodsItem.price)) || stickerValue >= 100) {
       await sendMessage(
         generateMessage({
           id: goods_id,

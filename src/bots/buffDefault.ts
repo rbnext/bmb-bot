@@ -22,7 +22,7 @@ const buffDefault = async () => {
       if (item.id in GOODS_CACHE && GOODS_CACHE[item.id].sell_num !== item.sell_num) {
         console.log(`${now}: ${item.market_hash_name} ${GOODS_CACHE[item.id].sell_num} -> ${item.sell_num}`)
 
-        if (GOODS_CACHE[item.id].sell_num < item.sell_num && item.sell_num >= 15) {
+        if (GOODS_CACHE[item.id].sell_num < item.sell_num && item.sell_num >= 10) {
           await executeBuffToBuffTrade(item, { source: Source.BUFF_DEFAULT })
           await executeBuffToBuffStickerTrade(item, { source: Source.BUFF_DEFAULT })
 

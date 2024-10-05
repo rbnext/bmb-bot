@@ -138,7 +138,9 @@ export const getGoodsSellOrder = async ({
 }): Promise<GoodsSellOrder> => {
   const { data } = await http.get('/market/goods/sell_order', {
     params: { game, page_num, sort_by, ...rest },
-    cache: false,
+    cache: {
+      ttl: 1000 * 9, // 9 seconds
+    },
   })
 
   return data

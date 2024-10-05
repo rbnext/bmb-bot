@@ -40,10 +40,7 @@ const buff2buff = async () => {
           console.log(`${now}: ${item.market_hash_name} $${GOODS_CACHE[goods_id].price} -> $${current_price}`)
 
           if (GOODS_CACHE[goods_id].price > current_price) {
-            await executeBuffToBuffTrade(item, {
-              source: Source.BUFF_BUFF,
-            })
-
+            await executeBuffToBuffTrade(item, { source: Source.BUFF_BUFF })
             await generateBuffSellingReport()
           }
         }

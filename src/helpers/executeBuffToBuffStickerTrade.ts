@@ -1,7 +1,7 @@
 import { differenceInDays } from 'date-fns'
 import { getGoodsInfo, getGoodsSellOrder, getMarketGoodsBillOrder, getMarketItemDetail } from '../api/buff'
 import { MarketGoodsItem, MessageType, Source } from '../types'
-import { generateMessage, sleep } from '../utils'
+import { generateMessage, isLessThanXHours, sleep } from '../utils'
 import { GOODS_SALES_THRESHOLD } from '../config'
 import { sendMessage } from '../api/telegram'
 
@@ -29,12 +29,17 @@ export const executeBuffToBuffStickerTrade = async (
   const orders = await getGoodsSellOrder({ goods_id, exclude_current_user: 1 })
 
   const refPrice = Number(goodsInfo.data.goods_info.goods_ref_price)
-  const goodsItems = orders.data.items.filter((item) => item.asset_info.info.stickers.length !== 0)
+
+  const goodsItems = orders.data.items.filter((item) => {
+    return (
+      isLessThanXHours(item.created_at, 12) &&
+      !GOODS_IDS_CACHE.includes(item.id) &&
+      item.asset_info.info.stickers.length !== 0
+    )
+  })
 
   for (const goodsItem of goodsItems) {
-    if (GOODS_IDS_CACHE.includes(goodsItem.id)) {
-      continue
-    }
+    GOODS_IDS_CACHE.push(goodsItem.id)
 
     const details = await getMarketItemDetail({
       classid: goodsItem.asset_info.classid,
@@ -64,8 +69,6 @@ export const executeBuffToBuffStickerTrade = async (
         })
       )
     }
-
-    GOODS_IDS_CACHE.push(goodsItem.id)
 
     await sleep(3_000)
   }

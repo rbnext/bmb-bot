@@ -1,4 +1,4 @@
-import { formatDistance } from 'date-fns'
+import { formatDistance, isAfter, subHours } from 'date-fns'
 import { MessageType, Source, Sticker } from './types'
 
 export const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms))
@@ -11,6 +11,10 @@ export const median = (array: number[]): number => {
   if (sorted.length % 2 === 0) (sorted[middle - 1] + sorted[middle]) / 2
 
   return sorted[middle]
+}
+
+export const isLessThanXHours = (date: number, hours = 24) => {
+  return isAfter(new Date(date * 1000), subHours(new Date(), hours))
 }
 
 export const isLessThanThreshold = (aPrice: number, bPrice: number, threshold = 1) => {
@@ -103,7 +107,7 @@ export const generateMessage = ({
   }
 
   if (stickerValue > 0) {
-    message.push(`<b>Sticker Value</b>: $${stickerValue.toFixed(2)}\n`)
+    message.push(`<b>Sticker value</b>: $${stickerValue.toFixed(2)}\n`)
   }
 
   if (bargainPrice) {

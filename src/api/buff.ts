@@ -12,6 +12,7 @@ import {
   GoodsInfo,
   GoodsSellOrder,
   ItemsOnSale,
+  Katowice14,
   MarketBatchFee,
   MarketGoods,
   MarketGoodsBillOrder,
@@ -118,6 +119,22 @@ export const getMarketGoods = async ({
       ...rest,
     },
     cache: false,
+  })
+
+  return data
+}
+
+export const getKatowice14 = async ({
+  game = 'csgo',
+  page_num = 1,
+  page_size = 50,
+}: {
+  game?: string
+  page_num?: number
+  page_size?: number
+}): Promise<Katowice14> => {
+  const { data } = await http.get('/market/sell_order/katowice_14', {
+    params: { game, page_num, page_size },
   })
 
   return data

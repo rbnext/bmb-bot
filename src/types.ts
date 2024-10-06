@@ -59,6 +59,38 @@ export type BriefAsset = {
   }
 }
 
+export type Katowice14Item = {
+  id: string
+  goods_id: number
+  created_at: number
+  updated_at: number
+  price: string
+  sticker_premium: number
+  asset_info: {
+    paintwear: string
+    classid: string
+    assetid: string
+    instanceid: string
+    contextid: number
+    info: {
+      stickers: Sticker[]
+    }
+  }
+}
+
+export type Katowice14 = {
+  data: {
+    goods_infos: {
+      [key: number]: {
+        goods_id: number
+        market_hash_name: string
+        steam_price: string
+      }
+    }
+    items: Katowice14Item[]
+  }
+}
+
 export type Sticker = {
   category: 'sticker'
   goods_id: number
@@ -259,4 +291,5 @@ export enum Source {
   BUFF_DEFAULT = 'BUFF_DEFAULT',
   BUFF_STEAM = 'BUFF_STEAM',
   BUFF_BARGAIN = 'BUFF_BARGAIN',
+  BUFF_KATOWICE = 'BUFF_KATOWICE',
 }

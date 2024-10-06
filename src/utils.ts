@@ -49,6 +49,7 @@ export const generateMessage = ({
   referencePrice,
   medianPrice,
   estimatedProfit,
+  stickerPremium,
   source,
   stickerValue = 0,
   createdAt,
@@ -71,6 +72,7 @@ export const generateMessage = ({
   stickerValue?: number
   float?: string
   bargainPrice?: string
+  stickerPremium?: number
   positions?: number
 }) => {
   const message: string[] = []
@@ -112,6 +114,10 @@ export const generateMessage = ({
 
   if (stickerValue > 0) {
     message.push(`<b>Sticker value</b>: $${stickerValue.toFixed(2)}\n`)
+  }
+
+  if (stickerPremium) {
+    message.push(`<b>Sticker premium</b>: ${stickerPremium}%\n`)
   }
 
   if (bargainPrice) {

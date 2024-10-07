@@ -7,12 +7,13 @@ import { sendMessage } from '../api/telegram'
 import { generateBuffSellingReport } from '../helpers/generateBuffSellingReport'
 import { executeBuffToBuffTrade } from '../helpers/executeBuffToBuffTrade'
 import { Source } from '../types'
+import { BARGAIN_MIN_PRICE } from '../config'
 
 export const GOODS_CACHE: Record<number, { price: number }> = {}
 
 const buff2buff = async () => {
   let currentPage = 1
-  const pagesToLoad = 13
+  const pagesToLoad = 20
   let hasNextPage = true
 
   try {
@@ -41,7 +42,8 @@ const buff2buff = async () => {
 
           if (GOODS_CACHE[goods_id].price > current_price) {
             await executeBuffToBuffTrade(item, { source: Source.BUFF_BUFF })
-            await generateBuffSellingReport()
+
+            if (Number(item.sell_min_price) > BARGAIN_MIN_PRICE) await generateBuffSellingReport()
           }
         }
 

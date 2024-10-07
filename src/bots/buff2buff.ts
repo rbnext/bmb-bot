@@ -43,7 +43,7 @@ const buff2buff = async () => {
           if (GOODS_CACHE[goods_id].price > current_price) {
             await executeBuffToBuffTrade(item, { source: Source.BUFF_BUFF })
 
-            if (Number(item.sell_min_price) > BARGAIN_MIN_PRICE) await generateBuffSellingReport()
+            if (Number(item.sell_min_price) > BARGAIN_MIN_PRICE + 5) await generateBuffSellingReport()
 
             await sleep(1_000)
           }

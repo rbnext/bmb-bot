@@ -21,10 +21,10 @@ const buffDefault = async () => {
     const items = marketGoods.data.items.slice(0, 5)
 
     for (const item of items) {
-      if (item.id in GOODS_CACHE && GOODS_CACHE[item.id].sell_num !== item.sell_num) {
+      if (item.id in GOODS_CACHE && GOODS_CACHE[item.id].sell_num !== item.sell_num && item.sell_num <= 10) {
         console.log(`${now}: ${item.market_hash_name} ${GOODS_CACHE[item.id].sell_num} -> ${item.sell_num}`)
 
-        if (GOODS_CACHE[item.id].sell_num < item.sell_num && item.sell_num >= 5 && item.sell_num <= 10) {
+        if (GOODS_CACHE[item.id].sell_num < item.sell_num) {
           await executeBuffToBuffTrade(item, { source: Source.BUFF_DEFAULT })
 
           if (Number(item.sell_min_price) >= BARGAIN_MIN_PRICE) {
@@ -53,7 +53,7 @@ const buffDefault = async () => {
 }
 
 ;(async () => {
-  const pages = Array.from({ length: 20 }, (_, i) => i + 1)
+  const pages = Array.from({ length: 20 }, (_, i) => i + 15)
 
   for (const page_num of pages) {
     const goods = await getMarketGoods({ page_num, sort_by: 'sell_num.desc' })

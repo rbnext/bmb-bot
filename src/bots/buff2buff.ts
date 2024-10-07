@@ -12,52 +12,37 @@ import { BARGAIN_MIN_PRICE } from '../config'
 export const GOODS_CACHE: Record<number, { price: number }> = {}
 
 const buff2buff = async () => {
-  let currentPage = 1
-  const pagesToLoad = 20
-  let hasNextPage = true
+  const pages = Array.from({ length: 20 }, (_, i) => i + 1)
 
   try {
-    do {
-      const page_num = currentPage
+    for (const page_num of pages) {
       const marketGoods = await getMarketGoods({ page_num, sort_by: 'sell_num.desc' })
 
-      const now = format(new Date(), 'HH:mm:ss')
-
-      if (hasNextPage) {
-        hasNextPage = currentPage < pagesToLoad
-      }
-
       for (const item of marketGoods.data.items) {
-        const goods_id = item.id
+        const now = format(new Date(), 'HH:mm:ss')
         const current_price = Number(item.sell_min_price)
 
-        if (goods_id in GOODS_CACHE && isLessThanThreshold(GOODS_CACHE[goods_id].price, current_price, 0.1)) {
-          GOODS_CACHE[goods_id].price = current_price
+        if (item.id in GOODS_CACHE && isLessThanThreshold(GOODS_CACHE[item.id].price, current_price, 0.1)) {
+          GOODS_CACHE[item.id].price = current_price
 
           continue
         }
 
-        if (goods_id in GOODS_CACHE) {
-          console.log(`${now}: ${item.market_hash_name} $${GOODS_CACHE[goods_id].price} -> $${current_price}`)
-
-          if (GOODS_CACHE[goods_id].price > current_price) {
-            await executeBuffToBuffTrade(item, { source: Source.BUFF_BUFF })
-
-            if (Number(item.sell_min_price) > BARGAIN_MIN_PRICE + 5) await generateBuffSellingReport()
-
-            await sleep(1_000)
-          }
+        if (item.id in GOODS_CACHE) {
+          console.log(`${now}: ${item.market_hash_name} $${GOODS_CACHE[item.id].price} -> $${current_price}`)
         }
 
-        GOODS_CACHE[goods_id] = { price: current_price }
+        if (item.id in GOODS_CACHE && GOODS_CACHE[item.id].price > current_price) {
+          await executeBuffToBuffTrade(item, { source: Source.BUFF_BUFF })
+          if (Number(item.sell_min_price) > BARGAIN_MIN_PRICE + 5) await generateBuffSellingReport()
+          await sleep(1_000)
+        }
+
+        GOODS_CACHE[item.id] = { price: current_price }
       }
 
-      if (hasNextPage) {
-        await sleep(4_000)
-      }
-
-      currentPage += 1
-    } while (hasNextPage)
+      await sleep(4_000)
+    }
   } catch (error) {
     console.log('Something went wrong', error)
 

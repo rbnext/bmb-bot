@@ -1,9 +1,12 @@
+import { format } from 'date-fns'
 import { getGoodsSellOrder, getItemsOnSale } from '../api/buff'
 import { CURRENT_USER_ID } from '../config'
 import { sleep } from '../utils'
 import { executePriceChange } from './executePriceChange'
 
 export const generateBuffSellingReport = async () => {
+  console.log(`${format(new Date(), 'HH:mm:ss')}: Generating selling report started.`)
+
   const itemsOnSale = await getItemsOnSale({})
 
   for (const item of itemsOnSale.data.items) {
@@ -39,4 +42,6 @@ export const generateBuffSellingReport = async () => {
 
     await sleep(2_000)
   }
+
+  console.log(`${format(new Date(), 'HH:mm:ss')}: Generating selling report complied.`)
 }

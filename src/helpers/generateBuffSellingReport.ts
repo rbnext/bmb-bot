@@ -5,7 +5,7 @@ import { sleep } from '../utils'
 import { executePriceChange } from './executePriceChange'
 
 export const generateBuffSellingReport = async () => {
-  console.log(`${format(new Date(), 'HH:mm:ss')}: Generating selling report started.`)
+  console.log(`${format(new Date(), 'HH:mm:ss')}: Generating selling report.`)
 
   const itemsOnSale = await getItemsOnSale({})
 
@@ -42,6 +42,4 @@ export const generateBuffSellingReport = async () => {
       if (currentDiff === 0.01) await executePriceChange({ price, ...payload })
     }
   }
-
-  console.log(`${format(new Date(), 'HH:mm:ss')}: Generating selling report complied.`)
 }

@@ -10,6 +10,7 @@ import {
 import { MarketGoodsItem, MessageType, Source } from '../types'
 import { generateMessage, median } from '../utils'
 import { BUFF_PURCHASE_THRESHOLD, GOODS_SALES_THRESHOLD, REFERENCE_DIFF_THRESHOLD } from '../config'
+import { executeBuffToSteamTrade } from './executeBuffToSteamTrade'
 import { sendMessage } from '../api/telegram'
 
 export const executeBuffToBuffTrade = async (
@@ -105,6 +106,10 @@ export const executeBuffToBuffTrade = async (
       }, 0)
 
       await sendMessage(generateMessage({ type: MessageType.Review, stickerValue, ...payload }))
+    } else {
+      await executeBuffToSteamTrade(item, { source: Source.BUFF_STEAM })
     }
+  } else {
+    await executeBuffToSteamTrade(item, { source: Source.BUFF_STEAM })
   }
 }

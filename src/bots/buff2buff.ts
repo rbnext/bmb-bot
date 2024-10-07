@@ -4,10 +4,8 @@ import { getMarketGoods } from '../api/buff'
 import { isLessThanThreshold, sleep } from '../utils'
 import { format } from 'date-fns'
 import { sendMessage } from '../api/telegram'
-import { generateBuffSellingReport } from '../helpers/generateBuffSellingReport'
 import { executeBuffToBuffTrade } from '../helpers/executeBuffToBuffTrade'
 import { Source } from '../types'
-import { BARGAIN_MIN_PRICE } from '../config'
 
 export const GOODS_CACHE: Record<number, { price: number }> = {}
 
@@ -22,7 +20,7 @@ const buff2buff = async () => {
         const now = format(new Date(), 'HH:mm:ss')
         const current_price = Number(item.sell_min_price)
 
-        if (item.id in GOODS_CACHE && isLessThanThreshold(GOODS_CACHE[item.id].price, current_price, 0.1)) {
+        if (item.id in GOODS_CACHE && isLessThanThreshold(GOODS_CACHE[item.id].price, current_price, 0.2)) {
           GOODS_CACHE[item.id].price = current_price
 
           continue
@@ -33,9 +31,8 @@ const buff2buff = async () => {
         }
 
         if (item.id in GOODS_CACHE && GOODS_CACHE[item.id].price > current_price) {
-          await sleep(5_000)
+          await sleep(3_000)
           await executeBuffToBuffTrade(item, { source: Source.BUFF_BUFF })
-          if (Number(item.sell_min_price) > BARGAIN_MIN_PRICE + 10) await generateBuffSellingReport()
         }
 
         GOODS_CACHE[item.id] = { price: current_price }

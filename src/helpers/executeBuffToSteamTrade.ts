@@ -1,4 +1,4 @@
-import { getBriefAsset, getGoodsSellOrder, postGoodsBuy } from '../api/buff'
+import { getGoodsSellOrder, postGoodsBuy } from '../api/buff'
 import { sendMessage } from '../api/telegram'
 import { STEAM_CHECK_THRESHOLD, STEAM_PURCHASE_THRESHOLD } from '../config'
 import { MarketGoodsItem, MessageType, Source } from '../types'
@@ -26,32 +26,13 @@ export const executeBuffToSteamTrade = async (
   const min_steam_price = prices.length !== 0 ? Math.min(...prices) : 0
   const estimated_profit = ((min_steam_price - current_price) / current_price) * 100
 
-  const payload = {
-    id: goods_id,
-    price: current_price,
-    estimatedProfit: estimated_profit,
-    medianPrice: min_steam_price,
-    name: item.market_hash_name,
-    source: options.source,
-  }
-
   if (estimated_profit >= STEAM_PURCHASE_THRESHOLD) {
-    const {
-      data: { cash_amount },
-    } = await getBriefAsset()
-
     const orders = await getGoodsSellOrder({ goods_id, exclude_current_user: 1 })
 
     const lowestPricedItem = orders.data.items.find((el) => el.price === item.sell_min_price)
 
     if (!lowestPricedItem) {
       await sendMessage(`[${options.source}] Someone already bought the ${item.market_hash_name} item.`)
-
-      return
-    }
-
-    if (current_price > Number(cash_amount)) {
-      await sendMessage(`[${options.source}] You don't have enough funds to buy ${item.market_hash_name} item.`)
 
       return
     }
@@ -66,6 +47,18 @@ export const executeBuffToSteamTrade = async (
       return
     }
 
-    await sendMessage(generateMessage({ type: MessageType.Purchased, ...payload }))
+    await sendMessage(
+      generateMessage({
+        id: goods_id,
+        price: current_price,
+        type: MessageType.Purchased,
+        name: item.market_hash_name,
+        createdAt: lowestPricedItem.created_at,
+        updatedAt: lowestPricedItem.updated_at,
+        estimatedProfit: estimated_profit,
+        medianPrice: min_steam_price,
+        source: options.source,
+      })
+    )
   }
 }

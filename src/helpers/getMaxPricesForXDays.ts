@@ -22,6 +22,8 @@ export const getMaxPricesForXDays = async (
       return acc
     }, {})
 
+    console.log(`${format(new Date(), 'HH:mm:ss')}: ${market_hash_name} ${JSON.stringify(history)}`)
+
     if (Object.keys(history).length !== days) {
       return []
     }

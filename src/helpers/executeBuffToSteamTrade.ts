@@ -5,7 +5,12 @@ import { MarketGoodsItem, MessageType, Source } from '../types'
 import { generateMessage } from '../utils'
 import { getMaxPricesForXDays } from './getMaxPricesForXDays'
 
-export const executeBuffToSteamTrade = async (item: MarketGoodsItem) => {
+export const executeBuffToSteamTrade = async (
+  item: MarketGoodsItem,
+  options: {
+    source: Source
+  }
+) => {
   const goods_id = item.id
   const current_price = Number(item.sell_min_price)
   const steam_price = Number(item.goods_info.steam_price)
@@ -27,7 +32,7 @@ export const executeBuffToSteamTrade = async (item: MarketGoodsItem) => {
     estimatedProfit: estimated_profit,
     medianPrice: min_steam_price,
     name: item.market_hash_name,
-    source: Source.BUFF_STEAM,
+    source: options.source,
   }
 
   if (estimated_profit >= STEAM_PURCHASE_THRESHOLD) {
@@ -35,20 +40,18 @@ export const executeBuffToSteamTrade = async (item: MarketGoodsItem) => {
       data: { cash_amount },
     } = await getBriefAsset()
 
-    const {
-      data: {
-        items: [lowestPricedItem],
-      },
-    } = await getGoodsSellOrder({ goods_id, max_price: item.sell_min_price, exclude_current_user: 1 })
+    const orders = await getGoodsSellOrder({ goods_id, exclude_current_user: 1 })
+
+    const lowestPricedItem = orders.data.items.find((el) => el.price === item.sell_min_price)
 
     if (!lowestPricedItem) {
-      await sendMessage(`[${Source.BUFF_STEAM}] Someone already bought the ${item.market_hash_name} item.`)
+      await sendMessage(`[${options.source}] Someone already bought the ${item.market_hash_name} item.`)
 
       return
     }
 
     if (current_price > Number(cash_amount)) {
-      await sendMessage(`[${Source.BUFF_STEAM}] You don't have enough funds to buy ${item.market_hash_name} item.`)
+      await sendMessage(`[${options.source}] You don't have enough funds to buy ${item.market_hash_name} item.`)
 
       return
     }
@@ -57,14 +60,12 @@ export const executeBuffToSteamTrade = async (item: MarketGoodsItem) => {
 
     if (response.code !== 'OK') {
       await sendMessage(
-        `[${Source.BUFF_STEAM}] Failed to purchase the item ${item.market_hash_name}. Reason: ${response.code}`
+        `[${options.source}] Failed to purchase the item ${item.market_hash_name}. Reason: ${response.code}`
       )
 
       return
     }
 
     await sendMessage(generateMessage({ type: MessageType.Purchased, ...payload }))
-  } else if (prices.length !== 0) {
-    await sendMessage(generateMessage({ type: MessageType.Review, ...payload }))
   }
 }

@@ -1,7 +1,7 @@
 export const BARGAIN_MIN_PRICE = 15
 export const BARGAIN_PROFIT_THRESHOLD = 15
 
-export const GOODS_SALES_THRESHOLD = 3
+export const GOODS_SALES_THRESHOLD = 4
 export const REFERENCE_DIFF_THRESHOLD = 9
 export const STEAM_PURCHASE_THRESHOLD = 70
 export const STEAM_CHECK_THRESHOLD = 55

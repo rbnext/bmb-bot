@@ -10,6 +10,8 @@ export const generateBuffSellingReport = async () => {
   const itemsOnSale = await getItemsOnSale({})
 
   for (const item of itemsOnSale.data.items) {
+    await sleep(4_000)
+
     const sellingList = await getGoodsSellOrder({ goods_id: item.goods_id })
 
     const current_price = Number(item.price)
@@ -39,8 +41,6 @@ export const generateBuffSellingReport = async () => {
 
       if (currentDiff === 0.01) await executePriceChange({ price, ...payload })
     }
-
-    await sleep(2_000)
   }
 
   console.log(`${format(new Date(), 'HH:mm:ss')}: Generating selling report complied.`)

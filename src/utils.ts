@@ -95,7 +95,7 @@ export const generateMessage = ({
   }
 
   if (refPriceDelta) {
-    message.push(`<b>Price vs reference price difference</b>: $${refPriceDelta.toFixed(2)}%\n`)
+    message.push(`<b>Price vs reference price</b>: ${refPriceDelta.toFixed(2)}%\n`)
   }
 
   if (createdAt) {

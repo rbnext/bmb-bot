@@ -33,7 +33,7 @@ export const executeBuffToBuffTrade = async (
     const goodsInfo = await getGoodsInfo({ goods_id })
 
     const goods_ref_price = Number(goodsInfo.data.goods_info.goods_ref_price)
-    const currentReferencePriceDiff = (goods_ref_price / current_price - 1) * 100
+    const refPriceDelta = (goods_ref_price / current_price - 1) * 100
 
     const orders = await getGoodsSellOrder({ goods_id, exclude_current_user: 1 })
 
@@ -61,10 +61,10 @@ export const executeBuffToBuffTrade = async (
       source: options.source,
       createdAt: lowestPricedItem.created_at,
       updatedAt: lowestPricedItem.updated_at,
-      refPriceDelta: currentReferencePriceDiff,
+      refPriceDelta: refPriceDelta,
     }
 
-    if (currentReferencePriceDiff > REFERENCE_DIFF_THRESHOLD) {
+    if (refPriceDelta > REFERENCE_DIFF_THRESHOLD) {
       const {
         data: { cash_amount },
       } = await getBriefAsset()
@@ -86,7 +86,7 @@ export const executeBuffToBuffTrade = async (
       }
 
       await sendMessage(generateMessage({ type: MessageType.Purchased, ...payload }))
-    } else if (currentReferencePriceDiff >= 4) {
+    } else if (refPriceDelta >= 4) {
       await sendMessage(generateMessage({ type: MessageType.Review, ...payload }))
     } else {
       await executeBuffToSteamTrade(item, { source: Source.BUFF_STEAM })

@@ -68,6 +68,7 @@ export const executeBuffToBuffTrade = async (
       source: options.source,
       createdAt: lowestPricedItem.created_at,
       updatedAt: lowestPricedItem.updated_at,
+      refPriceDelta: currentReferencePriceDiff,
     }
 
     if (currentReferencePriceDiff > REFERENCE_DIFF_THRESHOLD) {
@@ -92,20 +93,8 @@ export const executeBuffToBuffTrade = async (
       }
 
       await sendMessage(generateMessage({ type: MessageType.Purchased, ...payload }))
-    } else if (currentReferencePriceDiff > 0 && lowestPricedItem.asset_info.info.stickers.length !== 0) {
-      const details = await getMarketItemDetail({
-        classid: lowestPricedItem.asset_info.classid,
-        instanceid: lowestPricedItem.asset_info.instanceid,
-        assetid: lowestPricedItem.asset_info.assetid,
-        contextid: lowestPricedItem.asset_info.contextid,
-        sell_order_id: lowestPricedItem.id,
-      })
-
-      const stickerValue = details.data.asset_info.stickers.reduce((acc, current) => {
-        return current.wear === 0 ? Number(current.sell_reference_price) + acc : acc
-      }, 0)
-
-      await sendMessage(generateMessage({ type: MessageType.Review, stickerValue, ...payload }))
+    } else if (currentReferencePriceDiff >= 4) {
+      await sendMessage(generateMessage({ type: MessageType.Review, ...payload }))
     } else {
       await executeBuffToSteamTrade(item, { source: Source.BUFF_STEAM })
     }

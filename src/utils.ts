@@ -56,6 +56,7 @@ export const generateMessage = ({
   updatedAt,
   float,
   bargainPrice,
+  refPriceDelta,
   positions,
 }: {
   id: number
@@ -68,6 +69,7 @@ export const generateMessage = ({
   estimatedProfit?: number
   source: Source
   createdAt?: number
+  refPriceDelta?: number
   updatedAt?: number
   stickerValue?: number
   float?: string
@@ -90,6 +92,10 @@ export const generateMessage = ({
 
   if (referencePrice) {
     message.push(`<b>Reference price</b>: $${referencePrice}\n`)
+  }
+
+  if (refPriceDelta) {
+    message.push(`<b>Price vs reference price difference</b>: $${refPriceDelta.toFixed(2)}%\n`)
   }
 
   if (createdAt) {

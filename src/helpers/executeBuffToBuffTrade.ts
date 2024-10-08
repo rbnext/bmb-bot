@@ -64,7 +64,7 @@ export const executeBuffToBuffTrade = async (
       refPriceDelta: refPriceDelta,
     }
 
-    if (refPriceDelta > REFERENCE_DIFF_THRESHOLD) {
+    if (refPriceDelta >= REFERENCE_DIFF_THRESHOLD) {
       const {
         data: { cash_amount },
       } = await getBriefAsset()

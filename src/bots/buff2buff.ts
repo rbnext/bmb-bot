@@ -10,7 +10,7 @@ import { Source } from '../types'
 export const GOODS_CACHE: Record<number, { price: number }> = {}
 
 const buff2buff = async () => {
-  const pages = Array.from({ length: 20 }, (_, i) => i + 1)
+  const pages = Array.from({ length: 15 }, (_, i) => i + 1)
 
   try {
     for (const page_num of pages) {
@@ -38,7 +38,7 @@ const buff2buff = async () => {
         GOODS_CACHE[item.id] = { price: current_price }
       }
 
-      await sleep(3_000)
+      await sleep(2_500)
     }
   } catch (error) {
     console.log('Something went wrong', error)

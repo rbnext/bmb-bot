@@ -3,7 +3,6 @@ import { getBriefAsset, getGoodsInfo, getGoodsSellOrder, getMarketGoodsBillOrder
 import { MarketGoodsItem, MessageType, Source } from '../types'
 import { generateMessage, median } from '../utils'
 import { BUFF_PURCHASE_THRESHOLD, GOODS_SALES_THRESHOLD, REFERENCE_DIFF_THRESHOLD } from '../config'
-import { executeBuffToSteamTrade } from './executeBuffToSteamTrade'
 import { sendMessage } from '../api/telegram'
 
 export const executeBuffToBuffTrade = async (
@@ -29,7 +28,7 @@ export const executeBuffToBuffTrade = async (
   const median_price = median(sales.filter((price) => current_price * 2 > price))
   const estimated_profit = ((median_price * 0.975) / current_price - 1) * 100
 
-  if (estimated_profit >= BUFF_PURCHASE_THRESHOLD) {
+  if (estimated_profit >= BUFF_PURCHASE_THRESHOLD - 3) {
     const goodsInfo = await getGoodsInfo({ goods_id })
 
     const goods_ref_price = Number(goodsInfo.data.goods_info.goods_ref_price)
@@ -64,7 +63,7 @@ export const executeBuffToBuffTrade = async (
       refPriceDelta: refPriceDelta,
     }
 
-    if (refPriceDelta >= REFERENCE_DIFF_THRESHOLD) {
+    if (refPriceDelta >= REFERENCE_DIFF_THRESHOLD && estimated_profit >= BUFF_PURCHASE_THRESHOLD) {
       const {
         data: { cash_amount },
       } = await getBriefAsset()
@@ -86,12 +85,8 @@ export const executeBuffToBuffTrade = async (
       }
 
       await sendMessage(generateMessage({ type: MessageType.Purchased, ...payload }))
-    } else if (refPriceDelta >= 4) {
+    } else if (refPriceDelta >= REFERENCE_DIFF_THRESHOLD - 6) {
       await sendMessage(generateMessage({ type: MessageType.Review, ...payload }))
-    } else {
-      await executeBuffToSteamTrade(item, { source: Source.BUFF_STEAM })
     }
-  } else {
-    await executeBuffToSteamTrade(item, { source: Source.BUFF_STEAM })
   }
 }

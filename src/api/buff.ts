@@ -90,8 +90,8 @@ http.interceptors.response.use(
 export const getMarketGoods = async ({
   game = 'csgo',
   page_num = 1,
-  page_size = 50,
-  min_price = 3,
+  page_size = 130,
+  min_price = 5,
   max_price = 50,
   ...rest
 }: {

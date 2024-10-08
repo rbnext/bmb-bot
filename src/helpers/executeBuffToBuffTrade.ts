@@ -1,12 +1,5 @@
 import { differenceInDays } from 'date-fns'
-import {
-  getBriefAsset,
-  getGoodsInfo,
-  getGoodsSellOrder,
-  getMarketGoodsBillOrder,
-  getMarketItemDetail,
-  postGoodsBuy,
-} from '../api/buff'
+import { getBriefAsset, getGoodsInfo, getGoodsSellOrder, getMarketGoodsBillOrder, postGoodsBuy } from '../api/buff'
 import { MarketGoodsItem, MessageType, Source } from '../types'
 import { generateMessage, median } from '../utils'
 import { BUFF_PURCHASE_THRESHOLD, GOODS_SALES_THRESHOLD, REFERENCE_DIFF_THRESHOLD } from '../config'

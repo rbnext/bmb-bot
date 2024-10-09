@@ -1,9 +1,11 @@
-import { differenceInDays } from 'date-fns'
+import { differenceInDays, format } from 'date-fns'
 import { getBriefAsset, getGoodsInfo, getGoodsSellOrder, getMarketGoodsBillOrder, postGoodsBuy } from '../api/buff'
 import { MarketGoodsItem, MessageType, Source } from '../types'
 import { generateMessage, median } from '../utils'
 import { BUFF_PURCHASE_THRESHOLD, GOODS_SALES_THRESHOLD, REFERENCE_DIFF_THRESHOLD } from '../config'
 import { sendMessage } from '../api/telegram'
+
+const LOYAL_USER_IDS: string[] = []
 
 export const executeBuffToBuffTrade = async (
   item: MarketGoodsItem,
@@ -15,6 +17,12 @@ export const executeBuffToBuffTrade = async (
   const current_price = Number(item.sell_min_price)
 
   const history = await getMarketGoodsBillOrder({ goods_id })
+
+  for (const item of history.data.items) {
+    if (item.has_bargain && !LOYAL_USER_IDS.includes(item.seller_id)) {
+      LOYAL_USER_IDS.push(item.seller_id)
+    }
+  }
 
   const salesLastWeek = history.data.items.filter(({ updated_at, type }) => {
     return differenceInDays(new Date(), new Date(updated_at * 1000)) <= 7 && type !== 2
@@ -28,7 +36,7 @@ export const executeBuffToBuffTrade = async (
   const median_price = median(sales.filter((price) => current_price * 2 > price))
   const estimated_profit = ((median_price * 0.975) / current_price - 1) * 100
 
-  if (estimated_profit >= BUFF_PURCHASE_THRESHOLD - 3) {
+  if (estimated_profit >= BUFF_PURCHASE_THRESHOLD - 5) {
     const goodsInfo = await getGoodsInfo({ goods_id })
 
     const goods_ref_price = Number(goodsInfo.data.goods_info.goods_ref_price)
@@ -62,6 +70,14 @@ export const executeBuffToBuffTrade = async (
       updatedAt: lowestPricedItem.updated_at,
       refPriceDelta: refPriceDelta,
     }
+
+    if (LOYAL_USER_IDS.includes(lowestPricedItem.user_id)) {
+      await sendMessage(generateMessage({ type: MessageType.ManualBargain, ...payload }))
+
+      return
+    }
+
+    console.log(`[${format(new Date(), 'HH:mm:ss')}] Loyal users found for bargain: ${LOYAL_USER_IDS.length}`)
 
     if (refPriceDelta >= REFERENCE_DIFF_THRESHOLD && estimated_profit >= BUFF_PURCHASE_THRESHOLD) {
       const {

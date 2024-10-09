@@ -240,6 +240,9 @@ export type MarketGoodsBillOrderItem = {
   price: string
   updated_at: number
   type: number
+  has_bargain: boolean
+  seller_id: string
+  original_price: string
 }
 
 export type MarketGoodsBillOrder = {
@@ -284,6 +287,7 @@ export enum MessageType {
   Purchased = 'PURCHASED',
   Review = 'REVIEW',
   Bargain = 'BARGAIN',
+  ManualBargain = 'MANUAL_BARGAIN',
 }
 
 export enum Source {

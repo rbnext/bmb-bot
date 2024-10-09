@@ -38,6 +38,7 @@ const messageTypeMapper = {
   [MessageType.Purchased]: '✅',
   [MessageType.Review]: '🔶',
   [MessageType.Bargain]: '🤝',
+  [MessageType.ManualBargain]: '❗',
 }
 
 export const generateMessage = ({

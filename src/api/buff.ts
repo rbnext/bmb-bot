@@ -204,7 +204,7 @@ export const getMarketGoodsBillOrder = async ({
   const { data } = await http.get('/market/goods/bill_order', {
     params: { game, goods_id },
     cache: {
-      ttl: 1000 * 60 * 60 * 12, // 12 hours
+      ttl: 1000 * 60 * 60 * 1, // 1 hours
     },
   })
 

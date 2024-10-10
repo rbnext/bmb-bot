@@ -54,7 +54,7 @@ export const generateMessage = ({
   estimatedProfit,
   stickerPremium,
   source,
-  stickerValue = 0,
+  stickerTotal = 0,
   createdAt,
   updatedAt,
   float,
@@ -76,7 +76,7 @@ export const generateMessage = ({
   userAcceptBargains?: boolean
   userId?: string
   updatedAt?: number
-  stickerValue?: number
+  stickerTotal?: number
   float?: string
   bargainPrice?: string
   stickerPremium?: number
@@ -95,12 +95,8 @@ export const generateMessage = ({
     message.push(`<b>Steam price</b>: $${steamPrice}\n`)
   }
 
-  if (referencePrice) {
-    message.push(`<b>Reference price</b>: $${referencePrice}\n`)
-  }
-
-  if (refPriceDelta) {
-    message.push(`<b>Price vs reference price</b>: ${refPriceDelta.toFixed(2)}%\n`)
+  if (referencePrice && refPriceDelta) {
+    message.push(`<b>Reference price</b>: $${referencePrice} (${refPriceDelta.toFixed(2)}%)\n`)
   }
 
   if (createdAt) {
@@ -123,8 +119,8 @@ export const generateMessage = ({
     message.push(`<b>Float</b>: ${float}\n`)
   }
 
-  if (stickerValue > 0) {
-    message.push(`<b>Sticker value</b>: $${stickerValue.toFixed(2)}\n`)
+  if (stickerTotal > 0) {
+    message.push(`<b>Sticker value</b>: $${stickerTotal.toFixed(2)}\n`)
   }
 
   if (stickerPremium) {

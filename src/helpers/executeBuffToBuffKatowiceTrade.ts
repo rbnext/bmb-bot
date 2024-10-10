@@ -42,7 +42,7 @@ export const executeBuffToBuffKatowiceTrade = async () => {
         float: item.asset_info.paintwear,
         createdAt: item.created_at,
         updatedAt: item.updated_at,
-        stickerValue: total,
+        stickerTotal: total,
         stickerPremium: item.sticker_premium,
       })
     )

@@ -4,6 +4,7 @@ import {
   getGoodsInfo,
   getGoodsSellOrder,
   getMarketGoodsBillOrder,
+  getMarketItemDetail,
   getShopBillOrder,
   postGoodsBuy,
 } from '../api/buff'
@@ -94,12 +95,29 @@ export const executeBuffToBuffTrade = async (
 
       await sendMessage(generateMessage({ type: MessageType.Purchased, ...payload }))
     } else {
+      let stickerTotal = 0
+
       const userSellingHistory = await getShopBillOrder({ user_id: lowestPricedItem.user_id })
+
+      if (lowestPricedItem.asset_info.info.stickers.length !== 0) {
+        const details = await getMarketItemDetail({
+          sell_order_id: lowestPricedItem.id,
+          classid: lowestPricedItem.asset_info.classid,
+          instanceid: lowestPricedItem.asset_info.instanceid,
+          assetid: lowestPricedItem.asset_info.assetid,
+          contextid: lowestPricedItem.asset_info.contextid,
+        })
+
+        stickerTotal = details.data.asset_info.stickers.reduce(
+          (acc, { wear, sell_reference_price }) => (wear === 0 ? Number(sell_reference_price) + acc : acc),
+          0
+        )
+      }
 
       const isOk = userSellingHistory.code === 'OK'
       const userAcceptBargains = isOk ? !!userSellingHistory.data.items.find((item) => item.has_bargain) : false
 
-      await sendMessage(generateMessage({ type: MessageType.Review, userAcceptBargains, ...payload }))
+      await sendMessage(generateMessage({ type: MessageType.Review, userAcceptBargains, stickerTotal, ...payload }))
     }
   }
 }

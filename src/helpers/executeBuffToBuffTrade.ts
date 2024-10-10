@@ -67,6 +67,7 @@ export const executeBuffToBuffTrade = async (
       source: options.source,
       createdAt: lowestPricedItem.created_at,
       updatedAt: lowestPricedItem.updated_at,
+      userId: lowestPricedItem.user_id,
       refPriceDelta: refPriceDelta,
     }
 

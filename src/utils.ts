@@ -49,6 +49,7 @@ export const generateMessage = ({
   steamPrice,
   referencePrice,
   userAcceptBargains,
+  userId,
   medianPrice,
   estimatedProfit,
   stickerPremium,
@@ -73,6 +74,7 @@ export const generateMessage = ({
   createdAt?: number
   refPriceDelta?: number
   userAcceptBargains?: boolean
+  userId?: string
   updatedAt?: number
   stickerValue?: number
   float?: string
@@ -129,8 +131,10 @@ export const generateMessage = ({
     message.push(`<b>Sticker premium</b>: ${stickerPremium}%\n`)
   }
 
-  if (userAcceptBargains) {
-    message.push(`<b>User accept bargains:</b>: YES\n`)
+  if (userId && userAcceptBargains) {
+    message.push(
+      `<b><a href="https://buff.market/user_store/${userId}/selling">${userId}</a> accept bargains</b>: YES\n`
+    )
   }
 
   if (bargainPrice) {

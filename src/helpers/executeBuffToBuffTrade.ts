@@ -1,11 +1,16 @@
-import { differenceInDays, format } from 'date-fns'
-import { getBriefAsset, getGoodsInfo, getGoodsSellOrder, getMarketGoodsBillOrder, postGoodsBuy } from '../api/buff'
+import { differenceInDays } from 'date-fns'
+import {
+  getBriefAsset,
+  getGoodsInfo,
+  getGoodsSellOrder,
+  getMarketGoodsBillOrder,
+  getShopBillOrder,
+  postGoodsBuy,
+} from '../api/buff'
 import { MarketGoodsItem, MessageType, Source } from '../types'
 import { generateMessage, median } from '../utils'
 import { BUFF_PURCHASE_THRESHOLD, GOODS_SALES_THRESHOLD, REFERENCE_DIFF_THRESHOLD } from '../config'
 import { sendMessage } from '../api/telegram'
-
-const LOYAL_USER_IDS: string[] = []
 
 export const executeBuffToBuffTrade = async (
   item: MarketGoodsItem,
@@ -17,12 +22,6 @@ export const executeBuffToBuffTrade = async (
   const current_price = Number(item.sell_min_price)
 
   const history = await getMarketGoodsBillOrder({ goods_id })
-
-  for (const item of history.data.items) {
-    if (item.has_bargain && !LOYAL_USER_IDS.includes(item.seller_id)) {
-      LOYAL_USER_IDS.push(item.seller_id)
-    }
-  }
 
   const salesLastWeek = history.data.items.filter(({ updated_at, type }) => {
     return differenceInDays(new Date(), new Date(updated_at * 1000)) <= 7 && type !== 2
@@ -52,9 +51,9 @@ export const executeBuffToBuffTrade = async (
       return
     }
 
-    const positions = orders.data.items.filter((el) => {
-      return Number(el.price) > current_price && Number(el.price) < median_price
-    })
+    const positions = orders.data.items.filter(
+      (el) => Number(el.price) > current_price && Number(el.price) < median_price
+    )
 
     const payload = {
       id: goods_id,
@@ -70,14 +69,6 @@ export const executeBuffToBuffTrade = async (
       updatedAt: lowestPricedItem.updated_at,
       refPriceDelta: refPriceDelta,
     }
-
-    if (LOYAL_USER_IDS.includes(lowestPricedItem.user_id)) {
-      await sendMessage(generateMessage({ type: MessageType.ManualBargain, ...payload }))
-
-      return
-    }
-
-    console.log(`[${format(new Date(), 'HH:mm:ss')}] Loyal users found for bargain: ${LOYAL_USER_IDS.length}`)
 
     if (refPriceDelta >= REFERENCE_DIFF_THRESHOLD && estimated_profit >= BUFF_PURCHASE_THRESHOLD) {
       const {
@@ -101,8 +92,13 @@ export const executeBuffToBuffTrade = async (
       }
 
       await sendMessage(generateMessage({ type: MessageType.Purchased, ...payload }))
-    } else if (refPriceDelta >= REFERENCE_DIFF_THRESHOLD - 6) {
-      await sendMessage(generateMessage({ type: MessageType.Review, ...payload }))
+    } else {
+      const userSellingHistory = await getShopBillOrder({ user_id: lowestPricedItem.user_id })
+
+      const isOk = userSellingHistory.code === 'OK'
+      const userAcceptBargains = isOk ? !!userSellingHistory.data.items.find((item) => item.has_bargain) : false
+
+      await sendMessage(generateMessage({ type: MessageType.Review, userAcceptBargains, ...payload }))
     }
   }
 }

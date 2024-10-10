@@ -20,6 +20,7 @@ import {
   MarketPriceHistory,
   PostResponse,
   SentBargain,
+  ShopBillOrder,
   TopBookmarked,
   UserStorePopup,
 } from '../types'
@@ -158,6 +159,20 @@ export const getGoodsSellOrder = async ({
     cache: {
       ttl: 1000 * 10, // 10 seconds
     },
+  })
+
+  return data
+}
+
+export const getShopBillOrder = async ({
+  game = 'csgo',
+  user_id,
+}: {
+  game?: string
+  user_id: string
+}): Promise<ShopBillOrder> => {
+  const { data } = await http.get(`/market/shop/${user_id}/bill_order`, {
+    params: { game },
   })
 
   return data

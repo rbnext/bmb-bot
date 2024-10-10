@@ -33,6 +33,19 @@ export type GoodsSellOrder = {
   code: string
 }
 
+export type ShopBillOrderItem = {
+  has_bargain: boolean
+  original_price: string
+  price: string
+}
+
+export type ShopBillOrder = {
+  data: {
+    items: ShopBillOrderItem[]
+  }
+  code: 'OK' | 'CSRF Verification Error' | 'Market Not Allow Shop Display'
+}
+
 export type TopBookmarkedItem = {
   goods_id: number
   price: string

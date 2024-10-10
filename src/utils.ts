@@ -48,6 +48,7 @@ export const generateMessage = ({
   price,
   steamPrice,
   referencePrice,
+  userAcceptBargains,
   medianPrice,
   estimatedProfit,
   stickerPremium,
@@ -71,6 +72,7 @@ export const generateMessage = ({
   source: Source
   createdAt?: number
   refPriceDelta?: number
+  userAcceptBargains?: boolean
   updatedAt?: number
   stickerValue?: number
   float?: string
@@ -125,6 +127,10 @@ export const generateMessage = ({
 
   if (stickerPremium) {
     message.push(`<b>Sticker premium</b>: ${stickerPremium}%\n`)
+  }
+
+  if (userAcceptBargains) {
+    message.push(`<b>User accept bargains:</b>: YES\n`)
   }
 
   if (bargainPrice) {

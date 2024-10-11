@@ -20,7 +20,7 @@ const buff2buff = async () => {
         const now = format(new Date(), 'HH:mm:ss')
         const current_price = Number(item.sell_min_price)
 
-        if (item.goods_info.info.type.internal_name === 'type_customplayer') {
+        if (item.goods_info.info.tags.type.internal_name === 'type_customplayer') {
           continue
         }
 

@@ -238,6 +238,12 @@ export type MarketGoodsItem = {
   goods_info: {
     steam_price: string
     icon_url: string
+    info: {
+      type: {
+        id: number
+        internal_name: 'type_customplayer'
+      }
+    }
   }
   sell_num: number
 }

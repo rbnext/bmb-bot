@@ -1,5 +1,5 @@
 import { formatDistance, isAfter, subHours, subMinutes } from 'date-fns'
-import { MessageType, Source, Sticker } from './types'
+import { MessageType, Source } from './types'
 
 export const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms))
 
@@ -26,12 +26,6 @@ export const isLessThanThreshold = (aPrice: number, bPrice: number, threshold = 
   const roundedDifference = Math.round(priceDifference * 100) / 100
 
   return roundedDifference < threshold
-}
-
-export const getTotalStickerPrice = (stickers: Sticker[], start = 0): number => {
-  return stickers.reduce((acc, { wear, sell_reference_price }) => {
-    return wear === 0 ? acc + Number(sell_reference_price) : acc
-  }, start)
 }
 
 const messageTypeMapper = {

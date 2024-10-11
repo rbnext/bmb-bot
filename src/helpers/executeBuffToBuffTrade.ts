@@ -4,14 +4,15 @@ import {
   getGoodsInfo,
   getGoodsSellOrder,
   getMarketGoodsBillOrder,
-  getMarketItemDetail,
   getShopBillOrder,
+  postCreateBargain,
   postGoodsBuy,
 } from '../api/buff'
 import { MarketGoodsItem, MessageType, Source } from '../types'
 import { generateMessage, median } from '../utils'
 import { BUFF_PURCHASE_THRESHOLD, GOODS_SALES_THRESHOLD, REFERENCE_DIFF_THRESHOLD } from '../config'
 import { sendMessage } from '../api/telegram'
+import { getTotalStickerPrice } from './getTotalStickerPrice'
 
 export const executeBuffToBuffTrade = async (
   item: MarketGoodsItem,
@@ -95,29 +96,35 @@ export const executeBuffToBuffTrade = async (
 
       await sendMessage(generateMessage({ type: MessageType.Purchased, ...payload }))
     } else {
-      let stickerTotal = 0
-
+      const stickerTotal = await getTotalStickerPrice(lowestPricedItem)
       const userSellingHistory = await getShopBillOrder({ user_id: lowestPricedItem.user_id })
-
-      if (lowestPricedItem.asset_info.info.stickers.length !== 0) {
-        const details = await getMarketItemDetail({
-          sell_order_id: lowestPricedItem.id,
-          classid: lowestPricedItem.asset_info.classid,
-          instanceid: lowestPricedItem.asset_info.instanceid,
-          assetid: lowestPricedItem.asset_info.assetid,
-          contextid: lowestPricedItem.asset_info.contextid,
-        })
-
-        stickerTotal = details.data.asset_info.stickers.reduce(
-          (acc, { wear, sell_reference_price }) => (wear === 0 ? Number(sell_reference_price) + acc : acc),
-          0
-        )
-      }
 
       const isOk = userSellingHistory.code === 'OK'
       const userAcceptBargains = isOk ? !!userSellingHistory.data.items.find((item) => item.has_bargain) : false
 
-      await sendMessage(generateMessage({ type: MessageType.Review, userAcceptBargains, stickerTotal, ...payload }))
+      if (userAcceptBargains && current_price >= 15 && current_price < 20 && lowestPricedItem.allow_bargain) {
+        const desired_price = Number((current_price - 2).toFixed(2))
+        const lowest_bargain_price = Number(lowestPricedItem.lowest_bargain_price)
+
+        const ref_price_delta = (goods_ref_price / desired_price - 1) * 100
+        const estimated_profit = ((median_price * 0.975) / desired_price - 1) * 100
+
+        if (ref_price_delta >= 10 && estimated_profit >= 10 && desired_price >= lowest_bargain_price) {
+          const createBargain = await postCreateBargain({ sell_order_id: lowestPricedItem.id, price: desired_price })
+
+          if (createBargain.code !== 'OK') {
+            await sendMessage(`[${options.source}] Reason(create bargain): ${createBargain.code}.`)
+
+            return
+          }
+
+          const bargain_payload = { ...payload, refPriceDelta: ref_price_delta, estimatedProfit: estimated_profit }
+
+          await sendMessage(generateMessage({ type: MessageType.Bargain, stickerTotal, ...bargain_payload }))
+        }
+      } else {
+        await sendMessage(generateMessage({ type: MessageType.Review, userAcceptBargains, stickerTotal, ...payload }))
+      }
     }
   }
 }

@@ -118,9 +118,16 @@ export const executeBuffToBuffTrade = async (
             return
           }
 
-          const bargain_payload = { ...payload, refPriceDelta: ref_price_delta, estimatedProfit: estimated_profit }
+          const bargain_payload = {
+            ...payload,
+            stickerTotal,
+            userAcceptBargains,
+            refPriceDelta: ref_price_delta,
+            estimatedProfit: estimated_profit,
+            bargainPrice: desired_price,
+          }
 
-          await sendMessage(generateMessage({ type: MessageType.Bargain, stickerTotal, ...bargain_payload }))
+          await sendMessage(generateMessage({ type: MessageType.Bargain, ...bargain_payload }))
         }
       } else {
         await sendMessage(generateMessage({ type: MessageType.Review, userAcceptBargains, stickerTotal, ...payload }))

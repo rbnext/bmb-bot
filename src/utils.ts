@@ -72,7 +72,7 @@ export const generateMessage = ({
   updatedAt?: number
   stickerTotal?: number
   float?: string
-  bargainPrice?: string
+  bargainPrice?: number
   stickerPremium?: number
   positions?: number
 }) => {
@@ -83,7 +83,8 @@ export const generateMessage = ({
   message.push(messageTypeMapper[type] + ' ')
   message.push(`<b>[${type}][${source}]</b> <a href="https://buff.market/market/goods/${id}">${name}</a>\n\n`)
 
-  message.push(`<b>Price</b>: $${price}\n`)
+  if (bargainPrice) message.push(`<b>Price</b>: <s>$${price}</s> $${bargainPrice}\n`)
+  else message.push(`<b>Price</b>: $${price}\n`)
 
   if (steamPrice) {
     message.push(`<b>Steam price</b>: $${steamPrice}\n`)

@@ -48,7 +48,9 @@ export const executeBuffToBuffTrade = async (
     const lowestPricedItem = orders.data.items.find((el) => el.price === item.sell_min_price)
 
     if (!lowestPricedItem) {
-      await sendMessage(`[${options.source}] Someone already bought the ${item.market_hash_name} item.`)
+      await sendMessage(
+        `[${options.source}] Someone already bought the ${item.market_hash_name} item for $${current_price}.`
+      )
 
       return
     }

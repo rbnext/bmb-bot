@@ -37,11 +37,48 @@ export type ShopBillOrderItem = {
   has_bargain: boolean
   original_price: string
   price: string
+  goods_id: number
 }
 
 export type ShopBillOrder = {
   data: {
     items: ShopBillOrderItem[]
+  }
+  code: 'OK' | 'CSRF Verification Error' | 'Market Not Allow Shop Display'
+}
+
+export type ShopSellOrderItem = {
+  allow_bargain: boolean
+  id: string
+  price: string
+  user_id: string
+  is_cheapest: boolean
+  created_at: number
+  updated_at: number
+  goods_id: number
+  lowest_bargain_price: string
+  asset_info: {
+    paintwear: string
+    classid: string
+    assetid: string
+    instanceid: string
+    contextid: number
+    info: {
+      stickers: Sticker[]
+    }
+  }
+}
+
+export type ShopSellOrder = {
+  data: {
+    goods_infos: {
+      [key: number]: {
+        goods_id: number
+        market_hash_name: string
+        steam_price: string
+      }
+    }
+    items: ShopSellOrderItem[]
   }
   code: 'OK' | 'CSRF Verification Error' | 'Market Not Allow Shop Display'
 }

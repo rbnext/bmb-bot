@@ -9,8 +9,8 @@ import {
   postGoodsBuy,
 } from '../api/buff'
 import { MarketGoodsItem, MessageType, Source } from '../types'
-import { generateMessage, median } from '../utils'
-import { BUFF_PURCHASE_THRESHOLD, GOODS_SALES_THRESHOLD, REFERENCE_DIFF_THRESHOLD } from '../config'
+import { generateMessage, getBargainDiscountPrice, median } from '../utils'
+import { BARGAIN_MIN_PRICE, BUFF_PURCHASE_THRESHOLD, GOODS_SALES_THRESHOLD, REFERENCE_DIFF_THRESHOLD } from '../config'
 import { sendMessage } from '../api/telegram'
 import { getTotalStickerPrice } from './getTotalStickerPrice'
 
@@ -106,36 +106,22 @@ export const executeBuffToBuffTrade = async (
 
       Object.assign(payload, { stickerTotal, userAcceptBargains })
 
-      if (userAcceptBargains && lowestPricedItem.allow_bargain) {
-        const discount = (() => {
-          if (current_price === 15) {
-            return 1.5
-          }
+      if (userAcceptBargains && current_price >= BARGAIN_MIN_PRICE && lowestPricedItem.allow_bargain) {
+        const bargain_discount_price = getBargainDiscountPrice(current_price, userSellingHistory.data.items)
 
-          if (current_price > 15 && current_price < 20) {
-            return 2
-          }
-
-          if (current_price >= 20 && current_price < 60) {
-            return 3
-          }
-
-          return 0
-        })()
-
-        const desired_price = Number((current_price - discount).toFixed(2))
-        const lowest_bargain_price = Number(lowestPricedItem.lowest_bargain_price)
-
-        const ref_price_delta = (goods_ref_price / desired_price - 1) * 100
-        const bargain_estimated_profit = ((median_price * 0.975) / desired_price - 1) * 100
+        const ref_price_delta = (goods_ref_price / bargain_discount_price - 1) * 100
+        const bargain_estimated_profit = ((median_price * 0.975) / bargain_discount_price - 1) * 100
 
         if (
-          discount !== 0 &&
+          current_price < 60 &&
           ref_price_delta >= REFERENCE_DIFF_THRESHOLD &&
           bargain_estimated_profit >= BUFF_PURCHASE_THRESHOLD &&
-          desired_price >= lowest_bargain_price
+          bargain_discount_price >= Number(lowestPricedItem.lowest_bargain_price)
         ) {
-          const createBargain = await postCreateBargain({ sell_order_id: lowestPricedItem.id, price: desired_price })
+          const createBargain = await postCreateBargain({
+            price: bargain_discount_price,
+            sell_order_id: lowestPricedItem.id,
+          })
 
           if (createBargain.code !== 'OK') {
             await sendMessage(`[${options.source}] Reason(create bargain): ${createBargain.code}.`)
@@ -145,8 +131,8 @@ export const executeBuffToBuffTrade = async (
 
           const bargain_payload = {
             ...payload,
-            bargainPrice: desired_price,
             refPriceDelta: ref_price_delta,
+            bargainPrice: bargain_discount_price,
             estimatedProfit: bargain_estimated_profit,
           }
 

@@ -21,6 +21,7 @@ import {
   PostResponse,
   SentBargain,
   ShopBillOrder,
+  ShopSellOrder,
   TopBookmarked,
   UserStorePopup,
 } from '../types'
@@ -173,6 +174,28 @@ export const getShopBillOrder = async ({
 }): Promise<ShopBillOrder> => {
   const { data } = await http.get(`/market/shop/${user_id}/bill_order`, {
     params: { game },
+  })
+
+  return data
+}
+
+export const getShopSellOrder = async ({
+  game = 'csgo',
+  user_id,
+  page_num = 1,
+  page_size = 32,
+  min_price = 15,
+  max_price = 40,
+}: {
+  game?: string
+  user_id: string
+  page_num?: number
+  page_size?: number
+  min_price?: number
+  max_price?: number
+}): Promise<ShopSellOrder> => {
+  const { data } = await http.get(`/market/shop/${user_id}/sell_order`, {
+    params: { game, page_num, page_size, min_price, max_price },
   })
 
   return data

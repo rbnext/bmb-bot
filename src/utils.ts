@@ -1,5 +1,5 @@
 import { formatDistance, isAfter, subHours, subMinutes } from 'date-fns'
-import { MessageType, Source } from './types'
+import { MessageType, ShopBillOrderItem, Source } from './types'
 
 export const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms))
 
@@ -128,20 +128,12 @@ export const generateMessage = ({
     )
   }
 
-  if (bargainPrice) {
-    message.push(`<b>Bargain price</b>: $${bargainPrice}\n`)
-  }
-
   return message.join('')
 }
 
-// if (lowestPricedItem.asset_info.paintwear) {
-//   if (
-//     (float > 0.12 && float < 0.15) ||
-//     (float > 0.3 && float < 0.38) ||
-//     (float > 0.41 && float < 0.45) ||
-//     float > 0.5
-//   ) {
-//     return
-//   }
-// }
+export const getBargainDiscountPrice = (price: number, userSellingHistory: ShopBillOrderItem[]) => {
+  const history = userSellingHistory.filter((item) => item.has_bargain)
+  const percents = history.map((item) => (Number(item.original_price) / Number(item.price) - 1) * 100)
+
+  return Number((price - price * ((median(percents) > 7 ? 10.5 : 5) / 100)).toFixed(2))
+}

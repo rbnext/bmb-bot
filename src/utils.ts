@@ -135,5 +135,5 @@ export const getBargainDiscountPrice = (price: number, userSellingHistory: ShopB
   const history = userSellingHistory.filter((item) => item.has_bargain)
   const percents = history.map((item) => (Number(item.original_price) / Number(item.price) - 1) * 100)
 
-  return Number((price - price * ((median(percents) > 7 ? 10.5 : 5) / 100)).toFixed(2))
+  return Number((price - price * ((median(percents) > 8 ? 10.5 : 5) / 100)).toFixed(2))
 }

@@ -104,14 +104,37 @@ export const executeBuffToBuffTrade = async (
       const isOk = userSellingHistory.code === 'OK'
       const userAcceptBargains = isOk ? !!userSellingHistory.data.items.find((item) => item.has_bargain) : false
 
-      if (userAcceptBargains && current_price >= 15 && current_price < 20 && lowestPricedItem.allow_bargain) {
-        const desired_price = Number((current_price - 2).toFixed(2))
+      Object.assign(payload, { stickerTotal, userAcceptBargains })
+
+      if (userAcceptBargains && lowestPricedItem.allow_bargain) {
+        const discount = (() => {
+          if (current_price === 15) {
+            return 1.5
+          }
+
+          if (current_price > 15 && current_price < 20) {
+            return 2
+          }
+
+          if (current_price >= 20 && current_price < 60) {
+            return 3
+          }
+
+          return 0
+        })()
+
+        const desired_price = Number((current_price - discount).toFixed(2))
         const lowest_bargain_price = Number(lowestPricedItem.lowest_bargain_price)
 
         const ref_price_delta = (goods_ref_price / desired_price - 1) * 100
-        const estimated_profit = ((median_price * 0.975) / desired_price - 1) * 100
+        const bargain_estimated_profit = ((median_price * 0.975) / desired_price - 1) * 100
 
-        if (ref_price_delta >= 10 && estimated_profit >= 10 && desired_price >= lowest_bargain_price) {
+        if (
+          discount !== 0 &&
+          ref_price_delta >= REFERENCE_DIFF_THRESHOLD &&
+          bargain_estimated_profit >= BUFF_PURCHASE_THRESHOLD &&
+          desired_price >= lowest_bargain_price
+        ) {
           const createBargain = await postCreateBargain({ sell_order_id: lowestPricedItem.id, price: desired_price })
 
           if (createBargain.code !== 'OK') {
@@ -122,17 +145,17 @@ export const executeBuffToBuffTrade = async (
 
           const bargain_payload = {
             ...payload,
-            stickerTotal,
-            userAcceptBargains,
-            refPriceDelta: ref_price_delta,
-            estimatedProfit: estimated_profit,
             bargainPrice: desired_price,
+            refPriceDelta: ref_price_delta,
+            estimatedProfit: bargain_estimated_profit,
           }
 
           await sendMessage(generateMessage({ type: MessageType.Bargain, ...bargain_payload }))
+        } else {
+          await sendMessage(generateMessage({ type: MessageType.Review, ...payload }))
         }
       } else {
-        await sendMessage(generateMessage({ type: MessageType.Review, userAcceptBargains, stickerTotal, ...payload }))
+        await sendMessage(generateMessage({ type: MessageType.Review, ...payload }))
       }
     }
   }

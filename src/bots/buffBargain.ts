@@ -58,7 +58,10 @@ const buffBargain = async () => {
 
             message.push(
               history
-                .map((item, index) => `<b>Bargain[${index + 1}]</b>: <s>$${item.original_price}</s> $${item.price}`)
+                .map(
+                  (item, index) =>
+                    `<b>Bargain[${index + 1}]</b>: <s>$${item.original_price}</s> $${item.price} (${((Number(item.original_price) / Number(item.price) - 1) * 100).toFixed(2)}%)`
+                )
                 .join('\n')
             )
 

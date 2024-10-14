@@ -174,6 +174,9 @@ export const getShopBillOrder = async ({
 }): Promise<ShopBillOrder> => {
   const { data } = await http.get(`/market/shop/${user_id}/bill_order`, {
     params: { game },
+    cache: {
+      ttl: 1000 * 60 * 60 * 1, // 1 hours
+    },
   })
 
   return data

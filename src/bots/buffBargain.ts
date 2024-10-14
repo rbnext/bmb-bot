@@ -58,7 +58,7 @@ const buffBargain = async () => {
 
             message.push(
               history
-                .map((item) => `<b>Original price => price</b>: $${item.original_price} => $${item.price}`)
+                .map((item, index) => `<b>Bargain[${index + 1}]</b>: <s>$${item.original_price}</s> $${item.price}`)
                 .join('\n')
             )
 

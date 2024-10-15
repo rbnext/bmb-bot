@@ -1,5 +1,6 @@
-import { getGoodsSellOrder, postGoodsBuy } from '../api/buff'
+import { getGoodsSellOrder } from '../api/buff'
 import { sendMessage } from '../api/telegram'
+import { createVercelPurchase } from '../api/vercel'
 import { STEAM_CHECK_THRESHOLD, STEAM_PURCHASE_THRESHOLD } from '../config'
 import { MarketGoodsItem, MessageType, Source } from '../types'
 import { generateMessage } from '../utils'
@@ -37,7 +38,7 @@ export const executeBuffToSteamTrade = async (
       return
     }
 
-    const response = await postGoodsBuy({ price: current_price, sell_order_id: lowestPricedItem.id })
+    const response = await createVercelPurchase({ price: current_price, sell_order_id: lowestPricedItem.id })
 
     if (response.code !== 'OK') {
       await sendMessage(

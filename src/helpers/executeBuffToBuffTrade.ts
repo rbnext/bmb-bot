@@ -6,13 +6,13 @@ import {
   getMarketGoodsBillOrder,
   getShopBillOrder,
   postCreateBargain,
-  postGoodsBuy,
 } from '../api/buff'
 import { MarketGoodsItem, MessageType, Source } from '../types'
 import { generateMessage, getBargainDiscountPrice, median } from '../utils'
 import { BARGAIN_MIN_PRICE, BUFF_PURCHASE_THRESHOLD, GOODS_SALES_THRESHOLD, REFERENCE_DIFF_THRESHOLD } from '../config'
 import { sendMessage } from '../api/telegram'
 import { getTotalStickerPrice } from './getTotalStickerPrice'
+import { createVercelPurchase } from '../api/vercel'
 
 export const executeBuffToBuffTrade = async (
   item: MarketGoodsItem,
@@ -86,7 +86,7 @@ export const executeBuffToBuffTrade = async (
         return
       }
 
-      const response = await postGoodsBuy({ price: current_price, sell_order_id: lowestPricedItem.id })
+      const response = await createVercelPurchase({ price: current_price, sell_order_id: lowestPricedItem.id })
 
       if (response.code !== 'OK') {
         await sendMessage(

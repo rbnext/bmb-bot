@@ -7,6 +7,7 @@
     "buff2buff": "ts-node src/bots/buff2buff.ts",
     "buffDefault": "ts-node src/bots/buffDefault.ts",
     "buffBargain": "ts-node src/bots/buffBargain.ts",
+    "buffSteam": "ts-node src/bots/buffSteam.ts",
     "playground": "ts-node src/playground.ts"
   },
   "author": "",

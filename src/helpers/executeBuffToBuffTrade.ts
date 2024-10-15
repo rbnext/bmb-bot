@@ -118,25 +118,21 @@ export const executeBuffToBuffTrade = async (
           bargain_estimated_profit >= BUFF_PURCHASE_THRESHOLD &&
           bargain_discount_price >= Number(lowestPricedItem.lowest_bargain_price)
         ) {
-          const createBargain = await postCreateBargain({
-            price: bargain_discount_price,
-            sell_order_id: lowestPricedItem.id,
-          })
-
-          if (createBargain.code !== 'OK') {
-            await sendMessage(`[${options.source}] Reason(create bargain): ${createBargain.code}.`)
-
-            return
-          }
-
-          const bargain_payload = {
-            ...payload,
-            refPriceDelta: ref_price_delta,
-            bargainPrice: bargain_discount_price,
-            estimatedProfit: bargain_estimated_profit,
-          }
-
-          await sendMessage(generateMessage({ type: MessageType.Bargain, ...bargain_payload }))
+          // const createBargain = await postCreateBargain({
+          //   price: bargain_discount_price,
+          //   sell_order_id: lowestPricedItem.id,
+          // })
+          // if (createBargain.code !== 'OK') {
+          //   await sendMessage(`[${options.source}] Reason(create bargain): ${createBargain.code}.`)
+          //   return
+          // }
+          // const bargain_payload = {
+          //   ...payload,
+          //   refPriceDelta: ref_price_delta,
+          //   bargainPrice: bargain_discount_price,
+          //   estimatedProfit: bargain_estimated_profit,
+          // }
+          // await sendMessage(generateMessage({ type: MessageType.Bargain, ...bargain_payload }))
         } else {
           await sendMessage(generateMessage({ type: MessageType.Review, ...payload }))
         }

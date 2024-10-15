@@ -10,7 +10,7 @@ import { Source } from '../types'
 export const GOODS_CACHE: Record<number, { price: number }> = {}
 
 const buff2buff = async () => {
-  const pages = Array.from({ length: 10 }, (_, i) => i + 1)
+  const pages = Array.from({ length: 7 }, (_, i) => i + 1)
 
   try {
     for (const page_num of pages) {

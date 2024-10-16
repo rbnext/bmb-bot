@@ -3,7 +3,7 @@ import { sendMessage } from '../api/telegram'
 import { createVercelPurchase } from '../api/vercel'
 import { STEAM_CHECK_THRESHOLD, STEAM_PURCHASE_THRESHOLD } from '../config'
 import { MarketGoodsItem, MessageType, Source } from '../types'
-import { generateMessage, sleep } from '../utils'
+import { generateMessage } from '../utils'
 import { getMaxPricesForXDays } from './getMaxPricesForXDays'
 
 export const executeBuffToSteamTrade = async (

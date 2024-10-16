@@ -42,7 +42,7 @@ const buff2buff = async () => {
         GOODS_CACHE[item.id] = { price: current_price }
       }
 
-      await sleep(2_500)
+      await sleep(3_000)
     }
   } catch (error) {
     console.log('Something went wrong', error)

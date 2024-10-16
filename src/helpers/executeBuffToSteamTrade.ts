@@ -28,7 +28,6 @@ export const executeBuffToSteamTrade = async (
   const estimated_profit = ((min_steam_price - current_price) / current_price) * 100
 
   if (estimated_profit >= STEAM_PURCHASE_THRESHOLD) {
-    await sleep(2_000)
     const orders = await getGoodsSellOrder({ goods_id, exclude_current_user: 1 })
 
     const lowestPricedItem = orders.data.items.find((el) => el.price === item.sell_min_price)

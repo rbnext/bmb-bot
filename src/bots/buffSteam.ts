@@ -18,7 +18,7 @@ const buffSteam = async () => {
       const marketGoods = await getMarketGoods({
         ...(page_num !== 0 && { page_num, sort_by: 'sell_num.desc' }),
         min_price: 2,
-        max_price: 20,
+        max_price: 50,
       })
 
       for (const item of marketGoods.data.items) {

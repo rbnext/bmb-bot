@@ -10,11 +10,14 @@ import { Source } from '../types'
 export const GOODS_CACHE: Record<number, { price: number }> = {}
 
 const buff2buff = async () => {
-  const pages = Array.from({ length: 10 }, (_, i) => i + 1)
+  const list = Array.from({ length: 15 }, (_, i) => i + 1)
+  const pages = list.flatMap((num, i) => ((i + 1) % 3 === 0 ? [num, 0] : [num]))
 
   try {
     for (const page_num of pages) {
-      const marketGoods = await getMarketGoods({ page_num, sort_by: 'sell_num.desc' })
+      const marketGoods = await getMarketGoods({
+        ...(page_num !== 0 && { page_num, sort_by: 'sell_num.desc' }),
+      })
 
       for (const item of marketGoods.data.items) {
         const now = format(new Date(), 'HH:mm:ss')

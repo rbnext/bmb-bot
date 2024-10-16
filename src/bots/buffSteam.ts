@@ -14,7 +14,7 @@ const buffSteam = async () => {
 
   try {
     for (const page_num of pages) {
-      const marketGoods = await getMarketGoods({ page_num, sort_by: 'sell_num.desc', min_price: 2, max_price: 20 })
+      const marketGoods = await getMarketGoods({ page_num, sort_by: 'sell_num.desc', min_price: 2, max_price: 15 })
 
       for (const item of marketGoods.data.items) {
         const now = format(new Date(), 'HH:mm:ss')
@@ -31,14 +31,13 @@ const buffSteam = async () => {
         }
 
         if (item.id in GOODS_CACHE && GOODS_CACHE[item.id].price > current_price) {
-          await sleep(2_000)
           await executeBuffToSteamTrade(item, { source: Source.BUFF_STEAM })
         }
 
         GOODS_CACHE[item.id] = { price: current_price }
       }
 
-      await sleep(3_000)
+      await sleep(2_500)
     }
   } catch (error) {
     console.log('Something went wrong', error)

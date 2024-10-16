@@ -3,7 +3,7 @@ import { sendMessage } from '../api/telegram'
 import { createVercelPurchase } from '../api/vercel'
 import { STEAM_CHECK_THRESHOLD, STEAM_PURCHASE_THRESHOLD } from '../config'
 import { MarketGoodsItem, MessageType, Source } from '../types'
-import { generateMessage } from '../utils'
+import { generateMessage, sleep } from '../utils'
 import { getMaxPricesForXDays } from './getMaxPricesForXDays'
 
 export const executeBuffToSteamTrade = async (
@@ -28,6 +28,7 @@ export const executeBuffToSteamTrade = async (
   const estimated_profit = ((min_steam_price - current_price) / current_price) * 100
 
   if (estimated_profit >= STEAM_PURCHASE_THRESHOLD) {
+    await sleep(2_000)
     const orders = await getGoodsSellOrder({ goods_id, exclude_current_user: 1 })
 
     const lowestPricedItem = orders.data.items.find((el) => el.price === item.sell_min_price)

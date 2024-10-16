@@ -58,6 +58,7 @@ export const executeBuffToSteamTrade = async (
         updatedAt: lowestPricedItem.updated_at,
         estimatedProfit: estimated_profit,
         medianPrice: min_steam_price,
+        float: lowestPricedItem.asset_info.paintwear,
         source: options.source,
       })
     )

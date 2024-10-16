@@ -1,12 +1,5 @@
 import { differenceInDays } from 'date-fns'
-import {
-  getBriefAsset,
-  getGoodsInfo,
-  getGoodsSellOrder,
-  getMarketGoodsBillOrder,
-  getShopBillOrder,
-  postCreateBargain,
-} from '../api/buff'
+import { getGoodsInfo, getGoodsSellOrder, getMarketGoodsBillOrder, getShopBillOrder } from '../api/buff'
 import { MarketGoodsItem, MessageType, Source } from '../types'
 import { generateMessage, getBargainDiscountPrice, median } from '../utils'
 import { BARGAIN_MIN_PRICE, BUFF_PURCHASE_THRESHOLD, GOODS_SALES_THRESHOLD, REFERENCE_DIFF_THRESHOLD } from '../config'
@@ -76,16 +69,6 @@ export const executeBuffToBuffTrade = async (
     }
 
     if (refPriceDelta >= REFERENCE_DIFF_THRESHOLD && estimated_profit >= BUFF_PURCHASE_THRESHOLD) {
-      const {
-        data: { cash_amount },
-      } = await getBriefAsset()
-
-      if (current_price > Number(cash_amount)) {
-        await sendMessage(`[${options.source}] You don't have enough funds to buy ${item.market_hash_name} item.`)
-
-        return
-      }
-
       const response = await createVercelPurchase({ price: current_price, sell_order_id: lowestPricedItem.id })
 
       if (response.code !== 'OK') {

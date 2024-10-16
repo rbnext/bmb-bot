@@ -47,9 +47,14 @@ const buffSteam = async () => {
   } catch (error) {
     console.log('Something went wrong', error)
 
-    await sendMessage(error?.message ?? 'Something went wrong.')
+    if (error.message !== 'Request failed with status code 503') {
+      await sendMessage(error?.message ?? 'Something went wrong.')
 
-    return
+      return
+    }
+
+    await sendMessage(`${error.message}. Restarting in 60 seconds...`)
+    await sleep(60_000)
   }
 
   buffSteam()

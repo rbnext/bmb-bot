@@ -10,16 +10,11 @@ import { executeBuffToSteamTrade } from '../helpers/executeBuffToSteamTrade'
 export const GOODS_CACHE: Record<number, { price: number }> = {}
 
 const buffSteam = async () => {
-  const list = Array.from({ length: 15 }, (_, i) => i + 1)
-  const pages = list.flatMap((num, i) => ((i + 1) % 3 === 0 ? [num, 0] : [num]))
+  const pages = Array.from({ length: 1 }, (_, i) => i + 1)
 
   try {
     for (const page_num of pages) {
-      const marketGoods = await getMarketGoods({
-        ...(page_num !== 0 && { page_num, sort_by: 'sell_num.desc' }),
-        min_price: 2,
-        max_price: 50,
-      })
+      const marketGoods = await getMarketGoods({ page_num, min_price: 2, max_price: 50 })
 
       for (const item of marketGoods.data.items) {
         const now = format(new Date(), 'HH:mm:ss')
@@ -60,4 +55,18 @@ const buffSteam = async () => {
   buffSteam()
 }
 
-buffSteam()
+;(async () => {
+  const pages = Array.from({ length: 50 }, (_, i) => i + 1)
+
+  for (const page_num of pages) {
+    const goods = await getMarketGoods({ page_num, sort_by: 'sell_num.desc', min_price: 2, max_price: 50 })
+
+    for (const item of goods.data.items) {
+      GOODS_CACHE[item.id] = { price: Number(item.sell_min_price) }
+    }
+
+    await sleep(10_000)
+  }
+
+  buffSteam()
+})()

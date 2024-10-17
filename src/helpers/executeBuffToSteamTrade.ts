@@ -1,3 +1,4 @@
+import { format } from 'date-fns'
 import { getGoodsSellOrder } from '../api/buff'
 import { sendMessage } from '../api/telegram'
 import { createVercelPurchase } from '../api/vercel'
@@ -22,10 +23,15 @@ export const executeBuffToSteamTrade = async (
     return
   }
 
+  const now = format(new Date(), 'HH:mm:ss')
+
   const prices = await getMaxPricesForXDays(item.market_hash_name)
 
   const min_steam_price = prices.length !== 0 ? Math.min(...prices) : 0
   const estimated_profit = ((min_steam_price - current_price) / current_price) * 100
+
+  console.log(`${now}: ${item.market_hash_name} ${JSON.stringify(prices)}`)
+  console.log(`${now}: ${item.market_hash_name} (${estimated_profit.toFixed(2)}%)`)
 
   if (estimated_profit >= STEAM_PURCHASE_THRESHOLD) {
     const orders = await getGoodsSellOrder({ goods_id, exclude_current_user: 1 })

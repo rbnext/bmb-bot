@@ -70,7 +70,7 @@ export const executeBuffToSteamTrade = async (
         source: options.source,
       })
     )
-  } else if (estimated_profit >= STEAM_PURCHASE_THRESHOLD - 10 && current_price >= 5) {
+  } else if (estimated_profit >= STEAM_PURCHASE_THRESHOLD - 8 && current_price >= 5) {
     const orders = await getGoodsSellOrder({ goods_id, exclude_current_user: 1 })
 
     const lowestPricedItem = orders.data.items.find((el) => el.price === item.sell_min_price)

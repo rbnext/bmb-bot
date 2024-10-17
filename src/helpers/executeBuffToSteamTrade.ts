@@ -30,8 +30,8 @@ export const executeBuffToSteamTrade = async (
   const min_steam_price = prices.length !== 0 ? Math.min(...prices) : 0
   const estimated_profit = ((min_steam_price - current_price) / current_price) * 100
 
-  console.log(`${now}: ${item.market_hash_name} ${JSON.stringify(prices)}`)
-  console.log(`${now}: ${item.market_hash_name} (${estimated_profit.toFixed(2)}%)`)
+  console.log(`${now}: ${item.market_hash_name} min steam price `, Number(min_steam_price.toFixed(2)))
+  console.log(`${now}: ${item.market_hash_name} estimated profit `, Number(estimated_profit.toFixed(2)))
 
   if (estimated_profit >= STEAM_PURCHASE_THRESHOLD) {
     const orders = await getGoodsSellOrder({ goods_id, exclude_current_user: 1 })

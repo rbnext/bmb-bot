@@ -25,6 +25,8 @@ const buffSteam = async () => {
           item.goods_info.info.tags.type.internal_name === 'type_customplayer' ||
           item.goods_info.info.tags.type.internal_name === 'csgo_tool_sticker'
         ) {
+          GOODS_CACHE[item.id].price = current_price
+
           continue
         }
 

@@ -158,7 +158,7 @@ export const getGoodsSellOrder = async ({
   const { data } = await http.get('/market/goods/sell_order', {
     params: { game, page_num, sort_by, ...rest },
     cache: {
-      ttl: 1000 * 10, // 10 seconds
+      ttl: 1000 * 3, // 3 seconds
     },
   })
 
@@ -245,7 +245,7 @@ export const getMarketGoodsBillOrder = async ({
   const { data } = await http.get('/market/goods/bill_order', {
     params: { game, goods_id },
     cache: {
-      ttl: 1000 * 60 * 60 * 1, // 1 hours
+      ttl: 1000 * 60 * 60 * 12, // 12 hours
     },
   })
 
@@ -286,7 +286,7 @@ export const getGoodsInfo = async ({
   const { data } = await http.get('/market/goods/info', {
     params: { game, goods_id },
     cache: {
-      ttl: 1000 * 60 * 60, // 1 hour
+      ttl: 1000 * 60 * 60 * 6, // 6 hour
     },
   })
 

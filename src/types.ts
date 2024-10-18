@@ -279,7 +279,7 @@ export type MarketGoodsItem = {
       tags: {
         type: {
           id: number
-          internal_name: 'type_customplayer'
+          internal_name: 'type_customplayer' | 'csgo_tool_keychain'
         }
       }
     }

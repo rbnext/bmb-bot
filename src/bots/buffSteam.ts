@@ -14,7 +14,7 @@ const buffSteam = async () => {
 
   try {
     for (const page_num of pages) {
-      const marketGoods = await getMarketGoods({ page_num, min_price: 2, max_price: 50 })
+      const marketGoods = await getMarketGoods({ page_num, min_price: 2, max_price: 100 })
 
       for (const item of marketGoods.data.items) {
         const now = format(new Date(), 'HH:mm:ss')
@@ -22,7 +22,8 @@ const buffSteam = async () => {
 
         if (
           item.goods_info.info.tags.type.internal_name === 'csgo_tool_keychain' ||
-          item.goods_info.info.tags.type.internal_name === 'type_customplayer'
+          item.goods_info.info.tags.type.internal_name === 'type_customplayer' ||
+          item.goods_info.info.tags.type.internal_name === 'csgo_tool_sticker'
         ) {
           continue
         }

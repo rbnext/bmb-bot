@@ -281,6 +281,10 @@ export type MarketGoodsItem = {
           id: number
           internal_name: 'type_customplayer' | 'csgo_tool_keychain' | 'csgo_tool_sticker'
         }
+        quality: {
+          id: number
+          internal_name: 'normal' | 'strange'
+        }
       }
     }
   }

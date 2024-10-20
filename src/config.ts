@@ -8,3 +8,14 @@ export const STEAM_CHECK_THRESHOLD = 52
 export const BUFF_PURCHASE_THRESHOLD = 10
 
 export const CURRENT_USER_ID = 'U1092757843'
+
+export const BLACKLISTED_ITEMSET = [
+  'stkr_craft_02',
+  'set_realism_camo',
+  'set_xpshop_wpn_01',
+  'set_graphic_design',
+  'set_overpass_2024',
+  'stkr_craft_01',
+]
+
+export const BLACKLISTED_CATEGORY = ['csgo_tool_keychain', 'agent_team_ct', 'agent_team_t']

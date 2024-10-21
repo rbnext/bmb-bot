@@ -35,7 +35,10 @@ export const executeBuffToSteamTrade = async (
   console.log(`${now}: ${item.market_hash_name} estimated profit ${estimated_profit.toFixed(2)}%`)
   console.log('***')
 
-  if (estimated_profit >= STEAM_PURCHASE_THRESHOLD) {
+  if (
+    (current_price < 2 && estimated_profit >= STEAM_PURCHASE_THRESHOLD + 30) ||
+    (current_price >= 2 && estimated_profit >= STEAM_PURCHASE_THRESHOLD)
+  ) {
     const orders = await getGoodsSellOrder({ goods_id, exclude_current_user: 1 })
 
     const lowestPricedItem = orders.data.items.find((el) => el.price === item.sell_min_price)
@@ -70,7 +73,7 @@ export const executeBuffToSteamTrade = async (
         source: options.source,
       })
     )
-  } else if (estimated_profit >= STEAM_PURCHASE_THRESHOLD - 8 && current_price >= 5) {
+  } else if (current_price >= 5 && estimated_profit >= STEAM_PURCHASE_THRESHOLD - 8) {
     const orders = await getGoodsSellOrder({ goods_id, exclude_current_user: 1 })
 
     const lowestPricedItem = orders.data.items.find((el) => el.price === item.sell_min_price)

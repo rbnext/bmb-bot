@@ -1,7 +1,7 @@
 import { format } from 'date-fns'
 import { getGoodsInfo, getGoodsSellOrder, getMarketGoodsBillOrder } from '../api/buff'
 import { sendMessage } from '../api/telegram'
-import { createVercelPurchase } from '../api/vercel'
+import { createVercelPurchase, vercelHealthCheck } from '../api/vercel'
 import { STEAM_CHECK_THRESHOLD, STEAM_PURCHASE_THRESHOLD } from '../config'
 import { MarketGoodsItem, MessageType, Source } from '../types'
 import { generateMessage, median, sleep } from '../utils'
@@ -13,6 +13,8 @@ export const executeBuffToSteamTrade = async (
     source: Source
   }
 ) => {
+  vercelHealthCheck()
+
   const goods_id = item.id
   const current_price = Number(item.sell_min_price)
   const steam_price = Number(item.goods_info.steam_price)
@@ -44,7 +46,9 @@ export const executeBuffToSteamTrade = async (
     const lowestPricedItem = orders.data.items.find((el) => el.price === item.sell_min_price)
 
     if (!lowestPricedItem) {
-      await sendMessage(`[${options.source}] Someone already bought the ${item.market_hash_name} item.`)
+      await sendMessage(
+        `[${options.source}] Someone already bought the ${item.market_hash_name} item for $${current_price} with profit ${estimated_profit.toFixed(2)}%`
+      )
 
       return
     }
@@ -79,7 +83,9 @@ export const executeBuffToSteamTrade = async (
     const lowestPricedItem = orders.data.items.find((el) => el.price === item.sell_min_price)
 
     if (!lowestPricedItem) {
-      await sendMessage(`[${options.source}] Someone already bought the ${item.market_hash_name} item.`)
+      await sendMessage(
+        `[${Source.BUFF_DEFAULT}] Someone already bought the ${item.market_hash_name} item for $${current_price}.`
+      )
 
       return
     }
@@ -88,7 +94,7 @@ export const executeBuffToSteamTrade = async (
 
     if (response.code !== 'OK') {
       await sendMessage(
-        `[${options.source}] Failed to purchase the item ${item.market_hash_name}. Reason: ${response.code}`
+        `[${Source.BUFF_DEFAULT}] Failed to purchase the item ${item.market_hash_name}. Reason: ${response.code}`
       )
 
       return

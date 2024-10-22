@@ -4,6 +4,12 @@ const http = axios.create({
   baseURL: 'https://market-rbnext.vercel.app/api',
 })
 
+export const vercelHealthCheck = async (): Promise<unknown> => {
+  const { data } = await http.get('/health')
+
+  return data
+}
+
 export const createVercelPurchase = async ({
   price,
   sell_order_id,

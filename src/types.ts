@@ -253,6 +253,9 @@ export type OnSaleItem = {
     assetid: string
     classid: string
     instanceid: string
+    info: {
+      stickers: Sticker[]
+    }
   }
 }
 

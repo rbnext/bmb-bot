@@ -40,7 +40,7 @@ const buffSteam = async () => {
       GOODS_CACHE[item.id] = { price: current_price }
     }
 
-    await sleep(3_000)
+    await sleep(2_500)
   } catch (error) {
     console.log('Something went wrong', error)
 

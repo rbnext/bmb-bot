@@ -16,6 +16,7 @@ export const BLACKLISTED_ITEMSET = [
   'set_graphic_design',
   'set_overpass_2024',
   'stkr_craft_01',
+  'set_community_34',
 ]
 
 export const BLACKLISTED_CATEGORY = ['csgo_tool_keychain', 'agent_team_ct', 'agent_team_t']

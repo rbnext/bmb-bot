@@ -24,6 +24,8 @@ export const executeBuffToSteamTrade = async (
     return
   }
 
+  getGoodsSellOrder({ goods_id, exclude_current_user: 1 })
+
   const now = format(new Date(), 'HH:mm:ss')
 
   const prices = await getMaxPricesForXDays(item.market_hash_name)

@@ -55,9 +55,7 @@ export const executeBuffToSteamTrade = async (
     const response = await postGoodsBuy({ price: current_price, sell_order_id: lowestPricedItem.id })
 
     if (response.code !== 'OK') {
-      await sendMessage(
-        `[${options.source}] Failed to purchase the item ${item.market_hash_name}. Reason: ${response.code}`
-      )
+      sendMessage(`[${options.source}] Failed to purchase the item ${item.market_hash_name}. Reason: ${response.code}`)
 
       return
     }

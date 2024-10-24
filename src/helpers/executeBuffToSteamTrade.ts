@@ -12,8 +12,6 @@ export const executeBuffToSteamTrade = async (
     source: Source
   }
 ) => {
-  // vercelHealthCheck()
-
   const goods_id = item.id
   const current_price = Number(item.sell_min_price)
   const steam_price = Number(item.goods_info.steam_price)
@@ -23,8 +21,6 @@ export const executeBuffToSteamTrade = async (
   if (STEAM_CHECK_THRESHOLD > diffWithSteam) {
     return
   }
-
-  getGoodsSellOrder({ goods_id, exclude_current_user: 1 })
 
   const now = format(new Date(), 'HH:mm:ss')
 
@@ -47,7 +43,7 @@ export const executeBuffToSteamTrade = async (
     const lowestPricedItem = orders.data.items.find((el) => el.price === item.sell_min_price)
 
     if (!lowestPricedItem) {
-      sendMessage(
+      await sendMessage(
         `[${options.source}] Someone already bought the ${item.market_hash_name} item for $${current_price} with profit ${estimated_profit.toFixed(2)}%`
       )
 
@@ -57,12 +53,14 @@ export const executeBuffToSteamTrade = async (
     const response = await postGoodsBuy({ price: current_price, sell_order_id: lowestPricedItem.id })
 
     if (response.code !== 'OK') {
-      sendMessage(`[${options.source}] Failed to purchase the item ${item.market_hash_name}. Reason: ${response.code}`)
+      await sendMessage(
+        `[${options.source}] Failed to purchase the item ${item.market_hash_name}. Reason: ${response.code}`
+      )
 
       return
     }
 
-    sendMessage(
+    await sendMessage(
       generateMessage({
         id: goods_id,
         price: current_price,

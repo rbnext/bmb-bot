@@ -35,16 +35,16 @@ const proxyCheck = async () => {
       await sleep(3_000)
     }
   } catch (error) {
-    console.log('Something went wrong', error)
+    console.log('Something went wrong', error.message)
 
-    if (error.message !== 'Request failed with status code 503') {
+    if (error.message !== 'Request failed with status code 503' || error.message !== 'read ECONNRESET') {
       await sendMessage(error?.message ?? 'Something went wrong.')
 
       return
     }
 
-    await sendMessage(`${error.message}. Restarting in 60 seconds...`)
-    await sleep(60_000)
+    await sendMessage(`${error.message}. Restarting in 10 seconds...`)
+    await sleep(10_000)
   }
 
   proxyCheck()

@@ -8,24 +8,25 @@ export const PROXY_AGENTS = [new HttpsProxyAgent(process.env.PROXY_URL_1 as stri
 
 const PROXY_HEADERS = [
   {
-    'x-csrftoken': '',
-    'user-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 8_7_7; en-US) Gecko/20130401 Firefox/60.3',
+    'x-csrftoken': process.env.PROXY_CSRF_TOKEN_1 as string,
+    'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 8_7_7; en-US) Gecko/20130401 Firefox/60.3',
   },
 ]
 
 const PROXY_COOKIES = [
   {
-    'Device-Id': '',
-    client_id: '',
-    csrf_token: '',
+    csrf_token: process.env.PROXY_CSRF_TOKEN_1 as string,
+    session: process.env.PROXY_SESSION_TOKEN_1 as string,
   },
 ]
 
-export const getPublicMarketGoods = async ({
+export const getProxyMarketGoods = async ({
   game = 'csgo',
   page_num = 1,
   page_size = 50,
   proxy_index = 0,
+  max_price,
+  min_price,
 }: {
   game?: string
   search?: string
@@ -36,7 +37,7 @@ export const getPublicMarketGoods = async ({
   proxy_index?: number
 }): Promise<MarketGoods> => {
   const { data, headers } = await axios.get('https://api.buff.market/api/market/goods', {
-    params: { game, page_num, page_size },
+    params: { game, page_num, page_size, min_price, max_price },
     httpsAgent: PROXY_AGENTS[proxy_index],
     httpAgent: PROXY_AGENTS[proxy_index],
     headers: { ...PROXY_HEADERS[proxy_index], cookie: getCookies(PROXY_COOKIES[proxy_index]) },
@@ -47,25 +48,13 @@ export const getPublicMarketGoods = async ({
   if (setCookieHeader) {
     const cookies = parse(setCookieHeader, { map: true })
 
-    const device_id = 'Device-Id'
+    const session = 'session'
     const csrf_token = 'csrf_token'
-    const client_id = 'client_id'
 
-    if (cookies[csrf_token]) {
-      PROXY_HEADERS[proxy_index]['x-csrftoken'] = cookies[csrf_token].value
-    }
+    if (cookies[session]) PROXY_COOKIES[proxy_index][session] = cookies[session].value
+    if (cookies[csrf_token]) PROXY_COOKIES[proxy_index][csrf_token] = cookies[csrf_token].value
 
-    if (cookies[device_id]) {
-      PROXY_COOKIES[proxy_index][device_id] = cookies[device_id].value
-    }
-
-    if (cookies[csrf_token]) {
-      PROXY_COOKIES[proxy_index][csrf_token] = cookies[csrf_token].value
-    }
-
-    if (cookies[client_id]) {
-      PROXY_COOKIES[proxy_index][client_id] = cookies[client_id].value
-    }
+    if (cookies[csrf_token]) PROXY_HEADERS[proxy_index]['x-csrftoken'] = cookies[csrf_token].value
   }
 
   return data

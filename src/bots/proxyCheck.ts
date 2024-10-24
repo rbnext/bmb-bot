@@ -3,7 +3,7 @@ import 'dotenv/config'
 import { isLessThanThreshold, sleep } from '../utils'
 import { format } from 'date-fns'
 import { sendMessage } from '../api/telegram'
-import { PROXY_AGENTS, getPublicMarketGoods } from '../api/public'
+import { PROXY_AGENTS, getProxyMarketGoods } from '../api/proxy'
 
 export const GOODS_CACHE: Record<number, { price: number }> = {}
 export const GOODS_BLACKLIST_CACHE: number[] = []
@@ -13,7 +13,7 @@ const proxyCheck = async () => {
 
   try {
     for (const proxy_index of proxy_list) {
-      const marketGoods = await getPublicMarketGoods({ proxy_index, min_price: 1, max_price: 40 })
+      const marketGoods = await getProxyMarketGoods({ proxy_index, min_price: 1, max_price: 40 })
 
       for (const item of marketGoods.data.items) {
         const now = format(new Date(), 'HH:mm:ss')
@@ -37,7 +37,7 @@ const proxyCheck = async () => {
   } catch (error) {
     console.log('Something went wrong', error)
 
-    if (error.message !== 'Request failed with status code 503' || error.message !== '') {
+    if (error.message !== 'Request failed with status code 503') {
       await sendMessage(error?.message ?? 'Something went wrong.')
 
       return

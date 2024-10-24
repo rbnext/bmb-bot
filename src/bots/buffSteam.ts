@@ -6,7 +6,7 @@ import { format } from 'date-fns'
 import { sendMessage } from '../api/telegram'
 import { Source } from '../types'
 import { executeBuffToSteamTrade } from '../helpers/executeBuffToSteamTrade'
-import { BLACKLISTED_CATEGORY, BLACKLISTED_ITEMSET } from '../config'
+import { BLACKLISTED_CATEGORY, BLACKLISTED_ITEMSET, STEAM_CHECK_THRESHOLD } from '../config'
 
 export const GOODS_CACHE: Record<number, { price: number }> = {}
 export const GOODS_BLACKLIST_CACHE: number[] = []
@@ -18,6 +18,8 @@ const buffSteam = async () => {
     for (const item of marketGoods.data.items) {
       const now = format(new Date(), 'HH:mm:ss')
       const current_price = Number(item.sell_min_price)
+      const steam_price = Number(item.goods_info.steam_price)
+      const diff_with_steam = ((steam_price - current_price) / current_price) * 100
 
       if (GOODS_BLACKLIST_CACHE.includes(item.id)) {
         continue
@@ -31,6 +33,10 @@ const buffSteam = async () => {
 
       if (item.id in GOODS_CACHE) {
         console.log(`${now}: ${item.market_hash_name} $${GOODS_CACHE[item.id].price} -> $${current_price}`)
+      }
+
+      if (diff_with_steam >= STEAM_CHECK_THRESHOLD) {
+        console.log(`${now}: ${item.market_hash_name} if sold to Steam ${diff_with_steam.toFixed(2)}%`)
       }
 
       if (item.id in GOODS_CACHE && GOODS_CACHE[item.id].price > current_price) {

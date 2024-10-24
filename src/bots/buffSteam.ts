@@ -7,45 +7,40 @@ import { sendMessage } from '../api/telegram'
 import { Source } from '../types'
 import { executeBuffToSteamTrade } from '../helpers/executeBuffToSteamTrade'
 import { BLACKLISTED_CATEGORY, BLACKLISTED_ITEMSET } from '../config'
-import { PROXY_AGENTS, getPublicMarketGoods } from '../api/public'
 
 export const GOODS_CACHE: Record<number, { price: number }> = {}
 export const GOODS_BLACKLIST_CACHE: number[] = []
 
 const buffSteam = async () => {
-  const proxy_list = Array.from({ length: PROXY_AGENTS.length }, (_, i) => i)
-
   try {
-    for (const proxy_index of proxy_list) {
-      const marketGoods = await getPublicMarketGoods({ proxy_index, min_price: 1, max_price: 40 })
+    const marketGoods = await getMarketGoods({ min_price: 1, max_price: 40 })
 
-      for (const item of marketGoods.data.items) {
-        const now = format(new Date(), 'HH:mm:ss')
-        const current_price = Number(item.sell_min_price)
+    for (const item of marketGoods.data.items) {
+      const now = format(new Date(), 'HH:mm:ss')
+      const current_price = Number(item.sell_min_price)
 
-        if (GOODS_BLACKLIST_CACHE.includes(item.id)) {
-          continue
-        }
-
-        if (item.id in GOODS_CACHE && isLessThanThreshold(GOODS_CACHE[item.id].price, current_price, 0.1)) {
-          GOODS_CACHE[item.id].price = current_price
-
-          continue
-        }
-
-        if (item.id in GOODS_CACHE) {
-          console.log(`${now}: ${item.market_hash_name} $${GOODS_CACHE[item.id].price} -> $${current_price}`)
-        }
-
-        if (item.id in GOODS_CACHE && GOODS_CACHE[item.id].price > current_price) {
-          executeBuffToSteamTrade(item, { source: Source.BUFF_STEAM })
-        }
-
-        GOODS_CACHE[item.id] = { price: current_price }
+      if (GOODS_BLACKLIST_CACHE.includes(item.id)) {
+        continue
       }
 
-      await sleep(2_500)
+      if (item.id in GOODS_CACHE && isLessThanThreshold(GOODS_CACHE[item.id].price, current_price, 0.1)) {
+        GOODS_CACHE[item.id].price = current_price
+
+        continue
+      }
+
+      if (item.id in GOODS_CACHE) {
+        console.log(`${now}: ${item.market_hash_name} $${GOODS_CACHE[item.id].price} -> $${current_price}`)
+      }
+
+      if (item.id in GOODS_CACHE && GOODS_CACHE[item.id].price > current_price) {
+        executeBuffToSteamTrade(item, { source: Source.BUFF_STEAM })
+      }
+
+      GOODS_CACHE[item.id] = { price: current_price }
     }
+
+    await sleep(2_500)
   } catch (error) {
     console.log('Something went wrong', error)
 

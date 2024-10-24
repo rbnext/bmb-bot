@@ -151,14 +151,12 @@ export const getGoodsSellOrder = async ({
   max_price?: string
   exclude_current_user?: number
 }): Promise<GoodsSellOrder> => {
-  const { data, cached } = await http.get('/market/goods/sell_order', {
+  const { data } = await http.get('/market/goods/sell_order', {
     params: { game, page_num, sort_by, ...rest },
     cache: {
       ttl: 1000 * 5, // 5 seconds
     },
   })
-
-  console.log(rest.goods_id, cached)
 
   return data
 }

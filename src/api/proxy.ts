@@ -59,3 +59,12 @@ export const getProxyMarketGoods = async ({
 
   return data
 }
+
+export const checkCountryIP = async () => {
+  const { data } = await axios.get('https://api.country.is/', {
+    httpsAgent: PROXY_AGENTS[0],
+    httpAgent: PROXY_AGENTS[0],
+  })
+
+  return data
+}

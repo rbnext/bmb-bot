@@ -1,6 +1,6 @@
 import 'dotenv/config'
 
-import { checkCountryIP } from './api/public'
+import { checkCountryIP } from './api/proxy'
 
 // import { getShopBillOrder } from './api/buff'
 // import { getBargainDiscountPrice, median } from './utils'

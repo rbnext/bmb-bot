@@ -43,7 +43,7 @@ export const executeBuffToSteamTrade = async (
     const lowestPricedItem = orders.data.items.find((el) => el.price === item.sell_min_price)
 
     if (!lowestPricedItem) {
-      await sendMessage(
+      sendMessage(
         `[${options.source}] Someone already bought the ${item.market_hash_name} item for $${current_price} with profit ${estimated_profit.toFixed(2)}%`
       )
 
@@ -53,14 +53,12 @@ export const executeBuffToSteamTrade = async (
     const response = await postGoodsBuy({ price: current_price, sell_order_id: lowestPricedItem.id })
 
     if (response.code !== 'OK') {
-      await sendMessage(
-        `[${options.source}] Failed to purchase the item ${item.market_hash_name}. Reason: ${response.code}`
-      )
+      sendMessage(`[${options.source}] Failed to purchase the item ${item.market_hash_name}. Reason: ${response.code}`)
 
       return
     }
 
-    await sendMessage(
+    sendMessage(
       generateMessage({
         id: goods_id,
         price: current_price,
@@ -75,57 +73,4 @@ export const executeBuffToSteamTrade = async (
       })
     )
   }
-
-  // else if (current_price >= 5 && estimated_profit >= STEAM_PURCHASE_THRESHOLD - 8) {
-  //   const orders = await getGoodsSellOrder({ goods_id, exclude_current_user: 1 })
-
-  //   const lowestPricedItem = orders.data.items.find((el) => el.price === item.sell_min_price)
-
-  //   if (!lowestPricedItem) {
-  //     await sendMessage(
-  //       `[${Source.BUFF_DEFAULT}] Someone already bought the ${item.market_hash_name} item for $${current_price}.`
-  //     )
-
-  //     return
-  //   }
-
-  //   const response = await createVercelPurchase({ price: current_price, sell_order_id: lowestPricedItem.id })
-
-  //   if (response.code !== 'OK') {
-  //     await sendMessage(
-  //       `[${Source.BUFF_DEFAULT}] Failed to purchase the item ${item.market_hash_name}. Reason: ${response.code}`
-  //     )
-
-  //     return
-  //   }
-
-  //   await sleep(3_000)
-
-  //   const goods_info = await getGoodsInfo({ goods_id })
-  //   const history = await getMarketGoodsBillOrder({ goods_id })
-
-  //   const sales = history.data.items.map(({ price }) => Number(price))
-  //   const median_price = median(sales.filter((price) => current_price * 2 > price))
-  //   const estimated_profit = ((median_price * 0.975) / current_price - 1) * 100
-
-  //   const goods_ref_price = Number(goods_info.data.goods_info.goods_ref_price)
-  //   const ref_price_delta = (goods_ref_price / current_price - 1) * 100
-
-  //   await sendMessage(
-  //     generateMessage({
-  //       id: goods_id,
-  //       price: current_price,
-  //       type: MessageType.Purchased,
-  //       source: Source.BUFF_DEFAULT,
-  //       name: item.market_hash_name,
-  //       createdAt: lowestPricedItem.created_at,
-  //       updatedAt: lowestPricedItem.updated_at,
-  //       estimatedProfit: estimated_profit,
-  //       medianPrice: median_price,
-  //       float: lowestPricedItem.asset_info.paintwear,
-  //       referencePrice: goods_ref_price,
-  //       refPriceDelta: ref_price_delta,
-  //     })
-  //   )
-  // }
 }

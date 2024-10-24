@@ -45,7 +45,7 @@ const instance = axios.create({
 
 const http = setupCache(instance)
 
-const getCookies = (cookies: Record<string, string>) => {
+export const getCookies = (cookies: Record<string, string>) => {
   const cookieList = Object.keys(cookies).map((k) => `${k}=${cookies[k]};`)
 
   return cookieList.join(' ')

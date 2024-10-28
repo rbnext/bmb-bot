@@ -51,7 +51,7 @@ export const sellBuff = async () => {
       if (
         item.asset_info.paintwear &&
         item.asset_info.info.stickers.length === 0 &&
-        item.asset_info.info.keychains.length === 0
+        (!item.asset_info.info.keychains || item.asset_info.info.keychains.length === 0)
       ) {
         sell_items.push(item)
       }

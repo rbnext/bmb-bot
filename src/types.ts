@@ -277,7 +277,7 @@ export type OnSaleItem = {
     paintwear: string
     info: {
       stickers: Sticker[]
-      keychains: string[]
+      keychains?: string[]
     }
   }
 }

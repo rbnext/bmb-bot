@@ -47,6 +47,7 @@ export const sellBuff = async () => {
     const response = await getItemsOnSale({ page_num })
 
     for (const item of response.data.items) {
+      console.log(item.goods_id)
       if (
         item.asset_info.paintwear &&
         item.asset_info.info.stickers.length === 0 &&

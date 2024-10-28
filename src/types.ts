@@ -23,6 +23,13 @@ export type GoodsSellOrderItem = {
 
 export type GoodsSellOrder = {
   data: {
+    goods_infos: {
+      [key: number]: {
+        goods_id: number
+        market_hash_name: string
+        steam_price: string
+      }
+    }
     items: GoodsSellOrderItem[]
     user_infos: {
       [key: string]: {
@@ -231,8 +238,13 @@ export type SentBargain = {
 
 export type BuyOrderHistoryItem = {
   asset_info: {
+    paintwear: string
     assetid: string
     classid: string
+    info: {
+      stickers: Sticker[]
+      keychains: string[]
+    }
   }
   price: string
 }
@@ -242,6 +254,15 @@ export type BuyOrderHistory = {
     items: BuyOrderHistoryItem[]
   }
 }
+
+export type SellOrderItem = {
+  desc: string
+  income: number
+  price: string
+  sell_order_id: string
+}
+
+export type SellOrderPayload = SellOrderItem & { goods_id: number; prev_price: number }
 
 export type OnSaleItem = {
   id: string
@@ -253,6 +274,7 @@ export type OnSaleItem = {
     assetid: string
     classid: string
     instanceid: string
+    paintwear: string
     info: {
       stickers: Sticker[]
     }

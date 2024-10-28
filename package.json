@@ -8,7 +8,7 @@
     "buffDefault": "ts-node src/bots/buffDefault.ts",
     "buffBargain": "ts-node src/bots/buffBargain.ts",
     "buffSteam": "ts-node src/bots/buffSteam.ts",
-    "proxyCheck": "ts-node src/bots/proxyCheck.ts",
+    "sellBuff": "ts-node src/bots/sellBuff.ts",
     "playground": "ts-node src/playground.ts"
   },
   "author": "",

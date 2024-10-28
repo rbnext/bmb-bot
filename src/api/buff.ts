@@ -19,6 +19,7 @@ import {
   MarketItemDetail,
   MarketPriceHistory,
   PostResponse,
+  SellOrderItem,
   SentBargain,
   ShopBillOrder,
   ShopSellOrder,
@@ -355,6 +356,9 @@ export const getBuyOrderHistory = async ({
 }): Promise<BuyOrderHistory> => {
   const { data } = await http.get('/market/buy_order/history', {
     params: { game, page_num, page_size, search },
+    cache: {
+      ttl: 1000 * 60 * 60 * 12, //12 hours
+    },
   })
 
   return data
@@ -418,7 +422,7 @@ export const postSellOrderChange = async ({
   sell_orders,
 }: {
   game?: string
-  sell_orders: { desc: string; income: string; price: string; sell_order_id: string }[]
+  sell_orders: SellOrderItem[]
 }): Promise<PostResponse> => {
   const { data } = await http.post('/market/sell_order/change', { game, sell_orders })
 

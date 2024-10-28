@@ -78,7 +78,7 @@ export const sellBuff = async () => {
     const paintwear = item.asset_info.paintwear
     const market_hash_name = response.data.goods_infos[goods_id].market_hash_name
     const current_price = Number(response.data.items[current_index].price)
-    const payload = { sell_order_id, goods_id, desc: '', income: 0 }
+    const payload = { sell_order_id, goods_id, prev_price: current_price, desc: '', income: 0 }
 
     const purchasedItem = await findByFloatAndMarketHash({ market_hash_name, paintwear })
 
@@ -86,9 +86,9 @@ export const sellBuff = async () => {
       const next_price = Number(response.data.items[current_index + 1].price)
 
       if (current_price === next_price) {
-        sell_orders.push({ price: (current_price - 0.01).toFixed(2), prev_price: current_price, ...payload })
+        sell_orders.push({ price: (current_price - 0.01).toFixed(2), ...payload })
       } else if (Number((next_price - current_price).toFixed(2)) > 0.01) {
-        sell_orders.push({ price: (next_price - 0.01).toFixed(2), prev_price: current_price, ...payload })
+        sell_orders.push({ price: (next_price - 0.01).toFixed(2), ...payload })
       }
     }
 
@@ -100,12 +100,12 @@ export const sellBuff = async () => {
         const price = (current_price - 0.01).toFixed(2)
         const estimated_profit = getEstimatedProfit(price, purchasedItem.price)
 
-        if (estimated_profit >= 5) sell_orders.push({ price, prev_price: current_price, ...payload })
+        if (estimated_profit >= 5) sell_orders.push({ price, ...payload })
       } else {
         const price = (prev_price - 0.01).toFixed(2)
         const estimated_profit = getEstimatedProfit(price, purchasedItem.price)
 
-        if (estimated_profit >= 5) sell_orders.push({ price, prev_price, ...payload })
+        if (estimated_profit >= 5) sell_orders.push({ price, ...payload })
       }
     }
 
@@ -114,13 +114,9 @@ export const sellBuff = async () => {
 
   for (const sell_order of sell_orders) {
     const now = format(new Date(), 'HH:mm:ss')
-
     const fee = await getMarketBatchFee({ goods_ids: String(sell_order.goods_id), prices: sell_order.price })
-
     sell_order.income = Number((Number(sell_order.price) - Number(fee.data.total_fee)).toFixed(2))
-
     console.log(`${now}: ${sell_order.goods_id} $${sell_order.prev_price} -> $${sell_order.price}`)
-
     await sleep(5_000)
   }
 
@@ -128,7 +124,7 @@ export const sellBuff = async () => {
     await postSellOrderChange({ sell_orders: sell_orders.map(sellOrdersEntity) })
   }
 
-  await sleep(60_000 * 10) // 5 minutes
+  await sleep(60_000 * 10)
 
   sellBuff()
 }

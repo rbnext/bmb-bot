@@ -47,7 +47,13 @@ export const sellBuff = async () => {
     const response = await getItemsOnSale({ page_num })
 
     for (const item of response.data.items) {
-      if (item.asset_info.paintwear) sell_items.push(item)
+      if (
+        item.asset_info.paintwear &&
+        item.asset_info.info.stickers.length === 0 &&
+        item.asset_info.info.keychains.length === 0
+      ) {
+        sell_items.push(item)
+      }
     }
 
     if (response.data.items.length !== 40) {
@@ -95,10 +101,7 @@ export const sellBuff = async () => {
         const estimated_profit = getEstimatedProfit(price, purchasedItem.price)
 
         if (estimated_profit >= 5) sell_orders.push({ price, prev_price: current_price, ...payload })
-      } else if (
-        purchasedItem.asset_info.info.stickers.length === 0 &&
-        purchasedItem.asset_info.info.keychains.length === 0
-      ) {
+      } else {
         const price = (prev_price - 0.01).toFixed(2)
         const estimated_profit = getEstimatedProfit(price, purchasedItem.price)
 
@@ -125,7 +128,7 @@ export const sellBuff = async () => {
     await postSellOrderChange({ sell_orders: sell_orders.map(sellOrdersEntity) })
   }
 
-  await sleep(60_000 * 10) // 10 minutes
+  await sleep(60_000 * 10) // 5 minutes
 
   sellBuff()
 }

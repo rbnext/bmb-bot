@@ -95,7 +95,6 @@ const buffDefault = async () => {
       category_group: 'rifle,pistol,smg,shotgun',
       category: 'csgo_type_musickit',
     })
-    await sleep(3_000)
 
     for (const item of goods.data.items) {
       const goods_id = item.id
@@ -121,6 +120,9 @@ const buffDefault = async () => {
       format(new Date(), 'HH:mm:ss'),
       `page: ${page_num}, collected ${Object.keys(GOODS_THRESHOLD).length} items.`
     )
+
+    if (goods.data.items.length !== 50) break
+    await sleep(5_000)
   }
 
   buffDefault()

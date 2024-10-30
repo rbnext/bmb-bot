@@ -121,7 +121,7 @@ const buffDefault = async () => {
       `page: ${page_num}, collected ${Object.keys(GOODS_THRESHOLD).length} items.`
     )
 
-    if (goods.data.items.length !== 50) break
+    if (goods.data.items.length !== 50 || page_num === 20) break
     await sleep(5_000)
   }
 

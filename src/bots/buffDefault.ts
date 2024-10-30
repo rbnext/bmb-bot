@@ -1,75 +1,85 @@
 import 'dotenv/config'
-import { generateBuffSellingReport } from '../helpers/generateBuffSellingReport'
-import { sleep } from '../utils'
+
+import { getMarketGoods } from '../api/buff'
+import { isLessThanThreshold, sleep } from '../utils'
+import { format } from 'date-fns'
+import { sendMessage } from '../api/telegram'
+import { Source } from '../types'
+import { BLACKLISTED_CATEGORY, BLACKLISTED_ITEMSET } from '../config'
+import { executeBuffToBuffTrade } from '../helpers/executeBuffToBuffTrade'
+
+export const GOODS_CACHE: Record<number, { price: number }> = {}
+export const GOODS_BLACKLIST_CACHE: number[] = []
 
 const buffDefault = async () => {
-  await generateBuffSellingReport()
+  try {
+    const marketGoods = await getMarketGoods({ min_price: 5, max_price: 50 })
 
-  await sleep(1_000 * 60 * 60)
+    for (const item of marketGoods.data.items) {
+      const now = format(new Date(), 'HH:mm:ss')
+      const current_price = Number(item.sell_min_price)
+
+      if (GOODS_BLACKLIST_CACHE.includes(item.id)) {
+        continue
+      }
+
+      if (item.id in GOODS_CACHE && isLessThanThreshold(GOODS_CACHE[item.id].price, current_price, 0.5)) {
+        GOODS_CACHE[item.id].price = current_price
+
+        continue
+      }
+
+      if (item.id in GOODS_CACHE) {
+        console.log(`${now}: ${item.market_hash_name} $${GOODS_CACHE[item.id].price} -> $${current_price}`)
+      }
+
+      if (item.id in GOODS_CACHE && GOODS_CACHE[item.id].price > current_price) {
+        executeBuffToBuffTrade(item, { source: Source.BUFF_DEFAULT })
+      }
+
+      GOODS_CACHE[item.id] = { price: current_price }
+    }
+
+    await sleep(2_500)
+  } catch (error) {
+    console.log('Something went wrong', error)
+
+    if (error.message !== 'Request failed with status code 503') {
+      await sendMessage(error?.message ?? 'Something went wrong.')
+
+      return
+    }
+
+    await sendMessage(`${error.message}. Restarting in 60 seconds...`)
+    await sleep(60_000)
+  }
 
   buffDefault()
 }
 
-buffDefault()
+;(async () => {
+  const pages = Array.from({ length: 50 }, (_, i) => i + 1)
 
-// import { format } from 'date-fns'
-// import { getMarketGoods } from '../api/buff'
-// import { sleep } from '../utils'
-// import { sendMessage } from '../api/telegram'
-// import { executeBuffToBuffTrade } from '../helpers/executeBuffToBuffTrade'
-// import { Source } from '../types'
-// import { executeBuffToBuffKatowiceTrade } from '../helpers/executeBuffToBuffKatowiceTrade'
+  for (const page_num of pages) {
+    const goods = await getMarketGoods({ page_num, min_price: 5, max_price: 50 })
+    for (const item of goods.data.items) GOODS_CACHE[item.id] = { price: Number(item.sell_min_price) }
+    if (goods.data.items.length !== 50) break
+    await sleep(5_000)
+  }
 
-// const GOODS_CACHE: Record<number, { sell_num: number }> = {}
+  for (const page_num of pages) {
+    const goods = await getMarketGoods({ itemset: BLACKLISTED_ITEMSET.join(','), page_num })
+    goods.data.items.forEach((item) => GOODS_BLACKLIST_CACHE.push(item.id))
+    if (goods.data.items.length !== 50) break
+    await sleep(5_000)
+  }
 
-// const buffDefault = async () => {
-//   const now = format(new Date(), 'HH:mm:ss')
+  for (const page_num of pages) {
+    const goods = await getMarketGoods({ category: BLACKLISTED_CATEGORY.join(','), page_num })
+    goods.data.items.forEach((item) => GOODS_BLACKLIST_CACHE.push(item.id))
+    if (goods.data.items.length !== 50) break
+    await sleep(5_000)
+  }
 
-//   try {
-//     const marketGoods = await getMarketGoods({})
-
-//     const items = marketGoods.data.items.slice(0, 5)
-
-//     for (const item of items) {
-//       if (item.id in GOODS_CACHE && GOODS_CACHE[item.id].sell_num !== item.sell_num && item.sell_num <= 10) {
-//         console.log(`${now}: ${item.market_hash_name} ${GOODS_CACHE[item.id].sell_num} -> ${item.sell_num}`)
-
-//         if (GOODS_CACHE[item.id].sell_num < item.sell_num) {
-//           await executeBuffToBuffTrade(item, { source: Source.BUFF_DEFAULT })
-
-//           await sleep(2_000)
-//         }
-//       }
-
-//       GOODS_CACHE[item.id] = { sell_num: item.sell_num }
-//     }
-
-//     await executeBuffToBuffKatowiceTrade()
-//   } catch (error) {
-//     console.log('Something went wrong', error)
-
-//     await sendMessage(error?.message ?? 'Something went wrong.')
-
-//     return
-//   }
-
-//   await sleep(10_000)
-
-//   buffDefault()
-// }
-
-// ;(async () => {
-//   const pages = Array.from({ length: 20 }, (_, i) => i + 15)
-
-//   for (const page_num of pages) {
-//     const goods = await getMarketGoods({ page_num, sort_by: 'sell_num.desc' })
-
-//     for (const item of goods.data.items) {
-//       GOODS_CACHE[item.id] = { sell_num: item.sell_num }
-//     }
-
-//     await sleep(5_000)
-//   }
-
-//   buffDefault()
-// })()
+  buffDefault()
+})()

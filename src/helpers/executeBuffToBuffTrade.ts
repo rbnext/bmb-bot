@@ -1,10 +1,9 @@
 import { differenceInDays } from 'date-fns'
-import { getGoodsInfo, getGoodsSellOrder, getMarketGoodsBillOrder } from '../api/buff'
+import { getGoodsInfo, getGoodsSellOrder, getMarketGoodsBillOrder, postGoodsBuy } from '../api/buff'
 import { MarketGoodsItem, MessageType, Source } from '../types'
 import { generateMessage, median } from '../utils'
 import { BUFF_PURCHASE_THRESHOLD, GOODS_SALES_THRESHOLD, REFERENCE_DIFF_THRESHOLD } from '../config'
 import { sendMessage } from '../api/telegram'
-import { createVercelPurchase } from '../api/vercel'
 
 export const executeBuffToBuffTrade = async (
   item: MarketGoodsItem,
@@ -68,7 +67,7 @@ export const executeBuffToBuffTrade = async (
     }
 
     if (refPriceDelta >= REFERENCE_DIFF_THRESHOLD) {
-      const response = await createVercelPurchase({ price: current_price, sell_order_id: lowestPricedItem.id })
+      const response = await postGoodsBuy({ price: current_price, sell_order_id: lowestPricedItem.id })
 
       if (response.code !== 'OK') {
         await sendMessage(

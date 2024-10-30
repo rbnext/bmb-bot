@@ -379,6 +379,7 @@ export enum MessageType {
 }
 
 export enum Source {
+  BUFF_FAST = 'BUFF_FAST',
   BUFF_BUFF = 'BUFF_BUFF',
   BUFF_DEFAULT = 'BUFF_DEFAULT',
   BUFF_STEAM = 'BUFF_STEAM',

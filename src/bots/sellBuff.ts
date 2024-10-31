@@ -108,6 +108,10 @@ export const sellBuff = async () => {
         const estimated_profit = getEstimatedProfit(price, purchasedItem.price)
 
         if (estimated_profit >= 5) sell_orders.push({ price, ...payload })
+        else {
+          const price = (next_price - 0.01).toFixed(2)
+          if (Number(price) !== current_price) sell_orders.push({ price, ...payload })
+        }
       }
     }
 

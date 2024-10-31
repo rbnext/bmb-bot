@@ -69,7 +69,9 @@ export const sellBuff = async () => {
     const response = await getGoodsSellOrder({ goods_id })
     await sleep(5_000)
 
-    const current_index = response.data.items.findIndex(({ user_id }) => user_id === CURRENT_USER_ID)
+    const current_index = response.data.items.findIndex(
+      ({ user_id, asset_info }) => user_id === CURRENT_USER_ID && asset_info.paintwear === item.asset_info.paintwear
+    )
 
     if (current_index === -1 || !response.data.items[current_index + 1]) {
       continue

@@ -1,88 +1,85 @@
 import 'dotenv/config'
 
-import { getGoodsSellOrder, getMarketGoods, getShopBillOrder } from '../api/buff'
-import { isLessThanThreshold, median, sleep } from '../utils'
+import { getMarketGoods } from '../api/buff'
+import { isLessThanThreshold, sleep } from '../utils'
 import { format } from 'date-fns'
 import { sendMessage } from '../api/telegram'
+import { Source } from '../types'
+import { BLACKLISTED_CATEGORY, BLACKLISTED_ITEMSET } from '../config'
+import { executeBuffBargainTrade } from '../helpers/executeBuffBargainTrade'
 
 export const GOODS_CACHE: Record<number, { price: number }> = {}
+export const GOODS_BLACKLIST_CACHE: number[] = []
 
 const buffBargain = async () => {
-  const pages = Array.from({ length: 10 }, (_, i) => i + 1)
-
   try {
-    for (const page_num of pages) {
-      const marketGoods = await getMarketGoods({
-        page_num,
-        sort_by: 'sell_num.desc',
-        category_group: 'knife,hands,rifle,pistol,smg,shotgun,machinegun',
-        min_price: 20,
-        max_price: 90,
-      })
+    const marketGoods = await getMarketGoods({ min_price: 15, max_price: 40 })
 
-      for (const item of marketGoods.data.items) {
-        const now = format(new Date(), 'HH:mm:ss')
-        const current_price = Number(item.sell_min_price)
+    for (const item of marketGoods.data.items) {
+      const now = format(new Date(), 'HH:mm:ss')
+      const current_price = Number(item.sell_min_price)
 
-        if (item.id in GOODS_CACHE && isLessThanThreshold(GOODS_CACHE[item.id].price, current_price, 0.1)) {
-          GOODS_CACHE[item.id].price = current_price
-
-          continue
-        }
-
-        if (item.id in GOODS_CACHE && GOODS_CACHE[item.id].price > current_price) {
-          const message: string[] = []
-
-          const orders = await getGoodsSellOrder({ goods_id: item.id, exclude_current_user: 1 })
-          const lowestPricedItem = orders.data.items.find((el) => el.price === item.sell_min_price)
-
-          if (!lowestPricedItem) continue
-          if (!lowestPricedItem.allow_bargain) continue
-
-          const userSellingHistory = await getShopBillOrder({ user_id: lowestPricedItem.user_id })
-
-          if (userSellingHistory.code !== 'OK') continue
-
-          const history = userSellingHistory.data.items.filter((item) => item.has_bargain)
-          const average_discount = history.map((item) => (Number(item.original_price) / Number(item.price) - 1) * 100)
-
-          console.log(`${now}: ${item.market_hash_name}`, average_discount, lowestPricedItem.user_id)
-
-          if (median(average_discount) >= 5) {
-            message.push(`<a href="https://buff.market/market/goods/${item.id}">${item.market_hash_name}</a>\n\n`)
-
-            message.push(`<b>Price</b>: $${lowestPricedItem.price}\n`)
-            message.push(
-              `<b>User</b>: <a href="https://buff.market/user_store/${lowestPricedItem.user_id}/selling">${lowestPricedItem.user_id}</a>\n`
-            )
-
-            message.push(
-              history
-                .map(
-                  (item, index) =>
-                    `<b>Bargain[${index + 1}]</b>: <s>$${item.original_price}</s> $${item.price} (${((Number(item.original_price) / Number(item.price) - 1) * 100).toFixed(2)}%)`
-                )
-                .join('\n')
-            )
-
-            await sendMessage(message.join(''))
-          }
-        }
-
-        GOODS_CACHE[item.id] = { price: current_price }
+      if (GOODS_BLACKLIST_CACHE.includes(item.id)) {
+        continue
       }
 
-      await sleep(3_000)
+      if (item.id in GOODS_CACHE && isLessThanThreshold(GOODS_CACHE[item.id].price, current_price, 0.5)) {
+        GOODS_CACHE[item.id].price = current_price
+
+        continue
+      }
+
+      if (item.id in GOODS_CACHE) {
+        console.log(`${now}: ${item.market_hash_name} $${GOODS_CACHE[item.id].price} -> $${current_price}`)
+      }
+
+      if (item.id in GOODS_CACHE && GOODS_CACHE[item.id].price > current_price) {
+        await executeBuffBargainTrade(item, { source: Source.BUFF_DEFAULT })
+      }
+
+      GOODS_CACHE[item.id] = { price: current_price }
     }
+
+    await sleep(2_500)
   } catch (error) {
     console.log('Something went wrong', error)
 
-    await sendMessage(error?.message ?? 'Something went wrong.')
+    if (error.message !== 'Request failed with status code 503') {
+      await sendMessage(error?.message ?? 'Something went wrong.')
 
-    return
+      return
+    }
+
+    await sendMessage(`${error.message}. Restarting in 60 seconds...`)
+    await sleep(60_000)
   }
 
   buffBargain()
 }
 
-buffBargain()
+;(async () => {
+  const pages = Array.from({ length: 50 }, (_, i) => i + 1)
+
+  for (const page_num of pages) {
+    const goods = await getMarketGoods({ page_num, min_price: 10, max_price: 50 })
+    for (const item of goods.data.items) GOODS_CACHE[item.id] = { price: Number(item.sell_min_price) }
+    if (goods.data.items.length !== 50) break
+    await sleep(5_000)
+  }
+
+  for (const page_num of pages) {
+    const goods = await getMarketGoods({ itemset: BLACKLISTED_ITEMSET.join(','), page_num })
+    goods.data.items.forEach((item) => GOODS_BLACKLIST_CACHE.push(item.id))
+    if (goods.data.items.length !== 50) break
+    await sleep(5_000)
+  }
+
+  for (const page_num of pages) {
+    const goods = await getMarketGoods({ category: BLACKLISTED_CATEGORY.join(','), page_num })
+    goods.data.items.forEach((item) => GOODS_BLACKLIST_CACHE.push(item.id))
+    if (goods.data.items.length !== 50) break
+    await sleep(5_000)
+  }
+
+  buffBargain()
+})()

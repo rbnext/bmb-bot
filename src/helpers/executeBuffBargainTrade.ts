@@ -11,6 +11,8 @@ import { sendMessage } from '../api/telegram'
 import { differenceInDays } from 'date-fns'
 import { GOODS_SALES_THRESHOLD } from '../config'
 
+export const GOODS_CACHE: string[] = []
+
 export const executeBuffBargainTrade = async (
   item: MarketGoodsItem,
   options: {
@@ -35,6 +37,7 @@ export const executeBuffBargainTrade = async (
 
     if (!lowestPricedItem) return
     if (!lowestPricedItem.allow_bargain) return
+    if (GOODS_CACHE.includes(lowestPricedItem.id)) return
 
     const userStorePopup = await getUserStorePopup({ user_id: lowestPricedItem.user_id })
 
@@ -72,5 +75,7 @@ export const executeBuffBargainTrade = async (
         })
       )
     }
+
+    GOODS_CACHE.push(lowestPricedItem.id)
   }
 }

@@ -23,7 +23,7 @@ const buffBargain = async () => {
         continue
       }
 
-      if (item.id in GOODS_CACHE && isLessThanThreshold(GOODS_CACHE[item.id].price, current_price, 0.5)) {
+      if (item.id in GOODS_CACHE && isLessThanThreshold(GOODS_CACHE[item.id].price, current_price, 0.25)) {
         GOODS_CACHE[item.id].price = current_price
 
         continue

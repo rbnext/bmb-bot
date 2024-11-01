@@ -47,7 +47,7 @@ export const executeBuffBargainTrade = async (
     const goodsInfo = await getGoodsInfo({ goods_id })
     const reference_price = Number(goodsInfo.data.goods_info.goods_ref_price)
 
-    const bargain_price = Number((Math.min(median_price, reference_price) * 0.85).toFixed(2))
+    const bargain_price = Number((Math.min(median_price, reference_price) * 0.875).toFixed(2))
 
     if (
       Number(lowestPricedItem.price) > bargain_price &&

@@ -7,7 +7,7 @@ import {
   postCreateBargain,
 } from '../api/buff'
 import { MarketGoodsItem, MessageType, Source } from '../types'
-import { generateMessage, median } from '../utils'
+import { generateMessage, median, sleep } from '../utils'
 import { sendMessage } from '../api/telegram'
 import { differenceInDays } from 'date-fns'
 import { GOODS_SALES_THRESHOLD } from '../config'
@@ -34,6 +34,21 @@ export const executeBuffBargainTrade = async (
   const salesLastWeek = history.data.items.filter(({ updated_at, type }) => {
     return differenceInDays(new Date(), new Date(updated_at * 1000)) <= 7 && type !== 2
   })
+
+  if (BARGAIN_NOTIFICATIONS.size !== 0) {
+    const sentBargains = await getSentBargain({})
+
+    for (const [sell_order_id, value] of BARGAIN_NOTIFICATIONS) {
+      const bargain = sentBargains.data.items.find((item) => item.sell_order_id === sell_order_id)
+
+      if (bargain && (bargain.state === 5 || bargain.state === 2)) {
+        await sendMessage(bargain.state_text, value.telegram_message_id).then(() => {
+          BARGAIN_NOTIFICATIONS.delete(sell_order_id)
+        })
+        await sleep(1_000) // delay between requests to telegram
+      }
+    }
+  }
 
   if (salesLastWeek.length > GOODS_SALES_THRESHOLD) {
     const orders = await getGoodsSellOrder({ goods_id, exclude_current_user: 1 })
@@ -88,18 +103,6 @@ export const executeBuffBargainTrade = async (
           telegram_message_id: message.result.message_id,
         })
       })
-    }
-  } else if (BARGAIN_NOTIFICATIONS.size !== 0) {
-    const sentBargains = await getSentBargain({})
-
-    for (const [sell_order_id, value] of BARGAIN_NOTIFICATIONS) {
-      const bargain = sentBargains.data.items.find((item) => item.sell_order_id === sell_order_id)
-
-      if (bargain && (bargain.state === 5 || bargain.state === 2)) {
-        sendMessage(bargain.state_text, value.telegram_message_id).then(() => {
-          BARGAIN_NOTIFICATIONS.delete(sell_order_id)
-        })
-      }
     }
   }
 }

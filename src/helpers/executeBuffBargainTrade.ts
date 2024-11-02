@@ -41,7 +41,7 @@ export const executeBuffBargainTrade = async (
     for (const [sell_order_id, value] of BARGAIN_NOTIFICATIONS) {
       const bargain = sentBargains.data.items.find((item) => item.sell_order_id === sell_order_id)
 
-      if (bargain && (bargain.state === 5 || bargain.state === 2)) {
+      if (bargain && (bargain.state === 5 || bargain.state === 2 || bargain.state === 3)) {
         await sendMessage(bargain.state_text, value.telegram_message_id).then(() => {
           BARGAIN_NOTIFICATIONS.delete(sell_order_id)
         })

@@ -46,6 +46,8 @@ export const executeBuffBargainTrade = async (
     if (!lowestPricedItem.allow_bargain) return
     if (SENT_GOODS_IDS.includes(lowestPricedItem.id)) return
 
+    SENT_GOODS_IDS.push(lowestPricedItem.id)
+
     const userStorePopup = await getUserStorePopup({ user_id: lowestPricedItem.user_id })
 
     if (userStorePopup.code !== 'OK') return

@@ -228,6 +228,7 @@ export type SentBargainItem = {
   can_cancel_time: number
   can_cancel_timeout: number
   sell_order_id: string
+  state_text: string
 }
 
 export type SentBargain = {
@@ -385,4 +386,11 @@ export enum Source {
   BUFF_STEAM = 'BUFF_STEAM',
   BUFF_BARGAIN = 'BUFF_BARGAIN',
   BUFF_KATOWICE = 'BUFF_KATOWICE',
+}
+
+export type TelegramResponse = {
+  ok: boolean
+  result: {
+    message_id: number
+  }
 }

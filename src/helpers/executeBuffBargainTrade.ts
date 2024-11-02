@@ -2,6 +2,7 @@ import {
   getGoodsInfo,
   getGoodsSellOrder,
   getMarketGoodsBillOrder,
+  getSentBargain,
   getUserStorePopup,
   postCreateBargain,
 } from '../api/buff'
@@ -11,7 +12,13 @@ import { sendMessage } from '../api/telegram'
 import { differenceInDays } from 'date-fns'
 import { GOODS_SALES_THRESHOLD } from '../config'
 
-export const GOODS_CACHE: string[] = []
+type BargainNotification = {
+  sell_order_id: string
+  telegram_message_id: number
+}
+
+const SENT_GOODS_IDS: string[] = []
+const BARGAIN_NOTIFICATIONS = new Map<string, BargainNotification>()
 
 export const executeBuffBargainTrade = async (
   item: MarketGoodsItem,
@@ -37,7 +44,7 @@ export const executeBuffBargainTrade = async (
 
     if (!lowestPricedItem) return
     if (!lowestPricedItem.allow_bargain) return
-    if (GOODS_CACHE.includes(lowestPricedItem.id)) return
+    if (SENT_GOODS_IDS.includes(lowestPricedItem.id)) return
 
     const userStorePopup = await getUserStorePopup({ user_id: lowestPricedItem.user_id })
 
@@ -61,7 +68,7 @@ export const executeBuffBargainTrade = async (
         return
       }
 
-      await sendMessage(
+      sendMessage(
         generateMessage({
           id: goods_id,
           type: MessageType.Bargain,
@@ -73,9 +80,24 @@ export const executeBuffBargainTrade = async (
           updatedAt: lowestPricedItem.updated_at,
           source: options.source,
         })
-      )
+      ).then((message) => {
+        BARGAIN_NOTIFICATIONS.set(lowestPricedItem.id, {
+          sell_order_id: lowestPricedItem.id,
+          telegram_message_id: message.result.message_id,
+        })
+      })
     }
+  } else if (BARGAIN_NOTIFICATIONS.size !== 0) {
+    const sentBargains = await getSentBargain({})
 
-    GOODS_CACHE.push(lowestPricedItem.id)
+    for (const [sell_order_id, value] of BARGAIN_NOTIFICATIONS) {
+      const bargain = sentBargains.data.items.find((item) => item.sell_order_id === sell_order_id)
+
+      if (bargain && (bargain.state === 5 || bargain.state === 2)) {
+        sendMessage(bargain.state_text, value.telegram_message_id).then(() => {
+          BARGAIN_NOTIFICATIONS.delete(sell_order_id)
+        })
+      }
+    }
   }
 }

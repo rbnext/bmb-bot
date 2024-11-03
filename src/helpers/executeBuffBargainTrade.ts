@@ -78,8 +78,6 @@ export const executeBuffBargainTrade = async (
     if (SENT_GOODS_IDS.includes(lowestPricedItem.id)) return
     if (SELLER_BLACKLIST.includes(lowestPricedItem.user_id)) return
 
-    SENT_GOODS_IDS.push(lowestPricedItem.id)
-
     const userStorePopup = await getUserStorePopup({ user_id: lowestPricedItem.user_id })
 
     if (userStorePopup.code !== 'OK') return
@@ -115,6 +113,7 @@ export const executeBuffBargainTrade = async (
           source: options.source,
         })
       ).then((message) => {
+        SENT_GOODS_IDS.push(lowestPricedItem.id)
         BARGAIN_NOTIFICATIONS.set(lowestPricedItem.id, {
           sell_order_id: lowestPricedItem.id,
           telegram_message_id: message.result.message_id,
@@ -130,8 +129,6 @@ export const executeBuffBargainTrade = async (
     if (!isLessThanXMinutes(lowestPricedItem.created_at, 1)) return
     if (SENT_GOODS_IDS.includes(lowestPricedItem.id)) return
     if (SELLER_BLACKLIST.includes(lowestPricedItem.user_id)) return
-
-    SENT_GOODS_IDS.push(lowestPricedItem.id)
 
     const prices = await getMaxPricesForXDays(item.market_hash_name)
     const min_steam_price = prices.length !== 0 ? Math.min(...prices) : 0
@@ -163,6 +160,7 @@ export const executeBuffBargainTrade = async (
           source: options.source,
         })
       ).then((message) => {
+        SENT_GOODS_IDS.push(lowestPricedItem.id)
         BARGAIN_NOTIFICATIONS.set(lowestPricedItem.id, {
           sell_order_id: lowestPricedItem.id,
           telegram_message_id: message.result.message_id,

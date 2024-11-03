@@ -72,13 +72,12 @@ export const executeBuffBargainTrade = async (
     const reference_price = Number(goodsInfo.data.goods_info.goods_ref_price)
 
     const bargain_price = Number((Math.min(median_price, reference_price) * 0.875).toFixed(2))
-    const adjusted_bargain_price = Math.max(bargain_price, Number((current_price - 10).toFixed(2)))
 
     if (
-      Number(lowestPricedItem.price) > adjusted_bargain_price &&
-      Number(lowestPricedItem.lowest_bargain_price) < adjusted_bargain_price
+      Number(lowestPricedItem.price) > bargain_price &&
+      Number(lowestPricedItem.lowest_bargain_price) < bargain_price
     ) {
-      const response = await postCreateBargain({ price: adjusted_bargain_price, sell_order_id: lowestPricedItem.id })
+      const response = await postCreateBargain({ price: bargain_price, sell_order_id: lowestPricedItem.id })
 
       if (response.code !== 'OK') {
         console.log('Error:', JSON.stringify(response))
@@ -91,7 +90,7 @@ export const executeBuffBargainTrade = async (
           id: goods_id,
           type: MessageType.Bargain,
           price: current_price,
-          bargainPrice: adjusted_bargain_price,
+          bargainPrice: bargain_price,
           name: item.market_hash_name,
           float: lowestPricedItem.asset_info.paintwear,
           createdAt: lowestPricedItem.created_at,

@@ -73,7 +73,7 @@ export const executeBuffBargainTrade = async (
     const goodsInfo = await getGoodsInfo({ goods_id })
     const reference_price = Number(goodsInfo.data.goods_info.goods_ref_price)
 
-    const bargain_price = Number((Math.min(median_price, reference_price) * 0.875).toFixed(2))
+    const bargain_price = Math.ceil(Number((Math.min(median_price, reference_price) * 0.875).toFixed(2)))
 
     if (
       Number(lowestPricedItem.price) > bargain_price &&
@@ -119,7 +119,7 @@ export const executeBuffBargainTrade = async (
 
     const prices = await getMaxPricesForXDays(item.market_hash_name)
     const min_steam_price = prices.length !== 0 ? Math.min(...prices) : 0
-    const bargain_price = Number((min_steam_price / (1 + STEAM_PURCHASE_THRESHOLD / 100)).toFixed(2))
+    const bargain_price = Math.ceil(Number((min_steam_price / (1 + STEAM_PURCHASE_THRESHOLD / 100)).toFixed(2)))
 
     if (
       Number(lowestPricedItem.price) > bargain_price &&

@@ -7,7 +7,7 @@ import { sendMessage } from '../api/telegram'
 import { Source } from '../types'
 import { BARGAIN_MIN_PRICE, BLACKLISTED_CATEGORY, BLACKLISTED_ITEMSET } from '../config'
 import { executeBuffBargainTrade } from '../helpers/executeBuffBargainTrade'
-import { executeBuffToBuffTrade } from '../helpers/executeBuffToBuffTrade'
+import { executeBuffToSteamTrade } from '../helpers/executeBuffToSteamTrade'
 
 export const GOODS_CACHE: Record<number, { price: number }> = {}
 export const GOODS_BLACKLIST_CACHE: number[] = []
@@ -35,7 +35,7 @@ const buffBargain = async () => {
       }
 
       if (item.id in GOODS_CACHE && GOODS_CACHE[item.id].price > current_price) {
-        const executeTrade = current_price >= BARGAIN_MIN_PRICE ? executeBuffBargainTrade : executeBuffToBuffTrade
+        const executeTrade = current_price >= BARGAIN_MIN_PRICE ? executeBuffBargainTrade : executeBuffToSteamTrade
 
         await executeTrade(item, { source: Source.BUFF_DEFAULT })
       }

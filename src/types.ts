@@ -229,6 +229,7 @@ export type SentBargainItem = {
   can_cancel_timeout: number
   sell_order_id: string
   state_text: string
+  seller_id: string
 }
 
 export type SentBargain = {

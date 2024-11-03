@@ -20,6 +20,7 @@ type BargainNotification = {
 
 const SENT_GOODS_IDS: string[] = []
 const BARGAIN_NOTIFICATIONS = new Map<string, BargainNotification>()
+const SELLER_BLACKLIST: string[] = []
 
 export const executeBuffBargainTrade = async (
   item: MarketGoodsItem,
@@ -36,13 +37,26 @@ export const executeBuffBargainTrade = async (
     return differenceInDays(new Date(), new Date(updated_at * 1000)) <= 7 && type !== 2
   })
 
+  if (SELLER_BLACKLIST.length === 0) {
+    const pages = Array.from({ length: 10 }, (_, i) => i + 1)
+    for (const page_num of pages) {
+      const bargains = await getSentBargain({ page_num })
+      for (const bargain of bargains.data.items) {
+        if (bargain.state === 5) SELLER_BLACKLIST.push(bargain.seller_id)
+      }
+      await sleep(2_500)
+    }
+    console.log('Sellers have added to blacklist: ', SELLER_BLACKLIST.length)
+  }
+
   if (BARGAIN_NOTIFICATIONS.size !== 0) {
-    const sentBargains = await getSentBargain({})
+    const bargains = await getSentBargain({})
 
     for (const [sell_order_id, value] of BARGAIN_NOTIFICATIONS) {
-      const bargain = sentBargains.data.items.find((item) => item.sell_order_id === sell_order_id)
+      const bargain = bargains.data.items.find((item) => item.sell_order_id === sell_order_id)
 
       if (bargain && (bargain.state === 5 || bargain.state === 2 || bargain.state === 3)) {
+        if (bargain.state === 5) SELLER_BLACKLIST.push(bargain.seller_id)
         await sendMessage(bargain.state_text, value.telegram_message_id).then(() => {
           BARGAIN_NOTIFICATIONS.delete(sell_order_id)
         })
@@ -62,10 +76,9 @@ export const executeBuffBargainTrade = async (
     if (!lowestPricedItem.allow_bargain) return
     if (!isLessThanXMinutes(lowestPricedItem.created_at, 1)) return
     if (SENT_GOODS_IDS.includes(lowestPricedItem.id)) return
-    if (SENT_GOODS_IDS.includes(lowestPricedItem.asset_info.paintwear)) return
+    if (SELLER_BLACKLIST.includes(lowestPricedItem.user_id)) return
 
     SENT_GOODS_IDS.push(lowestPricedItem.id)
-    SENT_GOODS_IDS.push(lowestPricedItem.asset_info.paintwear)
 
     const userStorePopup = await getUserStorePopup({ user_id: lowestPricedItem.user_id })
 
@@ -116,10 +129,9 @@ export const executeBuffBargainTrade = async (
     if (!lowestPricedItem.allow_bargain) return
     if (!isLessThanXMinutes(lowestPricedItem.created_at, 1)) return
     if (SENT_GOODS_IDS.includes(lowestPricedItem.id)) return
-    if (SENT_GOODS_IDS.includes(lowestPricedItem.asset_info.paintwear)) return
+    if (SELLER_BLACKLIST.includes(lowestPricedItem.user_id)) return
 
     SENT_GOODS_IDS.push(lowestPricedItem.id)
-    SENT_GOODS_IDS.push(lowestPricedItem.asset_info.paintwear)
 
     const prices = await getMaxPricesForXDays(item.market_hash_name)
     const min_steam_price = prices.length !== 0 ? Math.min(...prices) : 0

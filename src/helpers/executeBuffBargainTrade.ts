@@ -62,8 +62,10 @@ export const executeBuffBargainTrade = async (
     if (!lowestPricedItem.allow_bargain) return
     if (!isLessThanXMinutes(lowestPricedItem.created_at, 1)) return
     if (SENT_GOODS_IDS.includes(lowestPricedItem.id)) return
+    if (SENT_GOODS_IDS.includes(lowestPricedItem.asset_info.paintwear)) return
 
     SENT_GOODS_IDS.push(lowestPricedItem.id)
+    SENT_GOODS_IDS.push(lowestPricedItem.asset_info.paintwear)
 
     const userStorePopup = await getUserStorePopup({ user_id: lowestPricedItem.user_id })
 
@@ -114,8 +116,10 @@ export const executeBuffBargainTrade = async (
     if (!lowestPricedItem.allow_bargain) return
     if (!isLessThanXMinutes(lowestPricedItem.created_at, 1)) return
     if (SENT_GOODS_IDS.includes(lowestPricedItem.id)) return
+    if (SENT_GOODS_IDS.includes(lowestPricedItem.asset_info.paintwear)) return
 
     SENT_GOODS_IDS.push(lowestPricedItem.id)
+    SENT_GOODS_IDS.push(lowestPricedItem.asset_info.paintwear)
 
     const prices = await getMaxPricesForXDays(item.market_hash_name)
     const min_steam_price = prices.length !== 0 ? Math.min(...prices) : 0

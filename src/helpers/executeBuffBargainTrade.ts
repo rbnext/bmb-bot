@@ -7,10 +7,11 @@ import {
   postCreateBargain,
 } from '../api/buff'
 import { MarketGoodsItem, MessageType, Source } from '../types'
-import { generateMessage, median, sleep } from '../utils'
+import { generateMessage, isLessThanXMinutes, median, sleep } from '../utils'
 import { sendMessage } from '../api/telegram'
 import { differenceInDays } from 'date-fns'
-import { GOODS_SALES_THRESHOLD } from '../config'
+import { GOODS_SALES_THRESHOLD, STEAM_PURCHASE_THRESHOLD } from '../config'
+import { getMaxPricesForXDays } from './getMaxPricesForXDays'
 
 type BargainNotification = {
   sell_order_id: string
@@ -50,7 +51,7 @@ export const executeBuffBargainTrade = async (
     }
   }
 
-  if (salesLastWeek.length > GOODS_SALES_THRESHOLD) {
+  if (salesLastWeek.length >= GOODS_SALES_THRESHOLD) {
     const orders = await getGoodsSellOrder({ goods_id, exclude_current_user: 1 })
 
     const sales = salesLastWeek.map(({ price }) => Number(price))
@@ -59,6 +60,7 @@ export const executeBuffBargainTrade = async (
 
     if (!lowestPricedItem) return
     if (!lowestPricedItem.allow_bargain) return
+    if (!isLessThanXMinutes(lowestPricedItem.created_at, 1)) return
     if (SENT_GOODS_IDS.includes(lowestPricedItem.id)) return
 
     SENT_GOODS_IDS.push(lowestPricedItem.id)
@@ -95,6 +97,53 @@ export const executeBuffBargainTrade = async (
           float: lowestPricedItem.asset_info.paintwear,
           createdAt: lowestPricedItem.created_at,
           updatedAt: lowestPricedItem.updated_at,
+          source: options.source,
+        })
+      ).then((message) => {
+        BARGAIN_NOTIFICATIONS.set(lowestPricedItem.id, {
+          sell_order_id: lowestPricedItem.id,
+          telegram_message_id: message.result.message_id,
+        })
+      })
+    }
+  } else if (salesLastWeek.length >= GOODS_SALES_THRESHOLD - 3) {
+    const orders = await getGoodsSellOrder({ goods_id, exclude_current_user: 1 })
+    const lowestPricedItem = orders.data.items.find((el) => el.price === item.sell_min_price)
+
+    if (!lowestPricedItem) return
+    if (!lowestPricedItem.allow_bargain) return
+    if (!isLessThanXMinutes(lowestPricedItem.created_at, 1)) return
+    if (SENT_GOODS_IDS.includes(lowestPricedItem.id)) return
+
+    SENT_GOODS_IDS.push(lowestPricedItem.id)
+
+    const prices = await getMaxPricesForXDays(item.market_hash_name)
+    const min_steam_price = prices.length !== 0 ? Math.min(...prices) : 0
+    const bargain_price = Number((min_steam_price / (1 + STEAM_PURCHASE_THRESHOLD / 100)).toFixed(2))
+
+    if (
+      Number(lowestPricedItem.price) > bargain_price &&
+      Number(lowestPricedItem.lowest_bargain_price) < bargain_price
+    ) {
+      const response = await postCreateBargain({ price: bargain_price, sell_order_id: lowestPricedItem.id })
+
+      if (response.code !== 'OK') {
+        console.log('Error:', JSON.stringify(response))
+
+        return
+      }
+
+      sendMessage(
+        generateMessage({
+          id: goods_id,
+          type: MessageType.Bargain,
+          price: current_price,
+          bargainPrice: bargain_price,
+          name: item.market_hash_name,
+          float: lowestPricedItem.asset_info.paintwear,
+          createdAt: lowestPricedItem.created_at,
+          updatedAt: lowestPricedItem.updated_at,
+          steamPrice: min_steam_price,
           source: options.source,
         })
       ).then((message) => {

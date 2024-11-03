@@ -106,7 +106,7 @@ export const executeBuffBargainTrade = async (
         })
       })
     }
-  } else if (salesLastWeek.length >= GOODS_SALES_THRESHOLD - 3) {
+  } else {
     const orders = await getGoodsSellOrder({ goods_id, exclude_current_user: 1 })
     const lowestPricedItem = orders.data.items.find((el) => el.price === item.sell_min_price)
 

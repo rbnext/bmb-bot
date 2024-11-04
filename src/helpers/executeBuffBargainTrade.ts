@@ -18,9 +18,8 @@ type BargainNotification = {
   telegram_message_id: number
 }
 
-const SENT_GOODS_IDS: string[] = []
+const FLOAT_BLACKLIST = new Set<string>()
 const BARGAIN_NOTIFICATIONS = new Map<string, BargainNotification>()
-const SELLER_BLACKLIST: string[] = []
 
 export const executeBuffBargainTrade = async (
   item: MarketGoodsItem,
@@ -37,16 +36,15 @@ export const executeBuffBargainTrade = async (
     return differenceInDays(new Date(), new Date(updated_at * 1000)) <= 7 && type !== 2
   })
 
-  if (SELLER_BLACKLIST.length === 0) {
+  if (FLOAT_BLACKLIST.size === 0) {
     const pages = Array.from({ length: 10 }, (_, i) => i + 1)
     for (const page_num of pages) {
       const bargains = await getSentBargain({ page_num })
       for (const bargain of bargains.data.items) {
-        if (bargain.state === 5) SELLER_BLACKLIST.push(bargain.seller_id)
+        if (bargain.asset_info.paintwear) FLOAT_BLACKLIST.add(bargain.asset_info.paintwear)
       }
       await sleep(2_500)
     }
-    console.log('Sellers have added to blacklist: ', SELLER_BLACKLIST.length)
   }
 
   if (BARGAIN_NOTIFICATIONS.size !== 0) {
@@ -56,7 +54,6 @@ export const executeBuffBargainTrade = async (
       const bargain = bargains.data.items.find((item) => item.sell_order_id === sell_order_id)
 
       if (bargain && (bargain.state === 5 || bargain.state === 2 || bargain.state === 3)) {
-        if (bargain.state === 5) SELLER_BLACKLIST.push(bargain.seller_id)
         await sendMessage(bargain.state_text, value.telegram_message_id).then(() => {
           BARGAIN_NOTIFICATIONS.delete(sell_order_id)
         })
@@ -75,8 +72,7 @@ export const executeBuffBargainTrade = async (
     if (!lowestPricedItem) return
     if (!lowestPricedItem.allow_bargain) return
     if (!isLessThanXMinutes(lowestPricedItem.created_at, 1)) return
-    if (SENT_GOODS_IDS.includes(lowestPricedItem.id)) return
-    if (SELLER_BLACKLIST.includes(lowestPricedItem.user_id)) return
+    if (FLOAT_BLACKLIST.has(lowestPricedItem.asset_info.instanceid)) return
 
     const userStorePopup = await getUserStorePopup({ user_id: lowestPricedItem.user_id })
 
@@ -85,8 +81,8 @@ export const executeBuffBargainTrade = async (
 
     const goodsInfo = await getGoodsInfo({ goods_id })
     const reference_price = Number(goodsInfo.data.goods_info.goods_ref_price)
-
     const bargain_price = Math.ceil(Number((Math.min(median_price, reference_price) * 0.875).toFixed(2)))
+    const paintwear = lowestPricedItem.asset_info.paintwear
 
     if (
       Number(lowestPricedItem.price) > bargain_price &&
@@ -113,11 +109,13 @@ export const executeBuffBargainTrade = async (
           source: options.source,
         })
       ).then((message) => {
-        SENT_GOODS_IDS.push(lowestPricedItem.id)
         BARGAIN_NOTIFICATIONS.set(lowestPricedItem.id, {
           sell_order_id: lowestPricedItem.id,
           telegram_message_id: message.result.message_id,
         })
+        if (paintwear) {
+          FLOAT_BLACKLIST.add(paintwear)
+        }
       })
     }
   } else {
@@ -127,12 +125,12 @@ export const executeBuffBargainTrade = async (
     if (!lowestPricedItem) return
     if (!lowestPricedItem.allow_bargain) return
     if (!isLessThanXMinutes(lowestPricedItem.created_at, 1)) return
-    if (SENT_GOODS_IDS.includes(lowestPricedItem.id)) return
-    if (SELLER_BLACKLIST.includes(lowestPricedItem.user_id)) return
+    if (FLOAT_BLACKLIST.has(lowestPricedItem.asset_info.instanceid)) return
 
     const prices = await getMaxPricesForXDays(item.market_hash_name)
     const min_steam_price = prices.length !== 0 ? Math.min(...prices) : 0
     const bargain_price = Math.ceil(Number((min_steam_price / (1 + STEAM_PURCHASE_THRESHOLD / 100)).toFixed(2)))
+    const paintwear = lowestPricedItem.asset_info.paintwear
 
     if (
       Number(lowestPricedItem.price) > bargain_price &&
@@ -160,11 +158,13 @@ export const executeBuffBargainTrade = async (
           source: options.source,
         })
       ).then((message) => {
-        SENT_GOODS_IDS.push(lowestPricedItem.id)
         BARGAIN_NOTIFICATIONS.set(lowestPricedItem.id, {
           sell_order_id: lowestPricedItem.id,
           telegram_message_id: message.result.message_id,
         })
+        if (paintwear) {
+          FLOAT_BLACKLIST.add(paintwear)
+        }
       })
     }
   }

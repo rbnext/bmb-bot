@@ -230,6 +230,9 @@ export type SentBargainItem = {
   sell_order_id: string
   state_text: string
   seller_id: string
+  asset_info: {
+    paintwear: string
+  }
 }
 
 export type SentBargain = {

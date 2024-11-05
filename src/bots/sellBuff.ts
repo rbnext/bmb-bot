@@ -50,7 +50,6 @@ export const sellBuff = async () => {
 
     for (const item of response.data.items) {
       if (
-        item.goods_id !== 30505 &&
         item.asset_info.paintwear &&
         item.asset_info.info.stickers.length === 0 &&
         (!item.asset_info.info.keychains || item.asset_info.info.keychains.length === 0)

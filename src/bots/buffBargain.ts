@@ -13,7 +13,7 @@ export const GOODS_BLACKLIST_CACHE: number[] = []
 
 const buffBargain = async () => {
   try {
-    const marketGoods = await getMarketGoods({ min_price: 80, max_price: 140 })
+    const marketGoods = await getMarketGoods({ min_price: 50, max_price: 140 })
 
     for (const item of marketGoods.data.items) {
       const now = format(new Date(), 'HH:mm:ss')

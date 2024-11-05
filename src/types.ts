@@ -45,6 +45,9 @@ export type ShopBillOrderItem = {
   original_price: string
   price: string
   goods_id: number
+  asset_info: {
+    paintwear: string
+  }
 }
 
 export type ShopBillOrder = {
@@ -224,6 +227,8 @@ export type UserStorePopup = {
 export type SentBargainItem = {
   id: string
   state: number
+  goods_id: number
+  price: string
   created_at: number
   can_cancel_time: number
   can_cancel_timeout: number
@@ -238,6 +243,11 @@ export type SentBargainItem = {
 export type SentBargain = {
   data: {
     items: SentBargainItem[]
+    goods_infos: {
+      [key: number]: {
+        market_hash_name: string
+      }
+    }
   }
 }
 

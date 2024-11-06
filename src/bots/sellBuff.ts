@@ -13,7 +13,6 @@ import { CURRENT_USER_ID } from '../config'
 import { OnSaleItem, SellOrderItem, SellOrderPayload } from '../types'
 import { sleep } from '../utils'
 import { format } from 'date-fns'
-import { getTotalStickerPrice } from '../helpers/getTotalStickerPrice'
 
 const findByFloatAndMarketHash = async ({
   market_hash_name,
@@ -50,17 +49,13 @@ export const sellBuff = async () => {
     const response = await getItemsOnSale({ page_num })
 
     for (const item of response.data.items) {
-      const totalStickerPrice = await getTotalStickerPrice(item)
-
       if (
-        totalStickerPrice <= 0.2 &&
         item.asset_info.paintwear &&
+        item.asset_info.info.stickers.length === 0 &&
         (!item.asset_info.info.keychains || item.asset_info.info.keychains.length === 0)
       ) {
         sell_items.push(item)
       }
-
-      if (item.asset_info.info.stickers.length !== 0) await sleep(3_000)
     }
 
     if (response.data.items.length !== 40) {
@@ -94,27 +89,16 @@ export const sellBuff = async () => {
     if (current_index === 0 && purchasedItem) {
       const next_price = Number(response.data.items[current_index + 1].price)
 
-      const isNextMe = response.data.items[current_index + 1].user_id === CURRENT_USER_ID
-
-      if (current_price === next_price && !isNextMe) {
+      if (current_price === next_price) {
         sell_orders.push({ price: (current_price - 0.01).toFixed(2), ...payload })
-      } else if (Number((next_price - current_price).toFixed(2)) > 0.01 && !isNextMe) {
+      } else if (Number((next_price - current_price).toFixed(2)) > 0.01) {
         sell_orders.push({ price: (next_price - 0.01).toFixed(2), ...payload })
-      } else if (current_price !== next_price && isNextMe) {
-        sell_orders.push({ price: next_price.toFixed(2), ...payload })
       }
     }
 
     if (current_index > 0 && purchasedItem) {
       const prev_price = Number(response.data.items[current_index - 1].price)
       const next_price = Number(response.data.items[current_index + 1].price)
-
-      const isPrevMe = response.data.items[current_index - 1].user_id === CURRENT_USER_ID
-      const isNextMe = response.data.items[current_index + 1].user_id === CURRENT_USER_ID
-
-      if (isPrevMe || isNextMe) {
-        continue
-      }
 
       if (prev_price === current_price || next_price === current_price) {
         const price = (current_price - 0.01).toFixed(2)

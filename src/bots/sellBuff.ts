@@ -40,8 +40,6 @@ const sellOrdersEntity = (data: SellOrderPayload): SellOrderItem => {
   }
 }
 
-const DB = {}
-
 export const sellBuff = async () => {
   const pages = Array.from({ length: 50 }, (_, i) => i + 1)
 
@@ -55,7 +53,7 @@ export const sellBuff = async () => {
       const totalStickerPrice = await getTotalStickerPrice(item)
 
       if (
-        totalStickerPrice >= 0.2 &&
+        totalStickerPrice <= 0.2 &&
         item.asset_info.paintwear &&
         (!item.asset_info.info.keychains || item.asset_info.info.keychains.length === 0)
       ) {

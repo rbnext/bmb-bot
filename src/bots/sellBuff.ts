@@ -13,6 +13,7 @@ import { CURRENT_USER_ID } from '../config'
 import { OnSaleItem, SellOrderItem, SellOrderPayload } from '../types'
 import { sleep } from '../utils'
 import { format } from 'date-fns'
+import { getTotalStickerPrice } from '../helpers/getTotalStickerPrice'
 
 const findByFloatAndMarketHash = async ({
   market_hash_name,
@@ -39,6 +40,8 @@ const sellOrdersEntity = (data: SellOrderPayload): SellOrderItem => {
   }
 }
 
+const DB = {}
+
 export const sellBuff = async () => {
   const pages = Array.from({ length: 50 }, (_, i) => i + 1)
 
@@ -49,13 +52,17 @@ export const sellBuff = async () => {
     const response = await getItemsOnSale({ page_num })
 
     for (const item of response.data.items) {
+      const totalStickerPrice = await getTotalStickerPrice(item)
+
       if (
+        totalStickerPrice >= 0.2 &&
         item.asset_info.paintwear &&
-        item.asset_info.info.stickers.length === 0 &&
         (!item.asset_info.info.keychains || item.asset_info.info.keychains.length === 0)
       ) {
         sell_items.push(item)
       }
+
+      if (item.asset_info.info.stickers.length !== 0) await sleep(3_000)
     }
 
     if (response.data.items.length !== 40) {

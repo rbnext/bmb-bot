@@ -1,7 +1,7 @@
 import { getMarketItemDetail } from '../api/buff'
-import { GoodsSellOrderItem } from '../types'
+import { GoodsSellOrderItem, OnSaleItem } from '../types'
 
-export const getTotalStickerPrice = async (data: GoodsSellOrderItem) => {
+export const getTotalStickerPrice = async (data: GoodsSellOrderItem | OnSaleItem) => {
   if (data.asset_info.info.stickers.length === 0) {
     return 0
   }

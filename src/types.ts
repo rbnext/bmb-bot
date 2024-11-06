@@ -290,6 +290,7 @@ export type OnSaleItem = {
     classid: string
     instanceid: string
     paintwear: string
+    contextid: number
     info: {
       stickers: Sticker[]
       keychains?: string[]

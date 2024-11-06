@@ -94,16 +94,27 @@ export const sellBuff = async () => {
     if (current_index === 0 && purchasedItem) {
       const next_price = Number(response.data.items[current_index + 1].price)
 
-      if (current_price === next_price) {
+      const isNextMe = response.data.items[current_index + 1].user_id === CURRENT_USER_ID
+
+      if (current_price === next_price && !isNextMe) {
         sell_orders.push({ price: (current_price - 0.01).toFixed(2), ...payload })
-      } else if (Number((next_price - current_price).toFixed(2)) > 0.01) {
+      } else if (Number((next_price - current_price).toFixed(2)) > 0.01 && !isNextMe) {
         sell_orders.push({ price: (next_price - 0.01).toFixed(2), ...payload })
+      } else if (current_price !== next_price && isNextMe) {
+        sell_orders.push({ price: next_price.toFixed(2), ...payload })
       }
     }
 
     if (current_index > 0 && purchasedItem) {
       const prev_price = Number(response.data.items[current_index - 1].price)
       const next_price = Number(response.data.items[current_index + 1].price)
+
+      const isPrevMe = response.data.items[current_index - 1].user_id === CURRENT_USER_ID
+      const isNextMe = response.data.items[current_index + 1].user_id === CURRENT_USER_ID
+
+      if (isPrevMe || isNextMe) {
+        continue
+      }
 
       if (prev_price === current_price || next_price === current_price) {
         const price = (current_price - 0.01).toFixed(2)

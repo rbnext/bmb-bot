@@ -1,4 +1,4 @@
-import { formatDistance, isAfter, subHours, subMinutes } from 'date-fns'
+import { differenceInMinutes, formatDistance, isAfter, subHours, subMinutes } from 'date-fns'
 import { MessageType, ShopBillOrderItem, Source } from './types'
 
 export const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms))
@@ -19,6 +19,10 @@ export const isLessThanXHours = (date: number, hours = 24) => {
 
 export const isLessThanXMinutes = (date: number, minutes = 1) => {
   return isAfter(new Date(date * 1000), subMinutes(new Date(), minutes))
+}
+
+export const getDifferenceInMinutes = (date1: number, date2: number): number => {
+  return differenceInMinutes(new Date(date1 * 1_000), new Date(date2 * 1_000))
 }
 
 export const isLessThanThreshold = (aPrice: number, bPrice: number, threshold = 1) => {

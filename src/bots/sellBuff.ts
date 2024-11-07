@@ -133,18 +133,18 @@ export const sellBuff = async () => {
     await postSellOrderChange({ sell_orders: sell_orders.map(sellOrdersEntity) })
   }
 
-  const sentBargains = await getSentBargain({})
+  // const sentBargains = await getSentBargain({})
 
-  for (const item of sentBargains.data.items) {
-    if (item.can_cancel_timeout < -1) {
-      await sleep(5_000)
-      const now = format(new Date(), 'HH:mm:ss')
-      const response = await postCancelBargain({ bargain_id: item.id })
-      console.log(`${now}: bargain cancel timeout ${item.can_cancel_timeout}`)
-      if (response.code !== 'OK') console.log(`${now}: failed to cancel bargain ${item.id}.`)
-      else console.log(`${now}: bargain has been canceled ${item.id}.`)
-    }
-  }
+  // for (const item of sentBargains.data.items) {
+  //   if (item.can_cancel_timeout < -1) {
+  //     await sleep(5_000)
+  //     const now = format(new Date(), 'HH:mm:ss')
+  //     const response = await postCancelBargain({ bargain_id: item.id })
+  //     console.log(`${now}: bargain cancel timeout ${item.can_cancel_timeout}`)
+  //     if (response.code !== 'OK') console.log(`${now}: failed to cancel bargain ${item.id}.`)
+  //     else console.log(`${now}: bargain has been canceled ${item.id}.`)
+  //   }
+  // }
 
   await sleep(60_000 * 10)
 

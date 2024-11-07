@@ -5,8 +5,6 @@ import {
   getGoodsSellOrder,
   getItemsOnSale,
   getMarketBatchFee,
-  getSentBargain,
-  postCancelBargain,
   postSellOrderChange,
 } from '../api/buff'
 import { CURRENT_USER_ID } from '../config'

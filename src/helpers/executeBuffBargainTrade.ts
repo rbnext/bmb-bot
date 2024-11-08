@@ -20,7 +20,7 @@ type BargainNotification = {
 
 const FLOAT_BLACKLIST = new Set<string>()
 const BARGAIN_NOTIFICATIONS = new Map<string, BargainNotification>()
-const SELLER_BLACKLIST: string[] = ['U1093134454']
+const SELLER_BLACKLIST: string[] = ['U1093134454', 'U1093468966']
 
 export const executeBuffBargainTrade = async (
   item: MarketGoodsItem,
@@ -83,7 +83,7 @@ export const executeBuffBargainTrade = async (
 
     const goodsInfo = await getGoodsInfo({ goods_id })
     const reference_price = Number(goodsInfo.data.goods_info.goods_ref_price)
-    const bargain_price = Math.ceil(Number((Math.min(median_price, reference_price) * 0.875).toFixed(2)))
+    const bargain_price = Number((Math.min(median_price, reference_price) * 0.875).toFixed(1))
     const paintwear = lowestPricedItem.asset_info.paintwear
 
     if (
@@ -132,7 +132,7 @@ export const executeBuffBargainTrade = async (
 
     const prices = await getMaxPricesForXDays(item.market_hash_name)
     const min_steam_price = prices.length !== 0 ? Math.min(...prices) : 0
-    const bargain_price = Math.ceil(Number((min_steam_price / (1 + STEAM_PURCHASE_THRESHOLD / 100)).toFixed(2)))
+    const bargain_price = Number((min_steam_price / (1 + STEAM_PURCHASE_THRESHOLD / 100)).toFixed(1))
     const paintwear = lowestPricedItem.asset_info.paintwear
 
     if (

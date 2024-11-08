@@ -20,6 +20,7 @@ type BargainNotification = {
 
 const FLOAT_BLACKLIST = new Set<string>()
 const BARGAIN_NOTIFICATIONS = new Map<string, BargainNotification>()
+const SELLER_BLACKLIST: string[] = ['U1093134454']
 
 export const executeBuffBargainTrade = async (
   item: MarketGoodsItem,
@@ -73,6 +74,7 @@ export const executeBuffBargainTrade = async (
     if (!lowestPricedItem.allow_bargain) return
     if (!isLessThanXMinutes(lowestPricedItem.created_at, 1)) return
     if (FLOAT_BLACKLIST.has(lowestPricedItem.asset_info.instanceid)) return
+    if (SELLER_BLACKLIST.includes(lowestPricedItem.user_id)) return
 
     const userStorePopup = await getUserStorePopup({ user_id: lowestPricedItem.user_id })
 
@@ -126,6 +128,7 @@ export const executeBuffBargainTrade = async (
     if (!lowestPricedItem.allow_bargain) return
     if (!isLessThanXMinutes(lowestPricedItem.created_at, 1)) return
     if (FLOAT_BLACKLIST.has(lowestPricedItem.asset_info.instanceid)) return
+    if (SELLER_BLACKLIST.includes(lowestPricedItem.user_id)) return
 
     const prices = await getMaxPricesForXDays(item.market_hash_name)
     const min_steam_price = prices.length !== 0 ? Math.min(...prices) : 0

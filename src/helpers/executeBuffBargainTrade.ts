@@ -20,7 +20,7 @@ type BargainNotification = {
 
 const FLOAT_BLACKLIST = new Set<string>()
 const BARGAIN_NOTIFICATIONS = new Map<string, BargainNotification>()
-const SELLER_BLACKLIST: string[] = ['U1093134454', 'U1093468966']
+const SELLER_BLACKLIST: string[] = ['U1093134454', 'U1093468966', 'U1093218438']
 
 export const executeBuffBargainTrade = async (
   item: MarketGoodsItem,

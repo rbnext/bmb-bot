@@ -40,111 +40,111 @@ const sellOrdersEntity = (data: SellOrderPayload): SellOrderItem => {
 }
 
 export const sellBuff = async () => {
-  // const pages = Array.from({ length: 50 }, (_, i) => i + 1)
+  const pages = Array.from({ length: 50 }, (_, i) => i + 1)
 
-  // const sell_items: OnSaleItem[] = []
-  // const sell_orders: SellOrderPayload[] = []
+  const sell_items: OnSaleItem[] = []
+  const sell_orders: SellOrderPayload[] = []
 
-  // for (const page_num of pages) {
-  //   const response = await getItemsOnSale({ page_num })
+  for (const page_num of pages) {
+    const response = await getItemsOnSale({ page_num })
 
-  //   for (const item of response.data.items) {
-  //     if (
-  //       ![28896, 19777].includes(item.goods_id) &&
-  //       item.asset_info.paintwear &&
-  //       item.asset_info.info.stickers.length === 0 &&
-  //       (!item.asset_info.info.keychains || item.asset_info.info.keychains.length === 0)
-  //     ) {
-  //       sell_items.push(item)
-  //     }
-  //   }
-
-  //   if (response.data.items.length !== 40) {
-  //     break
-  //   }
-
-  //   await sleep(10_000)
-  // }
-
-  // for (const item of sell_items) {
-  //   const sell_order_id = item.id
-  //   const goods_id = item.goods_id
-  //   const response = await getGoodsSellOrder({ goods_id })
-  //   await sleep(5_000)
-
-  //   const current_index = response.data.items.findIndex(
-  //     ({ user_id, asset_info }) => user_id === CURRENT_USER_ID && asset_info.paintwear === item.asset_info.paintwear
-  //   )
-
-  //   if (current_index === -1 || !response.data.items[current_index + 1]) {
-  //     continue
-  //   }
-
-  //   const paintwear = item.asset_info.paintwear
-  //   const market_hash_name = response.data.goods_infos[goods_id].market_hash_name
-  //   const current_price = Number(response.data.items[current_index].price)
-  //   const payload = { sell_order_id, goods_id, prev_price: current_price, desc: '', income: 0 }
-
-  //   const purchasedItem = await findByFloatAndMarketHash({ market_hash_name, paintwear })
-
-  //   if (current_index === 0 && purchasedItem) {
-  //     const next_price = Number(response.data.items[current_index + 1].price)
-
-  //     if (current_price === next_price) {
-  //       sell_orders.push({ price: (current_price - 0.01).toFixed(2), ...payload })
-  //     } else if (Number((next_price - current_price).toFixed(2)) > 0.01) {
-  //       sell_orders.push({ price: (next_price - 0.01).toFixed(2), ...payload })
-  //     }
-  //   }
-
-  //   if (current_index > 0 && purchasedItem) {
-  //     const prev_price = Number(response.data.items[current_index - 1].price)
-  //     const next_price = Number(response.data.items[current_index + 1].price)
-
-  //     if (prev_price === current_price || next_price === current_price) {
-  //       const price = (current_price - 0.01).toFixed(2)
-  //       const estimated_profit = getEstimatedProfit(price, purchasedItem.price)
-
-  //       if (estimated_profit >= 5) sell_orders.push({ price, ...payload })
-  //     } else {
-  //       const price = (prev_price - 0.01).toFixed(2)
-  //       const estimated_profit = getEstimatedProfit(price, purchasedItem.price)
-
-  //       if (estimated_profit >= 5) sell_orders.push({ price, ...payload })
-  //       else {
-  //         const price = (next_price - 0.01).toFixed(2)
-  //         if (Number(price) !== current_price) sell_orders.push({ price, ...payload })
-  //       }
-  //     }
-  //   }
-
-  //   await sleep(5_000)
-  // }
-
-  // for (const sell_order of sell_orders) {
-  //   const now = format(new Date(), 'HH:mm:ss')
-  //   const fee = await getMarketBatchFee({ goods_ids: String(sell_order.goods_id), prices: sell_order.price })
-  //   sell_order.income = Number((Number(sell_order.price) - Number(fee.data.total_fee)).toFixed(2))
-  //   console.log(`${now}: ${sell_order.goods_id} $${sell_order.prev_price} -> $${sell_order.price}`)
-  //   await sleep(5_000)
-  // }
-
-  // if (sell_orders.length !== 0) {
-  //   await postSellOrderChange({ sell_orders: sell_orders.map(sellOrdersEntity) })
-  // }
-
-  const sentBargains = await getSentBargain({})
-
-  for (const item of sentBargains.data.items) {
-    if (item.can_cancel_timeout < -1) {
-      await sleep(5_000)
-      const now = format(new Date(), 'HH:mm:ss')
-      const response = await postCancelBargain({ bargain_id: item.id })
-      console.log(`${now}: bargain cancel timeout ${item.can_cancel_timeout}`)
-      if (response.code !== 'OK') console.log(`${now}: failed to cancel bargain ${item.id}.`)
-      else console.log(`${now}: bargain has been canceled ${item.id}.`)
+    for (const item of response.data.items) {
+      if (
+        ![28896, 19777].includes(item.goods_id) &&
+        item.asset_info.paintwear &&
+        item.asset_info.info.stickers.length === 0 &&
+        (!item.asset_info.info.keychains || item.asset_info.info.keychains.length === 0)
+      ) {
+        sell_items.push(item)
+      }
     }
+
+    if (response.data.items.length !== 40) {
+      break
+    }
+
+    await sleep(10_000)
   }
+
+  for (const item of sell_items) {
+    const sell_order_id = item.id
+    const goods_id = item.goods_id
+    const response = await getGoodsSellOrder({ goods_id })
+    await sleep(5_000)
+
+    const current_index = response.data.items.findIndex(
+      ({ user_id, asset_info }) => user_id === CURRENT_USER_ID && asset_info.paintwear === item.asset_info.paintwear
+    )
+
+    if (current_index === -1 || !response.data.items[current_index + 1]) {
+      continue
+    }
+
+    const paintwear = item.asset_info.paintwear
+    const market_hash_name = response.data.goods_infos[goods_id].market_hash_name
+    const current_price = Number(response.data.items[current_index].price)
+    const payload = { sell_order_id, goods_id, prev_price: current_price, desc: '', income: 0 }
+
+    const purchasedItem = await findByFloatAndMarketHash({ market_hash_name, paintwear })
+
+    if (current_index === 0 && purchasedItem) {
+      const next_price = Number(response.data.items[current_index + 1].price)
+
+      if (current_price === next_price) {
+        sell_orders.push({ price: (current_price - 0.01).toFixed(2), ...payload })
+      } else if (Number((next_price - current_price).toFixed(2)) > 0.01) {
+        sell_orders.push({ price: (next_price - 0.01).toFixed(2), ...payload })
+      }
+    }
+
+    if (current_index > 0 && purchasedItem) {
+      const prev_price = Number(response.data.items[current_index - 1].price)
+      const next_price = Number(response.data.items[current_index + 1].price)
+
+      if (prev_price === current_price || next_price === current_price) {
+        const price = (current_price - 0.01).toFixed(2)
+        const estimated_profit = getEstimatedProfit(price, purchasedItem.price)
+
+        if (estimated_profit >= 5) sell_orders.push({ price, ...payload })
+      } else {
+        const price = (prev_price - 0.01).toFixed(2)
+        const estimated_profit = getEstimatedProfit(price, purchasedItem.price)
+
+        if (estimated_profit >= 5) sell_orders.push({ price, ...payload })
+        else {
+          const price = (next_price - 0.01).toFixed(2)
+          if (Number(price) !== current_price) sell_orders.push({ price, ...payload })
+        }
+      }
+    }
+
+    await sleep(5_000)
+  }
+
+  for (const sell_order of sell_orders) {
+    const now = format(new Date(), 'HH:mm:ss')
+    const fee = await getMarketBatchFee({ goods_ids: String(sell_order.goods_id), prices: sell_order.price })
+    sell_order.income = Number((Number(sell_order.price) - Number(fee.data.total_fee)).toFixed(2))
+    console.log(`${now}: ${sell_order.goods_id} $${sell_order.prev_price} -> $${sell_order.price}`)
+    await sleep(5_000)
+  }
+
+  if (sell_orders.length !== 0) {
+    await postSellOrderChange({ sell_orders: sell_orders.map(sellOrdersEntity) })
+  }
+
+  // const sentBargains = await getSentBargain({})
+
+  // for (const item of sentBargains.data.items) {
+  //   if (item.can_cancel_timeout < -1) {
+  //     await sleep(5_000)
+  //     const now = format(new Date(), 'HH:mm:ss')
+  //     const response = await postCancelBargain({ bargain_id: item.id })
+  //     console.log(`${now}: bargain cancel timeout ${item.can_cancel_timeout}`)
+  //     if (response.code !== 'OK') console.log(`${now}: failed to cancel bargain ${item.id}.`)
+  //     else console.log(`${now}: bargain has been canceled ${item.id}.`)
+  //   }
+  // }
 
   await sleep(60_000 * 10)
 

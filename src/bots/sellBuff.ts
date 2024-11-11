@@ -81,13 +81,14 @@ export const sellBuff = async () => {
     }
 
     const paintwear = item.asset_info.paintwear
+    const next_user = response.data.items[current_index + 1].user_id
     const market_hash_name = response.data.goods_infos[goods_id].market_hash_name
     const current_price = Number(response.data.items[current_index].price)
     const payload = { sell_order_id, goods_id, prev_price: current_price, desc: '', income: 0 }
 
     const purchasedItem = await findByFloatAndMarketHash({ market_hash_name, paintwear })
 
-    if (current_index === 0 && purchasedItem) {
+    if (current_index === 0 && purchasedItem && next_user !== CURRENT_USER_ID) {
       const next_price = Number(response.data.items[current_index + 1].price)
 
       if (current_price === next_price) {
@@ -98,8 +99,14 @@ export const sellBuff = async () => {
     }
 
     if (current_index > 0 && purchasedItem) {
+      const prev_user = response.data.items[current_index - 1].user_id
+
       const prev_price = Number(response.data.items[current_index - 1].price)
       const next_price = Number(response.data.items[current_index + 1].price)
+
+      if (prev_user === CURRENT_USER_ID || next_user === CURRENT_USER_ID) {
+        continue
+      }
 
       if (prev_price === current_price || next_price === current_price) {
         const price = (current_price - 0.01).toFixed(2)
@@ -133,18 +140,18 @@ export const sellBuff = async () => {
     await postSellOrderChange({ sell_orders: sell_orders.map(sellOrdersEntity) })
   }
 
-  // const sentBargains = await getSentBargain({})
+  const sentBargains = await getSentBargain({})
 
-  // for (const item of sentBargains.data.items) {
-  //   if (item.can_cancel_timeout < -1) {
-  //     await sleep(5_000)
-  //     const now = format(new Date(), 'HH:mm:ss')
-  //     const response = await postCancelBargain({ bargain_id: item.id })
-  //     console.log(`${now}: bargain cancel timeout ${item.can_cancel_timeout}`)
-  //     if (response.code !== 'OK') console.log(`${now}: failed to cancel bargain ${item.id}.`)
-  //     else console.log(`${now}: bargain has been canceled ${item.id}.`)
-  //   }
-  // }
+  for (const item of sentBargains.data.items) {
+    if (item.can_cancel_timeout < -1) {
+      await sleep(5_000)
+      const now = format(new Date(), 'HH:mm:ss')
+      const response = await postCancelBargain({ bargain_id: item.id })
+      console.log(`${now}: bargain cancel timeout ${item.can_cancel_timeout}`)
+      if (response.code !== 'OK') console.log(`${now}: failed to cancel bargain ${item.id}.`)
+      else console.log(`${now}: bargain has been canceled ${item.id}.`)
+    }
+  }
 
   await sleep(60_000 * 10)
 

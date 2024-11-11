@@ -7,6 +7,8 @@ import {
   postCreateBargain,
 } from './api/buff'
 import { getDifferenceInMinutes, sleep } from './utils'
+import { getCSFloatListings } from './api/csfloat'
+import { format } from 'date-fns'
 
 const ACTIVE_BARGAINS = new Set<string>()
 
@@ -51,27 +53,51 @@ const ACTIVE_BARGAINS = new Set<string>()
 //   init()
 // }
 
+// const init = async () => {
+//   const pages = Array.from({ length: 1 }, (_, i) => i + 1)
+//   for (const page_num of pages) {
+//     const bargains = await getSentBargain({ page_num })
+
+//     for (const bargain of bargains.data.items) {
+//       const response = await getShopBillOrder({ user_id: bargain.seller_id })
+
+//       if (bargain.asset_info.paintwear) {
+//         const market_hash_name = bargains.data.goods_infos[bargain.goods_id].market_hash_name
+//         const item = response.data.items.find((el) => el.asset_info.paintwear === bargain.asset_info.paintwear)
+
+//         if (item) {
+//           console.log(market_hash_name, `${bargain.price}/${item.original_price} ->`, item.price, bargain.state_text)
+//         }
+//       }
+
+//       await sleep(5_000)
+//     }
+//     await sleep(5_000)
+//   }
+// }
+
+const BLACKLIST = new Set<string>()
+
 const init = async () => {
-  const pages = Array.from({ length: 1 }, (_, i) => i + 1)
-  for (const page_num of pages) {
-    const bargains = await getSentBargain({ page_num })
+  const data = await getCSFloatListings({})
 
-    for (const bargain of bargains.data.items) {
-      const response = await getShopBillOrder({ user_id: bargain.seller_id })
+  for (const item of data.data) {
+    const now = format(new Date(), 'HH:mm:ss')
 
-      if (bargain.asset_info.paintwear) {
-        const market_hash_name = bargains.data.goods_infos[bargain.goods_id].market_hash_name
-        const item = response.data.items.find((el) => el.asset_info.paintwear === bargain.asset_info.paintwear)
+    const current_price = Number(Number(item.price / 100).toFixed(2))
+    const base_price_price = Number(Number(item.reference.predicted_price / 100).toFixed(2))
+    const profit = Number(((base_price_price / current_price - 1) * 100).toFixed(2))
 
-        if (item) {
-          console.log(market_hash_name, `${bargain.price}/${item.original_price} ->`, item.price, bargain.state_text)
-        }
-      }
-
-      await sleep(5_000)
+    if (profit >= 10 && !BLACKLIST.has(item.id)) {
+      console.log(`${now} ${item.item.market_hash_name}. Price: $${current_price}. Profit: ${profit}%`)
     }
-    await sleep(5_000)
+
+    BLACKLIST.add(item.id)
   }
+
+  await sleep(30_000)
+
+  init()
 }
 
 init()

@@ -409,3 +409,27 @@ export type TelegramResponse = {
     message_id: number
   }
 }
+
+type CSFloatListingItem = {
+  created_at: string
+  id: string
+  price: number
+  item: {
+    market_hash_name: string
+    float_value: number
+    is_stattrak: boolean
+    is_souvenir: boolean
+    is_commodity: boolean
+  }
+  reference: {
+    base_price: number
+    last_updated: string
+    predicted_price: number
+    quantity: number
+  }
+  type: 'buy_now'
+}
+
+export type CSFloatListing = {
+  data: CSFloatListingItem[]
+}

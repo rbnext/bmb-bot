@@ -63,7 +63,7 @@ const buffBargain = async () => {
 ;(async () => {
   const pages = Array.from({ length: 50 }, (_, i) => i + 1)
 
-  console.log('Settings: ', JSON.stringify({ min_price, max_price }))
+  console.log('Bargain settings:', JSON.stringify({ min_price, max_price }))
 
   for (const page_num of pages) {
     const goods = await getMarketGoods({ page_num, min_price, max_price })

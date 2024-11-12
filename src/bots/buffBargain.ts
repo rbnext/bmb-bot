@@ -11,9 +11,12 @@ import { executeBuffBargainTrade } from '../helpers/executeBuffBargainTrade'
 export const GOODS_CACHE: Record<number, { price: number }> = {}
 export const GOODS_BLACKLIST_CACHE: number[] = []
 
+const min_price = Number(process.env.MIN_BARGAIN_PRICE) ?? 15
+const max_price = Number(process.env.MAX_BARGAIN_PRICE) ?? 30
+
 const buffBargain = async () => {
   try {
-    const marketGoods = await getMarketGoods({ min_price: 15, max_price: 35 })
+    const marketGoods = await getMarketGoods({ min_price, max_price })
 
     for (const item of marketGoods.data.items) {
       const now = format(new Date(), 'HH:mm:ss')
@@ -60,8 +63,10 @@ const buffBargain = async () => {
 ;(async () => {
   const pages = Array.from({ length: 50 }, (_, i) => i + 1)
 
+  console.log('Settings: ', JSON.stringify({ min_price, max_price }))
+
   for (const page_num of pages) {
-    const goods = await getMarketGoods({ page_num, min_price: 14, max_price: 40 })
+    const goods = await getMarketGoods({ page_num, min_price, max_price })
     for (const item of goods.data.items) GOODS_CACHE[item.id] = { price: Number(item.sell_min_price) }
     if (goods.data.items.length !== 50) break
     await sleep(5_000)

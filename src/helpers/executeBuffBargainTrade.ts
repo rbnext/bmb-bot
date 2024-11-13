@@ -130,6 +130,11 @@ export const executeBuffBargainTrade = async (
     if (FLOAT_BLACKLIST.has(lowestPricedItem.asset_info.instanceid)) return
     if (SELLER_BLACKLIST.includes(lowestPricedItem.user_id)) return
 
+    const userStorePopup = await getUserStorePopup({ user_id: lowestPricedItem.user_id })
+
+    if (userStorePopup.code !== 'OK') return
+    if (Number(userStorePopup.data.bookmark_count) > 2) return
+
     const prices = await getMaxPricesForXDays(item.market_hash_name)
     const min_steam_price = prices.length !== 0 ? Math.min(...prices) : 0
     const bargain_price = Number((min_steam_price / (1 + STEAM_PURCHASE_THRESHOLD / 100)).toFixed(1))

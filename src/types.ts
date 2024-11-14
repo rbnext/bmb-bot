@@ -387,6 +387,31 @@ export type SteamMarketPriceHistory = {
   prices: SteamMarketPriceHistoryItem[]
 }
 
+type SteamListingInfoAsset = {
+  link: string
+  name: string
+}
+
+type SteamListingInfoItem = {
+  listingid: string
+  converted_price: number
+  converted_fee: number
+  asset: {
+    id: string
+    market_actions: SteamListingInfoAsset[]
+  }
+}
+
+export type SteamMarketRender = {
+  pagesize: number
+  success: boolean
+  total_count: number
+  results_html: string
+  listinginfo: {
+    [listingid: string]: SteamListingInfoItem
+  }
+}
+
 export enum MessageType {
   Purchased = 'PURCHASED',
   Review = 'REVIEW',
@@ -407,6 +432,12 @@ export type TelegramResponse = {
   ok: boolean
   result: {
     message_id: number
+  }
+}
+
+export type InspectItemInfo = {
+  iteminfo: {
+    floatvalue: number
   }
 }
 

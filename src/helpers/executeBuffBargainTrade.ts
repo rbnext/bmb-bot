@@ -57,6 +57,7 @@ export const executeBuffBargainTrade = async (
       if (bargain && (bargain.state === 5 || bargain.state === 2 || bargain.state === 3)) {
         await sendMessage(bargain.state_text, value.telegram_message_id).then(() => {
           BARGAIN_NOTIFICATIONS.delete(sell_order_id)
+          FLOAT_BLACKLIST.add(bargain.asset_info.paintwear)
         })
         await sleep(1_000) // delay between requests to telegram
       }

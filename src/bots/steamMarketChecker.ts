@@ -51,6 +51,8 @@ export const steamMarketChecker = async () => {
   }
 
   await sleep(70_000)
+
+  steamMarketChecker()
 }
 
 steamMarketChecker()

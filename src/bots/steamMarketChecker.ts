@@ -38,7 +38,7 @@ export const steamMarketChecker = async () => {
             0
           )
 
-          if (stickerTotalPrice >= 10) {
+          if (stickerTotalPrice >= 30) {
             await sendMessage(
               generateSteamMessage({
                 price: price,

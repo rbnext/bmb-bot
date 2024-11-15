@@ -15,11 +15,7 @@ const getInspectLink = (link: string, assetId: string, listingId: string): strin
 
 export const steamMarketChecker = async () => {
   try {
-    for (const market_hash_name of [
-      'M4A4 | Temukau (Field-Tested)',
-      'Glock-18 | Water Elemental (Minimal Wear)',
-      'Desert Eagle | Conspiracy (Factory New)',
-    ]) {
+    for (const market_hash_name of ['AK-47 | Redline (Field-Tested)']) {
       const steam = await getMarketRender({ market_hash_name })
 
       for (const listingId of Object.keys(steam.listinginfo)) {
@@ -41,7 +37,7 @@ export const steamMarketChecker = async () => {
             0
           )
 
-          console.log(now, market_hash_name, price, response.iteminfo.floatvalue, stickerTotalPrice)
+          console.log(now, market_hash_name, '$' + price, response.iteminfo.floatvalue, '$' + stickerTotalPrice)
         } catch (error) {
           console.log('error', error.message)
           console.log(now, 'failed to get data for', inspectLink)
@@ -50,7 +46,7 @@ export const steamMarketChecker = async () => {
         CASHED_LISTINGS.add(listingId)
       }
 
-      await sleep(50_000)
+      await sleep(45_000)
     }
   } catch (error) {
     console.log('error', error.message)
@@ -63,10 +59,14 @@ export const steamMarketChecker = async () => {
   steamMarketChecker()
 }
 ;(async () => {
-  const pages = Array.from({ length: 50 }, (_, i) => i + 1)
+  const pages = Array.from({ length: 70 }, (_, i) => i + 1)
 
   for (const page_num of pages) {
-    const goods = await getMarketGoods({ page_num, category_group: 'sticker' })
+    const goods = await getMarketGoods({
+      page_num,
+      category_group: 'sticker',
+      sort_by: 'sell_num.desc',
+    })
     for (const item of goods.data.items) STICKER_PRICES.set(item.market_hash_name, Number(item.sell_min_price))
     if (goods.data.items.length !== 50) break
     await sleep(5_000)

@@ -1,5 +1,5 @@
 import { differenceInMinutes, formatDistance, isAfter, subHours, subMinutes } from 'date-fns'
-import { MessageType, ShopBillOrderItem, Source } from './types'
+import { InspectInfoStickerItem, MessageType, ShopBillOrderItem, Source } from './types'
 
 export const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms))
 
@@ -37,6 +37,35 @@ const messageTypeMapper = {
   [MessageType.Review]: '🔶',
   [MessageType.Bargain]: '🤝',
   [MessageType.ManualBargain]: '❗',
+}
+
+export const generateSteamMessage = ({
+  name,
+  price,
+  float,
+  stickers,
+  stickerTotal,
+}: {
+  name: string
+  price: number
+  float: number
+  stickers: InspectInfoStickerItem[]
+  stickerTotal: number
+}) => {
+  const message: string[] = []
+
+  message.push(`<a href="https://steamcommunity.com/market/listings/730/${name}">${name}</a>\n\n`)
+
+  for (const sticker of stickers) {
+    message.push(`${sticker.name}: ${sticker.wear === null ? '0%' : `${sticker.wear.toFixed(2)}%`}\n`)
+  }
+
+  message.push(`\n`)
+  message.push(`<b>Steam price</b>: $${price}\n`)
+  message.push(`<b>Sticker total</b>: $${stickerTotal.toFixed(2)}\n`)
+  message.push(`<b>Float</b>: ${float}\n`)
+
+  return message.join('')
 }
 
 export const generateMessage = ({

@@ -435,10 +435,10 @@ export type TelegramResponse = {
   }
 }
 
-type InspectInfoStickerItem = {
+export type InspectInfoStickerItem = {
   name: string
   slot: number
-  wear: null
+  wear: null | number
 }
 
 export type InspectItemInfo = {

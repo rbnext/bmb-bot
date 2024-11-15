@@ -3,7 +3,8 @@ import 'dotenv/config'
 import { format } from 'date-fns'
 import { getMarketRender } from '../api/steam'
 import { getMarketGoods } from '../api/buff'
-import { sleep } from '../utils'
+import { sendMessage } from '../api/telegram'
+import { generateSteamMessage, sleep } from '../utils'
 import { getIPInspectItemInfo } from '../api/pricempire'
 
 const CASHED_LISTINGS = new Set<string>()
@@ -36,6 +37,18 @@ export const steamMarketChecker = async () => {
             (acc, { wear, name }) => (wear === null ? acc + (STICKER_PRICES.get(`Sticker | ${name}`) ?? 0) : acc),
             0
           )
+
+          if (stickerTotalPrice >= 10) {
+            await sendMessage(
+              generateSteamMessage({
+                price: price,
+                name: market_hash_name,
+                float: response.iteminfo.floatvalue,
+                stickers: response.iteminfo?.stickers || [],
+                stickerTotal: stickerTotalPrice,
+              })
+            )
+          }
 
           console.log(now, market_hash_name, '$' + price, response.iteminfo.floatvalue, '$' + stickerTotalPrice)
         } catch (error) {

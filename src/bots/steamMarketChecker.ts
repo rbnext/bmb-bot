@@ -68,7 +68,6 @@ export const steamMarketChecker = async () => {
   for (const page_num of pages) {
     const goods = await getMarketGoods({ page_num, category_group: 'sticker' })
     for (const item of goods.data.items) STICKER_PRICES.set(item.market_hash_name, Number(item.sell_min_price))
-    console.log(page_num, goods.data.items.length)
     if (goods.data.items.length !== 50) break
     await sleep(5_000)
   }

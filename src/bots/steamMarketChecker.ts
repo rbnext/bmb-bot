@@ -1,9 +1,13 @@
+import 'dotenv/config'
+
 import { format } from 'date-fns'
-import { getInspectItemInfo } from '../api/pricempire'
 import { getMarketRender } from '../api/steam'
+import { getMarketGoods } from '../api/buff'
 import { sleep } from '../utils'
+import { getIPInspectItemInfo } from '../api/pricempire'
 
 const CASHED_LISTINGS = new Set<string>()
+const STICKER_PRICES = new Map<string, number>()
 
 const getInspectLink = (link: string, assetId: string, listingId: string): string => {
   return link.replace('%assetid%', assetId).replace('%listingid%', listingId)
@@ -12,8 +16,8 @@ const getInspectLink = (link: string, assetId: string, listingId: string): strin
 export const steamMarketChecker = async () => {
   try {
     for (const market_hash_name of [
-      'AK-47 | Redline (Field-Tested)',
-      'M4A1-S | Black Lotus (Factory New)',
+      'M4A4 | Temukau (Field-Tested)',
+      'Glock-18 | Water Elemental (Minimal Wear)',
       'Desert Eagle | Conspiracy (Factory New)',
     ]) {
       const steam = await getMarketRender({ market_hash_name })
@@ -30,16 +34,20 @@ export const steamMarketChecker = async () => {
         const inspectLink = getInspectLink(link, currentListing.asset.id, listingId)
 
         try {
-          const response = await getInspectItemInfo({ url: inspectLink })
+          const response = await getIPInspectItemInfo({ url: inspectLink })
 
-          console.log(now, market_hash_name, price, response.iteminfo.floatvalue)
+          const stickerTotalPrice = (response.iteminfo?.stickers || []).reduce(
+            (acc, { wear, name }) => (wear === null ? acc + (STICKER_PRICES.get(`Sticker | ${name}`) ?? 0) : acc),
+            0
+          )
+
+          console.log(now, market_hash_name, price, response.iteminfo.floatvalue, stickerTotalPrice)
         } catch (error) {
+          console.log('error', error.message)
           console.log(now, 'failed to get data for', inspectLink)
         }
 
         CASHED_LISTINGS.add(listingId)
-
-        await sleep(1_000)
       }
 
       await sleep(50_000)
@@ -54,5 +62,16 @@ export const steamMarketChecker = async () => {
 
   steamMarketChecker()
 }
+;(async () => {
+  const pages = Array.from({ length: 50 }, (_, i) => i + 1)
 
-steamMarketChecker()
+  for (const page_num of pages) {
+    const goods = await getMarketGoods({ page_num, category_group: 'sticker' })
+    for (const item of goods.data.items) STICKER_PRICES.set(item.market_hash_name, Number(item.sell_min_price))
+    console.log(page_num, goods.data.items.length)
+    if (goods.data.items.length !== 50) break
+    await sleep(5_000)
+  }
+
+  steamMarketChecker()
+})()

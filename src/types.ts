@@ -435,9 +435,47 @@ export type TelegramResponse = {
   }
 }
 
+type InspectInfoStickerItem = {
+  name: string
+  slot: number
+  wear: null
+}
+
 export type InspectItemInfo = {
   iteminfo: {
     floatvalue: number
+    full_item_name: string
+    imageurl: string
+    stickers: InspectInfoStickerItem[] | null
+  }
+}
+
+type FloatItemFinderStickerItem = {
+  name: string
+  wear: number | null
+}
+
+export type FloatItemFinder = {
+  paintwear: number
+  stickers: FloatItemFinderStickerItem[]
+}
+
+type SIHInspectItemInfoStickerItem = {
+  stickerId: number
+  name: string
+  wear: number
+  imageUrl: string
+  offset_x: number
+  offset_y: number
+}
+
+export type SIHInspectItemInfo = {
+  success: boolean
+  iteminfo: {
+    paintseed: number
+    paintindex: number
+    floatvalue: number
+    stickers: SIHInspectItemInfoStickerItem[]
   }
 }
 

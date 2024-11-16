@@ -4,6 +4,7 @@ import UserAgent from 'user-agents'
 
 import { SteamMarketPriceHistory, SteamMarketPriceOverview, SteamMarketRender } from '../types'
 import { HttpsProxyAgent } from 'https-proxy-agent'
+import { getRandomNumber } from '../utils'
 
 const instance = axios.create({
   baseURL: 'https://steamcommunity.com',
@@ -78,6 +79,7 @@ export const getMarketRender = async ({
   language?: 'english'
 }): Promise<SteamMarketRender> => {
   const userAgent = new UserAgent()
+  const PORT = getRandomNumber(10000, 10999)
 
   const { data } = await axios.get(
     `https://steamcommunity.com/market/listings/${appid}/${encodeURIComponent(market_hash_name)}/render/`,
@@ -88,7 +90,7 @@ export const getMarketRender = async ({
         'User-Agent': userAgent.toString(),
         Referer: `https://steamcommunity.com/market/listings/${appid}/` + encodeURIComponent(market_hash_name),
       },
-      httpsAgent: new HttpsProxyAgent(process.env.POOL_PROXY_URL as string),
+      httpsAgent: new HttpsProxyAgent(`${process.env.POOL_PROXY_URL}:${PORT}`),
     }
   )
 

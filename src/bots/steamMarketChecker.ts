@@ -17,7 +17,7 @@ const limiter = new Bottleneck({ maxConcurrent: MIN_TREADS })
 const MARKET_HASH_NAMES = [
   'AWP | Asiimov (Battle-Scarred)',
   'Desert Eagle | Printstream (Minimal Wear)',
-  'M4A1-S | Black Lotus (Factory New)',
+  'AK-47 | Phantom Disruptor (Field-Tested)',
   'AK-47 | Redline (Field-Tested)',
 ]
 
@@ -76,7 +76,7 @@ const findSteamItemInfo = async (market_hash_name: string) => {
       await sleep(1_000)
     }
   } catch (error) {
-    console.log(now, `ERROR:`, error.message)
+    console.log(now, `ERROR: Failed to inspect ${market_hash_name} from steamcommunity.com`)
   }
 }
 

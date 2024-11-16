@@ -170,3 +170,7 @@ export const getBargainDiscountPrice = (price: number, userSellingHistory: ShopB
 
   return Number((price - price * ((median(percents) > 8 ? 10.5 : 5) / 100)).toFixed(2))
 }
+
+export function getRandomNumber(min: number, max: number): number {
+  return Math.floor(Math.random() * (max - min + 1)) + min
+}

@@ -14,7 +14,13 @@ const MIN_TREADS: number = 2
 
 const limiter = new Bottleneck({ maxConcurrent: MIN_TREADS })
 
-const MARKET_HASH_NAMES = ['AK-47 | Phantom Disruptor (Field-Tested)']
+const MARKET_HASH_NAMES = [
+  'AK-47 | Slate (Field-Tested)',
+  'AK-47 | Phantom Disruptor (Field-Tested)',
+  'AK-47 | Emerald Pinstripe (Field-Tested)',
+  'AK-47 | Ice Coaled (Field-Tested)',
+  'AK-47 | Nightwish (Field-Tested)',
+]
 
 const getInspectLink = (link: string, assetId: string, listingId: string): string => {
   return link.replace('%assetid%', assetId).replace('%listingid%', listingId)
@@ -100,7 +106,7 @@ const findSteamItemInfo = async (market_hash_name: string) => {
       break // Exit the loop if all responses are errors
     }
 
-    await sleep(60_000) // Sleep 60s between requests
+    await sleep(50_000) // Sleep 50s between requests
 
     // eslint-disable-next-line no-constant-condition
   } while (true)

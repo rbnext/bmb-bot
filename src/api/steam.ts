@@ -1,7 +1,9 @@
 import axios from 'axios'
 import { setupCache } from 'axios-cache-interceptor'
+import UserAgent from 'user-agents'
 
 import { SteamMarketPriceHistory, SteamMarketPriceOverview, SteamMarketRender } from '../types'
+import { HttpsProxyAgent } from 'https-proxy-agent'
 
 const instance = axios.create({
   baseURL: 'https://steamcommunity.com',
@@ -75,13 +77,20 @@ export const getMarketRender = async ({
   count?: number
   language?: 'english'
 }): Promise<SteamMarketRender> => {
-  const { data } = await http.get(`/market/listings/${appid}/${encodeURIComponent(market_hash_name)}/render/`, {
-    params: { appid, country, currency, start, count, language },
-    headers: {
-      'content-type': 'application/json',
-    },
-    cache: false,
-  })
+  const userAgent = new UserAgent()
+
+  const { data } = await axios.get(
+    `https://steamcommunity.com/market/listings/${appid}/${encodeURIComponent(market_hash_name)}/render/`,
+    {
+      params: { appid, country, currency, start, count, language },
+      headers: {
+        Host: 'steamcommunity.com',
+        'User-Agent': userAgent.toString(),
+        Referer: `https://steamcommunity.com/market/listings/${appid}/` + encodeURIComponent(market_hash_name),
+      },
+      httpsAgent: new HttpsProxyAgent(process.env.POOL_PROXY_URL as string),
+    }
+  )
 
   return data
 }

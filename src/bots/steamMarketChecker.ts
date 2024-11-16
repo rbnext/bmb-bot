@@ -14,12 +14,7 @@ const MIN_TREADS: number = 2
 
 const limiter = new Bottleneck({ maxConcurrent: MIN_TREADS })
 
-const MARKET_HASH_NAMES = [
-  'AWP | Asiimov (Battle-Scarred)',
-  'Desert Eagle | Printstream (Minimal Wear)',
-  'AK-47 | Phantom Disruptor (Field-Tested)',
-  'AK-47 | Redline (Field-Tested)',
-]
+const MARKET_HASH_NAMES = ['AK-47 | Phantom Disruptor (Field-Tested)']
 
 const getInspectLink = (link: string, assetId: string, listingId: string): string => {
   return link.replace('%assetid%', assetId).replace('%listingid%', listingId)

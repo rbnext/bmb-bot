@@ -26,12 +26,12 @@ const getInspectLink = (link: string, assetId: string, listingId: string): strin
 }
 
 const findSteamItemInfo = async (market_hash_name: string) => {
+  const now = format(new Date(), 'HH:mm:ss')
+
   try {
     const steam = await getMarketRender({ market_hash_name })
 
     for (const listingId of Object.keys(steam.listinginfo)) {
-      const now = format(new Date(), 'HH:mm:ss')
-
       if (CASHED_LISTINGS.has(listingId)) continue
 
       const currentListing = steam.listinginfo[listingId]
@@ -60,15 +60,24 @@ const findSteamItemInfo = async (market_hash_name: string) => {
           )
         }
 
-        console.log(now, market_hash_name, '$' + price, response.iteminfo.floatvalue, '$' + stickerTotalPrice)
+        console.log(
+          now,
+          market_hash_name,
+          '$' + price,
+          response.iteminfo.floatvalue,
+          '$' + stickerTotalPrice.toFixed(2)
+        )
       } catch (error) {
-        console.log('error', error.message)
+        console.log(now, `ERROR: Failed to inspect item from pricempire.com`)
       }
 
       CASHED_LISTINGS.add(listingId)
+
+      await sleep(1_000)
     }
   } catch (error) {
-    console.log('error', error.message)
+    console.log('error')
+    console.log(now, `ERROR:`, error.message)
   }
 }
 

@@ -10,7 +10,7 @@ import { getIPInspectItemInfo } from '../api/pricempire'
 
 const CASHED_LISTINGS = new Set<string>()
 const STICKER_PRICES = new Map<string, number>()
-const MIN_TREADS: number = 4
+const MIN_TREADS: number = 2
 
 const limiter = new Bottleneck({ maxConcurrent: MIN_TREADS })
 
@@ -76,7 +76,6 @@ const findSteamItemInfo = async (market_hash_name: string) => {
       await sleep(1_000)
     }
   } catch (error) {
-    console.log('error')
     console.log(now, `ERROR:`, error.message)
   }
 }

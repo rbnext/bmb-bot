@@ -118,7 +118,6 @@ const findSteamItemInfo = async (market_hash_name: string) => {
       await sleep(1_000)
     }
   } catch (error) {
-    console.log(error)
     console.log(now, `ERROR: Failed to inspect ${market_hash_name} from steamcommunity.com`)
   }
 }
@@ -154,7 +153,7 @@ const findSteamItemInfo = async (market_hash_name: string) => {
       break // Exit the loop if all responses are errors
     }
 
-    await sleep(45_000) // Sleep 50s between requests
+    await sleep(50_000) // Sleep 50s between requests
 
     // eslint-disable-next-line no-constant-condition
   } while (true)

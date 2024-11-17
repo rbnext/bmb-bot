@@ -15,15 +15,10 @@ const MIN_TREADS: number = 2
 const limiter = new Bottleneck({ maxConcurrent: MIN_TREADS })
 
 const MARKET_HASH_NAMES = [
-  'Charm | Die-cast AK',
-  'AK-47 | Slate (Field-Tested)',
-  'AK-47 | Nightwish (Field-Tested)',
+  'AWP | Asiimov (Battle-Scarred)',
   'AK-47 | Redline (Field-Tested)',
-  'AK-47 | Blue Laminate (Minimal Wear)',
-  'AK-47 | Blue Laminate (Factory New)',
-  'AK-47 | Asiimov (Field-Tested)',
-  'Desert Eagle | Printstream (Field-Tested)',
-  'AK-47 | Frontside Misty (Field-Tested)',
+  'AK-47 | Neon Rider (Minimal Wear)',
+  'AK-47 | Inheritance (Minimal Wear)',
 ]
 
 const getInspectLink = (link: string, assetId: string, listingId: string): string => {
@@ -48,20 +43,21 @@ const findSteamItemInfo = async (market_hash_name: string) => {
 
       if (isCharm) {
         const descriptions = steam.assets[730][currentListing.asset.contextid][currentListing.asset.id].descriptions
-        const template = descriptions.find((el) => el.value.includes('59089'))
+        const template = descriptions.find((el) => el.value.includes('Charm Template'))
+        // const templateId = template ? Number(template.value.match(/\d+/)?.[0]) : null
 
-        if (template) {
-          await sendMessage(
-            generateSteamMessage({
-              price: price,
-              name: market_hash_name,
-              position: index + 1,
-              templateId: 59089,
-            })
-          )
+        // if (template) {
+        //   await sendMessage(
+        //     generateSteamMessage({
+        //       price: price,
+        //       name: market_hash_name,
+        //       position: index + 1,
+        //       templateId: 59089,
+        //     })
+        //   )
 
-          await sleep(1_000)
-        }
+        //   await sleep(1_000)
+        // }
       } else {
         try {
           const response = await getIPInspectItemInfo({ url: inspectLink })
@@ -83,6 +79,10 @@ const findSteamItemInfo = async (market_hash_name: string) => {
 
             if (market_hash_name.includes('Field-Tested')) {
               return floatValue < 0.16
+            }
+
+            if (market_hash_name.includes('Battle-Scarred')) {
+              return floatValue >= 0.95
             }
 
             return false

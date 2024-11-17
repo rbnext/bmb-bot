@@ -35,7 +35,7 @@ const findSteamItemInfo = async (market_hash_name: string) => {
 
   try {
     const isCharm = market_hash_name.includes('Charm')
-    const steam = await getMarketRender({ market_hash_name, count: isCharm ? 100 : 10 })
+    const steam = await getMarketRender({ market_hash_name, count: isCharm ? 50 : 10 })
 
     for (const [index, listingId] of Object.keys(steam.listinginfo).entries()) {
       if (CASHED_LISTINGS.has(listingId)) continue

@@ -14,7 +14,11 @@ const MIN_TREADS: number = 1
 
 const limiter = new Bottleneck({ maxConcurrent: MIN_TREADS })
 
-const MARKET_HASH_NAMES = ['MAC-10 | Silver (Factory New)', 'MAC-10 | Candy Apple (Factory New)']
+const MARKET_HASH_NAMES = [
+  'AK-47 | Slate (Field-Tested)',
+  'AK-47 | Ice Coaled (Field-Tested)',
+  'AK-47 | Phantom Disruptor (Field-Tested)',
+]
 
 const getInspectLink = (link: string, assetId: string, listingId: string): string => {
   return link.replace('%assetid%', assetId).replace('%listingid%', listingId)
@@ -63,27 +67,27 @@ const findSteamItemInfo = async (market_hash_name: string) => {
             0
           )
 
-          const isSweetFloat = (() => {
-            if (market_hash_name.includes('Factory New')) {
-              return floatValue < 0.01
-            }
+          // const isSweetFloat = (() => {
+          //   if (market_hash_name.includes('Factory New')) {
+          //     return floatValue < 0.01
+          //   }
 
-            if (market_hash_name.includes('Minimal Wear')) {
-              return floatValue < 0.08
-            }
+          //   if (market_hash_name.includes('Minimal Wear')) {
+          //     return floatValue < 0.08
+          //   }
 
-            if (market_hash_name.includes('Field-Tested')) {
-              return floatValue < 0.16
-            }
+          //   if (market_hash_name.includes('Field-Tested')) {
+          //     return floatValue < 0.16
+          //   }
 
-            if (market_hash_name.includes('Battle-Scarred')) {
-              return floatValue >= 0.95
-            }
+          //   if (market_hash_name.includes('Battle-Scarred')) {
+          //     return floatValue >= 0.95
+          //   }
 
-            return false
-          })()
+          //   return false
+          // })()
 
-          if (stickerTotalPrice >= price || isSweetFloat) {
+          if (stickerTotalPrice >= price) {
             await sendMessage(
               generateSteamMessage({
                 price: price,

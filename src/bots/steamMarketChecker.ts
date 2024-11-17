@@ -62,57 +62,55 @@ const findSteamItemInfo = async (market_hash_name: string) => {
 
           await sleep(1_000)
         }
+      } else {
+        try {
+          const response = await getIPInspectItemInfo({ url: inspectLink })
 
-        continue
-      }
-
-      try {
-        const response = await getIPInspectItemInfo({ url: inspectLink })
-
-        const floatValue = response.iteminfo.floatvalue
-        const stickerTotalPrice = (response.iteminfo?.stickers || []).reduce(
-          (acc, { wear, name }) => (wear === null ? acc + (STICKER_PRICES.get(`Sticker | ${name}`) ?? 0) : acc),
-          0
-        )
-
-        const isSweetFloat = (() => {
-          if (market_hash_name.includes('Factory New')) {
-            return floatValue < 0.01
-          }
-
-          if (market_hash_name.includes('Minimal Wear')) {
-            return floatValue < 0.08
-          }
-
-          if (market_hash_name.includes('Field-Tested')) {
-            return floatValue < 0.16
-          }
-
-          return false
-        })()
-
-        if (stickerTotalPrice >= price || isSweetFloat) {
-          await sendMessage(
-            generateSteamMessage({
-              price: price,
-              name: market_hash_name,
-              float: response.iteminfo.floatvalue,
-              stickers: response.iteminfo?.stickers || [],
-              stickerTotal: stickerTotalPrice,
-              position: index + 1,
-            })
+          const floatValue = response.iteminfo.floatvalue
+          const stickerTotalPrice = (response.iteminfo?.stickers || []).reduce(
+            (acc, { wear, name }) => (wear === null ? acc + (STICKER_PRICES.get(`Sticker | ${name}`) ?? 0) : acc),
+            0
           )
-        }
 
-        console.log(
-          now,
-          market_hash_name,
-          '$' + price,
-          response.iteminfo.floatvalue,
-          '$' + stickerTotalPrice.toFixed(2)
-        )
-      } catch (error) {
-        console.log(now, `ERROR: Failed to inspect item from pricempire.com`)
+          const isSweetFloat = (() => {
+            if (market_hash_name.includes('Factory New')) {
+              return floatValue < 0.01
+            }
+
+            if (market_hash_name.includes('Minimal Wear')) {
+              return floatValue < 0.08
+            }
+
+            if (market_hash_name.includes('Field-Tested')) {
+              return floatValue < 0.16
+            }
+
+            return false
+          })()
+
+          if (stickerTotalPrice >= price || isSweetFloat) {
+            await sendMessage(
+              generateSteamMessage({
+                price: price,
+                name: market_hash_name,
+                float: response.iteminfo.floatvalue,
+                stickers: response.iteminfo?.stickers || [],
+                stickerTotal: stickerTotalPrice,
+                position: index + 1,
+              })
+            )
+          }
+
+          console.log(
+            now,
+            market_hash_name,
+            '$' + price,
+            response.iteminfo.floatvalue,
+            '$' + stickerTotalPrice.toFixed(2)
+          )
+        } catch (error) {
+          console.log(now, `ERROR: Failed to inspect item from pricempire.com`)
+        }
       }
 
       CASHED_LISTINGS.add(listingId)

@@ -15,10 +15,8 @@ const MIN_TREADS: number = 2
 const limiter = new Bottleneck({ maxConcurrent: MIN_TREADS })
 
 const MARKET_HASH_NAMES = [
+  'Charm | Die-cast AK',
   'AK-47 | Slate (Field-Tested)',
-  'AK-47 | Phantom Disruptor (Field-Tested)',
-  'AK-47 | Emerald Pinstripe (Field-Tested)',
-  'AK-47 | Ice Coaled (Field-Tested)',
   'AK-47 | Nightwish (Field-Tested)',
   'AK-47 | Redline (Field-Tested)',
   'AK-47 | Blue Laminate (Minimal Wear)',
@@ -36,7 +34,8 @@ const findSteamItemInfo = async (market_hash_name: string) => {
   const now = format(new Date(), 'HH:mm:ss')
 
   try {
-    const steam = await getMarketRender({ market_hash_name })
+    const isCharm = market_hash_name.includes('Charm')
+    const steam = await getMarketRender({ market_hash_name, count: isCharm ? 100 : 10 })
 
     for (const [index, listingId] of Object.keys(steam.listinginfo).entries()) {
       if (CASHED_LISTINGS.has(listingId)) continue
@@ -46,6 +45,26 @@ const findSteamItemInfo = async (market_hash_name: string) => {
 
       const price = Number(((currentListing.converted_price + currentListing.converted_fee) / 100).toFixed(2))
       const inspectLink = getInspectLink(link, currentListing.asset.id, listingId)
+
+      if (isCharm) {
+        const descriptions = steam.assets[730][currentListing.asset.contextid][currentListing.asset.id].descriptions
+        const template = descriptions.find((el) => el.value.includes('59089'))
+
+        if (template) {
+          await sendMessage(
+            generateSteamMessage({
+              price: price,
+              name: market_hash_name,
+              position: index + 1,
+              templateId: 59089,
+            })
+          )
+
+          await sleep(1_000)
+        }
+
+        continue
+      }
 
       try {
         const response = await getIPInspectItemInfo({ url: inspectLink })
@@ -101,6 +120,7 @@ const findSteamItemInfo = async (market_hash_name: string) => {
       await sleep(1_000)
     }
   } catch (error) {
+    console.log(error)
     console.log(now, `ERROR: Failed to inspect ${market_hash_name} from steamcommunity.com`)
   }
 }

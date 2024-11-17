@@ -392,6 +392,11 @@ type SteamListingInfoAsset = {
   name: string
 }
 
+type SteamAssetDescription = {
+  type: string
+  value: string
+}
+
 type SteamListingInfoItem = {
   listingid: string
   converted_price: number
@@ -399,6 +404,7 @@ type SteamListingInfoItem = {
   asset: {
     id: string
     market_actions: SteamListingInfoAsset[]
+    contextid: string
   }
 }
 
@@ -409,6 +415,16 @@ export type SteamMarketRender = {
   results_html: string
   listinginfo: {
     [listingid: string]: SteamListingInfoItem
+  }
+  assets: {
+    [appid: number]: {
+      [contextid: string]: {
+        [id: string]: {
+          market_actions: SteamListingInfoAsset[]
+          descriptions: SteamAssetDescription[]
+        }
+      }
+    }
   }
 }
 

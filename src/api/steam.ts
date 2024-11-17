@@ -67,7 +67,7 @@ export const getMarketRender = async ({
   currency = 1,
   market_hash_name,
   start = 0,
-  count = 100,
+  count = 20,
   language = 'english',
 }: {
   appid?: number

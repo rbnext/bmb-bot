@@ -20,6 +20,12 @@ const MARKET_HASH_NAMES = [
   'AK-47 | Emerald Pinstripe (Field-Tested)',
   'AK-47 | Ice Coaled (Field-Tested)',
   'AK-47 | Nightwish (Field-Tested)',
+  'AK-47 | Redline (Field-Tested)',
+  'AK-47 | Blue Laminate (Minimal Wear)',
+  'AK-47 | Blue Laminate (Factory New)',
+  'AK-47 | Asiimov (Field-Tested)',
+  'Desert Eagle | Printstream (Field-Tested)',
+  'AK-47 | Frontside Misty (Field-Tested)',
 ]
 
 const getInspectLink = (link: string, assetId: string, listingId: string): string => {
@@ -113,7 +119,7 @@ const findSteamItemInfo = async (market_hash_name: string) => {
       break // Exit the loop if all responses are errors
     }
 
-    await sleep(50_000) // Sleep 50s between requests
+    await sleep(45_000) // Sleep 50s between requests
 
     // eslint-disable-next-line no-constant-condition
   } while (true)

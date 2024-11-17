@@ -45,12 +45,14 @@ export const generateSteamMessage = ({
   float,
   stickers,
   stickerTotal,
+  position,
 }: {
   name: string
   price: number
   float: number
   stickers: InspectInfoStickerItem[]
   stickerTotal: number
+  position: number
 }) => {
   const message: string[] = []
 
@@ -64,6 +66,7 @@ export const generateSteamMessage = ({
   message.push(`<b>Steam price</b>: $${price}\n`)
   message.push(`<b>Sticker total</b>: $${stickerTotal.toFixed(2)}\n`)
   message.push(`<b>Float</b>: ${float}\n`)
+  message.push(`<b>Position</b>: ${position}\n`)
 
   return message.join('')
 }

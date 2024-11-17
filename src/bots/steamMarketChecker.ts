@@ -32,7 +32,7 @@ const findSteamItemInfo = async (market_hash_name: string) => {
   try {
     const steam = await getMarketRender({ market_hash_name })
 
-    for (const listingId of Object.keys(steam.listinginfo)) {
+    for (const [index, listingId] of Object.keys(steam.listinginfo).entries()) {
       if (CASHED_LISTINGS.has(listingId)) continue
 
       const currentListing = steam.listinginfo[listingId]
@@ -57,6 +57,7 @@ const findSteamItemInfo = async (market_hash_name: string) => {
               float: response.iteminfo.floatvalue,
               stickers: response.iteminfo?.stickers || [],
               stickerTotal: stickerTotalPrice,
+              position: index + 1,
             })
           )
         }

@@ -50,12 +50,29 @@ const findSteamItemInfo = async (market_hash_name: string) => {
       try {
         const response = await getIPInspectItemInfo({ url: inspectLink })
 
+        const floatValue = response.iteminfo.floatvalue
         const stickerTotalPrice = (response.iteminfo?.stickers || []).reduce(
           (acc, { wear, name }) => (wear === null ? acc + (STICKER_PRICES.get(`Sticker | ${name}`) ?? 0) : acc),
           0
         )
 
-        if (stickerTotalPrice >= price) {
+        const isSweetFloat = (() => {
+          if (market_hash_name.includes('Factory New')) {
+            return floatValue < 0.01
+          }
+
+          if (market_hash_name.includes('Minimal Wear')) {
+            return floatValue < 0.08
+          }
+
+          if (market_hash_name.includes('Field-Tested')) {
+            return floatValue < 0.16
+          }
+
+          return false
+        })()
+
+        if (stickerTotalPrice >= price || isSweetFloat) {
           await sendMessage(
             generateSteamMessage({
               price: price,

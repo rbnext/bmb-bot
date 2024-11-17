@@ -10,16 +10,11 @@ import { getBuff163MarketGoods } from '../api/buff163'
 
 const CASHED_LISTINGS = new Set<string>()
 const STICKER_PRICES = new Map<string, number>()
-const MIN_TREADS: number = 2
+const MIN_TREADS: number = 1
 
 const limiter = new Bottleneck({ maxConcurrent: MIN_TREADS })
 
-const MARKET_HASH_NAMES = [
-  'AWP | Asiimov (Battle-Scarred)',
-  'AK-47 | Redline (Field-Tested)',
-  'AK-47 | Neon Rider (Minimal Wear)',
-  'AK-47 | Inheritance (Minimal Wear)',
-]
+const MARKET_HASH_NAMES = ['MAC-10 | Silver (Factory New)', 'MAC-10 | Candy Apple (Factory New)']
 
 const getInspectLink = (link: string, assetId: string, listingId: string): string => {
   return link.replace('%assetid%', assetId).replace('%listingid%', listingId)

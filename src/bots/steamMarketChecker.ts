@@ -8,6 +8,7 @@ import { generateSteamMessage, sleep } from '../utils'
 import { getIPInspectItemInfo } from '../api/pricempire'
 import { getBuff163MarketGoods } from '../api/buff163'
 
+const LOADED_ITEMS: string[] = []
 const CASHED_LISTINGS = new Set<string>()
 const STICKER_PRICES = new Map<string, number>()
 const MIN_TREADS: number = 1
@@ -25,7 +26,7 @@ const findSteamItemInfo = async (market_hash_name: string) => {
 
   try {
     const isCharm = market_hash_name.includes('Charm')
-    const steam = await getMarketRender({ market_hash_name, count: isCharm ? 50 : 20 })
+    const steam = await getMarketRender({ market_hash_name, count: isCharm ? 100 : 20 })
 
     for (const [index, listingId] of Object.keys(steam.listinginfo).entries()) {
       if (CASHED_LISTINGS.has(listingId)) continue
@@ -66,6 +67,17 @@ const findSteamItemInfo = async (market_hash_name: string) => {
               name: market_hash_name,
               position: index + 1,
               templateId,
+            })
+          )
+
+          await sleep(1_000)
+        } else if (templateId === null && MARKET_HASH_NAMES.length === LOADED_ITEMS.length) {
+          await sendMessage(
+            generateSteamMessage({
+              price: price,
+              name: market_hash_name,
+              position: index + 1,
+              templateId: 0,
             })
           )
 
@@ -130,6 +142,8 @@ const findSteamItemInfo = async (market_hash_name: string) => {
 
       await sleep(1_000)
     }
+
+    LOADED_ITEMS.push(market_hash_name)
   } catch (error) {
     console.log(now, `ERROR: Failed to inspect ${market_hash_name} from steamcommunity.com`)
   }

@@ -14,11 +14,7 @@ const MIN_TREADS: number = 1
 
 const limiter = new Bottleneck({ maxConcurrent: MIN_TREADS })
 
-const MARKET_HASH_NAMES = [
-  'AK-47 | Slate (Field-Tested)',
-  'AK-47 | Ice Coaled (Field-Tested)',
-  'AK-47 | Phantom Disruptor (Field-Tested)',
-]
+const MARKET_HASH_NAMES = ['Charm | Die-cast AK']
 
 const getInspectLink = (link: string, assetId: string, listingId: string): string => {
   return link.replace('%assetid%', assetId).replace('%listingid%', listingId)
@@ -29,7 +25,7 @@ const findSteamItemInfo = async (market_hash_name: string) => {
 
   try {
     const isCharm = market_hash_name.includes('Charm')
-    const steam = await getMarketRender({ market_hash_name, count: isCharm ? 50 : 20 })
+    const steam = await getMarketRender({ market_hash_name, count: isCharm ? 100 : 20 })
 
     for (const [index, listingId] of Object.keys(steam.listinginfo).entries()) {
       if (CASHED_LISTINGS.has(listingId)) continue
@@ -43,20 +39,30 @@ const findSteamItemInfo = async (market_hash_name: string) => {
       if (isCharm) {
         const descriptions = steam.assets[730][currentListing.asset.contextid][currentListing.asset.id].descriptions
         const template = descriptions.find((el) => el.value.includes('Charm Template'))
-        // const templateId = template ? Number(template.value.match(/\d+/)?.[0]) : null
+        const templateId = template ? Number(template.value.match(/\d+/)?.[0]) : null
 
-        // if (template) {
-        //   await sendMessage(
-        //     generateSteamMessage({
-        //       price: price,
-        //       name: market_hash_name,
-        //       position: index + 1,
-        //       templateId: 59089,
-        //     })
-        //   )
+        const isSweetTemplate = (() => {
+          if (templateId && market_hash_name.includes('Charm | Die-cast AK')) {
+            return templateId < 27000 || templateId > 90000
+          }
 
-        //   await sleep(1_000)
-        // }
+          return false
+        })()
+
+        console.log(now, market_hash_name, templateId)
+
+        if (templateId && isSweetTemplate) {
+          await sendMessage(
+            generateSteamMessage({
+              price: price,
+              name: market_hash_name,
+              position: index + 1,
+              templateId,
+            })
+          )
+
+          await sleep(1_000)
+        }
       } else {
         try {
           const response = await getIPInspectItemInfo({ url: inspectLink })
@@ -67,25 +73,25 @@ const findSteamItemInfo = async (market_hash_name: string) => {
             0
           )
 
-          // const isSweetFloat = (() => {
-          //   if (market_hash_name.includes('Factory New')) {
-          //     return floatValue < 0.01
-          //   }
+          const isSweetFloat = (() => {
+            if (market_hash_name.includes('Factory New')) {
+              return floatValue < 0.01
+            }
 
-          //   if (market_hash_name.includes('Minimal Wear')) {
-          //     return floatValue < 0.08
-          //   }
+            if (market_hash_name.includes('Minimal Wear')) {
+              return floatValue < 0.08
+            }
 
-          //   if (market_hash_name.includes('Field-Tested')) {
-          //     return floatValue < 0.16
-          //   }
+            if (market_hash_name.includes('Field-Tested')) {
+              return floatValue < 0.16
+            }
 
-          //   if (market_hash_name.includes('Battle-Scarred')) {
-          //     return floatValue >= 0.95
-          //   }
+            if (market_hash_name.includes('Battle-Scarred')) {
+              return floatValue >= 0.95
+            }
 
-          //   return false
-          // })()
+            return false
+          })()
 
           if (stickerTotalPrice >= price) {
             await sendMessage(

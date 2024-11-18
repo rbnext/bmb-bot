@@ -8,7 +8,7 @@ import { generateSteamMessage, sleep } from '../utils'
 import { getIPInspectItemInfo } from '../api/pricempire'
 import { getBuff163MarketGoods } from '../api/buff163'
 
-const LOADED_ITEMS: string[] = []
+const LOADED_ITEMS: Record<string, boolean> = {}
 const CASHED_LISTINGS = new Set<string>()
 const STICKER_PRICES = new Map<string, number>()
 const MIN_TREADS: number = 1
@@ -71,7 +71,7 @@ const findSteamItemInfo = async (market_hash_name: string) => {
           )
 
           await sleep(1_000)
-        } else if (templateId === null && MARKET_HASH_NAMES.length === LOADED_ITEMS.length) {
+        } else if (templateId === null && Object.values(LOADED_ITEMS).every((item) => item)) {
           await sendMessage(
             generateSteamMessage({
               price: price,
@@ -142,33 +142,14 @@ const findSteamItemInfo = async (market_hash_name: string) => {
       CASHED_LISTINGS.add(listingId)
     }
 
-    if (MARKET_HASH_NAMES.length !== LOADED_ITEMS.length) {
-      LOADED_ITEMS.push(market_hash_name)
-    }
+    LOADED_ITEMS[market_hash_name] = true
   } catch (error) {
     console.log(now, `ERROR: Failed to inspect ${market_hash_name} from steamcommunity.com`)
   }
 }
 
 ;(async () => {
-  const pages = Array.from({ length: 100 }, (_, i) => i + 1)
-
-  // for (const page_num of pages) {
-  //   const goods = await getBuff163MarketGoods({
-  //     page_num,
-  //     category_group: 'sticker',
-  //     sort_by: 'sell_num.desc',
-  //     min_price: 1,
-  //   })
-  //   for (const item of goods.data.items) {
-  //     const market_hash_name = item.market_hash_name
-  //     const price = Number((Number(item.sell_min_price) * 0.1375).toFixed(2))
-  //     console.log(page_num, market_hash_name, price, item.sell_num)
-  //     STICKER_PRICES.set(market_hash_name, price)
-  //   }
-  //   if (goods.data.items.length !== 50) break
-  //   await sleep(5_000)
-  // }
+  for (const name of MARKET_HASH_NAMES) LOADED_ITEMS[name] = false
 
   do {
     const results = await Promise.allSettled(
@@ -186,3 +167,21 @@ const findSteamItemInfo = async (market_hash_name: string) => {
     // eslint-disable-next-line no-constant-condition
   } while (true)
 })()
+
+// const pages = Array.from({ length: 100 }, (_, i) => i + 1)
+// for (const page_num of pages) {
+//   const goods = await getBuff163MarketGoods({
+//     page_num,
+//     category_group: 'sticker',
+//     sort_by: 'sell_num.desc',
+//     min_price: 1,
+//   })
+//   for (const item of goods.data.items) {
+//     const market_hash_name = item.market_hash_name
+//     const price = Number((Number(item.sell_min_price) * 0.1375).toFixed(2))
+//     console.log(page_num, market_hash_name, price, item.sell_num)
+//     STICKER_PRICES.set(market_hash_name, price)
+//   }
+//   if (goods.data.items.length !== 50) break
+//   await sleep(5_000)
+// }

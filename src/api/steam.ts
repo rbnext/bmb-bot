@@ -91,6 +91,7 @@ export const getMarketRender = async ({
         Referer: `https://steamcommunity.com/market/listings/${appid}/` + encodeURIComponent(market_hash_name),
       },
       httpsAgent: new HttpsProxyAgent(`${process.env.POOL_PROXY_URL}:${PORT}`),
+      timeout: 3000,
     }
   )
 

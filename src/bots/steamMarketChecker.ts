@@ -14,7 +14,7 @@ const MIN_TREADS: number = 1
 
 const limiter = new Bottleneck({ maxConcurrent: MIN_TREADS })
 
-const MARKET_HASH_NAMES = ['Charm | Die-cast AK']
+const MARKET_HASH_NAMES = ['Charm | Die-cast AK', 'Charm | Titeenium AWP', 'Charm | Semi-Precious']
 
 const getInspectLink = (link: string, assetId: string, listingId: string): string => {
   return link.replace('%assetid%', assetId).replace('%listingid%', listingId)
@@ -25,7 +25,7 @@ const findSteamItemInfo = async (market_hash_name: string) => {
 
   try {
     const isCharm = market_hash_name.includes('Charm')
-    const steam = await getMarketRender({ market_hash_name, count: isCharm ? 100 : 20 })
+    const steam = await getMarketRender({ market_hash_name, count: isCharm ? 50 : 20 })
 
     for (const [index, listingId] of Object.keys(steam.listinginfo).entries()) {
       if (CASHED_LISTINGS.has(listingId)) continue
@@ -44,6 +44,14 @@ const findSteamItemInfo = async (market_hash_name: string) => {
         const isSweetTemplate = (() => {
           if (templateId && market_hash_name.includes('Charm | Die-cast AK')) {
             return templateId < 27000 || templateId > 90000
+          }
+
+          if (templateId && market_hash_name.includes('Charm | Titeenium AWP')) {
+            return templateId > 93000
+          }
+
+          if (templateId && market_hash_name.includes('Charm | Semi-Precious')) {
+            return templateId < 10000 || templateId > 90000
           }
 
           return false

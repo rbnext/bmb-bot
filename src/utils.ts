@@ -72,7 +72,7 @@ export const generateSteamMessage = ({
   if (float) message.push(`<b>Float</b>: ${float}\n`)
   if (templateId) message.push(`<b>Template ID</b>: ${templateId}\n`)
   if (position) message.push(`<b>Position</b>: ${position}\n`)
-  if (inspectLink) message.push(`<a href="${inspectLink}">Inspect</a>\n\n`)
+  if (inspectLink) message.push(`<b>Inspect link</b>: ${inspectLink}\n`)
 
   return message.join('')
 }

@@ -86,6 +86,7 @@ const findSteamItemInfo = async (market_hash_name: string) => {
       } else {
         try {
           const response = await getIPInspectItemInfo({ url: inspectLink })
+          await sleep(1_000)
 
           const floatValue = response.iteminfo.floatvalue
           const stickerTotalPrice = (response.iteminfo?.stickers || []).reduce(
@@ -139,8 +140,6 @@ const findSteamItemInfo = async (market_hash_name: string) => {
       }
 
       CASHED_LISTINGS.add(listingId)
-
-      await sleep(1_000)
     }
 
     if (MARKET_HASH_NAMES.length !== LOADED_ITEMS.length) {

@@ -143,7 +143,9 @@ const findSteamItemInfo = async (market_hash_name: string) => {
       await sleep(1_000)
     }
 
-    LOADED_ITEMS.push(market_hash_name)
+    if (MARKET_HASH_NAMES.length !== LOADED_ITEMS.length) {
+      LOADED_ITEMS.push(market_hash_name)
+    }
   } catch (error) {
     console.log(now, `ERROR: Failed to inspect ${market_hash_name} from steamcommunity.com`)
   }

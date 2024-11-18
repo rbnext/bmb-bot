@@ -518,3 +518,19 @@ type CSFloatListingItem = {
 export type CSFloatListing = {
   data: CSFloatListingItem[]
 }
+
+export type SearchMarketRenderResultItem = {
+  sell_listings: number
+  sell_price: number
+  sell_price_text: string
+  asset_description: {
+    market_hash_name: string
+  }
+}
+
+export type SearchMarketRender = {
+  searchdata: {
+    query: string
+  }
+  results: SearchMarketRenderResultItem[]
+}

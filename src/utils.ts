@@ -47,6 +47,7 @@ export const generateSteamMessage = ({
   stickerTotal,
   position,
   templateId,
+  inspectLink,
 }: {
   name: string
   price: number
@@ -55,6 +56,7 @@ export const generateSteamMessage = ({
   stickerTotal?: number
   position: number
   templateId?: number
+  inspectLink?: string
 }) => {
   const message: string[] = []
 
@@ -70,6 +72,7 @@ export const generateSteamMessage = ({
   if (float) message.push(`<b>Float</b>: ${float}\n`)
   if (templateId) message.push(`<b>Template ID</b>: ${templateId}\n`)
   if (position) message.push(`<b>Position</b>: ${position}\n`)
+  if (inspectLink) message.push(`<b>Inspect link</b>: ${inspectLink}\n`)
 
   return message.join('')
 }

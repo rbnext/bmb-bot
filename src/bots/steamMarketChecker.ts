@@ -67,6 +67,7 @@ const findSteamItemInfo = async (market_hash_name: string) => {
               name: market_hash_name,
               position: index + 1,
               templateId,
+              inspectLink: inspectLink,
             })
           )
 
@@ -78,6 +79,7 @@ const findSteamItemInfo = async (market_hash_name: string) => {
               name: market_hash_name,
               position: index + 1,
               templateId: 0,
+              inspectLink: inspectLink,
             })
           )
 

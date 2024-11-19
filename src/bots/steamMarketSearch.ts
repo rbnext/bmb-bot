@@ -102,7 +102,7 @@ const findSteamItemInfo = async (config: { query: string; start: number; count: 
               })
             )
           } catch (error) {
-            console.log(now, `ERROR: Failed to inspect item from pricempire.com`)
+            console.log(now, `ERROR: ${JSON.stringify(config)}`)
           }
 
           CASHED_LISTINGS.add(listingId)

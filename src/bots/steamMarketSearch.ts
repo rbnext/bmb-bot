@@ -69,7 +69,7 @@ const findSteamItemInfo = async (config: { query: string; start: number; count: 
               0
             )
 
-            if (stickerTotalPrice === 0) continue
+            if (stickerTotalPrice <= 1) continue
 
             await sendMessage(
               generateSteamMessage({

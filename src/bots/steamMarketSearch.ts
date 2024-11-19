@@ -16,6 +16,12 @@ const limiter = new Bottleneck({ maxConcurrent: 1 })
 
 const MARKET_CONFIG = [
   {
+    query: 'Katowice 2014',
+    start: 0,
+    count: 100,
+    type: 'any',
+  },
+  {
     query: 'Glitter',
     start: 0,
     count: 50,

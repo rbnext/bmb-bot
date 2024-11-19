@@ -103,7 +103,9 @@ export const getSearchMarketRender = async ({
         'tag_Rarity_Ancient_Weapon',
       ],
       'category_730_Weapon[]': [type],
-      'category_730_Type[]': ['tag_CSGO_Type_Rifle'],
+      ...(type !== 'any' && {
+        'category_730_Type[]': ['tag_CSGO_Type_Rifle'],
+      }),
     },
     headers: {
       Host: 'steamcommunity.com',

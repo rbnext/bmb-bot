@@ -34,21 +34,22 @@ const findSteamItemInfo = async (config: { query: string; start: number; count: 
       const quantity = result.sell_listings
       const price = Number((result.sell_price / 100).toFixed(2))
       const market_hash_name = result.asset_description.market_hash_name
+      const referenceId = `${config.query} ${result.asset_description.market_hash_name}`
 
-      if (market_hash_name in SEARCH_MARKET_DATA && SEARCH_MARKET_DATA[market_hash_name].price === price) {
+      if (referenceId in SEARCH_MARKET_DATA && SEARCH_MARKET_DATA[referenceId].price === price) {
         continue
       }
 
-      if (market_hash_name in SEARCH_MARKET_DATA && SEARCH_MARKET_DATA[market_hash_name].quantity === quantity) {
+      if (referenceId in SEARCH_MARKET_DATA && SEARCH_MARKET_DATA[referenceId].quantity === quantity) {
         continue
       }
 
-      if (market_hash_name in SEARCH_MARKET_DATA && SEARCH_MARKET_DATA[market_hash_name].price > price) {
+      if (referenceId in SEARCH_MARKET_DATA && SEARCH_MARKET_DATA[referenceId].price > price) {
         const now = format(new Date(), 'HH:mm:ss')
 
         const steam = await getMarketRender({ market_hash_name, filter: config.query, start: 0, count: 2 })
 
-        console.log(`${now}: ${market_hash_name} $${SEARCH_MARKET_DATA[market_hash_name].price} -> $${price}`)
+        console.log(`${now}: ${market_hash_name} $${SEARCH_MARKET_DATA[referenceId].price} -> $${price}`)
 
         for (const [index, listingId] of Object.keys(steam.listinginfo).entries()) {
           if (CASHED_LISTINGS.has(listingId)) continue
@@ -89,7 +90,7 @@ const findSteamItemInfo = async (config: { query: string; start: number; count: 
         }
       }
 
-      SEARCH_MARKET_DATA[market_hash_name] = { price, quantity }
+      SEARCH_MARKET_DATA[referenceId] = { price, quantity }
     }
   } catch (error) {
     const now = format(new Date(), 'HH:mm:ss')

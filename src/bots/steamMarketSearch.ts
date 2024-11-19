@@ -22,6 +22,12 @@ const MARKET_CONFIG = [
     type: 'tag_weapon_ak47',
   },
   {
+    query: 'Holo',
+    start: 10,
+    count: 50,
+    type: 'tag_weapon_ak47',
+  },
+  {
     query: 'Foil',
     start: 0,
     count: 50,
@@ -47,7 +53,7 @@ const findSteamItemInfo = async (config: { query: string; start: number; count: 
       const quantity = result.sell_listings
       const price = Number((result.sell_price / 100).toFixed(2))
       const market_hash_name = result.asset_description.market_hash_name
-      const referenceId = `${config.query} ${result.asset_description.market_hash_name}`
+      const referenceId = `${config.query} ${config.type} ${market_hash_name}`
 
       if (referenceId in SEARCH_MARKET_DATA && SEARCH_MARKET_DATA[referenceId].price === price) {
         continue
@@ -61,6 +67,8 @@ const findSteamItemInfo = async (config: { query: string; start: number; count: 
         const now = format(new Date(), 'HH:mm:ss')
 
         const steam = await getMarketRender({ market_hash_name, filter: config.query, start: 0, count: 2 })
+
+        console.log(`${now}: ${market_hash_name} $${SEARCH_MARKET_DATA[referenceId].price} -> $${price}`)
 
         for (const [index, listingId] of Object.keys(steam.listinginfo).entries()) {
           if (CASHED_LISTINGS.has(listingId)) continue

@@ -46,6 +46,8 @@ const getInspectLink = (link: string, assetId: string, listingId: string): strin
 }
 
 const findSteamItemInfo = async (config: { query: string; start: number; count: number; type: string }) => {
+  const now = format(new Date(), 'HH:mm:ss')
+
   try {
     const searchResult = await getSearchMarketRender({ ...config })
 
@@ -64,57 +66,57 @@ const findSteamItemInfo = async (config: { query: string; start: number; count: 
       }
 
       if (referenceId in SEARCH_MARKET_DATA && SEARCH_MARKET_DATA[referenceId].price > price) {
-        const now = format(new Date(), 'HH:mm:ss')
+        try {
+          const steam = await getMarketRender({ market_hash_name, filter: config.query, start: 0, count: 2 })
 
-        const steam = await getMarketRender({ market_hash_name, filter: config.query, start: 0, count: 2 })
+          console.log(`${now}: ${market_hash_name} $${SEARCH_MARKET_DATA[referenceId].price} -> $${price}`)
 
-        console.log(`${now}: ${market_hash_name} $${SEARCH_MARKET_DATA[referenceId].price} -> $${price}`)
+          for (const [index, listingId] of Object.keys(steam.listinginfo).entries()) {
+            if (CASHED_LISTINGS.has(listingId)) continue
 
-        for (const [index, listingId] of Object.keys(steam.listinginfo).entries()) {
-          if (CASHED_LISTINGS.has(listingId)) continue
+            const currentListing = steam.listinginfo[listingId]
+            const link = currentListing.asset.market_actions[0].link
 
-          const currentListing = steam.listinginfo[listingId]
-          const link = currentListing.asset.market_actions[0].link
+            const price = Number(((currentListing.converted_price + currentListing.converted_fee) / 100).toFixed(2))
+            const inspectLink = getInspectLink(link, currentListing.asset.id, listingId)
 
-          const price = Number(((currentListing.converted_price + currentListing.converted_fee) / 100).toFixed(2))
-          const inspectLink = getInspectLink(link, currentListing.asset.id, listingId)
+            try {
+              const response = await getIPInspectItemInfo({ url: inspectLink })
+              await sleep(1_000)
 
-          try {
-            const response = await getIPInspectItemInfo({ url: inspectLink })
-            await sleep(1_000)
+              const stickerTotalPrice = (response.iteminfo?.stickers || []).reduce(
+                (acc, { wear, name }) => (wear === null ? acc + (STICKER_PRICES.get(`Sticker | ${name}`) ?? 0) : acc),
+                0
+              )
 
-            const stickerTotalPrice = (response.iteminfo?.stickers || []).reduce(
-              (acc, { wear, name }) => (wear === null ? acc + (STICKER_PRICES.get(`Sticker | ${name}`) ?? 0) : acc),
-              0
-            )
+              if (stickerTotalPrice < 10) continue
 
-            if (stickerTotalPrice < 10) continue
+              await sendMessage(
+                generateSteamMessage({
+                  price: price,
+                  name: market_hash_name,
+                  float: response.iteminfo.floatvalue,
+                  stickers: response.iteminfo?.stickers || [],
+                  stickerTotal: stickerTotalPrice,
+                  position: index + 1,
+                  filter: config.query,
+                })
+              )
+            } catch (error) {
+              console.log(now, `INSPECT_PRICEEMPIRE_ERROR`)
+            }
 
-            await sendMessage(
-              generateSteamMessage({
-                price: price,
-                name: market_hash_name,
-                float: response.iteminfo.floatvalue,
-                stickers: response.iteminfo?.stickers || [],
-                stickerTotal: stickerTotalPrice,
-                position: index + 1,
-                filter: config.query,
-              })
-            )
-          } catch (error) {
-            console.log(now, `ERROR: ${JSON.stringify(config)}`)
+            CASHED_LISTINGS.add(listingId)
           }
-
-          CASHED_LISTINGS.add(listingId)
+        } catch (error) {
+          console.log(now, 'STEAM_MARKET_PAGE_ERROR')
         }
       }
 
       SEARCH_MARKET_DATA[referenceId] = { price, quantity }
     }
   } catch (error) {
-    const now = format(new Date(), 'HH:mm:ss')
-
-    console.log(now, `ERROR: Failed to load query ${config.query}`)
+    console.log(now, 'STEAM_MARKET_SEARCH_ERROR')
   }
 }
 

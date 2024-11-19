@@ -16,7 +16,7 @@ const limiter = new Bottleneck({ maxConcurrent: 1 })
 
 const MARKET_CONFIG = [
   {
-    query: 'Holo',
+    query: 'Foil',
     start: 0,
     count: 60,
   },
@@ -69,7 +69,7 @@ const findSteamItemInfo = async (config: { query: string; start: number; count: 
               0
             )
 
-            if (stickerTotalPrice <= 1) continue
+            if (stickerTotalPrice < 10) continue
 
             await sendMessage(
               generateSteamMessage({

@@ -65,11 +65,13 @@ const findSteamItemInfo = async (config: { query: string; start: number; count: 
         continue
       }
 
+      if (referenceId in SEARCH_MARKET_DATA) {
+        console.log(`${now}: ${market_hash_name} $${SEARCH_MARKET_DATA[referenceId].price} -> $${price}`)
+      }
+
       if (referenceId in SEARCH_MARKET_DATA && SEARCH_MARKET_DATA[referenceId].price > price) {
         try {
           const steam = await getMarketRender({ market_hash_name, filter: config.query, start: 0, count: 2 })
-
-          console.log(`${now}: ${market_hash_name} $${SEARCH_MARKET_DATA[referenceId].price} -> $${price}`)
 
           for (const [index, listingId] of Object.keys(steam.listinginfo).entries()) {
             if (CASHED_LISTINGS.has(listingId)) continue

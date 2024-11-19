@@ -70,6 +70,7 @@ export const getSearchMarketRender = async ({
   sort_column = 'price',
   sort_dir = 'asc',
   norender = 1,
+  type,
 }: {
   appid?: number
   query: string
@@ -79,6 +80,7 @@ export const getSearchMarketRender = async ({
   sort_column?: 'price'
   sort_dir?: 'asc'
   norender?: number
+  type: string
 }): Promise<SearchMarketRender> => {
   const userAgent = new UserAgent()
   const PORT = getRandomNumber(10000, 10999)
@@ -100,7 +102,7 @@ export const getSearchMarketRender = async ({
         'tag_Rarity_Legendary_Weapon',
         'tag_Rarity_Ancient_Weapon',
       ],
-      'category_730_Weapon[]': ['tag_weapon_ak47'],
+      'category_730_Weapon[]': [type],
       'category_730_Type[]': ['tag_CSGO_Type_Rifle'],
     },
     headers: {

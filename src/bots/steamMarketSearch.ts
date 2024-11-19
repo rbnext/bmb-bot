@@ -16,9 +16,22 @@ const limiter = new Bottleneck({ maxConcurrent: 1 })
 
 const MARKET_CONFIG = [
   {
+    query: 'Glitter',
+    start: 0,
+    count: 50,
+    type: 'tag_weapon_ak47',
+  },
+  {
     query: 'Foil',
     start: 0,
-    count: 60,
+    count: 50,
+    type: 'tag_weapon_m4a1',
+  },
+  {
+    query: 'Foil',
+    start: 0,
+    count: 50,
+    type: 'tag_weapon_m4a1_silencer',
   },
 ]
 
@@ -26,7 +39,7 @@ const getInspectLink = (link: string, assetId: string, listingId: string): strin
   return link.replace('%assetid%', assetId).replace('%listingid%', listingId)
 }
 
-const findSteamItemInfo = async (config: { query: string; start: number; count: number }) => {
+const findSteamItemInfo = async (config: { query: string; start: number; count: number; type: string }) => {
   try {
     const searchResult = await getSearchMarketRender({ ...config })
 
@@ -48,8 +61,6 @@ const findSteamItemInfo = async (config: { query: string; start: number; count: 
         const now = format(new Date(), 'HH:mm:ss')
 
         const steam = await getMarketRender({ market_hash_name, filter: config.query, start: 0, count: 2 })
-
-        console.log(`${now}: ${market_hash_name} $${SEARCH_MARKET_DATA[referenceId].price} -> $${price}`)
 
         for (const [index, listingId] of Object.keys(steam.listinginfo).entries()) {
           if (CASHED_LISTINGS.has(listingId)) continue
@@ -100,7 +111,8 @@ const findSteamItemInfo = async (config: { query: string; start: number; count: 
 }
 
 ;(async () => {
-  const pages = Array.from({ length: 100 }, (_, i) => i + 1)
+  const pages = Array.from({ length: 110 }, (_, i) => i + 1)
+
   for (const page_num of pages) {
     const goods = await getBuff163MarketGoods({
       page_num,

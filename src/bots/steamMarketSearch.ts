@@ -158,7 +158,7 @@ const findSteamItemInfo = async (config: { query: string; start: number; count: 
       STICKER_PRICES.set(market_hash_name, price)
     }
     if (goods.data.items.length !== 50) break
-    await sleep(5_000)
+    await sleep(4_000)
   }
 
   do {

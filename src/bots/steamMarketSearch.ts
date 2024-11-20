@@ -16,12 +16,6 @@ const limiter = new Bottleneck({ maxConcurrent: 1 })
 
 const MARKET_CONFIG = [
   {
-    query: 'Foil',
-    start: 300,
-    count: 100,
-    type: 'any',
-  },
-  {
     query: 'Glitter',
     start: 0,
     count: 50,
@@ -63,21 +57,17 @@ const findSteamItemInfo = async (config: { query: string; start: number; count: 
       const market_hash_name = result.asset_description.market_hash_name
       const referenceId = `${config.query} ${config.type} ${market_hash_name}`
 
-      if (referenceId in SEARCH_MARKET_DATA && SEARCH_MARKET_DATA[referenceId].price === price) {
-        continue
-      }
-
       if (referenceId in SEARCH_MARKET_DATA && SEARCH_MARKET_DATA[referenceId].quantity === quantity) {
         continue
       }
 
       if (referenceId in SEARCH_MARKET_DATA) {
-        console.log(`${now}: ${market_hash_name} $${SEARCH_MARKET_DATA[referenceId].price} -> $${price}`)
+        console.log(`${now}: ${market_hash_name} $${SEARCH_MARKET_DATA[referenceId].quantity} -> ${quantity}`)
       }
 
-      if (referenceId in SEARCH_MARKET_DATA && SEARCH_MARKET_DATA[referenceId].price > price) {
+      if (referenceId in SEARCH_MARKET_DATA && SEARCH_MARKET_DATA[referenceId].quantity < quantity) {
         try {
-          const steam = await getMarketRender({ market_hash_name, filter: config.query, start: 0, count: 2 })
+          const steam = await getMarketRender({ market_hash_name, filter: config.query, start: 0, count: 5 })
 
           for (const [index, listingId] of Object.keys(steam.listinginfo).entries()) {
             if (CASHED_LISTINGS.has(listingId)) continue
@@ -97,7 +87,7 @@ const findSteamItemInfo = async (config: { query: string; start: number; count: 
                 0
               )
 
-              if (stickerTotalPrice < 10) continue
+              if (stickerTotalPrice < 20) continue
 
               await sendMessage(
                 generateSteamMessage({

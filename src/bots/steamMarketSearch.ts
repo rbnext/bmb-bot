@@ -67,7 +67,7 @@ const findSteamItemInfo = async (config: { query: string; start: number; count: 
 
       if (referenceId in SEARCH_MARKET_DATA && SEARCH_MARKET_DATA[referenceId].quantity < quantity) {
         try {
-          const steam = await getMarketRender({ market_hash_name, filter: config.query, start: 0, count: 5 })
+          const steam = await getMarketRender({ market_hash_name, filter: config.query, start: 0, count: 10 })
 
           for (const [index, listingId] of Object.keys(steam.listinginfo).entries()) {
             if (CASHED_LISTINGS.has(listingId)) continue

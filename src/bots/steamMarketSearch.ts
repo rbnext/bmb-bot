@@ -7,6 +7,7 @@ import { sendMessage } from '../api/telegram'
 import { generateSteamMessage, sleep } from '../utils'
 import { getIPInspectItemInfo } from '../api/pricempire'
 import { getBuff163MarketGoods } from '../api/buff163'
+import { getGoodsInfo, getMarketGoods } from '../api/buff'
 
 const CASHED_LISTINGS = new Set<string>()
 const STICKER_PRICES = new Map<string, number>()
@@ -16,28 +17,28 @@ const limiter = new Bottleneck({ maxConcurrent: 1 })
 
 const MARKET_CONFIG = [
   {
-    query: 'Glitter',
-    start: 0,
-    count: 50,
-    type: 'tag_weapon_ak47',
+    query: 'Sticker',
+    start: 540,
+    count: 100,
+    type: 'any',
   },
   {
-    query: 'Holo',
-    start: 10,
-    count: 50,
-    type: 'tag_weapon_ak47',
+    query: 'Sticker',
+    start: 640,
+    count: 100,
+    type: 'any',
   },
   {
-    query: 'Foil',
-    start: 0,
-    count: 50,
-    type: 'tag_weapon_m4a1',
+    query: 'Sticker',
+    start: 740,
+    count: 100,
+    type: 'any',
   },
   {
-    query: 'Foil',
-    start: 0,
-    count: 50,
-    type: 'tag_weapon_m4a1_silencer',
+    query: 'Sticker',
+    start: 840,
+    count: 100,
+    type: 'any',
   },
 ]
 
@@ -50,6 +51,8 @@ const findSteamItemInfo = async (config: { query: string; start: number; count: 
 
   try {
     const searchResult = await getSearchMarketRender({ ...config })
+
+    console.log(searchResult.searchdata)
 
     for (const result of searchResult.results) {
       const quantity = result.sell_listings
@@ -87,19 +90,37 @@ const findSteamItemInfo = async (config: { query: string; start: number; count: 
                 0
               )
 
-              if (stickerTotalPrice < 20) continue
+              if (stickerTotalPrice >= 20) {
+                const goods = await getMarketGoods({ search: market_hash_name })
+                const goods_id = goods.data.items.find((el) => el.market_hash_name === market_hash_name)?.id
 
-              await sendMessage(
-                generateSteamMessage({
-                  price: price,
-                  name: market_hash_name,
-                  float: response.iteminfo.floatvalue,
-                  stickers: response.iteminfo?.stickers || [],
-                  stickerTotal: stickerTotalPrice,
-                  position: index + 1,
-                  filter: config.query,
-                })
-              )
+                if (!goods_id) {
+                  console.log(now, 'BUFF_GOODS_ID_ERROR')
+
+                  continue
+                }
+
+                const goodsInfo = await getGoodsInfo({ goods_id })
+                const referencePrice = Number(goodsInfo.data.goods_info.goods_ref_price)
+
+                if (referencePrice + stickerTotalPrice * 0.11 > price) {
+                  await sendMessage(
+                    generateSteamMessage({
+                      id: goods_id,
+                      price: price,
+                      name: market_hash_name,
+                      float: response.iteminfo.floatvalue,
+                      stickers: response.iteminfo?.stickers || [],
+                      stickerTotal: stickerTotalPrice,
+                      referencePrice: referencePrice,
+                      position: index + 1,
+                      filter: config.query,
+                    })
+                  )
+                }
+
+                await sleep(3_000)
+              }
             } catch (error) {
               console.log(now, `INSPECT_PRICEEMPIRE_ERROR`)
             }

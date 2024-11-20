@@ -40,6 +40,7 @@ const messageTypeMapper = {
 }
 
 export const generateSteamMessage = ({
+  id,
   name,
   price,
   float,
@@ -47,7 +48,7 @@ export const generateSteamMessage = ({
   stickerTotal,
   position,
   templateId,
-  inspectLink,
+  referencePrice,
   filter,
 }: {
   name: string
@@ -57,7 +58,9 @@ export const generateSteamMessage = ({
   stickerTotal?: number
   position: number
   templateId?: number
-  inspectLink?: string
+  referencePrice?: number
+  id: number
+
   filter?: string
 }) => {
   const message: string[] = []
@@ -72,11 +75,12 @@ export const generateSteamMessage = ({
 
   message.push(`\n`)
   if (price) message.push(`<b>Steam price</b>: $${price}\n`)
+  if (referencePrice) message.push(`<b>Reference price</b>: $${referencePrice}\n`)
   if (stickerTotal) message.push(`<b>Sticker total</b>: $${stickerTotal.toFixed(2)}\n`)
   if (float) message.push(`<b>Float</b>: ${float}\n`)
   if (templateId) message.push(`<b>Template ID</b>: ${templateId}\n`)
-  if (position) message.push(`<b>Position</b>: ${position}\n`)
-  if (inspectLink) message.push(`<b>Inspect link</b>: ${inspectLink}\n`)
+  if (position) message.push(`<b>Position</b>: ${position}\n\n`)
+  if (id) message.push(`<a href="https://buff.market/market/goods/${id}">BUFF</a>\n\n`)
 
   return message.join('')
 }

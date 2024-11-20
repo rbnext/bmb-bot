@@ -117,7 +117,11 @@ export const getMarketGoods = async ({
       page_size,
       ...rest,
     },
-    cache: false,
+    cache: rest.search
+      ? {
+          ttl: 1000 * 60 * 60 * 24, // 24 h
+        }
+      : false,
   })
 
   return data

@@ -52,8 +52,6 @@ const findSteamItemInfo = async (config: { query: string; start: number; count: 
   try {
     const searchResult = await getSearchMarketRender({ ...config })
 
-    console.log(searchResult.searchdata)
-
     for (const result of searchResult.results) {
       const quantity = result.sell_listings
       const price = Number((result.sell_price / 100).toFixed(2))
@@ -90,37 +88,41 @@ const findSteamItemInfo = async (config: { query: string; start: number; count: 
                 0
               )
 
-              if (stickerTotalPrice >= 20) {
-                const goods = await getMarketGoods({ search: market_hash_name })
-                const goods_id = goods.data.items.find((el) => el.market_hash_name === market_hash_name)?.id
-
-                if (!goods_id) {
-                  console.log(now, 'BUFF_GOODS_ID_ERROR')
-
-                  continue
-                }
-
-                const goodsInfo = await getGoodsInfo({ goods_id })
-                const referencePrice = Number(goodsInfo.data.goods_info.goods_ref_price)
-
-                if (referencePrice + stickerTotalPrice * 0.11 > price) {
-                  await sendMessage(
-                    generateSteamMessage({
-                      id: goods_id,
-                      price: price,
-                      name: market_hash_name,
-                      float: response.iteminfo.floatvalue,
-                      stickers: response.iteminfo?.stickers || [],
-                      stickerTotal: stickerTotalPrice,
-                      referencePrice: referencePrice,
-                      position: index + 1,
-                      filter: config.query,
-                    })
-                  )
-                }
-
-                await sleep(3_000)
+              if (stickerTotalPrice < 20) {
+                continue
               }
+
+              const goods = await getMarketGoods({ search: market_hash_name })
+              const goods_id = goods.data.items.find((el) => el.market_hash_name === market_hash_name)?.id
+
+              if (!goods_id) {
+                console.log(now, 'BUFF_GOODS_ID_ERROR')
+
+                continue
+              }
+
+              const goodsInfo = await getGoodsInfo({ goods_id })
+              const referencePrice = Number(goodsInfo.data.goods_info.goods_ref_price)
+
+              if (referencePrice + stickerTotalPrice * 0.11 < price) {
+                continue
+              }
+
+              await sendMessage(
+                generateSteamMessage({
+                  id: goods_id,
+                  price: price,
+                  name: market_hash_name,
+                  float: response.iteminfo.floatvalue,
+                  stickers: response.iteminfo?.stickers || [],
+                  stickerTotal: stickerTotalPrice,
+                  referencePrice: referencePrice,
+                  position: index + 1,
+                  filter: config.query,
+                })
+              )
+
+              await sleep(3_000)
             } catch (error) {
               console.log(now, `INSPECT_PRICEEMPIRE_ERROR`)
             }

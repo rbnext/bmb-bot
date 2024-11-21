@@ -90,6 +90,8 @@ const findSteamItemInfo = async (config: { query: string; start: number; count: 
             const price = Number(((currentListing.converted_price + currentListing.converted_fee) / 100).toFixed(2))
             const inspectLink = getInspectLink(link, currentListing.asset.id, listingId)
 
+            CASHED_LISTINGS.add(listingId)
+
             try {
               const response = await getIPInspectItemInfo({ url: inspectLink })
               await sleep(1_000)
@@ -137,8 +139,6 @@ const findSteamItemInfo = async (config: { query: string; start: number; count: 
             } catch (error) {
               console.log(now, `INSPECT_PRICEEMPIRE_ERROR`)
             }
-
-            CASHED_LISTINGS.add(listingId)
           }
         } catch (error) {
           console.log(now, 'STEAM_MARKET_PAGE_ERROR')

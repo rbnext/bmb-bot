@@ -40,6 +40,12 @@ const MARKET_CONFIG = [
     count: 100,
     type: 'any',
   },
+  {
+    query: 'Sticker',
+    start: 940,
+    count: 100,
+    type: 'any',
+  },
 ]
 
 const getInspectLink = (link: string, assetId: string, listingId: string): string => {
@@ -63,12 +69,17 @@ const findSteamItemInfo = async (config: { query: string; start: number; count: 
       }
 
       if (referenceId in SEARCH_MARKET_DATA) {
-        console.log(`${now}: ${market_hash_name} $${SEARCH_MARKET_DATA[referenceId].quantity} -> ${quantity}`)
+        console.log(`${now}: ${market_hash_name} ${SEARCH_MARKET_DATA[referenceId].quantity} -> ${quantity}`)
       }
 
       if (referenceId in SEARCH_MARKET_DATA && SEARCH_MARKET_DATA[referenceId].quantity < quantity) {
         try {
-          const steam = await getMarketRender({ market_hash_name, filter: config.query, start: 0, count: 10 })
+          const steam = await getMarketRender({
+            market_hash_name,
+            filter: config.query,
+            start: 0,
+            count: quantity >= 50 ? 20 : 10,
+          })
 
           for (const [index, listingId] of Object.keys(steam.listinginfo).entries()) {
             if (CASHED_LISTINGS.has(listingId)) continue
@@ -121,8 +132,6 @@ const findSteamItemInfo = async (config: { query: string; start: number; count: 
                   filter: config.query,
                 })
               )
-
-              await sleep(3_000)
             } catch (error) {
               console.log(now, `INSPECT_PRICEEMPIRE_ERROR`)
             }

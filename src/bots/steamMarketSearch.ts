@@ -173,7 +173,7 @@ const findSteamItemInfo = async (config: { query: string; start: number; count: 
   do {
     await Promise.allSettled(MARKET_CONFIG.map((config) => limiter.schedule(() => findSteamItemInfo(config))))
 
-    await sleep(30_000) // Sleep 30s between requests
+    await sleep(10_000) // Sleep 10s between requests
 
     // eslint-disable-next-line no-constant-condition
   } while (true)

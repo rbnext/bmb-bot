@@ -99,7 +99,9 @@ const findSteamItemInfo = async (config: { query: string; start: number; count: 
                 0
               )
 
-              if (stickerTotalPrice < 20) {
+              console.log(`|___ ${listingId} $${stickerTotalPrice}`)
+
+              if (stickerTotalPrice < 20 || response.iteminfo.floatvalue >= 0.01) {
                 continue
               }
 
@@ -115,7 +117,7 @@ const findSteamItemInfo = async (config: { query: string; start: number; count: 
               const goodsInfo = await getGoodsInfo({ goods_id })
               const referencePrice = Number(goodsInfo.data.goods_info.goods_ref_price)
 
-              if (referencePrice + stickerTotalPrice * 0.11 < price) {
+              if (referencePrice + stickerTotalPrice * 0.11 < price || response.iteminfo.floatvalue >= 0.01) {
                 continue
               }
 

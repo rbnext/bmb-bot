@@ -24,7 +24,7 @@ const getInspectLink = (link: string, assetId: string, listingId: string): strin
 
 const findSteamItemInfo = async (market_hash_name: string) => {
   try {
-    const steam = await getMarketRender({ market_hash_name, start: 1000, count: 1, filter: 'Sticker' })
+    const steam = await getMarketRender({ market_hash_name, start: 1000, count: 1 })
 
     if (market_hash_name in SEARCH_MARKET_DATA && SEARCH_MARKET_DATA[market_hash_name] === steam.total_count) {
       return
@@ -37,7 +37,7 @@ const findSteamItemInfo = async (market_hash_name: string) => {
     }
 
     if (market_hash_name in SEARCH_MARKET_DATA && SEARCH_MARKET_DATA[market_hash_name] < steam.total_count) {
-      const steam = await getMarketRender({ market_hash_name, start: 0, count: 30, filter: 'Sticker' })
+      const steam = await getMarketRender({ market_hash_name, start: 0, count: 30 })
 
       for (const [index, listingId] of Object.keys(steam.listinginfo).entries()) {
         if (CASHED_LISTINGS.has(listingId)) continue
@@ -89,7 +89,6 @@ const findSteamItemInfo = async (market_hash_name: string) => {
               stickerTotal: stickerTotalPrice,
               referencePrice: referencePrice,
               position: index + 1,
-              filter: 'Sticker',
             })
           )
         } catch (error) {

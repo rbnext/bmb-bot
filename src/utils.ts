@@ -65,9 +65,7 @@ export const generateSteamMessage = ({
 }) => {
   const message: string[] = []
 
-  message.push(
-    `<a href="https://steamcommunity.com/market/listings/730/${encodeURIComponent(name)}?filter=${filter}">${name}</a>\n\n`
-  )
+  message.push(`<a href="https://steamcommunity.com/market/listings/730/${encodeURIComponent(name)}">${name}</a>\n\n`)
 
   for (const sticker of stickers) {
     message.push(`${sticker.name}: ${sticker.wear === null ? '100%' : `${sticker.wear.toFixed(2)}%`}\n`)

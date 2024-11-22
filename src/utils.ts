@@ -59,7 +59,7 @@ export const generateSteamMessage = ({
   position: number
   templateId?: number
   referencePrice?: number
-  id: number
+  id?: number
 
   filter?: string
 }) => {

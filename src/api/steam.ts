@@ -138,17 +138,19 @@ export const getMarketRender = async ({
   language?: 'english'
   filter?: string
 }): Promise<SteamMarketRender> => {
+  const userAgent = new UserAgent()
+  const PORT = getRandomNumber(10000, 10999)
+
   const { data } = await axios.get(
     `https://steamcommunity.com/market/listings/${appid}/${encodeURIComponent(market_hash_name)}/render/`,
     {
       params: { appid, country, currency, start, count, language, filter },
       headers: {
         Host: 'steamcommunity.com',
-        'User-Agent':
-          'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+        'User-Agent': userAgent.toString(),
         Referer: `https://steamcommunity.com/market/listings/${appid}/` + encodeURIComponent(market_hash_name),
       },
-      // httpsAgent: new HttpsProxyAgent(`${process.env.POOL_PROXY_URL}:${PORT}`),
+      httpsAgent: new HttpsProxyAgent(`${process.env.POOL_PROXY_URL}:${PORT}`),
       timeout: 3000,
     }
   )

@@ -101,9 +101,9 @@ const findSteamItemInfo = async (config: { query: string; start: number; count: 
                 0
               )
 
-              console.log(`|___ ${listingId} $${stickerTotalPrice}`)
+              console.log(`|___ ${listingId} $${stickerTotalPrice.toFixed(2)}`)
 
-              if (stickerTotalPrice < 20 || response.iteminfo.floatvalue >= 0.01) {
+              if (stickerTotalPrice < 20) {
                 continue
               }
 
@@ -119,7 +119,7 @@ const findSteamItemInfo = async (config: { query: string; start: number; count: 
               const goodsInfo = await getGoodsInfo({ goods_id })
               const referencePrice = Number(goodsInfo.data.goods_info.goods_ref_price)
 
-              if (referencePrice + stickerTotalPrice * 0.11 < price || response.iteminfo.floatvalue >= 0.01) {
+              if (referencePrice + stickerTotalPrice * 0.11 < price) {
                 continue
               }
 
@@ -137,7 +137,7 @@ const findSteamItemInfo = async (config: { query: string; start: number; count: 
                 })
               )
             } catch (error) {
-              console.log(now, `INSPECT_PRICEEMPIRE_ERROR`)
+              console.log(now, error.message)
             }
           }
         } catch (error) {
@@ -159,8 +159,7 @@ const findSteamItemInfo = async (config: { query: string; start: number; count: 
     const goods = await getBuff163MarketGoods({
       page_num,
       category_group: 'sticker',
-      sort_by: 'sell_num.desc',
-      min_price: 1,
+      sort_by: 'price.desc',
     })
     for (const item of goods.data.items) {
       const market_hash_name = item.market_hash_name

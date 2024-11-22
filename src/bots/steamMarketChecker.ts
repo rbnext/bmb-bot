@@ -1,187 +1,76 @@
-// import 'dotenv/config'
+import 'dotenv/config'
 
-// import { format } from 'date-fns'
-// import Bottleneck from 'bottleneck'
-// import { getMarketRender } from '../api/steam'
-// import { sendMessage } from '../api/telegram'
-// import { generateSteamMessage, sleep } from '../utils'
-// import { getIPInspectItemInfo } from '../api/pricempire'
-// import { getBuff163MarketGoods } from '../api/buff163'
+import { format } from 'date-fns'
+import Bottleneck from 'bottleneck'
+import { getMarketRender } from '../api/steam'
+import { sendMessage } from '../api/telegram'
+import { generateSteamMessage, sleep } from '../utils'
+import { getIPInspectItemInfo } from '../api/pricempire'
 
-// const LOADED_ITEMS: Record<string, boolean> = {}
-// const CASHED_LISTINGS = new Set<string>()
-// const STICKER_PRICES = new Map<string, number>()
-// const MIN_TREADS: number = 1
+const LOADED_ITEMS: Record<string, boolean> = {}
+const CASHED_LISTINGS = new Set<string>()
+const MIN_TREADS: number = 1
 
-// const limiter = new Bottleneck({ maxConcurrent: MIN_TREADS })
+const limiter = new Bottleneck({ maxConcurrent: MIN_TREADS })
 
-// const MARKET_HASH_NAMES = ['Charm | Die-cast AK', 'Charm | Titeenium AWP', 'Charm | Semi-Precious']
+const MARKET_HASH_NAMES = ['MAC-10 | Silver (Factory New)']
 
-// const getInspectLink = (link: string, assetId: string, listingId: string): string => {
-//   return link.replace('%assetid%', assetId).replace('%listingid%', listingId)
-// }
+const getInspectLink = (link: string, assetId: string, listingId: string): string => {
+  return link.replace('%assetid%', assetId).replace('%listingid%', listingId)
+}
 
-// const findSteamItemInfo = async (market_hash_name: string) => {
-//   const now = format(new Date(), 'HH:mm:ss')
+const findSteamItemInfo = async (market_hash_name: string) => {
+  try {
+    const steam = await getMarketRender({ market_hash_name, count: 40 })
 
-//   try {
-//     const isCharm = market_hash_name.includes('Charm')
-//     const steam = await getMarketRender({ market_hash_name })
+    for (const [index, listingId] of Object.keys(steam.listinginfo).entries()) {
+      if (CASHED_LISTINGS.has(listingId)) continue
 
-//     for (const [index, listingId] of Object.keys(steam.listinginfo).entries()) {
-//       if (CASHED_LISTINGS.has(listingId)) continue
+      const currentListing = steam.listinginfo[listingId]
+      const link = currentListing.asset.market_actions[0].link
 
-//       const currentListing = steam.listinginfo[listingId]
-//       const link = currentListing.asset.market_actions[0].link
+      const price = Number(((currentListing.converted_price + currentListing.converted_fee) / 100).toFixed(2))
+      const inspectLink = getInspectLink(link, currentListing.asset.id, listingId)
 
-//       const price = Number(((currentListing.converted_price + currentListing.converted_fee) / 100).toFixed(2))
-//       const inspectLink = getInspectLink(link, currentListing.asset.id, listingId)
+      try {
+        const response = await getIPInspectItemInfo({ url: inspectLink })
 
-//       if (isCharm) {
-//         const descriptions = steam.assets[730][currentListing.asset.contextid][currentListing.asset.id].descriptions
-//         const template = descriptions.find((el) => el.value.includes('Charm Template'))
-//         const templateId = template ? Number(template.value.match(/\d+/)?.[0]) : null
+        if (response.iteminfo.floatvalue < 0.01) {
+          await sendMessage(
+            generateSteamMessage({
+              price: price,
+              name: market_hash_name,
+              float: response.iteminfo.floatvalue,
+              stickers: response.iteminfo?.stickers || [],
+              position: index + 1,
+            })
+          )
+        }
 
-//         const isSweetTemplate = (() => {
-//           if (templateId && market_hash_name.includes('Charm | Die-cast AK')) {
-//             return templateId < 27000 || templateId > 90000
-//           }
+        console.log(format(new Date(), 'HH:mm:ss'), market_hash_name, response.iteminfo.floatvalue)
+      } catch (error) {
+        console.log(format(new Date(), 'HH:mm:ss'), `ERROR: Failed to inspect item from pricempire.com`)
+      }
 
-//           if (templateId && market_hash_name.includes('Charm | Titeenium AWP')) {
-//             return templateId > 93000
-//           }
+      CASHED_LISTINGS.add(listingId)
+    }
+  } catch (error) {
+    console.log(format(new Date(), 'HH:mm:ss'), 'STEAM_MARKET_SEARCH_ERROR')
+  }
+}
 
-//           if (templateId && market_hash_name.includes('Charm | Semi-Precious')) {
-//             return templateId < 10000 || templateId > 90000
-//           }
+;(async () => {
+  for (const name of MARKET_HASH_NAMES) LOADED_ITEMS[name] = false
 
-//           return false
-//         })()
+  do {
+    await Promise.allSettled(
+      MARKET_HASH_NAMES.map((name) => {
+        return limiter.schedule(() => findSteamItemInfo(name))
+      })
+    )
 
-//         console.log(now, market_hash_name, templateId)
+    await sleep(20_000) // Sleep 50s between requests
 
-//         if (templateId && isSweetTemplate) {
-//           await sendMessage(
-//             generateSteamMessage({
-//               price: price,
-//               name: market_hash_name,
-//               position: index + 1,
-//               templateId,
-//             })
-//           )
-
-//           await sleep(1_000)
-//         } else if (templateId === null && Object.values(LOADED_ITEMS).every((item) => item)) {
-//           await sendMessage(
-//             generateSteamMessage({
-//               price: price,
-//               name: market_hash_name,
-//               position: index + 1,
-//               templateId: 0,
-//             })
-//           )
-
-//           await sleep(1_000)
-//         }
-//       } else {
-//         try {
-//           const response = await getIPInspectItemInfo({ url: inspectLink })
-//           await sleep(1_000)
-
-//           const floatValue = response.iteminfo.floatvalue
-//           const stickerTotalPrice = (response.iteminfo?.stickers || []).reduce(
-//             (acc, { wear, name }) => (wear === null ? acc + (STICKER_PRICES.get(`Sticker | ${name}`) ?? 0) : acc),
-//             0
-//           )
-
-//           const isSweetFloat = (() => {
-//             if (market_hash_name.includes('Factory New')) {
-//               return floatValue < 0.01
-//             }
-
-//             if (market_hash_name.includes('Minimal Wear')) {
-//               return floatValue < 0.08
-//             }
-
-//             if (market_hash_name.includes('Field-Tested')) {
-//               return floatValue < 0.16
-//             }
-
-//             if (market_hash_name.includes('Battle-Scarred')) {
-//               return floatValue >= 0.95
-//             }
-
-//             return false
-//           })()
-
-//           if (stickerTotalPrice >= price) {
-//             await sendMessage(
-//               generateSteamMessage({
-//                 price: price,
-//                 name: market_hash_name,
-//                 float: response.iteminfo.floatvalue,
-//                 stickers: response.iteminfo?.stickers || [],
-//                 stickerTotal: stickerTotalPrice,
-//                 position: index + 1,
-//               })
-//             )
-//           }
-
-//           console.log(
-//             now,
-//             market_hash_name,
-//             '$' + price,
-//             response.iteminfo.floatvalue,
-//             '$' + stickerTotalPrice.toFixed(2)
-//           )
-//         } catch (error) {
-//           console.log(now, `ERROR: Failed to inspect item from pricempire.com`)
-//         }
-//       }
-
-//       CASHED_LISTINGS.add(listingId)
-//     }
-
-//     LOADED_ITEMS[market_hash_name] = true
-//   } catch (error) {
-//     console.log(now, `ERROR: Failed to inspect ${market_hash_name} from steamcommunity.com`)
-//   }
-// }
-
-// ;(async () => {
-//   for (const name of MARKET_HASH_NAMES) LOADED_ITEMS[name] = false
-
-//   do {
-//     const results = await Promise.allSettled(
-//       MARKET_HASH_NAMES.map((name) => {
-//         return limiter.schedule(() => findSteamItemInfo(name))
-//       })
-//     )
-
-//     if (results.every((result) => result.status === 'rejected')) {
-//       break // Exit the loop if all responses are errors
-//     }
-
-//     await sleep(50_000) // Sleep 50s between requests
-
-//     // eslint-disable-next-line no-constant-condition
-//   } while (true)
-// })()
-
-// // const pages = Array.from({ length: 100 }, (_, i) => i + 1)
-// // for (const page_num of pages) {
-// //   const goods = await getBuff163MarketGoods({
-// //     page_num,
-// //     category_group: 'sticker',
-// //     sort_by: 'sell_num.desc',
-// //     min_price: 1,
-// //   })
-// //   for (const item of goods.data.items) {
-// //     const market_hash_name = item.market_hash_name
-// //     const price = Number((Number(item.sell_min_price) * 0.1375).toFixed(2))
-// //     console.log(page_num, market_hash_name, price, item.sell_num)
-// //     STICKER_PRICES.set(market_hash_name, price)
-// //   }
-// //   if (goods.data.items.length !== 50) break
-// //   await sleep(5_000)
-// // }
+    // eslint-disable-next-line no-constant-condition
+  } while (true)
+})()

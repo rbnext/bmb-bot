@@ -232,6 +232,7 @@ export type SentBargainItem = {
   created_at: number
   can_cancel_time: number
   can_cancel_timeout: number
+  original_price: string
   sell_order_id: string
   state_text: string
   seller_id: string

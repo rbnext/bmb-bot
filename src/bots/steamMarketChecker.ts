@@ -69,7 +69,7 @@ const findSteamItemInfo = async (market_hash_name: string) => {
       })
     )
 
-    await sleep(20_000) // Sleep 50s between requests
+    await sleep(40_000) // Sleep 50s between requests
 
     // eslint-disable-next-line no-constant-condition
   } while (true)

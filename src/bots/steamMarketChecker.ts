@@ -21,7 +21,7 @@ const getInspectLink = (link: string, assetId: string, listingId: string): strin
 
 const findSteamItemInfo = async (market_hash_name: string) => {
   try {
-    const steam = await getMarketRender({ market_hash_name, count: 40 })
+    const steam = await getMarketRender({ market_hash_name, start: 50, count: 100 })
 
     for (const [index, listingId] of Object.keys(steam.listinginfo).entries()) {
       if (CASHED_LISTINGS.has(listingId)) continue

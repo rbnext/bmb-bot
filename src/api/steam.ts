@@ -128,6 +128,7 @@ export const getMarketRender = async ({
   count = 5,
   language = 'english',
   filter,
+  proxy = false,
 }: {
   appid?: number
   country?: string
@@ -137,6 +138,7 @@ export const getMarketRender = async ({
   count?: number
   language?: 'english'
   filter?: string
+  proxy?: boolean
 }): Promise<SteamMarketRender> => {
   const userAgent = new UserAgent()
   const PORT = getRandomNumber(10000, 10999)
@@ -147,10 +149,13 @@ export const getMarketRender = async ({
       params: { appid, country, currency, start, count, language, filter },
       headers: {
         Host: 'steamcommunity.com',
-        'User-Agent': userAgent.toString(),
+        'User-Agent': proxy
+          ? userAgent.toString()
+          : 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+
         Referer: `https://steamcommunity.com/market/listings/${appid}/` + encodeURIComponent(market_hash_name),
       },
-      httpsAgent: new HttpsProxyAgent(`${process.env.POOL_PROXY_URL}:${PORT}`),
+      httpsAgent: proxy ? new HttpsProxyAgent(`${process.env.POOL_PROXY_URL}:${PORT}`) : undefined,
       timeout: 3000,
     }
   )

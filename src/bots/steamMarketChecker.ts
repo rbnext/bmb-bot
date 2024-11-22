@@ -24,7 +24,7 @@ const getInspectLink = (link: string, assetId: string, listingId: string): strin
 
 const findSteamItemInfo = async (market_hash_name: string) => {
   try {
-    const steam = await getMarketRender({ market_hash_name, start: 1000, count: 1 })
+    const steam = await getMarketRender({ market_hash_name, start: 1000, count: 1, proxy: true })
 
     if (market_hash_name in SEARCH_MARKET_DATA && SEARCH_MARKET_DATA[market_hash_name] === steam.total_count) {
       return

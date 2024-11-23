@@ -90,21 +90,21 @@ const findSteamItemInfo = async (market_hash_name: string) => {
 ;(async () => {
   const pages = Array.from({ length: 110 }, (_, i) => i + 1)
 
-  // for (const page_num of pages) {
-  //   const goods = await getBuff163MarketGoods({
-  //     page_num,
-  //     category_group: 'sticker',
-  //     sort_by: 'price.desc',
-  //   })
-  //   for (const item of goods.data.items) {
-  //     const market_hash_name = item.market_hash_name
-  //     const price = Number((Number(item.sell_min_price) * 0.1375).toFixed(2))
-  //     console.log(page_num, market_hash_name, price, item.sell_num)
-  //     STICKER_PRICES.set(market_hash_name, price)
-  //   }
-  //   if (goods.data.items.length !== 50) break
-  //   await sleep(4_000)
-  // }
+  for (const page_num of pages) {
+    const goods = await getBuff163MarketGoods({
+      page_num,
+      category_group: 'sticker',
+      sort_by: 'price.desc',
+    })
+    for (const item of goods.data.items) {
+      const market_hash_name = item.market_hash_name
+      const price = Number((Number(item.sell_min_price) * 0.1375).toFixed(2))
+      console.log(page_num, market_hash_name, price, item.sell_num)
+      STICKER_PRICES.set(market_hash_name, price)
+    }
+    if (goods.data.items.length !== 50) break
+    await sleep(4_000)
+  }
 
   do {
     await Promise.allSettled(

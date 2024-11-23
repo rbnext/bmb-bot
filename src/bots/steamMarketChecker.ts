@@ -4,7 +4,7 @@ import { format } from 'date-fns'
 import Bottleneck from 'bottleneck'
 import { getMarketRender } from '../api/steam'
 import { sendMessage } from '../api/telegram'
-import { generateSteamMessage, sleep } from '../utils'
+import { extractStickers, generateSteamMessage, sleep } from '../utils'
 import { getIPInspectItemInfo } from '../api/pricempire'
 import { getBuff163MarketGoods } from '../api/buff163'
 
@@ -49,7 +49,7 @@ const findSteamItemInfo = async (market_hash_name: string) => {
           `${market_hash_name} ${response.iteminfo.floatvalue.toFixed(7)} $${stickerTotalPrice.toFixed(2)}`
         )
 
-        if (stickerTotalPrice > price) {
+        if (price && stickerTotalPrice > price) {
           await sendMessage(
             generateSteamMessage({
               price: price,
@@ -62,7 +62,29 @@ const findSteamItemInfo = async (market_hash_name: string) => {
           )
         }
       } catch (error) {
-        console.log(format(new Date(), 'HH:mm:ss'), error.message)
+        const assetInfo = steam.assets[730][currentListing.asset.contextid][currentListing.asset.id]
+        const htmlDescription = assetInfo.descriptions.find((el) => el.value.includes('sticker_info'))?.value || ''
+
+        const stickers = extractStickers(htmlDescription)
+
+        const stickerTotalPrice = stickers.reduce(
+          (acc, name) => acc + (STICKER_PRICES.get(`Sticker | ${name}`) ?? 0),
+          0
+        )
+
+        console.log(format(new Date(), 'HH:mm:ss'), `${market_hash_name} $${stickerTotalPrice.toFixed(2)}`)
+
+        if (price && stickerTotalPrice > price) {
+          await sendMessage(
+            generateSteamMessage({
+              price: price,
+              name: market_hash_name,
+              stickers: stickers,
+              stickerTotal: stickerTotalPrice,
+              position: index + 1,
+            })
+          )
+        }
       }
     }
   } catch (error) {
@@ -93,7 +115,7 @@ const findSteamItemInfo = async (market_hash_name: string) => {
   do {
     await Promise.allSettled(MARKET_HASH_NAMES.map((name) => limiter.schedule(() => findSteamItemInfo(name))))
 
-    await sleep(20_000) // Sleep 20s between requests
+    await sleep(15_000) // Sleep 15s between requests
 
     // eslint-disable-next-line no-constant-condition
   } while (true)

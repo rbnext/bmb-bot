@@ -49,26 +49,27 @@ export const generateSteamMessage = ({
   position,
   templateId,
   referencePrice,
-  filter,
 }: {
   name: string
   price: number
   float?: number
-  stickers?: InspectInfoStickerItem[]
+  stickers?: InspectInfoStickerItem[] | string[]
   stickerTotal?: number
   position: number
   templateId?: number
   referencePrice?: number
   id?: number
-
-  filter?: string
 }) => {
   const message: string[] = []
 
   message.push(`<a href="https://steamcommunity.com/market/listings/730/${encodeURIComponent(name)}">${name}</a>\n\n`)
 
   for (const sticker of stickers) {
-    message.push(`${sticker.name}: ${sticker.wear === null ? '100%' : `${sticker.wear.toFixed(2)}%`}\n`)
+    if (typeof sticker === 'string') {
+      message.push(`<b>${sticker}</b>: unknown\n`)
+    } else {
+      message.push(`<b>${sticker.name}</b>: ${sticker.wear === null ? '100%' : `${sticker.wear.toFixed(2)}%`}\n`)
+    }
   }
 
   message.push(`\n`)
@@ -188,4 +189,10 @@ export const getBargainDiscountPrice = (price: number, userSellingHistory: ShopB
 
 export function getRandomNumber(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min + 1)) + min
+}
+
+export function extractStickers(input: string): string[] {
+  const match = input.match(/Sticker:\s*([^<]*)/)
+
+  return match && match[1] ? match[1].split(',').map((sticker) => sticker.trim()) : []
 }

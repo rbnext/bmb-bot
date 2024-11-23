@@ -61,36 +61,18 @@ const findSteamItemInfo = async (market_hash_name: string) => {
 
           console.log(`|___ ${listingId} $${stickerTotalPrice.toFixed(2)}`)
 
-          if (stickerTotalPrice < 20) {
-            continue
+          if (stickerTotalPrice > price) {
+            await sendMessage(
+              generateSteamMessage({
+                price: price,
+                name: market_hash_name,
+                float: response.iteminfo.floatvalue,
+                stickers: response.iteminfo?.stickers || [],
+                stickerTotal: stickerTotalPrice,
+                position: index + 1,
+              })
+            )
           }
-
-          const goods = await getMarketGoods({ search: market_hash_name })
-          const goods_id = goods.data.items.find((el) => el.market_hash_name === market_hash_name)?.id
-
-          if (!goods_id) {
-            continue
-          }
-
-          const goodsInfo = await getGoodsInfo({ goods_id })
-          const referencePrice = Number(goodsInfo.data.goods_info.goods_ref_price)
-
-          if (referencePrice + stickerTotalPrice * 0.11 < price) {
-            continue
-          }
-
-          await sendMessage(
-            generateSteamMessage({
-              id: goods_id,
-              price: price,
-              name: market_hash_name,
-              float: response.iteminfo.floatvalue,
-              stickers: response.iteminfo?.stickers || [],
-              stickerTotal: stickerTotalPrice,
-              referencePrice: referencePrice,
-              position: index + 1,
-            })
-          )
         } catch (error) {
           console.log(format(new Date(), 'HH:mm:ss'), error.message)
         }

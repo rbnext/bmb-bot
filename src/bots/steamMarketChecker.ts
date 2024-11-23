@@ -24,62 +24,64 @@ const getInspectLink = (link: string, assetId: string, listingId: string): strin
 
 const findSteamItemInfo = async (market_hash_name: string) => {
   try {
-    const steam = await getMarketRender({ market_hash_name, start: 1000, count: 1, proxy: true })
+    // const steam = await getMarketRender({ market_hash_name, start: 1000, count: 1, proxy: false })
 
-    if (market_hash_name in SEARCH_MARKET_DATA && SEARCH_MARKET_DATA[market_hash_name] === steam.total_count) {
-      return
-    }
+    // console.log(steam.total_count)
 
-    if (market_hash_name in SEARCH_MARKET_DATA) {
-      console.log(
-        `${format(new Date(), 'HH:mm:ss')}: ${market_hash_name} ${SEARCH_MARKET_DATA[market_hash_name]} -> ${steam.total_count}`
-      )
-    }
+    // if (market_hash_name in SEARCH_MARKET_DATA && SEARCH_MARKET_DATA[market_hash_name] === steam.total_count) {
+    //   return
+    // }
 
-    if (market_hash_name in SEARCH_MARKET_DATA && SEARCH_MARKET_DATA[market_hash_name] < steam.total_count) {
-      const steam = await getMarketRender({ market_hash_name, start: 0, count: 30 })
+    // if (market_hash_name in SEARCH_MARKET_DATA) {
+    //   console.log(
+    //     `${format(new Date(), 'HH:mm:ss')}: ${market_hash_name} ${SEARCH_MARKET_DATA[market_hash_name]} -> ${steam.total_count}`
+    //   )
+    // }
 
-      for (const [index, listingId] of Object.keys(steam.listinginfo).entries()) {
-        if (CASHED_LISTINGS.has(listingId)) continue
+    // if (market_hash_name in SEARCH_MARKET_DATA && SEARCH_MARKET_DATA[market_hash_name] < steam.total_count) {
+    const steam = await getMarketRender({ market_hash_name, start: 0, count: 30 })
 
-        const currentListing = steam.listinginfo[listingId]
-        const link = currentListing.asset.market_actions[0].link
+    for (const [index, listingId] of Object.keys(steam.listinginfo).entries()) {
+      if (CASHED_LISTINGS.has(listingId)) continue
 
-        const price = Number(((currentListing.converted_price + currentListing.converted_fee) / 100).toFixed(2))
-        const inspectLink = getInspectLink(link, currentListing.asset.id, listingId)
+      const currentListing = steam.listinginfo[listingId]
+      const link = currentListing.asset.market_actions[0].link
 
-        CASHED_LISTINGS.add(listingId)
+      const price = Number(((currentListing.converted_price + currentListing.converted_fee) / 100).toFixed(2))
+      const inspectLink = getInspectLink(link, currentListing.asset.id, listingId)
 
-        try {
-          const response = await getIPInspectItemInfo({ url: inspectLink })
-          await sleep(1_000)
+      CASHED_LISTINGS.add(listingId)
 
-          const stickerTotalPrice = (response.iteminfo?.stickers || []).reduce(
-            (acc, { wear, name }) => (wear === null ? acc + (STICKER_PRICES.get(`Sticker | ${name}`) ?? 0) : acc),
-            0
+      try {
+        const response = await getIPInspectItemInfo({ url: inspectLink })
+        await sleep(1_000)
+
+        const stickerTotalPrice = (response.iteminfo?.stickers || []).reduce(
+          (acc, { wear, name }) => (wear === null ? acc + (STICKER_PRICES.get(`Sticker | ${name}`) ?? 0) : acc),
+          0
+        )
+
+        console.log(format(new Date(), 'HH:mm:ss'), `${market_hash_name} ${listingId} $${stickerTotalPrice.toFixed(2)}`)
+
+        if (stickerTotalPrice > price) {
+          await sendMessage(
+            generateSteamMessage({
+              price: price,
+              name: market_hash_name,
+              float: response.iteminfo.floatvalue,
+              stickers: response.iteminfo?.stickers || [],
+              stickerTotal: stickerTotalPrice,
+              position: index + 1,
+            })
           )
-
-          console.log(`|___ ${listingId} $${stickerTotalPrice.toFixed(2)}`)
-
-          if (stickerTotalPrice > price) {
-            await sendMessage(
-              generateSteamMessage({
-                price: price,
-                name: market_hash_name,
-                float: response.iteminfo.floatvalue,
-                stickers: response.iteminfo?.stickers || [],
-                stickerTotal: stickerTotalPrice,
-                position: index + 1,
-              })
-            )
-          }
-        } catch (error) {
-          console.log(format(new Date(), 'HH:mm:ss'), error.message)
         }
+      } catch (error) {
+        console.log(format(new Date(), 'HH:mm:ss'), error.message)
       }
     }
+    // }
 
-    SEARCH_MARKET_DATA[market_hash_name] = steam.total_count
+    // SEARCH_MARKET_DATA[market_hash_name] = steam.total_count
   } catch (error) {
     console.log(format(new Date(), 'HH:mm:ss'), 'STEAM_MARKET_SEARCH_ERROR')
   }
@@ -88,21 +90,21 @@ const findSteamItemInfo = async (market_hash_name: string) => {
 ;(async () => {
   const pages = Array.from({ length: 110 }, (_, i) => i + 1)
 
-  for (const page_num of pages) {
-    const goods = await getBuff163MarketGoods({
-      page_num,
-      category_group: 'sticker',
-      sort_by: 'price.desc',
-    })
-    for (const item of goods.data.items) {
-      const market_hash_name = item.market_hash_name
-      const price = Number((Number(item.sell_min_price) * 0.1375).toFixed(2))
-      console.log(page_num, market_hash_name, price, item.sell_num)
-      STICKER_PRICES.set(market_hash_name, price)
-    }
-    if (goods.data.items.length !== 50) break
-    await sleep(4_000)
-  }
+  // for (const page_num of pages) {
+  //   const goods = await getBuff163MarketGoods({
+  //     page_num,
+  //     category_group: 'sticker',
+  //     sort_by: 'price.desc',
+  //   })
+  //   for (const item of goods.data.items) {
+  //     const market_hash_name = item.market_hash_name
+  //     const price = Number((Number(item.sell_min_price) * 0.1375).toFixed(2))
+  //     console.log(page_num, market_hash_name, price, item.sell_num)
+  //     STICKER_PRICES.set(market_hash_name, price)
+  //   }
+  //   if (goods.data.items.length !== 50) break
+  //   await sleep(4_000)
+  // }
 
   do {
     await Promise.allSettled(
@@ -111,7 +113,7 @@ const findSteamItemInfo = async (market_hash_name: string) => {
       })
     )
 
-    await sleep(20_000) // Sleep 50s between requests
+    await sleep(30_000) // Sleep 50s between requests
 
     // eslint-disable-next-line no-constant-condition
   } while (true)

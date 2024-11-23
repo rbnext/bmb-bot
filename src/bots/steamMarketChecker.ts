@@ -7,10 +7,8 @@ import { sendMessage } from '../api/telegram'
 import { generateSteamMessage, sleep } from '../utils'
 import { getIPInspectItemInfo } from '../api/pricempire'
 import { getBuff163MarketGoods } from '../api/buff163'
-import { getGoodsInfo, getMarketGoods } from '../api/buff'
 
 const STICKER_PRICES = new Map<string, number>()
-const SEARCH_MARKET_DATA: Record<string, number> = {}
 const CASHED_LISTINGS = new Set<string>()
 const MIN_TREADS: number = 1
 
@@ -24,22 +22,7 @@ const getInspectLink = (link: string, assetId: string, listingId: string): strin
 
 const findSteamItemInfo = async (market_hash_name: string) => {
   try {
-    // const steam = await getMarketRender({ market_hash_name, start: 1000, count: 1, proxy: false })
-
-    // console.log(steam.total_count)
-
-    // if (market_hash_name in SEARCH_MARKET_DATA && SEARCH_MARKET_DATA[market_hash_name] === steam.total_count) {
-    //   return
-    // }
-
-    // if (market_hash_name in SEARCH_MARKET_DATA) {
-    //   console.log(
-    //     `${format(new Date(), 'HH:mm:ss')}: ${market_hash_name} ${SEARCH_MARKET_DATA[market_hash_name]} -> ${steam.total_count}`
-    //   )
-    // }
-
-    // if (market_hash_name in SEARCH_MARKET_DATA && SEARCH_MARKET_DATA[market_hash_name] < steam.total_count) {
-    const steam = await getMarketRender({ market_hash_name, start: 0, count: 30 })
+    const steam = await getMarketRender({ market_hash_name, start: 0, count: 50 })
 
     for (const [index, listingId] of Object.keys(steam.listinginfo).entries()) {
       if (CASHED_LISTINGS.has(listingId)) continue
@@ -61,7 +44,10 @@ const findSteamItemInfo = async (market_hash_name: string) => {
           0
         )
 
-        console.log(format(new Date(), 'HH:mm:ss'), `${market_hash_name} ${listingId} $${stickerTotalPrice.toFixed(2)}`)
+        console.log(
+          format(new Date(), 'HH:mm:ss'),
+          `${market_hash_name} ${response.iteminfo.floatvalue.toFixed(7)} $${stickerTotalPrice.toFixed(2)}`
+        )
 
         if (stickerTotalPrice > price) {
           await sendMessage(
@@ -79,16 +65,14 @@ const findSteamItemInfo = async (market_hash_name: string) => {
         console.log(format(new Date(), 'HH:mm:ss'), error.message)
       }
     }
-    // }
-
-    // SEARCH_MARKET_DATA[market_hash_name] = steam.total_count
   } catch (error) {
+    await sleep(60_000 * 5)
     console.log(format(new Date(), 'HH:mm:ss'), 'STEAM_MARKET_SEARCH_ERROR')
   }
 }
 
 ;(async () => {
-  const pages = Array.from({ length: 110 }, (_, i) => i + 1)
+  const pages = Array.from({ length: 115 }, (_, i) => i + 1)
 
   for (const page_num of pages) {
     const goods = await getBuff163MarketGoods({
@@ -107,13 +91,9 @@ const findSteamItemInfo = async (market_hash_name: string) => {
   }
 
   do {
-    await Promise.allSettled(
-      MARKET_HASH_NAMES.map((name) => {
-        return limiter.schedule(() => findSteamItemInfo(name))
-      })
-    )
+    await Promise.allSettled(MARKET_HASH_NAMES.map((name) => limiter.schedule(() => findSteamItemInfo(name))))
 
-    await sleep(30_000) // Sleep 50s between requests
+    await sleep(20_000) // Sleep 20s between requests
 
     // eslint-disable-next-line no-constant-condition
   } while (true)

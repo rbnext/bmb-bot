@@ -8,7 +8,7 @@ import { extractStickers, generateSteamMessage, sleep } from '../utils'
 import { getBuff163MarketGoods } from '../api/buff163'
 import puppeteer from 'puppeteer-extra'
 import StealthPlugin from 'puppeteer-extra-plugin-stealth'
-import { Page } from 'puppeteer'
+import { Page, executablePath } from 'puppeteer'
 import { SteamInventoryHelperDetails } from '../types'
 
 puppeteer.use(StealthPlugin())
@@ -108,6 +108,7 @@ const findSteamItemInfo = async (page: Page, market_hash_name: string) => {
     headless: true,
     // executablePath: 'C:\\Users\\Administrator\\Downloads\\Win_x64_1067886_chrome-win\\chrome-win\\chrome.exe',
     args: ['--disable-extensions', '--disable-gpu', '--disable-setuid-sandbox', '--no-sandbox', '--no-zygote'],
+    executablePath: executablePath(),
   })
 
   console.log('asdas', browser)

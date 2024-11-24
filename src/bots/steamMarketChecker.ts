@@ -109,9 +109,10 @@ const findSteamItemInfo = async (page: Page, market_hash_name: string) => {
     executablePath: 'C:\\Users\\Administrator\\Downloads\\Win_x64_1067886_chrome-win\\chrome-win\\chrome.exe',
     args: ['--no-startup-window'],
   })
-  const page = await browser.newPage()
 
-  console.log('asdas')
+  console.log('asdas', browser)
+
+  const page = await browser.newPage()
 
   const pages = Array.from({ length: 115 }, (_, i) => i + 1)
 

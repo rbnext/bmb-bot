@@ -105,7 +105,7 @@ const findSteamItemInfo = async (page: Page, market_hash_name: string) => {
 
 ;(async () => {
   const browser = await puppeteer.launch({
-    headless: true,
+    headless: false,
     executablePath: 'C:\\Users\\Administrator\\Downloads\\Win_x64_1067886_chrome-win\\chrome-win\\chrome.exe',
   })
   const page = await browser.newPage()

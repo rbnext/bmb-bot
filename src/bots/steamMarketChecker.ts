@@ -6,8 +6,12 @@ import { getMarketRender } from '../api/steam'
 import { sendMessage } from '../api/telegram'
 import { extractStickers, generateSteamMessage, sleep } from '../utils'
 import { getBuff163MarketGoods } from '../api/buff163'
-import puppeteer, { Page } from 'puppeteer-core'
+import puppeteer from 'puppeteer-extra'
+import StealthPlugin from 'puppeteer-extra-plugin-stealth'
+import { Page } from 'puppeteer'
 import { SteamInventoryHelperDetails } from '../types'
+
+puppeteer.use(StealthPlugin())
 
 const CASHED_LISTINGS = new Set<string>()
 const STICKER_PRICES = new Map<string, number>()
@@ -101,8 +105,8 @@ const findSteamItemInfo = async (page: Page, market_hash_name: string) => {
 
 ;(async () => {
   const browser = await puppeteer.launch({
-    headless: false,
-    executablePath: 'C:\\Users\\Administrator\\Downloads\\Win_x64_1067886_chrome-win\\chrome-win\\chrome.exe',
+    headless: true,
+    // executablePath: 'C:\\Users\\Administrator\\Downloads\\Win_x64_1067886_chrome-win\\chrome-win\\chrome.exe',
     args: ['--disable-gpu', '--disable-setuid-sandbox', '--no-sandbox', '--no-zygote'],
   })
 

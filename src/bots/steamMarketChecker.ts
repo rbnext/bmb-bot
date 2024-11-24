@@ -105,7 +105,7 @@ const findSteamItemInfo = async (page: Page, market_hash_name: string) => {
 
 ;(async () => {
   const browser = await puppeteer.launch({
-    headless: true,
+    headless: false,
   })
   const page = await browser.newPage()
 

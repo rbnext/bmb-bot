@@ -108,6 +108,7 @@ const findSteamItemInfo = async (page: Page, market_hash_name: string) => {
     headless: false,
     executablePath: 'C:\\Users\\Administrator\\Downloads\\Win_x64_1067886_chrome-win\\chrome-win\\chrome.exe',
     args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    dumpio: true,
   })
   const page = await browser.newPage()
 

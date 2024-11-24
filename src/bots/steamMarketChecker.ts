@@ -5,14 +5,18 @@ import Bottleneck from 'bottleneck'
 import { getMarketRender } from '../api/steam'
 import { sendMessage } from '../api/telegram'
 import { extractStickers, generateSteamMessage, sleep } from '../utils'
-import { getIPInspectItemInfo } from '../api/pricempire'
 import { getBuff163MarketGoods } from '../api/buff163'
+import puppeteer from 'puppeteer-extra'
+import StealthPlugin from 'puppeteer-extra-plugin-stealth'
+import { Page } from 'puppeteer'
+import { SteamInventoryHelperDetails } from '../types'
 
-const STICKER_PRICES = new Map<string, number>()
+puppeteer.use(StealthPlugin())
+
 const CASHED_LISTINGS = new Set<string>()
-const MIN_TREADS: number = 1
+const STICKER_PRICES = new Map<string, number>()
 
-const limiter = new Bottleneck({ maxConcurrent: MIN_TREADS })
+const limiter = new Bottleneck({ maxConcurrent: 1 })
 
 const MARKET_HASH_NAMES = ['AK-47 | Redline (Field-Tested)']
 
@@ -20,9 +24,9 @@ const getInspectLink = (link: string, assetId: string, listingId: string): strin
   return link.replace('%assetid%', assetId).replace('%listingid%', listingId)
 }
 
-const findSteamItemInfo = async (market_hash_name: string) => {
+const findSteamItemInfo = async (page: Page, market_hash_name: string) => {
   try {
-    const steam = await getMarketRender({ market_hash_name, start: 0, count: 100 })
+    const steam = await getMarketRender({ market_hash_name, start: 0, count: 10 })
 
     for (const [index, listingId] of Object.keys(steam.listinginfo).entries()) {
       if (CASHED_LISTINGS.has(listingId)) continue
@@ -36,20 +40,26 @@ const findSteamItemInfo = async (market_hash_name: string) => {
       CASHED_LISTINGS.add(listingId)
 
       try {
-        const response = await getIPInspectItemInfo({ url: inspectLink })
-        await sleep(1_000)
+        await sleep(2_000)
+        await page.goto(`https://floats.steaminventoryhelper.com/?url=${inspectLink}`, {
+          waitUntil: 'domcontentloaded',
+        })
+
+        const response: SteamInventoryHelperDetails = await page.evaluate(() => {
+          return JSON.parse(document.body.innerText)
+        })
 
         const stickerTotalPrice = (response.iteminfo?.stickers || []).reduce(
-          (acc, { wear, name }) => (wear === null ? acc + (STICKER_PRICES.get(`Sticker | ${name}`) ?? 0) : acc),
+          (acc, { wear, name }) => (wear === 0 ? acc + (STICKER_PRICES.get(`Sticker | ${name}`) ?? 0) : acc),
           0
         )
 
         console.log(
           format(new Date(), 'HH:mm:ss'),
-          `${market_hash_name} ${response.iteminfo.floatvalue.toFixed(7)} $${stickerTotalPrice.toFixed(2)}`
+          `${market_hash_name} ${response.iteminfo.floatvalue.toFixed(10)} $${stickerTotalPrice.toFixed(2)}`
         )
 
-        if (price && stickerTotalPrice > price) {
+        if ((price && stickerTotalPrice > price) || response.iteminfo.floatvalue < 0.2) {
           await sendMessage(
             generateSteamMessage({
               price: price,
@@ -89,11 +99,14 @@ const findSteamItemInfo = async (market_hash_name: string) => {
     }
   } catch (error) {
     await sleep(60_000 * 5)
-    console.log(format(new Date(), 'HH:mm:ss'), 'STEAM_MARKET_SEARCH_ERROR')
+    console.log(format(new Date(), 'HH:mm:ss'), 'STEAM_ERROR', error.message)
   }
 }
 
 ;(async () => {
+  const browser = await puppeteer.launch({ headless: true })
+  const page = await browser.newPage()
+
   const pages = Array.from({ length: 115 }, (_, i) => i + 1)
 
   for (const page_num of pages) {
@@ -113,7 +126,7 @@ const findSteamItemInfo = async (market_hash_name: string) => {
   }
 
   do {
-    await Promise.allSettled(MARKET_HASH_NAMES.map((name) => limiter.schedule(() => findSteamItemInfo(name))))
+    await Promise.allSettled(MARKET_HASH_NAMES.map((name) => limiter.schedule(() => findSteamItemInfo(page, name))))
 
     await sleep(12_000) // Sleep 12s between requests
 

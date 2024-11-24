@@ -1,5 +1,5 @@
 import { differenceInMinutes, formatDistance, isAfter, subHours, subMinutes } from 'date-fns'
-import { InspectInfoStickerItem, MessageType, ShopBillOrderItem, Source } from './types'
+import { MessageType, ShopBillOrderItem, Source, SteamInventoryHelperSticker } from './types'
 
 export const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms))
 
@@ -53,7 +53,7 @@ export const generateSteamMessage = ({
   name: string
   price: number
   float?: number
-  stickers?: InspectInfoStickerItem[] | string[]
+  stickers?: SteamInventoryHelperSticker[] | string[]
   stickerTotal?: number
   position: number
   templateId?: number
@@ -68,7 +68,7 @@ export const generateSteamMessage = ({
     if (typeof sticker === 'string') {
       message.push(`<b>${sticker}</b>: unknown\n`)
     } else {
-      message.push(`<b>${sticker.name}</b>: ${sticker.wear === null ? '100%' : `${sticker.wear.toFixed(2)}%`}\n`)
+      message.push(`<b>${sticker.name}</b>: ${sticker.wear === 0 ? '100%' : `${sticker.wear.toFixed(2)}%`}\n`)
     }
   }
 

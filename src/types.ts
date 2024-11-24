@@ -535,3 +535,18 @@ export type SearchMarketRender = {
   }
   results: SearchMarketRenderResultItem[]
 }
+
+export type SteamInventoryHelperSticker = {
+  name: string
+  slot: number
+  wear: number
+}
+
+export type SteamInventoryHelperDetails = {
+  success: boolean
+  iteminfo: {
+    full_item_name: string
+    floatvalue: number
+    stickers: SteamInventoryHelperSticker[]
+  }
+}

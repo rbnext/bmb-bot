@@ -109,8 +109,6 @@ const findSteamItemInfo = async (page: Page, market_hash_name: string) => {
     args: ['--disable-extensions', '--disable-gpu', '--disable-setuid-sandbox', '--no-sandbox', '--no-zygote'],
   })
 
-  console.log('asdas', browser)
-
   const page = await browser.newPage()
 
   const pages = Array.from({ length: 115 }, (_, i) => i + 1)

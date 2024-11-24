@@ -22,7 +22,7 @@ const getInspectLink = (link: string, assetId: string, listingId: string): strin
 
 const findSteamItemInfo = async (market_hash_name: string) => {
   try {
-    const steam = await getMarketRender({ market_hash_name, start: 0, count: 50 })
+    const steam = await getMarketRender({ market_hash_name, start: 0, count: 100 })
 
     for (const [index, listingId] of Object.keys(steam.listinginfo).entries()) {
       if (CASHED_LISTINGS.has(listingId)) continue
@@ -115,7 +115,7 @@ const findSteamItemInfo = async (market_hash_name: string) => {
   do {
     await Promise.allSettled(MARKET_HASH_NAMES.map((name) => limiter.schedule(() => findSteamItemInfo(name))))
 
-    await sleep(15_000) // Sleep 15s between requests
+    await sleep(12_000) // Sleep 12s between requests
 
     // eslint-disable-next-line no-constant-condition
   } while (true)

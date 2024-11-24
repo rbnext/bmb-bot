@@ -6,8 +6,7 @@ import { getMarketRender } from '../api/steam'
 import { sendMessage } from '../api/telegram'
 import { extractStickers, generateSteamMessage, sleep } from '../utils'
 import { getBuff163MarketGoods } from '../api/buff163'
-import puppeteer from 'puppeteer-core'
-import { Page } from 'puppeteer'
+import puppeteer, { Page } from 'puppeteer-core'
 import { SteamInventoryHelperDetails } from '../types'
 
 const CASHED_LISTINGS = new Set<string>()

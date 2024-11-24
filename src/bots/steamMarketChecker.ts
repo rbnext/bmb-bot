@@ -112,6 +112,8 @@ const findSteamItemInfo = async (page: Page, market_hash_name: string) => {
   })
   const page = await browser.newPage()
 
+  console.log('asdas')
+
   const pages = Array.from({ length: 115 }, (_, i) => i + 1)
 
   for (const page_num of pages) {

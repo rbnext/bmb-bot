@@ -9,7 +9,12 @@ import { getBuff163MarketGoods } from '../api/buff163'
 const CASHED_LISTINGS = new Set<string>()
 const STICKER_PRICES = new Map<string, number>()
 
-const MARKET_HASH_NAMES = ['AK-47 | Redline (Field-Tested)', 'AK-47 | Blue Laminate (Minimal Wear)']
+const MARKET_HASH_NAMES = [
+  'AK-47 | Redline (Field-Tested)',
+  'AK-47 | Blue Laminate (Minimal Wear)',
+  'USP-S | Blueprint (Factory New)',
+  'Glock-18 | Candy Apple (Minimal Wear)',
+]
 
 const findSteamItemInfo = async (market_hash_name: string, start: number = 0) => {
   console.log(format(new Date(), 'HH:mm:ss'), market_hash_name, start)
@@ -31,6 +36,8 @@ const findSteamItemInfo = async (market_hash_name: string, start: number = 0) =>
       const stickers = extractStickers(htmlDescription)
 
       const stickerTotalPrice = stickers.reduce((acc, name) => acc + (STICKER_PRICES.get(`Sticker | ${name}`) ?? 0), 0)
+
+      if (price >= 100) return
 
       if (price && price <= 100 && stickerTotalPrice !== 0 && price / stickerTotalPrice < 0.2) {
         await sendMessage(
@@ -79,8 +86,9 @@ const findSteamItemInfo = async (market_hash_name: string, start: number = 0) =>
   }
 
   do {
-    await findSteamItemInfo(MARKET_HASH_NAMES[0])
-    await findSteamItemInfo(MARKET_HASH_NAMES[1])
+    for (const market_hash_name of MARKET_HASH_NAMES) {
+      await findSteamItemInfo(market_hash_name)
+    }
 
     // eslint-disable-next-line no-constant-condition
   } while (true)

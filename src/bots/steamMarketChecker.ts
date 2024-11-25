@@ -14,6 +14,8 @@ const MARKET_HASH_NAMES = ['AK-47 | Redline (Field-Tested)', 'AK-47 | Blue Lamin
 const findSteamItemInfo = async (market_hash_name: string, start: number = 0) => {
   console.log(format(new Date(), 'HH:mm:ss'), market_hash_name, start)
 
+  await sleep(20_000)
+
   try {
     const steam = await getMarketRender({ market_hash_name, start, count: 100 })
 
@@ -47,12 +49,11 @@ const findSteamItemInfo = async (market_hash_name: string, start: number = 0) =>
     }
 
     if (start + 100 < steam.total_count) {
-      await sleep(15_000)
       await findSteamItemInfo(market_hash_name, start + 100)
     }
   } catch (error) {
-    await sleep(60_000 * 5)
     console.log(format(new Date(), 'HH:mm:ss'), 'STEAM_ERROR', error.message)
+    await sleep(60_000 * 5)
 
     return
   }
@@ -79,9 +80,7 @@ const findSteamItemInfo = async (market_hash_name: string, start: number = 0) =>
 
   do {
     await findSteamItemInfo(MARKET_HASH_NAMES[0])
-    await sleep(12_000)
     await findSteamItemInfo(MARKET_HASH_NAMES[1])
-    await sleep(12_000)
 
     // eslint-disable-next-line no-constant-condition
   } while (true)

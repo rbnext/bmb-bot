@@ -30,7 +30,7 @@ const findSteamItemInfo = async (market_hash_name: string, start: number = 0) =>
 
       const stickerTotalPrice = stickers.reduce((acc, name) => acc + (STICKER_PRICES.get(`Sticker | ${name}`) ?? 0), 0)
 
-      if (stickerTotalPrice !== 0 && price / stickerTotalPrice < 0.2) {
+      if (price && price <= 100 && stickerTotalPrice !== 0 && price / stickerTotalPrice < 0.2) {
         await sendMessage(
           generateSteamMessage({
             price: price,

@@ -9,6 +9,7 @@
     "buffBargain": "ts-node src/bots/buffBargain.ts",
     "steamMarketChecker": "ts-node src/bots/steamMarketChecker.ts",
     "steamMarketSearch": "ts-node src/bots/steamMarketSearch.ts",
+    "steamCharmsChecker": "ts-node src/bots/steamCharmsChecker.ts",
     "buffSteam": "ts-node src/bots/buffSteam.ts",
     "sellBuff": "ts-node src/bots/sellBuff.ts",
     "playground": "ts-node src/playground.ts"

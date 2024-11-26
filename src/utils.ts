@@ -57,7 +57,7 @@ export const generateSteamMessage = ({
   stickers?: SteamInventoryHelperSticker[] | string[]
   stickerTotal?: number
   position: number
-  templateId?: number
+  templateId?: number | null
   referencePrice?: number
   id?: number
   ratio?: number

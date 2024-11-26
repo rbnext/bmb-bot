@@ -61,7 +61,7 @@ const findSteamItemInfo = async (
       CASHED_LISTINGS.add(listingId)
     }
 
-    if (start + 100 < steam.total_count) {
+    if (start + 100 < steam.total_count && start <= 700) {
       await findSteamItemInfo(config, start + 100)
     }
   } catch (error) {

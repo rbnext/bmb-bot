@@ -6,7 +6,8 @@ import { format } from 'date-fns'
 import { sendMessage } from '../api/telegram'
 import { Source } from '../types'
 import { executeBuffToSteamTrade } from '../helpers/executeBuffToSteamTrade'
-import { BLACKLISTED_CATEGORY, BLACKLISTED_ITEMSET } from '../config'
+import { BARGAIN_PROFIT_THRESHOLD, BLACKLISTED_CATEGORY, BLACKLISTED_ITEMSET, STEAM_CHECK_THRESHOLD } from '../config'
+import { executeBuffBargainTrade } from '../helpers/executeBuffBargainTrade'
 
 export const GOODS_CACHE: Record<number, { price: number }> = {}
 export const GOODS_BLACKLIST_CACHE: number[] = []
@@ -34,7 +35,13 @@ const buffSteam = async () => {
       }
 
       if (item.id in GOODS_CACHE && GOODS_CACHE[item.id].price > current_price) {
-        executeBuffToSteamTrade(item, { source: Source.BUFF_STEAM })
+        if (current_price >= BARGAIN_PROFIT_THRESHOLD) {
+          executeBuffBargainTrade(item, { source: Source.BUFF_DEFAULT })
+        }
+
+        if (current_price < BARGAIN_PROFIT_THRESHOLD) {
+          executeBuffToSteamTrade(item, { source: Source.BUFF_STEAM })
+        }
       }
 
       GOODS_CACHE[item.id] = { price: current_price }

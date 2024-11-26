@@ -9,30 +9,37 @@ const CASHED_LISTINGS = new Set<string>()
 
 const MARKET_HASH_NAMES = [
   {
-    name: 'Charm | Die-cast AK',
+    market_hash_name: 'Charm | Die-cast AK',
     isSweet: (template: number) => template > 90000 || template < 27000,
+    canSendToTelegram: false,
   },
   {
-    name: 'Charm | Titeenium AWP',
+    market_hash_name: 'Charm | Titeenium AWP',
     isSweet: (template: number) => template > 93000,
+    canSendToTelegram: false,
   },
   {
-    name: 'Charm | Semi-Precious',
+    market_hash_name: 'Charm | Semi-Precious',
     isSweet: (template: number) => template > 90000 || template < 10000,
+    canSendToTelegram: false,
   },
 ]
 
 const findSteamItemInfo = async (
-  market_hash_name: string,
-  isSweet: (template: number) => boolean,
+  config: {
+    market_hash_name: string
+    isSweet: (template: number) => boolean
+    canSendToTelegram: boolean
+  },
+
   start: number = 0
 ) => {
-  console.log(format(new Date(), 'HH:mm:ss'), market_hash_name, start)
+  console.log(format(new Date(), 'HH:mm:ss'), config.market_hash_name, start)
 
-  await sleep(20_000)
+  await sleep(30_000)
 
   try {
-    const steam = await getMarketRender({ market_hash_name, start, count: 100 })
+    const steam = await getMarketRender({ market_hash_name: config.market_hash_name, start, count: 100 })
 
     for (const [index, listingId] of Object.keys(steam.listinginfo).entries()) {
       if (CASHED_LISTINGS.has(listingId)) continue
@@ -45,9 +52,9 @@ const findSteamItemInfo = async (
 
       const templateId = template ? Number(template.match(/\d+/g)) : null
 
-      if (templateId && isSweet(templateId)) {
+      if (templateId && config.canSendToTelegram && config.isSweet(templateId)) {
         await sendMessage(
-          generateSteamMessage({ price: price, name: market_hash_name, position: start + index + 1, templateId })
+          generateSteamMessage({ price: price, name: config.market_hash_name, position: start + index + 1, templateId })
         )
       }
 
@@ -55,7 +62,7 @@ const findSteamItemInfo = async (
     }
 
     if (start + 100 < steam.total_count) {
-      await findSteamItemInfo(market_hash_name, isSweet, start + 100)
+      await findSteamItemInfo(config, start + 100)
     }
   } catch (error) {
     console.log(format(new Date(), 'HH:mm:ss'), 'STEAM_ERROR', error.message)
@@ -68,8 +75,12 @@ const findSteamItemInfo = async (
 ;(async () => {
   do {
     for (const config of MARKET_HASH_NAMES) {
-      await findSteamItemInfo(config.name, config.isSweet)
+      await findSteamItemInfo(config)
     }
+
+    MARKET_HASH_NAMES.forEach((_, index) => {
+      MARKET_HASH_NAMES[index].canSendToTelegram = true
+    })
 
     // eslint-disable-next-line no-constant-condition
   } while (true)

@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { parse } from 'set-cookie-parser'
 
-import { MarketGoods } from '../types'
+import { GoodsSellOrder, MarketGoods } from '../types'
 
 export const defaultCookies: Record<string, string> = {
   'Locale-Supported': 'en',
@@ -90,6 +90,26 @@ export const getBuff163MarketGoods = async ({
       page_size,
       ...rest,
     },
+  })
+
+  return data
+}
+
+export const getBuff163GoodsSellOrder = async ({
+  game = 'csgo',
+  page_num = 1,
+  sort_by = 'default',
+  ...rest
+}: {
+  game?: string
+  page_num?: number
+  goods_id: number
+  min_paintseed?: number
+  max_paintseed?: number
+  sort_by?: string
+}): Promise<GoodsSellOrder> => {
+  const { data } = await http.get('/market/goods/sell_order', {
+    params: { game, page_num, sort_by, ...rest },
   })
 
   return data

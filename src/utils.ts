@@ -49,6 +49,7 @@ export const generateSteamMessage = ({
   position,
   templateId,
   referencePrice,
+  buffFirstPrice,
   ratio,
 }: {
   name: string
@@ -59,6 +60,7 @@ export const generateSteamMessage = ({
   position: number
   templateId?: number | null
   referencePrice?: number
+  buffFirstPrice?: number
   id?: number
   ratio?: number
 }) => {
@@ -77,6 +79,7 @@ export const generateSteamMessage = ({
   message.push(`\n`)
   if (price) message.push(`<b>Steam price</b>: $${price}\n`)
   if (referencePrice) message.push(`<b>Reference price</b>: $${referencePrice}\n`)
+  if (buffFirstPrice) message.push(`<b>Buff first price</b>: $${buffFirstPrice.toFixed(2)}\n`)
   if (stickerTotal) message.push(`<b>Sticker total</b>: $${stickerTotal.toFixed(2)}\n`)
   if (float) message.push(`<b>Float</b>: ${float}\n`)
   if (templateId) message.push(`<b>Template ID</b>: ${templateId}\n`)

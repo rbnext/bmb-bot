@@ -163,7 +163,7 @@ const findSteamItemInfo = async (config: { query: string; start: number; count: 
     })
     for (const item of goods.data.items) {
       const market_hash_name = item.market_hash_name
-      const price = Number((Number(item.sell_min_price) * 0.1375).toFixed(2))
+      const price = Number((Number(item.sell_min_price) * 0.138).toFixed(2))
       console.log(page_num, market_hash_name, price, item.sell_num)
       STICKER_PRICES.set(market_hash_name, price)
     }

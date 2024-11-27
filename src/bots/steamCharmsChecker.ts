@@ -4,21 +4,25 @@ import { format } from 'date-fns'
 import { getMarketRender } from '../api/steam'
 import { sendMessage } from '../api/telegram'
 import { generateSteamMessage, sleep } from '../utils'
+import { getBuff163GoodsSellOrder } from '../api/buff163'
 
 const CASHED_LISTINGS = new Set<string>()
 
 const MARKET_HASH_NAMES = [
   {
+    goods_id: 968112,
     market_hash_name: 'Charm | Die-cast AK',
     isSweet: (template: number) => template > 90000 || template < 27000,
     canSendToTelegram: false,
   },
   {
+    goods_id: 968082,
     market_hash_name: 'Charm | Titeenium AWP',
     isSweet: (template: number) => template > 93000,
     canSendToTelegram: false,
   },
   {
+    goods_id: 968270,
     market_hash_name: 'Charm | Semi-Precious',
     isSweet: (template: number) => template > 90000 || template < 10000,
     canSendToTelegram: false,
@@ -27,6 +31,7 @@ const MARKET_HASH_NAMES = [
 
 const findSteamItemInfo = async (
   config: {
+    goods_id: number
     market_hash_name: string
     isSweet: (template: number) => boolean
     canSendToTelegram: boolean
@@ -53,8 +58,21 @@ const findSteamItemInfo = async (
       const templateId = template ? Number(template.match(/\d+/g)) : null
 
       if (templateId && config.canSendToTelegram && config.isSweet(templateId)) {
+        const min_paintseed = Math.floor(templateId / 1000) * 1000
+        const max_paintseed = Math.floor(templateId / 1000) * 1000 + 1000
+
+        const response = await getBuff163GoodsSellOrder({ goods_id: config.goods_id, min_paintseed, max_paintseed })
+
+        const buffFirstPrice = Number(Number(response.data?.items?.[0]?.price || 0) * 0.138)
+
         await sendMessage(
-          generateSteamMessage({ price: price, name: config.market_hash_name, position: start + index + 1, templateId })
+          generateSteamMessage({
+            price: price,
+            buffFirstPrice,
+            name: config.market_hash_name,
+            position: start + index + 1,
+            templateId,
+          })
         )
       }
 
@@ -66,7 +84,7 @@ const findSteamItemInfo = async (
     }
   } catch (error) {
     console.log(format(new Date(), 'HH:mm:ss'), 'STEAM_ERROR', error.message)
-    await sleep(60_000 * 5)
+    await sleep(60_000 * 4)
 
     return
   }

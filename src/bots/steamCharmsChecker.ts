@@ -36,7 +36,7 @@ const findSteamItemInfo = async (
 ) => {
   console.log(format(new Date(), 'HH:mm:ss'), config.market_hash_name, start)
 
-  await sleep(30_000)
+  await sleep(25_000)
 
   try {
     const steam = await getMarketRender({ market_hash_name: config.market_hash_name, start, count: 100 })
@@ -61,7 +61,7 @@ const findSteamItemInfo = async (
       CASHED_LISTINGS.add(listingId)
     }
 
-    if (start + 100 < steam.total_count && start <= 700) {
+    if (start + 100 < steam.total_count && start <= 600) {
       await findSteamItemInfo(config, start + 100)
     }
   } catch (error) {

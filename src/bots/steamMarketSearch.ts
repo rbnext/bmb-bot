@@ -6,7 +6,7 @@ import { getMarketRender, getSearchMarketRender } from '../api/steam'
 import { sendMessage } from '../api/telegram'
 import { generateSteamMessage, sleep } from '../utils'
 import { getIPInspectItemInfo } from '../api/pricempire'
-import { getBuff163MarketGoods } from '../api/buff163'
+// import { getBuff163MarketGoods } from '../api/buff163'
 import { getGoodsInfo, getMarketGoods } from '../api/buff'
 
 const CASHED_LISTINGS = new Set<string>()
@@ -155,21 +155,21 @@ const findSteamItemInfo = async (config: { query: string; start: number; count: 
 ;(async () => {
   const pages = Array.from({ length: 110 }, (_, i) => i + 1)
 
-  for (const page_num of pages) {
-    const goods = await getBuff163MarketGoods({
-      page_num,
-      category_group: 'sticker',
-      sort_by: 'price.desc',
-    })
-    for (const item of goods.data.items) {
-      const market_hash_name = item.market_hash_name
-      const price = Number((Number(item.sell_min_price) * 0.138).toFixed(2))
-      console.log(page_num, market_hash_name, price, item.sell_num)
-      STICKER_PRICES.set(market_hash_name, price)
-    }
-    if (goods.data.items.length !== 50) break
-    await sleep(4_000)
-  }
+  // for (const page_num of pages) {
+  //   const goods = await getBuff163MarketGoods({
+  //     page_num,
+  //     category_group: 'sticker',
+  //     sort_by: 'price.desc',
+  //   })
+  //   for (const item of goods.data.items) {
+  //     const market_hash_name = item.market_hash_name
+  //     const price = Number((Number(item.sell_min_price) * 0.138).toFixed(2))
+  //     console.log(page_num, market_hash_name, price, item.sell_num)
+  //     STICKER_PRICES.set(market_hash_name, price)
+  //   }
+  //   if (goods.data.items.length !== 50) break
+  //   await sleep(4_000)
+  // }
 
   do {
     await Promise.allSettled(MARKET_CONFIG.map((config) => limiter.schedule(() => findSteamItemInfo(config))))

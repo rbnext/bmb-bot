@@ -13,11 +13,11 @@ const MARKET_HASH_NAMES = [
     isSweet: (template: number) => template > 90000 || template < 27000,
     canSendToTelegram: false,
   },
-  {
-    market_hash_name: 'Charm | Titeenium AWP',
-    isSweet: (template: number) => template > 93000,
-    canSendToTelegram: false,
-  },
+  // {
+  //   market_hash_name: 'Charm | Titeenium AWP',
+  //   isSweet: (template: number) => template > 93000,
+  //   canSendToTelegram: false,
+  // },
   {
     market_hash_name: 'Charm | Semi-Precious',
     isSweet: (template: number) => template > 90000 || template < 10000,

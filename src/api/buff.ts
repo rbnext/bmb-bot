@@ -287,7 +287,7 @@ export const getGoodsInfo = async ({
   const { data } = await http.get('/market/goods/info', {
     params: { game, goods_id },
     cache: {
-      ttl: 1000 * 60 * 60 * 6, // 6 hour
+      ttl: 1000 * 60 * 60 * 24, // 6 hour
     },
   })
 

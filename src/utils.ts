@@ -51,6 +51,7 @@ export const generateSteamMessage = ({
   referencePrice,
   buffFirstPrice,
   ratio,
+  details = {},
 }: {
   name: string
   price: number
@@ -63,6 +64,7 @@ export const generateSteamMessage = ({
   buffFirstPrice?: number
   id?: number
   ratio?: number
+  details?: Record<string, number>
 }) => {
   const message: string[] = []
 
@@ -70,7 +72,7 @@ export const generateSteamMessage = ({
 
   for (const sticker of stickers) {
     if (typeof sticker === 'string') {
-      message.push(`<b>Sticker | ${sticker}</b> <a href="https://buff.market/market/all?search=${sticker}">[i]</a>\n`)
+      message.push(`<b>Sticker | ${sticker}</b>: ${details[sticker] ? `$${details[sticker]}` : 'n/a'} \n`)
     } else {
       message.push(`<b>${sticker.name}</b>: ${sticker.wear === 0 ? '100%' : `${sticker.wear.toFixed(2)}%`}\n`)
     }

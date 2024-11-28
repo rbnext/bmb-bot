@@ -5,6 +5,7 @@ import Bottleneck from 'bottleneck'
 import { getMarketRender } from '../api/steam'
 import { sendMessage } from '../api/telegram'
 import { extractStickers, generateSteamMessage, sleep } from '../utils'
+import { getMarketGoods, getGoodsInfo } from '../api/buff'
 import UserAgent from 'user-agents'
 
 const CASHED_LISTINGS = new Set<string>()
@@ -27,6 +28,32 @@ const MARKET_HASH_NAMES = [
     proxy: 'http://05b8879f:4809862d7f@192.144.10.226:30013',
   },
 ]
+
+const getStickerDetails = async (stickers: string[]) => {
+  const details: Record<string, number> = {}
+
+  try {
+    for (const sticker of [...new Set(stickers)]) {
+      const market_hash_name = `Sticker | ${sticker}`
+
+      const goods = await getMarketGoods({ search: market_hash_name })
+      const goods_id = goods.data.items.find((el) => el.market_hash_name === market_hash_name)?.id
+
+      if (goods_id) {
+        const goodsInfo = await getGoodsInfo({ goods_id })
+        details[sticker] = Number(goodsInfo.data.goods_info.goods_ref_price)
+      }
+
+      await sleep(1_000)
+    }
+
+    return details
+  } catch (error) {
+    console.log('BUFF.MARKET', error.message)
+
+    return {}
+  }
+}
 
 const findSteamItemInfo = async (
   config: {
@@ -63,8 +90,16 @@ const findSteamItemInfo = async (
       const stickers = extractStickers(htmlDescription)
 
       if (stickers.length > 1 && config.canSendToTelegram) {
+        const details = await getStickerDetails(stickers)
+
         await sendMessage(
-          generateSteamMessage({ price: price, name: config.market_hash_name, position: start + index + 1, stickers })
+          generateSteamMessage({
+            price: price,
+            name: config.market_hash_name,
+            position: start + index + 1,
+            stickers,
+            details,
+          })
         )
       }
 

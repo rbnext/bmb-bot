@@ -1,17 +1,23 @@
 import 'dotenv/config'
 
 import { format } from 'date-fns'
+import Bottleneck from 'bottleneck'
 import { getMarketRender } from '../api/steam'
 import { sendMessage } from '../api/telegram'
 import { generateSteamMessage, sleep } from '../utils'
+import UserAgent from 'user-agents'
 
 const CASHED_LISTINGS = new Set<string>()
+
+const limiter = new Bottleneck({ maxConcurrent: 2 })
 
 const MARKET_HASH_NAMES = [
   {
     market_hash_name: 'Charm | Die-cast AK',
     isSweet: (template: number) => template > 90000 || template < 27000,
     canSendToTelegram: false,
+    userAgent: new UserAgent().toString(),
+    proxy: null,
   },
   // {
   //   market_hash_name: 'Charm | Titeenium AWP',
@@ -22,6 +28,8 @@ const MARKET_HASH_NAMES = [
     market_hash_name: 'Charm | Semi-Precious',
     isSweet: (template: number) => template > 90000 || template < 10000,
     canSendToTelegram: false,
+    userAgent: new UserAgent().toString(),
+    proxy: 'http://05b8879f:4809862d7f@192.144.10.226:30013',
   },
 ]
 
@@ -30,6 +38,8 @@ const findSteamItemInfo = async (
     market_hash_name: string
     isSweet: (template: number) => boolean
     canSendToTelegram: boolean
+    proxy: string | null
+    userAgent: string
   },
 
   start: number = 0
@@ -39,7 +49,13 @@ const findSteamItemInfo = async (
   await sleep(25_000)
 
   try {
-    const steam = await getMarketRender({ market_hash_name: config.market_hash_name, start, count: 100 })
+    const steam = await getMarketRender({
+      proxy: config.proxy,
+      userAgent: config.userAgent,
+      market_hash_name: config.market_hash_name,
+      start,
+      count: 100,
+    })
 
     for (const [index, listingId] of Object.keys(steam.listinginfo).entries()) {
       if (CASHED_LISTINGS.has(listingId)) continue
@@ -74,9 +90,11 @@ const findSteamItemInfo = async (
 
 ;(async () => {
   do {
-    for (const config of MARKET_HASH_NAMES) {
-      await findSteamItemInfo(config)
-    }
+    await Promise.all(
+      MARKET_HASH_NAMES.map((config) => {
+        return limiter.schedule(() => findSteamItemInfo(config))
+      })
+    )
 
     MARKET_HASH_NAMES.forEach((_, index) => {
       MARKET_HASH_NAMES[index].canSendToTelegram = true

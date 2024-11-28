@@ -127,7 +127,9 @@ export const getMarketRender = async ({
   start = 0,
   count = 5,
   language = 'english',
+  userAgent,
   filter,
+  proxy,
 }: {
   appid?: number
   country?: string
@@ -135,16 +137,23 @@ export const getMarketRender = async ({
   market_hash_name: string
   start?: number
   count?: number
+  userAgent: string
   language?: 'english'
   filter?: string
+  proxy: string | null
 }): Promise<SteamMarketRender> => {
-  const { data } = await http.get(`/market/listings/${appid}/${encodeURIComponent(market_hash_name)}/render/`, {
-    params: { appid, country, currency, start, count, language, filter },
-    headers: {
-      Host: 'steamcommunity.com',
-      Referer: `https://steamcommunity.com/market/listings/${appid}/` + encodeURIComponent(market_hash_name),
-    },
-  })
+  const { data } = await axios.get(
+    `https://steamcommunity.com/market/listings/${appid}/${encodeURIComponent(market_hash_name)}/render/`,
+    {
+      params: { appid, country, currency, start, count, language, filter },
+      headers: {
+        'User-Agent': userAgent,
+        Host: 'steamcommunity.com',
+        Referer: `https://steamcommunity.com/market/listings/${appid}/` + encodeURIComponent(market_hash_name),
+      },
+      httpsAgent: proxy ? new HttpsProxyAgent(proxy) : undefined,
+    }
+  )
 
   return data
 }

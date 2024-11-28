@@ -70,7 +70,7 @@ export const generateSteamMessage = ({
 
   for (const sticker of stickers) {
     if (typeof sticker === 'string') {
-      message.push(`<b>${sticker}</b>: unknown\n`)
+      message.push(`<b>Sticker | ${sticker}</b> <a href="https://buff.market/market/all?search=${sticker}">[i]</a>\n`)
     } else {
       message.push(`<b>${sticker.name}</b>: ${sticker.wear === 0 ? '100%' : `${sticker.wear.toFixed(2)}%`}\n`)
     }

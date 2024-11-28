@@ -1,27 +1,55 @@
 import 'dotenv/config'
 
 import { format } from 'date-fns'
+import Bottleneck from 'bottleneck'
 import { getMarketRender } from '../api/steam'
 import { sendMessage } from '../api/telegram'
 import { extractStickers, generateSteamMessage, sleep } from '../utils'
+import UserAgent from 'user-agents'
 
 const CASHED_LISTINGS = new Set<string>()
-const STICKER_PRICES = new Map<string, number>()
+
+const limiter = new Bottleneck({ maxConcurrent: 2 })
 
 const MARKET_HASH_NAMES = [
-  'AK-47 | Redline (Field-Tested)',
-  'AK-47 | Blue Laminate (Minimal Wear)',
-  'USP-S | Blueprint (Factory New)',
-  'Glock-18 | Candy Apple (Minimal Wear)',
+  {
+    market_hash_name: 'AK-47 | Blue Laminate (Minimal Wear)',
+    isSweet: (price: number, total: number) => price < 15 && total > 30,
+    canSendToTelegram: false,
+    userAgent: new UserAgent().toString(),
+    proxy: null,
+  },
+  {
+    market_hash_name: 'M4A1-S | Basilisk (Minimal Wear)',
+    isSweet: (price: number, total: number) => price < 15 && total > 30,
+    canSendToTelegram: false,
+    userAgent: new UserAgent().toString(),
+    proxy: 'http://05b8879f:4809862d7f@192.144.10.226:30013',
+  },
 ]
 
-const findSteamItemInfo = async (market_hash_name: string, start: number = 0) => {
-  console.log(format(new Date(), 'HH:mm:ss'), market_hash_name, start)
+const findSteamItemInfo = async (
+  config: {
+    market_hash_name: string
+    isSweet: (price: number, total: number) => boolean
+    canSendToTelegram: boolean
+    proxy: string | null
+    userAgent: string
+  },
+  start: number = 0
+) => {
+  console.log(format(new Date(), 'HH:mm:ss'), config.market_hash_name, start)
 
-  await sleep(20_000)
+  await sleep(25_000)
 
   try {
-    const steam = await getMarketRender({ market_hash_name, start, count: 100 })
+    const steam = await getMarketRender({
+      proxy: config.proxy,
+      userAgent: config.userAgent,
+      market_hash_name: config.market_hash_name,
+      start,
+      count: 50,
+    })
 
     for (const [index, listingId] of Object.keys(steam.listinginfo).entries()) {
       if (CASHED_LISTINGS.has(listingId)) continue
@@ -34,60 +62,33 @@ const findSteamItemInfo = async (market_hash_name: string, start: number = 0) =>
 
       const stickers = extractStickers(htmlDescription)
 
-      const stickerTotalPrice = stickers.reduce((acc, name) => acc + (STICKER_PRICES.get(`Sticker | ${name}`) ?? 0), 0)
-
-      if (price >= 100) return
-
-      if (price && price <= 100 && stickerTotalPrice !== 0 && price / stickerTotalPrice < 0.2) {
+      if (stickers.length > 1 && config.canSendToTelegram) {
         await sendMessage(
-          generateSteamMessage({
-            price: price,
-            name: market_hash_name,
-            stickers: stickers,
-            stickerTotal: stickerTotalPrice,
-            ratio: price / stickerTotalPrice,
-            position: start + index + 1,
-          })
+          generateSteamMessage({ price: price, name: config.market_hash_name, position: start + index + 1, stickers })
         )
       }
 
       CASHED_LISTINGS.add(listingId)
     }
-
-    if (start + 100 < steam.total_count) {
-      await findSteamItemInfo(market_hash_name, start + 100)
-    }
   } catch (error) {
     console.log(format(new Date(), 'HH:mm:ss'), 'STEAM_ERROR', error.message)
-    await sleep(60_000 * 5)
+    await sleep(60_000 * 4)
 
     return
   }
 }
 
 ;(async () => {
-  const pages = Array.from({ length: 115 }, (_, i) => i + 1)
-
-  // for (const page_num of pages) {
-  //   const goods = await getBuff163MarketGoods({
-  //     page_num,
-  //     category_group: 'sticker',
-  //     sort_by: 'price.desc',
-  //   })
-  //   for (const item of goods.data.items) {
-  //     const market_hash_name = item.market_hash_name
-  //     const price = Number((Number(item.sell_min_price) * 0.1375).toFixed(2))
-  //     console.log(page_num, market_hash_name, price, item.sell_num)
-  //     STICKER_PRICES.set(market_hash_name, price)
-  //   }
-  //   if (goods.data.items.length !== 50) break
-  //   await sleep(4_000)
-  // }
-
   do {
-    for (const market_hash_name of MARKET_HASH_NAMES) {
-      await findSteamItemInfo(market_hash_name)
-    }
+    await Promise.all(
+      MARKET_HASH_NAMES.map((config) => {
+        return limiter.schedule(() => findSteamItemInfo(config))
+      })
+    )
+
+    MARKET_HASH_NAMES.forEach((_, index) => {
+      MARKET_HASH_NAMES[index].canSendToTelegram = true
+    })
 
     // eslint-disable-next-line no-constant-condition
   } while (true)

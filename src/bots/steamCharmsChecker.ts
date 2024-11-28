@@ -41,7 +41,6 @@ const findSteamItemInfo = async (
     proxy: string | null
     userAgent: string
   },
-
   start: number = 0
 ) => {
   console.log(format(new Date(), 'HH:mm:ss'), config.market_hash_name, start)

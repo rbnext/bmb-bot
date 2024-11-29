@@ -108,7 +108,7 @@ const findSteamItemInfo = async (
 
         const stickerTotalPrice = stickers.reduce((acc, name) => acc + (details[name] ?? 0), 0)
 
-        console.log(format(new Date(), 'HH:mm:ss'), config.market_hash_name, `$${stickerTotalPrice}`)
+        console.log(format(new Date(), 'HH:mm:ss'), config.market_hash_name, `$${stickerTotalPrice.toFixed(2)}`)
 
         if (price && stickerTotalPrice >= price) {
           await sendMessage(

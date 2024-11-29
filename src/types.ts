@@ -550,3 +550,11 @@ export type SteamInventoryHelperDetails = {
     stickers: SteamInventoryHelperSticker[]
   }
 }
+
+export type SteamMarketConfig = {
+  market_hash_name: string
+  canSendToTelegram: boolean
+  proxy: string | null
+  userAgent: string
+  referencePrice: number
+}

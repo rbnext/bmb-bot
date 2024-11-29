@@ -68,7 +68,9 @@ export const generateSteamMessage = ({
 }) => {
   const message: string[] = []
 
-  message.push(`<a href="https://steamcommunity.com/market/listings/730/${encodeURIComponent(name)}">${name}</a>\n\n`)
+  message.push(
+    `<a href="https://steamcommunity.com/market/listings/730/${encodeURIComponent(name)}">${name}</a> | #${position}\n\n`
+  )
 
   for (const sticker of stickers) {
     if (typeof sticker === 'string') {
@@ -79,15 +81,12 @@ export const generateSteamMessage = ({
   }
 
   message.push(`\n`)
-  if (price) message.push(`<b>Steam price</b>: $${price}\n`)
-  if (referencePrice) message.push(`<b>Reference price</b>: $${referencePrice}\n`)
-  if (buffFirstPrice) message.push(`<b>Buff first price</b>: $${buffFirstPrice.toFixed(2)}\n`)
-  if (stickerTotal) message.push(`<b>Sticker total</b>: $${stickerTotal.toFixed(2)}\n`)
-  if (float) message.push(`<b>Float</b>: ${float}\n`)
+  if (price) message.push(`<b>Steam price</b>: $${price.toFixed(2)}\n`)
+  if (referencePrice) message.push(`<b>Reference price</b>: $${referencePrice.toFixed(2)}\n`)
+  if (stickerTotal) message.push(`<b>Sticker total price</b>: $${stickerTotal.toFixed(2)}\n`)
+
   if (templateId) message.push(`<b>Template ID</b>: ${templateId}\n`)
   if (ratio) message.push(`<b>Ratio</b>: ${ratio.toFixed(2)}\n`)
-  if (position) message.push(`<b>Position</b>: ${position}\n\n`)
-  if (id) message.push(`<a href="https://buff.market/market/goods/${id}">BUFF</a>\n\n`)
 
   return message.join('')
 }

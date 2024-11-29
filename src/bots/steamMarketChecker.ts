@@ -6,13 +6,7 @@ import { sendMessage } from '../api/telegram'
 import { extractStickers, generateSteamMessage, sleep } from '../utils'
 import { getMarketGoods, getGoodsInfo } from '../api/buff'
 import UserAgent from 'user-agents'
-
-type MarketConfigItem = {
-  market_hash_name: string
-  canSendToTelegram: boolean
-  proxy: string | null
-  userAgent: string
-}
+import { SteamMarketConfig } from '../types'
 
 const CASHED_LISTINGS = new Set<string>()
 
@@ -69,15 +63,7 @@ const getStickerDetails = async (stickers: string[]) => {
   }
 }
 
-const findSteamItemInfo = async (
-  config: {
-    market_hash_name: string
-    canSendToTelegram: boolean
-    proxy: string | null
-    userAgent: string
-  },
-  start: number = 0
-) => {
+const findSteamItemInfo = async (config: SteamMarketConfig, start: number = 0) => {
   await sleep(25_000)
 
   try {
@@ -113,6 +99,8 @@ const findSteamItemInfo = async (
               price: price,
               name: config.market_hash_name,
               position: start + index + 1,
+              referencePrice: config.referencePrice,
+              stickerTotal: stickerTotalPrice,
               stickers,
               details,
             })
@@ -131,16 +119,26 @@ const findSteamItemInfo = async (
 }
 
 ;(async () => {
-  const MARKET_HASH_NAMES: MarketConfigItem[] = []
+  const MARKET_HASH_NAMES: SteamMarketConfig[] = []
 
   for (const { proxy, market_hash_names } of CONFIG) {
     for (const market_hash_name of market_hash_names) {
-      MARKET_HASH_NAMES.push({
-        proxy,
-        market_hash_name,
-        canSendToTelegram: false,
-        userAgent: new UserAgent().toString(),
-      })
+      const canSendToTelegram = false
+      const userAgent = new UserAgent().toString()
+
+      const goods = await getMarketGoods({ search: market_hash_name })
+      const goods_id = goods.data.items.find((el) => el.market_hash_name === market_hash_name)?.id
+
+      if (goods_id) {
+        const goodsInfo = await getGoodsInfo({ goods_id })
+        const referencePrice = Number(goodsInfo.data.goods_info.goods_ref_price)
+
+        console.log(market_hash_name, `$${referencePrice}`)
+
+        MARKET_HASH_NAMES.push({ proxy, market_hash_name, canSendToTelegram, userAgent, referencePrice })
+      }
+
+      await sleep(5_000)
     }
   }
 

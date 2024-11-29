@@ -10,8 +10,6 @@ import UserAgent from 'user-agents'
 
 const CASHED_LISTINGS = new Set<string>()
 
-const limiter = new Bottleneck({ maxConcurrent: 2 })
-
 const MARKET_HASH_NAMES = [
   {
     market_hash_name: 'AK-47 | Blue Laminate (Minimal Wear)',
@@ -53,6 +51,8 @@ const MARKET_HASH_NAMES = [
     proxy: 'http://44379168:8345796691@192.144.9.27:30013',
   },
 ]
+
+const limiter = new Bottleneck({ maxConcurrent: MARKET_HASH_NAMES.length })
 
 const getStickerDetails = async (stickers: string[]) => {
   const details: Record<string, number> = {}

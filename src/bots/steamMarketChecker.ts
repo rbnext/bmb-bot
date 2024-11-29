@@ -1,7 +1,6 @@
 import 'dotenv/config'
 
 import { format } from 'date-fns'
-import Bottleneck from 'bottleneck'
 import { getMarketRender } from '../api/steam'
 import { sendMessage } from '../api/telegram'
 import { extractStickers, generateSteamMessage, sleep } from '../utils'
@@ -43,8 +42,6 @@ const CONFIG = [
     proxy: 'http://44379168:8345796691@192.144.9.27:30013',
   },
 ]
-
-const limiter = new Bottleneck({ maxConcurrent: 9 })
 
 const getStickerDetails = async (stickers: string[]) => {
   const details: Record<string, number> = {}
@@ -148,11 +145,7 @@ const findSteamItemInfo = async (
   }
 
   do {
-    await Promise.all(
-      MARKET_HASH_NAMES.map((config) => {
-        return limiter.schedule(() => findSteamItemInfo(config))
-      })
-    )
+    await Promise.all(MARKET_HASH_NAMES.map(findSteamItemInfo))
 
     MARKET_HASH_NAMES.forEach((_, index) => {
       MARKET_HASH_NAMES[index].canSendToTelegram = true

@@ -10,7 +10,7 @@ import UserAgent from 'user-agents'
 
 const CASHED_LISTINGS = new Set<string>()
 
-const limiter = new Bottleneck({ maxConcurrent: 2 })
+const limiter = new Bottleneck({ maxConcurrent: 3 })
 
 const MARKET_HASH_NAMES = [
   {
@@ -26,6 +26,14 @@ const MARKET_HASH_NAMES = [
     canSendToTelegram: false,
     userAgent: new UserAgent().toString(),
     proxy: 'http://05b8879f:4809862d7f@192.144.10.226:30013',
+  },
+
+  {
+    market_hash_name: 'M4A4 | Temukau (Field-Tested)',
+    isSweet: (price: number, total: number) => price < 15 && total > 30,
+    canSendToTelegram: false,
+    userAgent: new UserAgent().toString(),
+    proxy: 'http://44379168:8345796691@192.144.9.27:30013',
   },
 ]
 

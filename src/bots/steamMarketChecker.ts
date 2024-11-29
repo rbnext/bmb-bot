@@ -8,51 +8,43 @@ import { extractStickers, generateSteamMessage, sleep } from '../utils'
 import { getMarketGoods, getGoodsInfo } from '../api/buff'
 import UserAgent from 'user-agents'
 
+type MarketConfigItem = {
+  market_hash_name: string
+  canSendToTelegram: boolean
+  proxy: string | null
+  userAgent: string
+}
+
 const CASHED_LISTINGS = new Set<string>()
 
-const MARKET_HASH_NAMES = [
+const CONFIG = [
   {
-    market_hash_name: 'AK-47 | Blue Laminate (Minimal Wear)',
-    canSendToTelegram: false,
-    userAgent: new UserAgent().toString(),
+    market_hash_names: [
+      'M4A1-S | Nitro (Factory New)',
+      'AK-47 | Blue Laminate (Minimal Wear)',
+      'M4A1-S | Basilisk (Minimal Wear)',
+    ],
     proxy: '',
   },
   {
-    market_hash_name: 'M4A1-S | Nitro (Factory New)',
-    canSendToTelegram: false,
-    userAgent: new UserAgent().toString(),
-    proxy: '',
-  },
-  {
-    market_hash_name: 'M4A1-S | Basilisk (Minimal Wear)',
-    canSendToTelegram: false,
-    userAgent: new UserAgent().toString(),
+    market_hash_names: [
+      'M4A4 | Temukau (Field-Tested)',
+      'Desert Eagle | Crimson Web (Field-Tested)',
+      'M4A1-S | Blood Tiger (Minimal Wear)',
+    ],
     proxy: 'http://05b8879f:4809862d7f@192.144.10.226:30013',
   },
   {
-    market_hash_name: 'Desert Eagle | Crimson Web (Field-Tested)',
-    canSendToTelegram: false,
-    userAgent: new UserAgent().toString(),
-    proxy: 'http://05b8879f:4809862d7f@192.144.10.226:30013',
-  },
-
-  {
-    market_hash_name: 'M4A4 | Temukau (Field-Tested)',
-    isSweet: (price: number, total: number) => price < 15 && total > 30,
-    canSendToTelegram: false,
-    userAgent: new UserAgent().toString(),
-    proxy: 'http://44379168:8345796691@192.144.9.27:30013',
-  },
-  {
-    market_hash_name: 'M4A1-S | Blood Tiger (Minimal Wear)',
-    isSweet: (price: number, total: number) => price < 15 && total > 30,
-    canSendToTelegram: false,
-    userAgent: new UserAgent().toString(),
+    market_hash_names: [
+      'AK-47 | Cartel (Field-Tested)',
+      'AK-47 | Frontside Misty (Field-Tested)',
+      'M4A4 | Bullet Rain (Minimal Wear)',
+    ],
     proxy: 'http://44379168:8345796691@192.144.9.27:30013',
   },
 ]
 
-const limiter = new Bottleneck({ maxConcurrent: MARKET_HASH_NAMES.length })
+const limiter = new Bottleneck({ maxConcurrent: 9 })
 
 const getStickerDetails = async (stickers: string[]) => {
   const details: Record<string, number> = {}
@@ -118,7 +110,7 @@ const findSteamItemInfo = async (
 
         const stickerTotalPrice = stickers.reduce((acc, name) => acc + (details[name] ?? 0), 0)
 
-        if (stickerTotalPrice >= 10) {
+        if (price && stickerTotalPrice >= price) {
           await sendMessage(
             generateSteamMessage({
               price: price,
@@ -142,6 +134,19 @@ const findSteamItemInfo = async (
 }
 
 ;(async () => {
+  const MARKET_HASH_NAMES: MarketConfigItem[] = []
+
+  for (const { proxy, market_hash_names } of CONFIG) {
+    for (const market_hash_name of market_hash_names) {
+      MARKET_HASH_NAMES.push({
+        proxy,
+        market_hash_name,
+        canSendToTelegram: false,
+        userAgent: new UserAgent().toString(),
+      })
+    }
+  }
+
   do {
     await Promise.all(
       MARKET_HASH_NAMES.map((config) => {

@@ -81,8 +81,6 @@ const findSteamItemInfo = async (
   },
   start: number = 0
 ) => {
-  console.log(format(new Date(), 'HH:mm:ss'), config.market_hash_name, start)
-
   await sleep(25_000)
 
   try {
@@ -110,6 +108,8 @@ const findSteamItemInfo = async (
 
         const stickerTotalPrice = stickers.reduce((acc, name) => acc + (details[name] ?? 0), 0)
 
+        console.log(format(new Date(), 'HH:mm:ss'), config.market_hash_name, `$${stickerTotalPrice}`)
+
         if (price && stickerTotalPrice >= price) {
           await sendMessage(
             generateSteamMessage({
@@ -126,7 +126,7 @@ const findSteamItemInfo = async (
       CASHED_LISTINGS.add(listingId)
     }
   } catch (error) {
-    console.log(format(new Date(), 'HH:mm:ss'), 'STEAM_ERROR', error.message)
+    console.log('STEAM_ERROR', error.message)
     await sleep(60_000 * 4)
 
     return

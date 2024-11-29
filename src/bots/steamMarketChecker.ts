@@ -10,19 +10,29 @@ import UserAgent from 'user-agents'
 
 const CASHED_LISTINGS = new Set<string>()
 
-const limiter = new Bottleneck({ maxConcurrent: 3 })
+const limiter = new Bottleneck({ maxConcurrent: 2 })
 
 const MARKET_HASH_NAMES = [
   {
     market_hash_name: 'AK-47 | Blue Laminate (Minimal Wear)',
-    isSweet: (price: number, total: number) => price < 15 && total > 30,
     canSendToTelegram: false,
     userAgent: new UserAgent().toString(),
-    proxy: null,
+    proxy: '',
+  },
+  {
+    market_hash_name: 'M4A1-S | Nitro (Factory New)',
+    canSendToTelegram: false,
+    userAgent: new UserAgent().toString(),
+    proxy: '',
   },
   {
     market_hash_name: 'M4A1-S | Basilisk (Minimal Wear)',
-    isSweet: (price: number, total: number) => price < 15 && total > 30,
+    canSendToTelegram: false,
+    userAgent: new UserAgent().toString(),
+    proxy: 'http://05b8879f:4809862d7f@192.144.10.226:30013',
+  },
+  {
+    market_hash_name: 'Desert Eagle | Crimson Web (Field-Tested)',
     canSendToTelegram: false,
     userAgent: new UserAgent().toString(),
     proxy: 'http://05b8879f:4809862d7f@192.144.10.226:30013',
@@ -30,6 +40,13 @@ const MARKET_HASH_NAMES = [
 
   {
     market_hash_name: 'M4A4 | Temukau (Field-Tested)',
+    isSweet: (price: number, total: number) => price < 15 && total > 30,
+    canSendToTelegram: false,
+    userAgent: new UserAgent().toString(),
+    proxy: 'http://44379168:8345796691@192.144.9.27:30013',
+  },
+  {
+    market_hash_name: 'M4A1-S | Blood Tiger (Minimal Wear)',
     isSweet: (price: number, total: number) => price < 15 && total > 30,
     canSendToTelegram: false,
     userAgent: new UserAgent().toString(),
@@ -66,7 +83,6 @@ const getStickerDetails = async (stickers: string[]) => {
 const findSteamItemInfo = async (
   config: {
     market_hash_name: string
-    isSweet: (price: number, total: number) => boolean
     canSendToTelegram: boolean
     proxy: string | null
     userAgent: string
@@ -100,15 +116,19 @@ const findSteamItemInfo = async (
       if (stickers.length > 1 && config.canSendToTelegram) {
         const details = await getStickerDetails(stickers)
 
-        await sendMessage(
-          generateSteamMessage({
-            price: price,
-            name: config.market_hash_name,
-            position: start + index + 1,
-            stickers,
-            details,
-          })
-        )
+        const stickerTotalPrice = stickers.reduce((acc, name) => acc + (details[name] ?? 0), 0)
+
+        if (stickerTotalPrice >= 10) {
+          await sendMessage(
+            generateSteamMessage({
+              price: price,
+              name: config.market_hash_name,
+              position: start + index + 1,
+              stickers,
+              details,
+            })
+          )
+        }
       }
 
       CASHED_LISTINGS.add(listingId)

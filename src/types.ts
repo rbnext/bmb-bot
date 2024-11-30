@@ -558,3 +558,5 @@ export type SteamMarketConfig = {
   userAgent: string
   referencePrice: number
 }
+
+export type SteamDBItem = Record<string, { goods_id: number; reference_price: number }>

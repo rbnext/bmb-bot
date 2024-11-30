@@ -12,7 +12,8 @@
     "steamCharmsChecker": "ts-node src/bots/steamCharmsChecker.ts",
     "buffSteam": "ts-node src/bots/buffSteam.ts",
     "sellBuff": "ts-node src/bots/sellBuff.ts",
-    "playground": "ts-node src/playground.ts"
+    "playground": "ts-node src/playground.ts",
+    "loadBuffRef": "ts-node src/scripts/loadReferencePrices.ts"
   },
   "author": "",
   "license": "ISC",

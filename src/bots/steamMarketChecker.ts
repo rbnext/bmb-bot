@@ -6,9 +6,17 @@ import { sendMessage } from '../api/telegram'
 import { extractStickers, generateSteamMessage, sleep } from '../utils'
 import { getMarketGoods, getGoodsInfo } from '../api/buff'
 import UserAgent from 'user-agents'
-import { SteamMarketConfig } from '../types'
+import { SteamDBItem, SteamMarketConfig } from '../types'
+import Bottleneck from 'bottleneck'
+import path from 'path'
+import { readFileSync } from 'fs'
 
 const CASHED_LISTINGS = new Set<string>()
+
+const pathname = path.join(__dirname, '../../buff.json')
+const steam_db: SteamDBItem = JSON.parse(readFileSync(pathname, 'utf8'))
+
+console.log('Stickers in DB:', Object.keys(steam_db).length)
 
 const CONFIG = [
   {
@@ -49,6 +57,8 @@ const CONFIG = [
   },
 ]
 
+const limiter = new Bottleneck({ maxConcurrent: CONFIG.length })
+
 const getStickerDetails = async (stickers: string[]) => {
   const details: Record<string, number> = {}
 
@@ -56,15 +66,20 @@ const getStickerDetails = async (stickers: string[]) => {
     for (const sticker of [...new Set(stickers)]) {
       const market_hash_name = `Sticker | ${sticker}`
 
-      const goods = await getMarketGoods({ search: market_hash_name })
-      const goods_id = goods.data.items.find((el) => el.market_hash_name === market_hash_name)?.id
+      if (steam_db[market_hash_name]) {
+        details[sticker] = Number(steam_db[market_hash_name].reference_price)
+        console.log('Price from cache', steam_db[market_hash_name].reference_price)
+      } else {
+        const goods = await getMarketGoods({ search: market_hash_name })
+        const goods_id = goods.data.items.find((el) => el.market_hash_name === market_hash_name)?.id
 
-      if (goods_id) {
-        const goodsInfo = await getGoodsInfo({ goods_id })
-        details[sticker] = Number(goodsInfo.data.goods_info.goods_ref_price)
+        if (goods_id) {
+          const goodsInfo = await getGoodsInfo({ goods_id })
+          details[sticker] = Number(goodsInfo.data.goods_info.goods_ref_price)
+        }
+
+        await sleep(1_000)
       }
-
-      await sleep(1_000)
     }
 
     return details
@@ -80,8 +95,6 @@ const getInspectLink = (link: string, assetId: string, listingId: string): strin
 }
 
 const findSteamItemInfo = async (config: SteamMarketConfig, start: number = 0) => {
-  await sleep(25_000)
-
   try {
     const steam = await getMarketRender({
       proxy: config.proxy,
@@ -93,6 +106,8 @@ const findSteamItemInfo = async (config: SteamMarketConfig, start: number = 0) =
 
     for (const [index, listingId] of Object.keys(steam.listinginfo).entries()) {
       if (CASHED_LISTINGS.has(listingId)) continue
+
+      CASHED_LISTINGS.add(listingId)
 
       const currentListing = steam.listinginfo[listingId]
       const price = Number(((currentListing.converted_price + currentListing.converted_fee) / 100).toFixed(2))
@@ -127,8 +142,6 @@ const findSteamItemInfo = async (config: SteamMarketConfig, start: number = 0) =
           )
         }
       }
-
-      CASHED_LISTINGS.add(listingId)
     }
   } catch (error) {
     console.log('STEAM_ERROR', error.message)
@@ -163,11 +176,17 @@ const findSteamItemInfo = async (config: SteamMarketConfig, start: number = 0) =
   }
 
   do {
-    await Promise.all(MARKET_HASH_NAMES.map(findSteamItemInfo))
+    await Promise.all(
+      MARKET_HASH_NAMES.map((config) => {
+        return limiter.schedule(() => findSteamItemInfo(config))
+      })
+    )
 
     MARKET_HASH_NAMES.forEach((_, index) => {
       MARKET_HASH_NAMES[index].canSendToTelegram = true
     })
+
+    await sleep(25_000)
 
     // eslint-disable-next-line no-constant-condition
   } while (true)

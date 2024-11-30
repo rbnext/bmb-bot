@@ -7818,5 +7818,89 @@
     "Sticker | FURIA (Foil) | Berlin 2019": {
         "goods_id": 14877,
         "reference_price": 1.23
+    },
+    "Sticker | Twin Koi (Holo)": {
+        "goods_id": 11800,
+        "reference_price": 0.77
+    },
+    "Sticker | Twin Koi": {
+        "goods_id": 4831,
+        "reference_price": 0.16
+    },
+    "Sticker | Fancy Koi (Foil)": {
+        "goods_id": 10548,
+        "reference_price": 4.84
+    },
+    "Sticker | KOI (Gold) | Copenhagen 2024": {
+        "goods_id": 29716,
+        "reference_price": 1.95
+    },
+    "Sticker | Fancy Koi": {
+        "goods_id": 4835,
+        "reference_price": 0.29
+    },
+    "Sticker | m0NESY (Holo) | Antwerp 2022": {
+        "goods_id": 22974,
+        "reference_price": 13.35
+    },
+    "Sticker | Eternal Fire (Holo) | Antwerp 2022": {
+        "goods_id": 22124,
+        "reference_price": 4.68
+    },
+    "Sticker | Patsi (Gold) | Antwerp 2022": {
+        "goods_id": 22537,
+        "reference_price": 7.11
+    },
+    "Sticker | FalleN (Gold) | Antwerp 2022": {
+        "goods_id": 22719,
+        "reference_price": 10.24
+    },
+    "Sticker | rox (Gold) | Antwerp 2022": {
+        "goods_id": 22606,
+        "reference_price": 38.4
+    },
+    "Sticker | rox (Holo) | Antwerp 2022": {
+        "goods_id": 22870,
+        "reference_price": 83.47
+    },
+    "Sticker | BIG (Gold) | Antwerp 2022": {
+        "goods_id": 22973,
+        "reference_price": 2.67
+    },
+    "Sticker | Imperial Esports (Gold) | Antwerp 2022": {
+        "goods_id": 22553,
+        "reference_price": 29.37
+    },
+    "Sticker | Spinx (Gold) | Antwerp 2022": {
+        "goods_id": 22664,
+        "reference_price": 1.53
+    },
+    "Sticker | Outsiders (Gold) | Antwerp 2022": {
+        "goods_id": 22547,
+        "reference_price": 7.37
+    },
+    "Sticker | G2 Esports (Gold) | Antwerp 2022": {
+        "goods_id": 22554,
+        "reference_price": 4.97
+    },
+    "Sticker | FaZe Clan (Gold) | Antwerp 2022": {
+        "goods_id": 22514,
+        "reference_price": 3.34
+    },
+    "Sticker | Twistzz (Glitter) | Antwerp 2022": {
+        "goods_id": 22874,
+        "reference_price": 0.12
+    },
+    "Sticker | Beaky Decade": {
+        "goods_id": 23346,
+        "reference_price": 0.12
+    },
+    "Sticker | Baby Cerberus": {
+        "goods_id": 23332,
+        "reference_price": 0.09
+    },
+    "Sticker | Cerberus": {
+        "goods_id": 7201,
+        "reference_price": 0.26
     }
 }

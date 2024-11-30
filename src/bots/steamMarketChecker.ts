@@ -68,7 +68,6 @@ const getStickerDetails = async (stickers: string[]) => {
 
       if (steam_db[market_hash_name]) {
         details[sticker] = Number(steam_db[market_hash_name].reference_price)
-        console.log('Price from cache', steam_db[market_hash_name].reference_price)
       } else {
         const goods = await getMarketGoods({ search: market_hash_name })
         const goods_id = goods.data.items.find((el) => el.market_hash_name === market_hash_name)?.id
@@ -76,6 +75,7 @@ const getStickerDetails = async (stickers: string[]) => {
         if (goods_id) {
           const goodsInfo = await getGoodsInfo({ goods_id })
           details[sticker] = Number(goodsInfo.data.goods_info.goods_ref_price)
+          console.log('-', market_hash_name)
         }
 
         await sleep(1_000)

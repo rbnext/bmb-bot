@@ -7902,5 +7902,213 @@
     "Sticker | Cerberus": {
         "goods_id": 7201,
         "reference_price": 0.26
+    },
+    "Sticker | paiN Gaming (Holo) | Copenhagen 2024": {
+        "goods_id": 29487,
+        "reference_price": 0.31
+    },
+    "Sticker | paiN Gaming (Glitter) | Paris 2023": {
+        "goods_id": 24988,
+        "reference_price": 0.04
+    },
+    "Sticker | paiN Gaming | Stockholm 2021": {
+        "goods_id": 20531,
+        "reference_price": 0.06
+    },
+    "Sticker | paiN Gaming (Gold) | Stockholm 2021": {
+        "goods_id": 20707,
+        "reference_price": 11.28
+    },
+    "Sticker | Queen Of Pain": {
+        "goods_id": 8908,
+        "reference_price": 0.85
+    },
+    "Sticker | Stupid Banana (Foil)": {
+        "goods_id": 3179,
+        "reference_price": 25.88
+    },
+    "Sticker | CT in Banana": {
+        "goods_id": 3978,
+        "reference_price": 0.77
+    },
+    "Sticker | flamie (Foil) | MLG Columbus 2016": {
+        "goods_id": 2901,
+        "reference_price": 10.91
+    },
+    "Sticker | flamie (Gold) | Berlin 2019": {
+        "goods_id": 6093,
+        "reference_price": 5.81
+    },
+    "Sticker | flamie | Atlanta 2017": {
+        "goods_id": 4432,
+        "reference_price": 4.92
+    },
+    "Sticker | flamie | Boston 2018": {
+        "goods_id": 10250,
+        "reference_price": 2.2
+    },
+    "Sticker | flamie (Foil) | Cluj-Napoca 2015": {
+        "goods_id": 3451,
+        "reference_price": 17.71
+    },
+    "Sticker | flamie | Cologne 2015": {
+        "goods_id": 6841,
+        "reference_price": 4.1
+    },
+    "Sticker | flamie (Gold) | Boston 2018": {
+        "goods_id": 1433,
+        "reference_price": 220.46
+    },
+    "Sticker | flamie (Foil) | Katowice 2019": {
+        "goods_id": 4131,
+        "reference_price": 1.56
+    },
+    "Sticker | flamie (Foil) | Krakow 2017": {
+        "goods_id": 3511,
+        "reference_price": 9.46
+    },
+    "Sticker | flamie (Foil) | Atlanta 2017": {
+        "goods_id": 573,
+        "reference_price": 60.88
+    },
+    "Sticker | flamie (Gold) | Krakow 2017": {
+        "goods_id": 1125,
+        "reference_price": 540.05
+    },
+    "Sticker | flamie (Gold) | Katowice 2019": {
+        "goods_id": 1788,
+        "reference_price": 33.41
+    },
+    "Sticker | flamie (Foil) | Boston 2018": {
+        "goods_id": 10249,
+        "reference_price": 6.4
+    },
+    "Sticker | Hotpot": {
+        "goods_id": 10545,
+        "reference_price": 0.04
+    },
+    "Sticker | Movistar Riders (Gold) | Stockholm 2021": {
+        "goods_id": 20772,
+        "reference_price": 14.58
+    },
+    "Sticker | Qikert (Gold) | Stockholm 2021": {
+        "goods_id": 21536,
+        "reference_price": 4.24
+    },
+    "Sticker | KSCERATO (Gold) | Stockholm 2021": {
+        "goods_id": 21570,
+        "reference_price": 7.96
+    },
+    "Sticker | FaZe Clan (Gold) | Stockholm 2021": {
+        "goods_id": 20702,
+        "reference_price": 5.6
+    },
+    "Sticker | FURIA (Gold) | Stockholm 2021": {
+        "goods_id": 20583,
+        "reference_price": 5.47
+    },
+    "Sticker | BIG (Gold) | Stockholm 2021": {
+        "goods_id": 20759,
+        "reference_price": 10.5
+    },
+    "Sticker | Movistar Riders (Foil) | Stockholm 2021": {
+        "goods_id": 20755,
+        "reference_price": 4.5
+    },
+    "Sticker | Entropiq (Foil) | Stockholm 2021": {
+        "goods_id": 20547,
+        "reference_price": 9.3
+    },
+    "Sticker | MOUZ (Gold) | Stockholm 2021": {
+        "goods_id": 20733,
+        "reference_price": 68.27
+    },
+    "Sticker | MOUZ (Holo) | Stockholm 2021": {
+        "goods_id": 20568,
+        "reference_price": 9.78
+    },
+    "Sticker | MOUZ (Foil) | Stockholm 2021": {
+        "goods_id": 20735,
+        "reference_price": 15.15
+    },
+    "Sticker | GODSENT (Gold) | Stockholm 2021": {
+        "goods_id": 20704,
+        "reference_price": 5.28
+    },
+    "Sticker | Sharks Esports (Gold) | Stockholm 2021": {
+        "goods_id": 20676,
+        "reference_price": 5.55
+    },
+    "Sticker | Ax1Le (Gold) | Stockholm 2021": {
+        "goods_id": 21547,
+        "reference_price": 7.11
+    },
+    "Sticker | NiKo (Gold) | Stockholm 2021": {
+        "goods_id": 21506,
+        "reference_price": 70.97
+    },
+    "Sticker | Heroic (Gold) | Stockholm 2021": {
+        "goods_id": 20765,
+        "reference_price": 4.98
+    },
+    "Sticker | Tyloo (Foil) | Stockholm 2021": {
+        "goods_id": 20585,
+        "reference_price": 8.91
+    },
+    "Sticker | s1mple (Gold) | Stockholm 2021": {
+        "goods_id": 21501,
+        "reference_price": 25.83
+    },
+    "Sticker | Natus Vincere (Gold) | Stockholm 2021": {
+        "goods_id": 20605,
+        "reference_price": 7.48
+    },
+    "Sticker | Vitality (Gold) | Stockholm 2021": {
+        "goods_id": 20716,
+        "reference_price": 2.84
+    },
+    "Sticker | sjuush | Stockholm 2021": {
+        "goods_id": 21226,
+        "reference_price": 0.03
+    },
+    "Sticker | nafany (Gold) | Stockholm 2021": {
+        "goods_id": 21544,
+        "reference_price": 4.64
+    },
+    "Sticker | b1t (Gold) | Stockholm 2021": {
+        "goods_id": 21502,
+        "reference_price": 3.76
+    },
+    "Sticker | hampus (Gold) | Stockholm 2021": {
+        "goods_id": 21537,
+        "reference_price": 3.84
+    },
+    "Sticker | Copenhagen Flames (Gold) | Stockholm 2021": {
+        "goods_id": 20708,
+        "reference_price": 7.25
+    },
+    "Sticker | Astralis (Foil) | Stockholm 2021": {
+        "goods_id": 20592,
+        "reference_price": 5.6
+    },
+    "Sticker | Entropiq (Gold) | Stockholm 2021": {
+        "goods_id": 20727,
+        "reference_price": 5.35
+    },
+    "Sticker | hampus | Rio 2022": {
+        "goods_id": 23639,
+        "reference_price": 0.05
+    },
+    "Sticker | hampus | Stockholm 2021": {
+        "goods_id": 21422,
+        "reference_price": 0.03
+    },
+    "Sticker | hampus (Holo) | Rio 2022": {
+        "goods_id": 24096,
+        "reference_price": 0.71
+    },
+    "Sticker | hampus (Glitter) | Antwerp 2022": {
+        "goods_id": 22757,
+        "reference_price": 0.04
     }
 }

@@ -50,6 +50,7 @@ export const generateSteamMessage = ({
   templateId,
   referencePrice,
   buffFirstPrice,
+  inspectLink,
   ratio,
   details = {},
 }: {
@@ -65,12 +66,13 @@ export const generateSteamMessage = ({
   id?: number
   ratio?: number
   details?: Record<string, number>
+  inspectLink?: string
 }) => {
   const message: string[] = []
 
-  message.push(
-    `<a href="https://steamcommunity.com/market/listings/730/${encodeURIComponent(name)}">${name}</a> | #${position}\n\n`
-  )
+  const steamUrl = `https://steamcommunity.com/market/listings/730/${encodeURIComponent(name)}`
+
+  message.push(`<a href="${steamUrl}">${name}</a> | #${position}\n\n`)
 
   for (const sticker of stickers) {
     if (typeof sticker === 'string') {
@@ -83,10 +85,16 @@ export const generateSteamMessage = ({
   message.push(`\n`)
   if (price) message.push(`<b>Steam price</b>: $${price.toFixed(2)}\n`)
   if (referencePrice) message.push(`<b>Reference price</b>: $${referencePrice.toFixed(2)}\n`)
-  if (stickerTotal) message.push(`<b>Sticker total price</b>: $${stickerTotal.toFixed(2)}\n`)
+  if (stickerTotal) message.push(`<b>Sticker total price</b>: $${stickerTotal.toFixed(2)}\n\n`)
 
   if (templateId) message.push(`<b>Template ID</b>: ${templateId}\n`)
   if (ratio) message.push(`<b>Ratio</b>: ${ratio.toFixed(2)}\n`)
+
+  if (stickers.length !== 0) {
+    message.push(
+      `<a href="${steamUrl}?filter=${stickers.join(',')}">FAST OPEN</a> | <a href="https://floats.steaminventoryhelper.com/?url=${inspectLink}">SIH</a>`
+    )
+  }
 
   return message.join('')
 }

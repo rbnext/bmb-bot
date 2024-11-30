@@ -16,6 +16,7 @@ const CONFIG = [
       'M4A1-S | Nitro (Factory New)',
       'AK-47 | Blue Laminate (Minimal Wear)',
       'M4A1-S | Basilisk (Minimal Wear)',
+      'AK-47 | Ice Coaled (Factory New)',
     ],
     proxy: '',
   },
@@ -24,6 +25,7 @@ const CONFIG = [
       'M4A4 | Temukau (Field-Tested)',
       'Desert Eagle | Crimson Web (Field-Tested)',
       'M4A1-S | Blood Tiger (Minimal Wear)',
+      'AK-47 | Cartel (Minimal Wear)',
     ],
     proxy: 'http://05b8879f:4809862d7f@192.144.10.226:30013',
   },
@@ -32,8 +34,18 @@ const CONFIG = [
       'AK-47 | Cartel (Field-Tested)',
       'AK-47 | Frontside Misty (Field-Tested)',
       'M4A4 | Bullet Rain (Minimal Wear)',
+      'AK-47 | Red Laminate (Field-Tested)',
     ],
     proxy: 'http://44379168:8345796691@192.144.9.27:30013',
+  },
+  {
+    market_hash_names: [
+      'USP-S | Blueprint (Factory New)',
+      'M4A1-S | Player Two (Field-Tested)',
+      'AK-47 | Slate (Factory New)',
+      'AK-47 | Slate (Minimal Wear)',
+    ],
+    proxy: 'http://jqhH85slcm:7NhQuTt8jm@78.153.143.128:11869', // test
   },
 ]
 
@@ -63,6 +75,10 @@ const getStickerDetails = async (stickers: string[]) => {
   }
 }
 
+const getInspectLink = (link: string, assetId: string, listingId: string): string => {
+  return link.replace('%assetid%', assetId).replace('%listingid%', listingId)
+}
+
 const findSteamItemInfo = async (config: SteamMarketConfig, start: number = 0) => {
   await sleep(25_000)
 
@@ -80,6 +96,9 @@ const findSteamItemInfo = async (config: SteamMarketConfig, start: number = 0) =
 
       const currentListing = steam.listinginfo[listingId]
       const price = Number(((currentListing.converted_price + currentListing.converted_fee) / 100).toFixed(2))
+
+      const link = currentListing.asset.market_actions[0].link
+      const inspectLink = getInspectLink(link, currentListing.asset.id, listingId)
 
       const assetInfo = steam.assets[730][currentListing.asset.contextid][currentListing.asset.id]
       const htmlDescription = assetInfo.descriptions.find((el) => el.value.includes('sticker_info'))?.value || ''
@@ -101,6 +120,7 @@ const findSteamItemInfo = async (config: SteamMarketConfig, start: number = 0) =
               position: start + index + 1,
               referencePrice: config.referencePrice,
               stickerTotal: stickerTotalPrice,
+              inspectLink,
               stickers,
               details,
             })

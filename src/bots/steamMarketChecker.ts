@@ -139,6 +139,8 @@ const findSteamItemInfo = async (config: SteamMarketConfig, start: number = 0) =
 
       CASHED_LISTINGS.add(listingId)
 
+      const position = start + index + 1
+
       const currentListing = steam.listinginfo[listingId]
       const price = Number(((currentListing.converted_price + currentListing.converted_fee) / 100).toFixed(2))
 
@@ -155,14 +157,19 @@ const findSteamItemInfo = async (config: SteamMarketConfig, start: number = 0) =
 
         const stickerTotalPrice = stickers.reduce((acc, name) => acc + (details[name] ?? 0), 0)
 
-        console.log(format(new Date(), 'HH:mm:ss'), config.market_hash_name, `$${stickerTotalPrice.toFixed(2)}`)
+        console.log(
+          format(new Date(), 'HH:mm:ss'),
+          config.market_hash_name,
+          `$${stickerTotalPrice.toFixed(2)}`,
+          `#${position}`
+        )
 
         if (price && stickerTotalPrice >= price) {
           await sendMessage(
             generateSteamMessage({
               price: price,
               name: config.market_hash_name,
-              position: start + index + 1,
+              position,
               referencePrice: config.referencePrice,
               stickerTotal: stickerTotalPrice,
               inspectLink,
@@ -174,8 +181,7 @@ const findSteamItemInfo = async (config: SteamMarketConfig, start: number = 0) =
       }
     }
   } catch (error) {
-    console.log('STEAM_ERROR', error.message)
-    console.log(JSON.stringify(config))
+    console.log('STEAM_ERROR', config.proxy, error.message)
     await sleep(60_000 * 4)
 
     return

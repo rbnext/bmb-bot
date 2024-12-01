@@ -11082,5 +11082,4101 @@
     "Sticker | FalleN (Gold) | London 2018": {
         "goods_id": 5373,
         "reference_price": 163.27
+    },
+    "Sticker | NiKo | Paris 2023": {
+        "goods_id": 24870,
+        "reference_price": 0.04
+    },
+    "Sticker | headtr1ck (Glitter) | Paris 2023": {
+        "goods_id": 24939,
+        "reference_price": 0.03
+    },
+    "Sticker | Woro2k (Glitter) | Paris 2023": {
+        "goods_id": 24942,
+        "reference_price": 0.02
+    },
+    "Sticker | maden (Glitter) | Paris 2023": {
+        "goods_id": 25069,
+        "reference_price": 0.03
+    },
+    "Sticker | acoR (Glitter) | Paris 2023": {
+        "goods_id": 25206,
+        "reference_price": 0.03
+    },
+    "Sticker | rain (Glitter) | Paris 2023": {
+        "goods_id": 25284,
+        "reference_price": 0.02
+    },
+    "Sticker | MOUZ | Copenhagen 2024": {
+        "goods_id": 29259,
+        "reference_price": 0.04
+    },
+    "Sticker | Forester (Glitter) | Copenhagen 2024": {
+        "goods_id": 29654,
+        "reference_price": 0.03
+    },
+    "Sticker | mezii (Glitter) | Copenhagen 2024": {
+        "goods_id": 29676,
+        "reference_price": 0.04
+    },
+    "Sticker | latto (Glitter) | Copenhagen 2024": {
+        "goods_id": 29815,
+        "reference_price": 0.03
+    },
+    "Sticker | VINI | Stockholm 2021": {
+        "goods_id": 21433,
+        "reference_price": 0.03
+    },
+    "Sticker | FaNg | Antwerp 2022": {
+        "goods_id": 22141,
+        "reference_price": 0.03
+    },
+    "Sticker | JT | Antwerp 2022": {
+        "goods_id": 22145,
+        "reference_price": 0.03
+    },
+    "Sticker | nin9 | Antwerp 2022": {
+        "goods_id": 22179,
+        "reference_price": 0.03
+    },
+    "Sticker | nafany | Antwerp 2022": {
+        "goods_id": 22180,
+        "reference_price": 0.04
+    },
+    "Sticker | xfl0ud | Antwerp 2022": {
+        "goods_id": 22305,
+        "reference_price": 0.03
+    },
+    "Sticker | Grim | Antwerp 2022": {
+        "goods_id": 22306,
+        "reference_price": 0.03
+    },
+    "Sticker | shox | Antwerp 2022": {
+        "goods_id": 22504,
+        "reference_price": 0.03
+    },
+    "Sticker | JaCkz (Glitter) | Antwerp 2022": {
+        "goods_id": 22734,
+        "reference_price": 0.02
+    },
+    "Sticker | shalfey (Glitter) | Antwerp 2022": {
+        "goods_id": 22738,
+        "reference_price": 0.04
+    },
+    "Sticker | Plopski (Glitter) | Antwerp 2022": {
+        "goods_id": 22751,
+        "reference_price": 0.05
+    },
+    "Sticker | tiziaN (Glitter) | Antwerp 2022": {
+        "goods_id": 22754,
+        "reference_price": 0.04
+    },
+    "Sticker | KENSi (Glitter) | Antwerp 2022": {
+        "goods_id": 22761,
+        "reference_price": 0.04
+    },
+    "Sticker | refrezh (Glitter) | Antwerp 2022": {
+        "goods_id": 22766,
+        "reference_price": 0.03
+    },
+    "Sticker | Brollan (Glitter) | Antwerp 2022": {
+        "goods_id": 22782,
+        "reference_price": 0.02
+    },
+    "Sticker | es3tag (Glitter) | Antwerp 2022": {
+        "goods_id": 22786,
+        "reference_price": 0.04
+    },
+    "Sticker | SENER1 (Glitter) | Antwerp 2022": {
+        "goods_id": 22803,
+        "reference_price": 0.02
+    },
+    "Sticker | huNter (Glitter) | Antwerp 2022": {
+        "goods_id": 22806,
+        "reference_price": 0.04
+    },
+    "Sticker | Techno4K (Glitter) | Antwerp 2022": {
+        "goods_id": 22812,
+        "reference_price": 0.02
+    },
+    "Sticker | gxx- (Glitter) | Antwerp 2022": {
+        "goods_id": 22821,
+        "reference_price": 0.02
+    },
+    "Sticker | FaNg (Glitter) | Antwerp 2022": {
+        "goods_id": 22824,
+        "reference_price": 0.04
+    },
+    "Sticker | rigoN (Glitter) | Antwerp 2022": {
+        "goods_id": 22851,
+        "reference_price": 0.03
+    },
+    "Sticker | juanflatroo (Glitter) | Antwerp 2022": {
+        "goods_id": 22879,
+        "reference_price": 0.03
+    },
+    "Sticker | nitr0 | Antwerp 2022": {
+        "goods_id": 22944,
+        "reference_price": 0.03
+    },
+    "Sticker | Noble Steed": {
+        "goods_id": 23312,
+        "reference_price": 0.04
+    },
+    "Sticker | broky | Rio 2022": {
+        "goods_id": 23635,
+        "reference_price": 0.05
+    },
+    "Sticker | OG | Rio 2022": {
+        "goods_id": 23677,
+        "reference_price": 0.03
+    },
+    "Sticker | iM | Rio 2022": {
+        "goods_id": 23707,
+        "reference_price": 0.02
+    },
+    "Sticker | rigoN | Rio 2022": {
+        "goods_id": 23740,
+        "reference_price": 0.04
+    },
+    "Sticker | rain | Rio 2022": {
+        "goods_id": 23745,
+        "reference_price": 0.03
+    },
+    "Sticker | faveN (Glitter) | Rio 2022": {
+        "goods_id": 23762,
+        "reference_price": 0.04
+    },
+    "Sticker | HexT (Glitter) | Rio 2022": {
+        "goods_id": 23804,
+        "reference_price": 0.05
+    },
+    "Sticker | bLitz (Glitter) | Rio 2022": {
+        "goods_id": 23816,
+        "reference_price": 0.04
+    },
+    "Sticker | saffee (Glitter) | Rio 2022": {
+        "goods_id": 23827,
+        "reference_price": 0.04
+    },
+    "Sticker | roeJ | Rio 2022": {
+        "goods_id": 23838,
+        "reference_price": 0.04
+    },
+    "Sticker | drop (Glitter) | Rio 2022": {
+        "goods_id": 24061,
+        "reference_price": 0.04
+    },
+    "Sticker | chopper (Glitter) | Rio 2022": {
+        "goods_id": 24080,
+        "reference_price": 0.04
+    },
+    "Sticker | TeSeS (Glitter) | Rio 2022": {
+        "goods_id": 24134,
+        "reference_price": 0.04
+    },
+    "Sticker | SENER1 (Glitter) | Rio 2022": {
+        "goods_id": 24168,
+        "reference_price": 0.04
+    },
+    "Sticker | Keoz (Glitter) | Rio 2022": {
+        "goods_id": 24182,
+        "reference_price": 0.03
+    },
+    "Sticker | juanflatroo | Rio 2022": {
+        "goods_id": 24203,
+        "reference_price": 0.04
+    },
+    "Sticker | KSCERATO (Glitter) | Paris 2023": {
+        "goods_id": 25133,
+        "reference_price": 0.02
+    },
+    "Sticker | STYKO (Glitter) | Paris 2023": {
+        "goods_id": 25165,
+        "reference_price": 0.03
+    },
+    "Sticker | 910 (Glitter) | Copenhagen 2024": {
+        "goods_id": 29357,
+        "reference_price": 0.03
+    },
+    "Sticker | Team Spirit | Copenhagen 2024": {
+        "goods_id": 29439,
+        "reference_price": 0.11
+    },
+    "Sticker | NickelBack (Glitter) | Copenhagen 2024": {
+        "goods_id": 29472,
+        "reference_price": 0.03
+    },
+    "Sticker | EliGE (Glitter) | Copenhagen 2024": {
+        "goods_id": 29587,
+        "reference_price": 0.02
+    },
+    "Sticker | iM (Glitter, Champion) | Copenhagen 2024": {
+        "goods_id": 30062,
+        "reference_price": 0.03
+    },
+    "Sticker | ENCE | Stockholm 2021": {
+        "goods_id": 20576,
+        "reference_price": 0.02
+    },
+    "Sticker | interz | Stockholm 2021": {
+        "goods_id": 21221,
+        "reference_price": 0.03
+    },
+    "Sticker | KENSi | Antwerp 2022": {
+        "goods_id": 22759,
+        "reference_price": 0.03
+    },
+    "Sticker | Save Me": {
+        "goods_id": 23334,
+        "reference_price": 0.04
+    },
+    "Sticker | mezii | Rio 2022": {
+        "goods_id": 23705,
+        "reference_price": 0.02
+    },
+    "Sticker | Krimbo (Glitter) | Rio 2022": {
+        "goods_id": 23741,
+        "reference_price": 0.05
+    },
+    "Sticker | Zyphon (Glitter) | Rio 2022": {
+        "goods_id": 23770,
+        "reference_price": 0.05
+    },
+    "Sticker | Magisk (Glitter) | Rio 2022": {
+        "goods_id": 23794,
+        "reference_price": 0.04
+    },
+    "Sticker | FL1T (Glitter) | Rio 2022": {
+        "goods_id": 23870,
+        "reference_price": 0.06
+    },
+    "Sticker | nicoodoz (Glitter) | Rio 2022": {
+        "goods_id": 24021,
+        "reference_price": 0.04
+    },
+    "Sticker | kabal (Glitter) | Rio 2022": {
+        "goods_id": 24099,
+        "reference_price": 0.06
+    },
+    "Sticker | xertioN (Glitter) | Rio 2022": {
+        "goods_id": 24100,
+        "reference_price": 0.05
+    },
+    "Sticker | roeJ (Glitter) | Rio 2022": {
+        "goods_id": 24141,
+        "reference_price": 0.05
+    },
+    "Sticker | nafany (Glitter) | Rio 2022": {
+        "goods_id": 24155,
+        "reference_price": 0.06
+    },
+    "Sticker | torzsi (Glitter) | Paris 2023": {
+        "goods_id": 25260,
+        "reference_price": 0.03
+    },
+    "Sticker | Aleksib (Glitter) | Paris 2023": {
+        "goods_id": 25280,
+        "reference_price": 0.03
+    },
+    "Sticker | vexite (Glitter) | Paris 2023": {
+        "goods_id": 25292,
+        "reference_price": 0.03
+    },
+    "Sticker | electronic | Copenhagen 2024": {
+        "goods_id": 29600,
+        "reference_price": 0.02
+    },
+    "Sticker | Wicadia | Copenhagen 2024": {
+        "goods_id": 29640,
+        "reference_price": 0.03
+    },
+    "Sticker | chelo (Glitter) | Copenhagen 2024": {
+        "goods_id": 29694,
+        "reference_price": 0.05
+    },
+    "Sticker | Perfecto | Copenhagen 2024": {
+        "goods_id": 29794,
+        "reference_price": 0.05
+    },
+    "Sticker | MAJ3R | Copenhagen 2024": {
+        "goods_id": 29808,
+        "reference_price": 0.03
+    },
+    "Sticker | Skull Troop": {
+        "goods_id": 9325,
+        "reference_price": 0.06
+    },
+    "Sticker | Too Old for This": {
+        "goods_id": 14205,
+        "reference_price": 0.07
+    },
+    "Sticker | Press Start": {
+        "goods_id": 23286,
+        "reference_price": 0.03
+    },
+    "Sticker | ENCE (Glitter) | Rio 2022": {
+        "goods_id": 23681,
+        "reference_price": 0.03
+    },
+    "Sticker | dumau (Glitter) | Rio 2022": {
+        "goods_id": 23706,
+        "reference_price": 0.05
+    },
+    "Sticker | KRIMZ (Glitter) | Rio 2022": {
+        "goods_id": 24017,
+        "reference_price": 0.06
+    },
+    "Sticker | sdy (Glitter) | Rio 2022": {
+        "goods_id": 24082,
+        "reference_price": 0.05
+    },
+    "Sticker | karrigan (Glitter) | Copenhagen 2024": {
+        "goods_id": 29607,
+        "reference_price": 0.05
+    },
+    "Sticker | Kitted Out": {
+        "goods_id": 19449,
+        "reference_price": 0.03
+    },
+    "Sticker | EliGE (Glitter) | Antwerp 2022": {
+        "goods_id": 22522,
+        "reference_price": 0.03
+    },
+    "Sticker | electronic (Glitter) | Rio 2022": {
+        "goods_id": 23698,
+        "reference_price": 0.06
+    },
+    "Sticker | k1to (Glitter) | Rio 2022": {
+        "goods_id": 23799,
+        "reference_price": 0.07
+    },
+    "Sticker | juanflatroo (Glitter) | Rio 2022": {
+        "goods_id": 23815,
+        "reference_price": 0.07
+    },
+    "Sticker | REZ (Glitter) | Rio 2022": {
+        "goods_id": 23821,
+        "reference_price": 0.05
+    },
+    "Sticker | apEX (Glitter) | Rio 2022": {
+        "goods_id": 24068,
+        "reference_price": 0.07
+    },
+    "Sticker | rigoN (Glitter) | Rio 2022": {
+        "goods_id": 24192,
+        "reference_price": 0.06
+    },
+    "Sticker | dupreeh (Glitter) | Paris 2023": {
+        "goods_id": 24756,
+        "reference_price": 0.03
+    },
+    "Sticker | NiKo | Copenhagen 2024": {
+        "goods_id": 29393,
+        "reference_price": 0.09
+    },
+    "Sticker | LNZ | Stockholm 2021": {
+        "goods_id": 21458,
+        "reference_price": 0.04
+    },
+    "Sticker | Ninjas in Pyjamas (Glitter) | Antwerp 2022": {
+        "goods_id": 22123,
+        "reference_price": 0.07
+    },
+    "Sticker | Liazz | Antwerp 2022": {
+        "goods_id": 22205,
+        "reference_price": 0.04
+    },
+    "Sticker | Patsi (Glitter) | Antwerp 2022": {
+        "goods_id": 22762,
+        "reference_price": 0.05
+    },
+    "Sticker | k0nfig (Glitter) | Antwerp 2022": {
+        "goods_id": 22768,
+        "reference_price": 0.05
+    },
+    "Sticker | nin9 (Glitter) | Antwerp 2022": {
+        "goods_id": 22842,
+        "reference_price": 0.04
+    },
+    "Sticker | torzsi | Rio 2022": {
+        "goods_id": 23822,
+        "reference_price": 0.06
+    },
+    "Sticker | isak (Glitter) | Rio 2022": {
+        "goods_id": 23828,
+        "reference_price": 0.07
+    },
+    "Sticker | Vitality (Glitter) | Rio 2022": {
+        "goods_id": 23842,
+        "reference_price": 0.03
+    },
+    "Sticker | YEKINDAR (Glitter) | Rio 2022": {
+        "goods_id": 23856,
+        "reference_price": 0.07
+    },
+    "Sticker | Ax1Le (Glitter) | Rio 2022": {
+        "goods_id": 23889,
+        "reference_price": 0.06
+    },
+    "Sticker | dgt (Glitter) | Rio 2022": {
+        "goods_id": 23977,
+        "reference_price": 0.64
+    },
+    "Sticker | es3tag (Glitter) | Rio 2022": {
+        "goods_id": 24179,
+        "reference_price": 0.08
+    },
+    "Sticker | Lefty (T)": {
+        "goods_id": 30339,
+        "reference_price": 0.05
+    },
+    "Sticker | Noodles": {
+        "goods_id": 10297,
+        "reference_price": 0.1
+    },
+    "Sticker | HObbit | Stockholm 2021": {
+        "goods_id": 21457,
+        "reference_price": 0.08
+    },
+    "Sticker | Tuurtle (Glitter) | Antwerp 2022": {
+        "goods_id": 22739,
+        "reference_price": 0.02
+    },
+    "Sticker | junior | Antwerp 2022": {
+        "goods_id": 22796,
+        "reference_price": 0.03
+    },
+    "Sticker | Chicken Whisperer": {
+        "goods_id": 23282,
+        "reference_price": 0.04
+    },
+    "Sticker | Call Your Flashes": {
+        "goods_id": 23305,
+        "reference_price": 0.1
+    },
+    "Sticker | C-S On The Go": {
+        "goods_id": 23310,
+        "reference_price": 0.02
+    },
+    "Sticker | refrezh | Rio 2022": {
+        "goods_id": 23634,
+        "reference_price": 0.07
+    },
+    "Sticker | degster | Rio 2022": {
+        "goods_id": 23859,
+        "reference_price": 0.02
+    },
+    "Sticker | frozen (Glitter) | Rio 2022": {
+        "goods_id": 24131,
+        "reference_price": 0.09
+    },
+    "Sticker | Monte (Glitter) | Paris 2023": {
+        "goods_id": 25010,
+        "reference_price": 0.06
+    },
+    "Sticker | electronic (Glitter) | Paris 2023": {
+        "goods_id": 25011,
+        "reference_price": 0.02
+    },
+    "Sticker | Dr. Dazzles": {
+        "goods_id": 19458,
+        "reference_price": 0.08
+    },
+    "Sticker | XANTARES | Antwerp 2022": {
+        "goods_id": 22139,
+        "reference_price": 0.08
+    },
+    "Sticker | stavn | Antwerp 2022": {
+        "goods_id": 22178,
+        "reference_price": 0.03
+    },
+    "Sticker | sjuush (Glitter) | Antwerp 2022": {
+        "goods_id": 22292,
+        "reference_price": 0.04
+    },
+    "Sticker | aliStair (Glitter) | Antwerp 2022": {
+        "goods_id": 22296,
+        "reference_price": 0.04
+    },
+    "Sticker | TeSeS | Antwerp 2022": {
+        "goods_id": 22508,
+        "reference_price": 0.03
+    },
+    "Sticker | Magisk (Glitter) | Antwerp 2022": {
+        "goods_id": 22728,
+        "reference_price": 0.03
+    },
+    "Sticker | Zyphon (Glitter) | Antwerp 2022": {
+        "goods_id": 22941,
+        "reference_price": 0.04
+    },
+    "Sticker | sk0R (Glitter) | Rio 2022": {
+        "goods_id": 24130,
+        "reference_price": 0.11
+    },
+    "Sticker | syrsoN (Glitter) | Rio 2022": {
+        "goods_id": 24151,
+        "reference_price": 0.09
+    },
+    "Sticker | Sico (Glitter) | Rio 2022": {
+        "goods_id": 24166,
+        "reference_price": 0.1
+    },
+    "Sticker | degster (Glitter) | Rio 2022": {
+        "goods_id": 24194,
+        "reference_price": 0.09
+    },
+    "Sticker | Goofy (Glitter) | Paris 2023": {
+        "goods_id": 25022,
+        "reference_price": 0.02
+    },
+    "Sticker | JDC (Glitter) | Paris 2023": {
+        "goods_id": 25071,
+        "reference_price": 0.03
+    },
+    "Sticker | hardzao (Glitter) | Paris 2023": {
+        "goods_id": 25163,
+        "reference_price": 0.03
+    },
+    "Sticker | SENER1 (Glitter) | Paris 2023": {
+        "goods_id": 25220,
+        "reference_price": 0.03
+    },
+    "Sticker | NertZ (Glitter) | Paris 2023": {
+        "goods_id": 25239,
+        "reference_price": 0.03
+    },
+    "Sticker | roeJ (Glitter) | Antwerp 2022": {
+        "goods_id": 22750,
+        "reference_price": 0.04
+    },
+    "Sticker | slaxz- | Rio 2022": {
+        "goods_id": 23658,
+        "reference_price": 0.12
+    },
+    "Sticker | Team Liquid (Glitter) | Rio 2022": {
+        "goods_id": 23667,
+        "reference_price": 0.07
+    },
+    "Sticker | Sprout Esports | Rio 2022": {
+        "goods_id": 23723,
+        "reference_price": 0.09
+    },
+    "Sticker | fer (Glitter) | Rio 2022": {
+        "goods_id": 24149,
+        "reference_price": 0.09
+    },
+    "Sticker | gxx- (Glitter) | Rio 2022": {
+        "goods_id": 24170,
+        "reference_price": 0.11
+    },
+    "Sticker | sh1ro (Glitter) | Copenhagen 2024": {
+        "goods_id": 29417,
+        "reference_price": 0.05
+    },
+    "Sticker | Senzu (Glitter) | Copenhagen 2024": {
+        "goods_id": 29443,
+        "reference_price": 0.03
+    },
+    "Sticker | Bombsquad": {
+        "goods_id": 11519,
+        "reference_price": 0.04
+    },
+    "Sticker | Necron": {
+        "goods_id": 12685,
+        "reference_price": 0.14
+    },
+    "Sticker | Farlig (Glitter) | Antwerp 2022": {
+        "goods_id": 22744,
+        "reference_price": 0.02
+    },
+    "Sticker | CeRq (Glitter) | Rio 2022": {
+        "goods_id": 23743,
+        "reference_price": 0.13
+    },
+    "Sticker | drop (Glitter) | Paris 2023": {
+        "goods_id": 25132,
+        "reference_price": 0.04
+    },
+    "Sticker | apEX (Glitter) | Copenhagen 2024": {
+        "goods_id": 29705,
+        "reference_price": 0.02
+    },
+    "Sticker | Liazz (Glitter) | Antwerp 2022": {
+        "goods_id": 22506,
+        "reference_price": 0.16
+    },
+    "Sticker | NQZ | Rio 2022": {
+        "goods_id": 23806,
+        "reference_price": 0.16
+    },
+    "Sticker | VINI (Glitter) | Rio 2022": {
+        "goods_id": 24165,
+        "reference_price": 0.12
+    },
+    "Sticker | Complexity Gaming (Glitter) | Copenhagen 2024": {
+        "goods_id": 29431,
+        "reference_price": 0.1
+    },
+    "Sticker | Brollan (Glitter) | Copenhagen 2024": {
+        "goods_id": 29647,
+        "reference_price": 0.03
+    },
+    "Sticker | JUST (Glitter) | Copenhagen 2024": {
+        "goods_id": 29670,
+        "reference_price": 0.1
+    },
+    "Sticker | Spinx | Rio 2022": {
+        "goods_id": 23727,
+        "reference_price": 0.02
+    },
+    "Sticker | sinnopsyy | Rio 2022": {
+        "goods_id": 23738,
+        "reference_price": 0.03
+    },
+    "Sticker | dupreeh | Rio 2022": {
+        "goods_id": 23851,
+        "reference_price": 0.02
+    },
+    "Sticker | cadiaN | Rio 2022": {
+        "goods_id": 23949,
+        "reference_price": 0.12
+    },
+    "Sticker | latto (Glitter) | Rio 2022": {
+        "goods_id": 24063,
+        "reference_price": 0.07
+    },
+    "Sticker | NEOFRAG (Glitter) | Rio 2022": {
+        "goods_id": 24066,
+        "reference_price": 0.03
+    },
+    "Sticker | Martha": {
+        "goods_id": 12468,
+        "reference_price": 0.03
+    },
+    "Sticker | cadiaN | Stockholm 2021": {
+        "goods_id": 21429,
+        "reference_price": 0.03
+    },
+    "Sticker | dupreeh | Antwerp 2022": {
+        "goods_id": 22524,
+        "reference_price": 0.03
+    },
+    "Sticker | Snappi | Antwerp 2022": {
+        "goods_id": 22742,
+        "reference_price": 0.03
+    },
+    "Sticker | oSee (Glitter) | Antwerp 2022": {
+        "goods_id": 22850,
+        "reference_price": 0.03
+    },
+    "Sticker | JDC | Rio 2022": {
+        "goods_id": 23742,
+        "reference_price": 0.02
+    },
+    "Sticker | interz | Rio 2022": {
+        "goods_id": 23797,
+        "reference_price": 0.08
+    },
+    "Sticker | Magisk | Rio 2022": {
+        "goods_id": 23809,
+        "reference_price": 0.07
+    },
+    "Sticker | xertioN | Rio 2022": {
+        "goods_id": 23888,
+        "reference_price": 0.04
+    },
+    "Sticker | boltz (Glitter) | Rio 2022": {
+        "goods_id": 24186,
+        "reference_price": 0.09
+    },
+    "Sticker | SunPayus (Glitter) | Paris 2023": {
+        "goods_id": 24882,
+        "reference_price": 0.03
+    },
+    "Sticker | Jerry (Glitter) | Paris 2023": {
+        "goods_id": 25144,
+        "reference_price": 0.03
+    },
+    "Sticker | Krad (Glitter) | Paris 2023": {
+        "goods_id": 25184,
+        "reference_price": 0.04
+    },
+    "Sticker | FlameZ (Glitter) | Copenhagen 2024": {
+        "goods_id": 29623,
+        "reference_price": 0.04
+    },
+    "Sticker | Hobbit | Copenhagen 2024": {
+        "goods_id": 29685,
+        "reference_price": 0.05
+    },
+    "Sticker | Ax1Le | Stockholm 2021": {
+        "goods_id": 21552,
+        "reference_price": 0.02
+    },
+    "Sticker | dav1d | Antwerp 2022": {
+        "goods_id": 22098,
+        "reference_price": 0.03
+    },
+    "Sticker | forZe eSports (Glitter) | Antwerp 2022": {
+        "goods_id": 22494,
+        "reference_price": 0.02
+    },
+    "Sticker | BUDA | Rio 2022": {
+        "goods_id": 23653,
+        "reference_price": 0.15
+    },
+    "Sticker | slaxz- (Glitter) | Rio 2022": {
+        "goods_id": 23789,
+        "reference_price": 0.04
+    },
+    "Sticker | Repulsor": {
+        "goods_id": 12691,
+        "reference_price": 0.13
+    },
+    "Sticker | JOTA (Glitter) | Antwerp 2022": {
+        "goods_id": 22807,
+        "reference_price": 0.04
+    },
+    "Sticker | refrezh (Glitter) | Rio 2022": {
+        "goods_id": 24174,
+        "reference_price": 0.07
+    },
+    "Sticker | Jame (Glitter) | Rio 2022": {
+        "goods_id": 24177,
+        "reference_price": 0.14
+    },
+    "Sticker | karrigan (Glitter) | Paris 2023": {
+        "goods_id": 25258,
+        "reference_price": 0.02
+    },
+    "Sticker | To B or not to B": {
+        "goods_id": 12686,
+        "reference_price": 0.11
+    },
+    "Sticker | device | Stockholm 2021": {
+        "goods_id": 21207,
+        "reference_price": 0.05
+    },
+    "Sticker | Renegades (Glitter) | Antwerp 2022": {
+        "goods_id": 22223,
+        "reference_price": 0.02
+    },
+    "Sticker | tabseN (Glitter) | Rio 2022": {
+        "goods_id": 24064,
+        "reference_price": 0.08
+    },
+    "Sticker | Batter Up": {
+        "goods_id": 24358,
+        "reference_price": 0.03
+    },
+    "Sticker | sdy (Glitter) | Paris 2023": {
+        "goods_id": 25162,
+        "reference_price": 0.05
+    },
+    "Sticker | Pocket BBQ": {
+        "goods_id": 8859,
+        "reference_price": 0.14
+    },
+    "Sticker | Shaolin": {
+        "goods_id": 10299,
+        "reference_price": 0.11
+    },
+    "Sticker | This Is Fine (CT)": {
+        "goods_id": 19453,
+        "reference_price": 0.14
+    },
+    "Sticker | Renegades | Stockholm 2021": {
+        "goods_id": 20609,
+        "reference_price": 0.02
+    },
+    "Sticker | KSCERATO | Stockholm 2021": {
+        "goods_id": 21431,
+        "reference_price": 0.03
+    },
+    "Sticker | Battlefield Portal": {
+        "goods_id": 21611,
+        "reference_price": 0.05
+    },
+    "Sticker | broky (Glitter) | Antwerp 2022": {
+        "goods_id": 22309,
+        "reference_price": 0.04
+    },
+    "Sticker | karrigan (Glitter) | Antwerp 2022": {
+        "goods_id": 22316,
+        "reference_price": 0.06
+    },
+    "Sticker | Xyp9x (Glitter) | Antwerp 2022": {
+        "goods_id": 22528,
+        "reference_price": 0.03
+    },
+    "Sticker | hatz (Glitter) | Antwerp 2022": {
+        "goods_id": 22729,
+        "reference_price": 0.03
+    },
+    "Sticker | dupreeh (Glitter) | Antwerp 2022": {
+        "goods_id": 22730,
+        "reference_price": 0.02
+    },
+    "Sticker | dycha (Glitter) | Antwerp 2022": {
+        "goods_id": 22740,
+        "reference_price": 0.03
+    },
+    "Sticker | apEX (Glitter) | Antwerp 2022": {
+        "goods_id": 22748,
+        "reference_price": 0.04
+    },
+    "Sticker | chelo (Glitter) | Antwerp 2022": {
+        "goods_id": 22764,
+        "reference_price": 0.05
+    },
+    "Sticker | woxic (Glitter) | Antwerp 2022": {
+        "goods_id": 22848,
+        "reference_price": 0.04
+    },
+    "Sticker | Dragon's Keep": {
+        "goods_id": 23309,
+        "reference_price": 0.02
+    },
+    "Sticker | B-Day": {
+        "goods_id": 23352,
+        "reference_price": 0.04
+    },
+    "Sticker | b1t | Rio 2022": {
+        "goods_id": 23666,
+        "reference_price": 0.04
+    },
+    "Sticker | Ax1Le | Rio 2022": {
+        "goods_id": 23769,
+        "reference_price": 0.07
+    },
+    "Sticker | TRY | Rio 2022": {
+        "goods_id": 23831,
+        "reference_price": 0.09
+    },
+    "Sticker | FASHR | Rio 2022": {
+        "goods_id": 23836,
+        "reference_price": 0.03
+    },
+    "Sticker | GamerLegion (Glitter) | Rio 2022": {
+        "goods_id": 23850,
+        "reference_price": 0.04
+    },
+    "Sticker | jabbi (Glitter) | Rio 2022": {
+        "goods_id": 23906,
+        "reference_price": 0.03
+    },
+    "Sticker | interz (Glitter) | Rio 2022": {
+        "goods_id": 24113,
+        "reference_price": 0.05
+    },
+    "Sticker | chelo (Glitter) | Rio 2022": {
+        "goods_id": 24195,
+        "reference_price": 0.04
+    },
+    "Sticker | KSCERATO | Rio 2022": {
+        "goods_id": 24214,
+        "reference_price": 0.06
+    },
+    "Sticker | History (Glitter) | Paris 2023": {
+        "goods_id": 25248,
+        "reference_price": 0.05
+    },
+    "Sticker | magixx (Glitter) | Copenhagen 2024": {
+        "goods_id": 29415,
+        "reference_price": 0.06
+    },
+    "Sticker | XANTARES | Copenhagen 2024": {
+        "goods_id": 29559,
+        "reference_price": 0.05
+    },
+    "Sticker | gla1ve (Glitter) | Copenhagen 2024": {
+        "goods_id": 29929,
+        "reference_price": 0.02
+    },
+    "Sticker | Salute!": {
+        "goods_id": 11043,
+        "reference_price": 0.07
+    },
+    "Sticker | Hippocamp": {
+        "goods_id": 12575,
+        "reference_price": 0.11
+    },
+    "Sticker | arT (Glitter) | Rio 2022": {
+        "goods_id": 24189,
+        "reference_price": 0.21
+    },
+    "Sticker | siuhy (Glitter) | Rio 2022": {
+        "goods_id": 24197,
+        "reference_price": 0.04
+    },
+    "Sticker | iM (Glitter) | Copenhagen 2024": {
+        "goods_id": 29237,
+        "reference_price": 0.03
+    },
+    "Sticker | degster | Antwerp 2022": {
+        "goods_id": 22127,
+        "reference_price": 0.03
+    },
+    "Sticker | interz | Antwerp 2022": {
+        "goods_id": 22255,
+        "reference_price": 0.03
+    },
+    "Sticker | NAF | Antwerp 2022": {
+        "goods_id": 22312,
+        "reference_price": 0.03
+    },
+    "Sticker | SENER1 | Rio 2022": {
+        "goods_id": 23861,
+        "reference_price": 0.03
+    },
+    "Sticker | lauNX | Rio 2022": {
+        "goods_id": 23891,
+        "reference_price": 0.08
+    },
+    "Sticker | latto | Rio 2022": {
+        "goods_id": 23903,
+        "reference_price": 0.08
+    },
+    "Sticker | cadiaN (Glitter) | Paris 2023": {
+        "goods_id": 25241,
+        "reference_price": 0.04
+    },
+    "Sticker | JDC (Glitter) | Rio 2022": {
+        "goods_id": 24097,
+        "reference_price": 0.22
+    },
+    "Sticker | noway (Glitter) | Copenhagen 2024": {
+        "goods_id": 29413,
+        "reference_price": 0.04
+    },
+    "Sticker | Hello PP-Bizon": {
+        "goods_id": 13784,
+        "reference_price": 0.25
+    },
+    "Sticker | dgt (Glitter) | Antwerp 2022": {
+        "goods_id": 22532,
+        "reference_price": 0.12
+    },
+    "Sticker | saffee (Glitter) | Antwerp 2022": {
+        "goods_id": 22573,
+        "reference_price": 0.04
+    },
+    "Sticker | chopper (Glitter) | Antwerp 2022": {
+        "goods_id": 22776,
+        "reference_price": 0.04
+    },
+    "Sticker | NAF (Glitter) | Antwerp 2022": {
+        "goods_id": 22816,
+        "reference_price": 0.06
+    },
+    "Sticker | stavn | Rio 2022": {
+        "goods_id": 23642,
+        "reference_price": 0.04
+    },
+    "Sticker | electronic | Rio 2022": {
+        "goods_id": 23646,
+        "reference_price": 0.02
+    },
+    "Sticker | siuhy | Rio 2022": {
+        "goods_id": 23685,
+        "reference_price": 0.03
+    },
+    "Sticker | KRIMZ | Rio 2022": {
+        "goods_id": 23687,
+        "reference_price": 0.03
+    },
+    "Sticker | TACO | Rio 2022": {
+        "goods_id": 23689,
+        "reference_price": 0.08
+    },
+    "Sticker | sjuush | Rio 2022": {
+        "goods_id": 23734,
+        "reference_price": 0.02
+    },
+    "Sticker | ropz | Rio 2022": {
+        "goods_id": 23752,
+        "reference_price": 0.03
+    },
+    "Sticker | Brollan | Rio 2022": {
+        "goods_id": 23767,
+        "reference_price": 0.04
+    },
+    "Sticker | Outsiders (Glitter) | Rio 2022": {
+        "goods_id": 23778,
+        "reference_price": 0.07
+    },
+    "Sticker | dgt | Rio 2022": {
+        "goods_id": 23805,
+        "reference_price": 0.06
+    },
+    "Sticker | drop | Rio 2022": {
+        "goods_id": 23829,
+        "reference_price": 0.02
+    },
+    "Sticker | TeSeS (Glitter) | Paris 2023": {
+        "goods_id": 25027,
+        "reference_price": 0.03
+    },
+    "Sticker | b4rtiN (Glitter) | Copenhagen 2024": {
+        "goods_id": 29370,
+        "reference_price": 0.03
+    },
+    "Sticker | Space Marine": {
+        "goods_id": 8570,
+        "reference_price": 0.2
+    },
+    "Sticker | FaZe Clan (Glitter) | Antwerp 2022": {
+        "goods_id": 22133,
+        "reference_price": 0.26
+    },
+    "Sticker | NQZ (Glitter) | Rio 2022": {
+        "goods_id": 24091,
+        "reference_price": 0.35
+    },
+    "Sticker | Green Swallow": {
+        "goods_id": 10124,
+        "reference_price": 0.25
+    },
+    "Sticker | Ivette": {
+        "goods_id": 13182,
+        "reference_price": 0.31
+    },
+    "Sticker | Jame (Glitter, Champion) | Rio 2022": {
+        "goods_id": 24284,
+        "reference_price": 0.11
+    },
+    "Sticker | Dragon": {
+        "goods_id": 13133,
+        "reference_price": 0.16
+    },
+    "Sticker | juanflatroo (Glitter) | Paris 2023": {
+        "goods_id": 24849,
+        "reference_price": 0.03
+    },
+    "Sticker | dumau (Glitter) | Copenhagen 2024": {
+        "goods_id": 29444,
+        "reference_price": 0.04
+    },
+    "Sticker | Llama Cannon": {
+        "goods_id": 11126,
+        "reference_price": 0.26
+    },
+    "Sticker | Team Liquid (Glitter) | Antwerp 2022": {
+        "goods_id": 22140,
+        "reference_price": 0.08
+    },
+    "Sticker | KSCERATO (Glitter) | Antwerp 2022": {
+        "goods_id": 22225,
+        "reference_price": 0.03
+    },
+    "Sticker | TeSeS (Glitter) | Antwerp 2022": {
+        "goods_id": 22303,
+        "reference_price": 0.02
+    },
+    "Sticker | Jerry (Glitter) | Antwerp 2022": {
+        "goods_id": 22747,
+        "reference_price": 0.04
+    },
+    "Sticker | cadiaN (Glitter) | Antwerp 2022": {
+        "goods_id": 22763,
+        "reference_price": 0.09
+    },
+    "Sticker | Plopski | Antwerp 2022": {
+        "goods_id": 22896,
+        "reference_price": 0.04
+    },
+    "Sticker | INS | Rio 2022": {
+        "goods_id": 23702,
+        "reference_price": 0.06
+    },
+    "Sticker | dexter | Rio 2022": {
+        "goods_id": 23737,
+        "reference_price": 0.05
+    },
+    "Sticker | gxx- | Rio 2022": {
+        "goods_id": 23818,
+        "reference_price": 0.03
+    },
+    "Sticker | Aleksib | Rio 2022": {
+        "goods_id": 23867,
+        "reference_price": 0.04
+    },
+    "Sticker | magixx (Glitter) | Rio 2022": {
+        "goods_id": 23904,
+        "reference_price": 0.06
+    },
+    "Sticker | FASHR (Glitter) | Rio 2022": {
+        "goods_id": 24095,
+        "reference_price": 0.14
+    },
+    "Sticker | yuurih (Glitter) | Rio 2022": {
+        "goods_id": 24137,
+        "reference_price": 0.05
+    },
+    "Sticker | FURIA (Glitter) | Paris 2023": {
+        "goods_id": 24813,
+        "reference_price": 0.03
+    },
+    "Sticker | ZywOo (Glitter) | Paris 2023": {
+        "goods_id": 24919,
+        "reference_price": 0.07
+    },
+    "Sticker | m0NESY | Paris 2023": {
+        "goods_id": 25007,
+        "reference_price": 0.05
+    },
+    "Sticker | b1t (Glitter) | Paris 2023": {
+        "goods_id": 25136,
+        "reference_price": 0.02
+    },
+    "Sticker | EliGE (Glitter) | Paris 2023": {
+        "goods_id": 25177,
+        "reference_price": 0.03
+    },
+    "Sticker | siuhy (Glitter) | Paris 2023": {
+        "goods_id": 25251,
+        "reference_price": 0.03
+    },
+    "Sticker | isak (Glitter) | Copenhagen 2024": {
+        "goods_id": 29244,
+        "reference_price": 0.06
+    },
+    "Sticker | FURIA (Glitter) | Copenhagen 2024": {
+        "goods_id": 29496,
+        "reference_price": 0.04
+    },
+    "Sticker | Huaji": {
+        "goods_id": 5016,
+        "reference_price": 0.13
+    },
+    "Sticker | ropz (Glitter) | Copenhagen 2024": {
+        "goods_id": 29611,
+        "reference_price": 0.29
+    },
+    "Sticker | Heresy": {
+        "goods_id": 13340,
+        "reference_price": 0.35
+    },
+    "Sticker | felps (Glitter) | Copenhagen 2024": {
+        "goods_id": 29483,
+        "reference_price": 0.03
+    },
+    "Sticker | Keoz (Glitter) | Copenhagen 2024": {
+        "goods_id": 29969,
+        "reference_price": 0.03
+    },
+    "Sticker | Terror Rice": {
+        "goods_id": 10300,
+        "reference_price": 0.27
+    },
+    "Sticker | Backstab": {
+        "goods_id": 12959,
+        "reference_price": 0.23
+    },
+    "Sticker | Jame (Glitter) | Antwerp 2022": {
+        "goods_id": 22830,
+        "reference_price": 0.17
+    },
+    "Sticker | Grim (Glitter) | Antwerp 2022": {
+        "goods_id": 22805,
+        "reference_price": 0.03
+    },
+    "Sticker | VINI | Antwerp 2022": {
+        "goods_id": 22181,
+        "reference_price": 0.04
+    },
+    "Sticker | FlameZ (Glitter) | Rio 2022": {
+        "goods_id": 24150,
+        "reference_price": 0.3
+    },
+    "Sticker | VINI | Rio 2022": {
+        "goods_id": 24207,
+        "reference_price": 0.09
+    },
+    "Sticker | mezii (Glitter) | Paris 2023": {
+        "goods_id": 24922,
+        "reference_price": 0.03
+    },
+    "Sticker | huNter- (Glitter) | Copenhagen 2024": {
+        "goods_id": 29390,
+        "reference_price": 0.14
+    },
+    "Sticker | w0nderful (Glitter) | Copenhagen 2024": {
+        "goods_id": 29396,
+        "reference_price": 0.04
+    },
+    "Sticker | Sphinx": {
+        "goods_id": 9572,
+        "reference_price": 0.16
+    },
+    "Sticker | God of Fortune": {
+        "goods_id": 10546,
+        "reference_price": 0.43
+    },
+    "Sticker | dupreeh (Glitter) | Rio 2022": {
+        "goods_id": 23644,
+        "reference_price": 0.35
+    },
+    "Sticker | PTFO": {
+        "goods_id": 21585,
+        "reference_price": 0.11
+    },
+    "Sticker | Camper": {
+        "goods_id": 10239,
+        "reference_price": 0.2
+    },
+    "Sticker | Greetings": {
+        "goods_id": 13733,
+        "reference_price": 0.03
+    },
+    "Sticker | Separate Pixels": {
+        "goods_id": 13980,
+        "reference_price": 0.06
+    },
+    "Sticker | War": {
+        "goods_id": 19462,
+        "reference_price": 0.15
+    },
+    "Sticker | ZywOo (Glitter) | Copenhagen 2024": {
+        "goods_id": 29590,
+        "reference_price": 0.21
+    },
+    "Sticker | Starry (Glitter) | Copenhagen 2024": {
+        "goods_id": 29604,
+        "reference_price": 0.06
+    },
+    "Sticker | coldzera (Glitter) | Copenhagen 2024": {
+        "goods_id": 29655,
+        "reference_price": 0.04
+    },
+    "Sticker | dav1g (Glitter) | Copenhagen 2024": {
+        "goods_id": 29656,
+        "reference_price": 0.1
+    },
+    "Sticker | Friendly Fire": {
+        "goods_id": 10258,
+        "reference_price": 0.39
+    },
+    "Sticker | Toy Tiger": {
+        "goods_id": 10532,
+        "reference_price": 0.12
+    },
+    "Sticker | Pixiu": {
+        "goods_id": 10549,
+        "reference_price": 0.21
+    },
+    "Sticker | Hello MP9": {
+        "goods_id": 13558,
+        "reference_price": 0.26
+    },
+    "Sticker | stavn (Glitter) | Antwerp 2022": {
+        "goods_id": 22745,
+        "reference_price": 0.02
+    },
+    "Sticker | nexa | Rio 2022": {
+        "goods_id": 23640,
+        "reference_price": 0.06
+    },
+    "Sticker | S1ren | Rio 2022": {
+        "goods_id": 23655,
+        "reference_price": 0.03
+    },
+    "Sticker | EliGE | Rio 2022": {
+        "goods_id": 23788,
+        "reference_price": 0.02
+    },
+    "Sticker | TRY (Glitter) | Rio 2022": {
+        "goods_id": 24092,
+        "reference_price": 0.08
+    },
+    "Sticker | KSCERATO (Glitter) | Copenhagen 2024": {
+        "goods_id": 29664,
+        "reference_price": 0.04
+    },
+    "Sticker | volt (Glitter) | Copenhagen 2024": {
+        "goods_id": 29738,
+        "reference_price": 0.02
+    },
+    "Sticker | NertZ (Glitter) | Copenhagen 2024": {
+        "goods_id": 29887,
+        "reference_price": 0.06
+    },
+    "Sticker | nicoodoz (Glitter) | Copenhagen 2024": {
+        "goods_id": 29897,
+        "reference_price": 0.03
+    },
+    "Sticker | Jame | Antwerp 2022": {
+        "goods_id": 22313,
+        "reference_price": 0.03
+    },
+    "Sticker | boltz | Rio 2022": {
+        "goods_id": 24206,
+        "reference_price": 0.08
+    },
+    "Sticker | Phoenix Reborn": {
+        "goods_id": 9564,
+        "reference_price": 0.32
+    },
+    "Sticker | Hello AUG": {
+        "goods_id": 13484,
+        "reference_price": 0.49
+    },
+    "Sticker | Complexity Gaming (Glitter) | Antwerp 2022": {
+        "goods_id": 22183,
+        "reference_price": 0.26
+    },
+    "Sticker | sjuush (Glitter) | Paris 2023": {
+        "goods_id": 25123,
+        "reference_price": 0.03
+    },
+    "Sticker | Sneaky Beaky Like": {
+        "goods_id": 8966,
+        "reference_price": 0.2
+    },
+    "Sticker | The Bomber": {
+        "goods_id": 4259,
+        "reference_price": 0.19
+    },
+    "Sticker | From The Deep": {
+        "goods_id": 30244,
+        "reference_price": 0.09
+    },
+    "Sticker | Bite Me": {
+        "goods_id": 11686,
+        "reference_price": 0.17
+    },
+    "Sticker | Toxic Wave Rider": {
+        "goods_id": 19913,
+        "reference_price": 0.17
+    },
+    "Sticker | yuurih | Stockholm 2021": {
+        "goods_id": 21439,
+        "reference_price": 0.03
+    },
+    "Sticker | floppy (Glitter) | Antwerp 2022": {
+        "goods_id": 22880,
+        "reference_price": 0.03
+    },
+    "Sticker | FlameZ (Glitter) | Paris 2023": {
+        "goods_id": 25222,
+        "reference_price": 0.03
+    },
+    "Sticker | Blinky": {
+        "goods_id": 30284,
+        "reference_price": 0.44
+    },
+    "Sticker | Don't Worry": {
+        "goods_id": 12477,
+        "reference_price": 0.03
+    },
+    "Sticker | s1mple | Antwerp 2022": {
+        "goods_id": 22148,
+        "reference_price": 0.1
+    },
+    "Sticker | qikert | Antwerp 2022": {
+        "goods_id": 22311,
+        "reference_price": 0.03
+    },
+    "Sticker | VINI (Glitter) | Antwerp 2022": {
+        "goods_id": 22361,
+        "reference_price": 0.2
+    },
+    "Sticker | exit (Glitter) | Antwerp 2022": {
+        "goods_id": 22557,
+        "reference_price": 0.03
+    },
+    "Sticker | Ax1Le (Glitter) | Antwerp 2022": {
+        "goods_id": 22569,
+        "reference_price": 0.07
+    },
+    "Sticker | fer (Glitter) | Antwerp 2022": {
+        "goods_id": 22576,
+        "reference_price": 0.06
+    },
+    "Sticker | tabseN (Glitter) | Antwerp 2022": {
+        "goods_id": 22767,
+        "reference_price": 0.04
+    },
+    "Sticker | Spinx (Glitter) | Antwerp 2022": {
+        "goods_id": 22817,
+        "reference_price": 0.03
+    },
+    "Sticker | nafany (Glitter) | Antwerp 2022": {
+        "goods_id": 22856,
+        "reference_price": 0.04
+    },
+    "Sticker | S1ren (Glitter) | Rio 2022": {
+        "goods_id": 23823,
+        "reference_price": 0.04
+    },
+    "Sticker | sh1ro | Rio 2022": {
+        "goods_id": 23868,
+        "reference_price": 0.1
+    },
+    "Sticker | autimatic (Glitter) | Rio 2022": {
+        "goods_id": 23893,
+        "reference_price": 0.09
+    },
+    "Sticker | Twistzz (Glitter) | Rio 2022": {
+        "goods_id": 24196,
+        "reference_price": 0.25
+    },
+    "Sticker | NAF (Glitter) | Paris 2023": {
+        "goods_id": 25223,
+        "reference_price": 0.03
+    },
+    "Sticker | dupreeh (Glitter, Champion) | Paris 2023": {
+        "goods_id": 25702,
+        "reference_price": 0.03
+    },
+    "Sticker | Aeldari Avatar": {
+        "goods_id": 8567,
+        "reference_price": 0.08
+    },
+    "Sticker | b1t (Glitter) | Antwerp 2022": {
+        "goods_id": 22233,
+        "reference_price": 0.05
+    },
+    "Sticker | Agent Select": {
+        "goods_id": 23341,
+        "reference_price": 0.04
+    },
+    "Sticker | ZywOo (Glitter) | Rio 2022": {
+        "goods_id": 23647,
+        "reference_price": 0.51
+    },
+    "Sticker | rain (Glitter) | Antwerp 2022": {
+        "goods_id": 22500,
+        "reference_price": 0.07
+    },
+    "Sticker | YEKINDAR (Glitter) | Antwerp 2022": {
+        "goods_id": 22801,
+        "reference_price": 0.1
+    },
+    "Sticker | broky (Glitter) | Rio 2022": {
+        "goods_id": 24085,
+        "reference_price": 0.06
+    },
+    "Sticker | Full Buy": {
+        "goods_id": 8360,
+        "reference_price": 0.11
+    },
+    "Sticker | Guardian Dragon": {
+        "goods_id": 10121,
+        "reference_price": 0.23
+    },
+    "Sticker | Death Comes": {
+        "goods_id": 11402,
+        "reference_price": 0.42
+    },
+    "Sticker | roeJ (Glitter) | Paris 2023": {
+        "goods_id": 25137,
+        "reference_price": 0.03
+    },
+    "Sticker | This Is Fine (T)": {
+        "goods_id": 22027,
+        "reference_price": 0.07
+    },
+    "Sticker | Trick Or Threat": {
+        "goods_id": 8019,
+        "reference_price": 0.47
+    },
+    "Sticker | IHC Esports (Holo) | Rio 2022": {
+        "goods_id": 23869,
+        "reference_price": 0.35
+    },
+    "Sticker | NiKo (Glitter) | Paris 2023": {
+        "goods_id": 25338,
+        "reference_price": 0.48
+    },
+    "Sticker | TeSeS (Holo) | Antwerp 2022": {
+        "goods_id": 22258,
+        "reference_price": 0.82
+    },
+    "Sticker | ENCE (Holo) | Antwerp 2022": {
+        "goods_id": 22893,
+        "reference_price": 0.29
+    },
+    "Sticker | sinnopsyy (Holo) | Rio 2022": {
+        "goods_id": 23983,
+        "reference_price": 0.62
+    },
+    "Sticker | JACKZ (Holo) | Stockholm 2021": {
+        "goods_id": 21499,
+        "reference_price": 0.43
+    },
+    "Sticker | headtr1ck (Holo) | Paris 2023": {
+        "goods_id": 25247,
+        "reference_price": 0.16
+    },
+    "Sticker | Zombie Hop": {
+        "goods_id": 10117,
+        "reference_price": 0.12
+    },
+    "Sticker | roeJ (Holo) | Rio 2022": {
+        "goods_id": 23971,
+        "reference_price": 0.56
+    },
+    "Sticker | FaNg (Holo) | Paris 2023": {
+        "goods_id": 25063,
+        "reference_price": 0.3
+    },
+    "Sticker | STYKO (Holo) | Paris 2023": {
+        "goods_id": 25306,
+        "reference_price": 0.11
+    },
+    "Sticker | Ninjas in Pyjamas (Holo) | Rio 2022": {
+        "goods_id": 23776,
+        "reference_price": 0.5
+    },
+    "Sticker | mezii (Holo) | Rio 2022": {
+        "goods_id": 24026,
+        "reference_price": 0.6
+    },
+    "Sticker | jabbi (Holo) | Paris 2023": {
+        "goods_id": 25058,
+        "reference_price": 0.24
+    },
+    "Sticker | s1mple (Glitter) | Paris 2023": {
+        "goods_id": 25140,
+        "reference_price": 0.48
+    },
+    "Sticker | k0nfig (Holo) | Paris 2023": {
+        "goods_id": 25297,
+        "reference_price": 0.15
+    },
+    "Sticker | dupreeh (Holo, Champion) | Paris 2023": {
+        "goods_id": 25712,
+        "reference_price": 0.14
+    },
+    "Sticker | Chicken Lover": {
+        "goods_id": 7750,
+        "reference_price": 0.2
+    },
+    "Sticker | sh1ro (Glitter) | Antwerp 2022": {
+        "goods_id": 22499,
+        "reference_price": 0.13
+    },
+    "Sticker | NAF (Glitter) | Rio 2022": {
+        "goods_id": 23651,
+        "reference_price": 0.08
+    },
+    "Sticker | w0nderful (Glitter) | Rio 2022": {
+        "goods_id": 23700,
+        "reference_price": 0.27
+    },
+    "Sticker | Heroic (Holo) | Rio 2022": {
+        "goods_id": 23892,
+        "reference_price": 0.48
+    },
+    "Sticker | max (Glitter) | Rio 2022": {
+        "goods_id": 24183,
+        "reference_price": 0.15
+    },
+    "Sticker | SENER1 (Holo) | Paris 2023": {
+        "goods_id": 24995,
+        "reference_price": 0.16
+    },
+    "Sticker | mezii (Holo) | Paris 2023": {
+        "goods_id": 25234,
+        "reference_price": 0.16
+    },
+    "Sticker | NertZ (Holo) | Paris 2023": {
+        "goods_id": 25279,
+        "reference_price": 0.12
+    },
+    "Sticker | Support": {
+        "goods_id": 4175,
+        "reference_price": 0.66
+    },
+    "Sticker | The Awper": {
+        "goods_id": 6541,
+        "reference_price": 0.71
+    },
+    "Sticker | isak (Holo) | Rio 2022": {
+        "goods_id": 23991,
+        "reference_price": 0.71
+    },
+    "Sticker | iM (Glitter) | Rio 2022": {
+        "goods_id": 24083,
+        "reference_price": 0.15
+    },
+    "Sticker | IHC Esports (Holo) | Antwerp 2022": {
+        "goods_id": 22495,
+        "reference_price": 0.34
+    },
+    "Sticker | Bad News Eagles (Holo) | Antwerp 2022": {
+        "goods_id": 22549,
+        "reference_price": 0.39
+    },
+    "Sticker | Zyphon (Holo) | Antwerp 2022": {
+        "goods_id": 22687,
+        "reference_price": 0.58
+    },
+    "Sticker | NEOFRAG (Holo) | Rio 2022": {
+        "goods_id": 24002,
+        "reference_price": 0.67
+    },
+    "Sticker | b1t (Glitter) | Rio 2022": {
+        "goods_id": 24081,
+        "reference_price": 0.15
+    },
+    "Sticker | The Bot": {
+        "goods_id": 6540,
+        "reference_price": 0.6
+    },
+    "Sticker | sinnopsyy (Holo) | Paris 2023": {
+        "goods_id": 24968,
+        "reference_price": 0.16
+    },
+    "Sticker | Trick Or Treat": {
+        "goods_id": 3839,
+        "reference_price": 0.8
+    },
+    "Sticker | Toxic Tentaskull": {
+        "goods_id": 19843,
+        "reference_price": 0.49
+    },
+    "Sticker | Flick Shotter": {
+        "goods_id": 22021,
+        "reference_price": 0.34
+    },
+    "Sticker | KSCERATO (Glitter) | Rio 2022": {
+        "goods_id": 23899,
+        "reference_price": 0.06
+    },
+    "Sticker | jkaem (Holo) | Paris 2023": {
+        "goods_id": 25269,
+        "reference_price": 0.14
+    },
+    "Sticker | biguzera (Holo) | Paris 2023": {
+        "goods_id": 25305,
+        "reference_price": 0.14
+    },
+    "Sticker | SAS Chicken": {
+        "goods_id": 7995,
+        "reference_price": 0.68
+    },
+    "Sticker | Chompers": {
+        "goods_id": 30343,
+        "reference_price": 0.23
+    },
+    "Sticker | War Penguin": {
+        "goods_id": 3879,
+        "reference_price": 0.99
+    },
+    "Sticker | Work For Ammo": {
+        "goods_id": 4065,
+        "reference_price": 0.82
+    },
+    "Sticker | I Conquered": {
+        "goods_id": 4169,
+        "reference_price": 0.31
+    },
+    "Sticker | Lurker": {
+        "goods_id": 11685,
+        "reference_price": 0.28
+    },
+    "Sticker | Handle With Care (Holo)": {
+        "goods_id": 19478,
+        "reference_price": 0.52
+    },
+    "Sticker | Purple Gnar": {
+        "goods_id": 19972,
+        "reference_price": 0.31
+    },
+    "Sticker | Green Gnar": {
+        "goods_id": 20012,
+        "reference_price": 0.34
+    },
+    "Sticker | nitr0 (Glitter) | Antwerp 2022": {
+        "goods_id": 22945,
+        "reference_price": 0.04
+    },
+    "Sticker | torzsi (Holo) | Rio 2022": {
+        "goods_id": 24110,
+        "reference_price": 0.9
+    },
+    "Sticker | ZywOo (Holo, Champion) | Paris 2023": {
+        "goods_id": 25707,
+        "reference_price": 0.79
+    },
+    "Sticker | Flashbang": {
+        "goods_id": 3932,
+        "reference_price": 0.79
+    },
+    "Sticker | nitr0 (Holo) | Antwerp 2022": {
+        "goods_id": 22588,
+        "reference_price": 0.51
+    },
+    "Sticker | Double Dip": {
+        "goods_id": 3597,
+        "reference_price": 0.11
+    },
+    "Sticker | Non-Veg": {
+        "goods_id": 5006,
+        "reference_price": 0.19
+    },
+    "Sticker | Shave Master": {
+        "goods_id": 8974,
+        "reference_price": 0.32
+    },
+    "Sticker | The Lurker": {
+        "goods_id": 10979,
+        "reference_price": 0.47
+    },
+    "Sticker | Hello FAMAS": {
+        "goods_id": 13550,
+        "reference_price": 0.27
+    },
+    "Sticker | YEKINDAR (Holo) | Stockholm 2021": {
+        "goods_id": 21467,
+        "reference_price": 0.58
+    },
+    "Sticker | VINI (Holo) | Stockholm 2021": {
+        "goods_id": 21520,
+        "reference_price": 0.54
+    },
+    "Sticker | HObbit (Holo) | Stockholm 2021": {
+        "goods_id": 21561,
+        "reference_price": 0.31
+    },
+    "Sticker | kabal (Holo) | Antwerp 2022": {
+        "goods_id": 22800,
+        "reference_price": 0.25
+    },
+    "Sticker | Co Co Co": {
+        "goods_id": 23325,
+        "reference_price": 0.46
+    },
+    "Sticker | ropz (Glitter) | Rio 2022": {
+        "goods_id": 23947,
+        "reference_price": 0.1
+    },
+    "Sticker | Bart4k (Holo) | Paris 2023": {
+        "goods_id": 25038,
+        "reference_price": 0.17
+    },
+    "Sticker | Brollan (Holo) | Paris 2023": {
+        "goods_id": 25048,
+        "reference_price": 0.17
+    },
+    "Sticker | bLitz (Glitter) | Paris 2023": {
+        "goods_id": 25217,
+        "reference_price": 0.03
+    },
+    "Sticker | FASHR (Holo) | Paris 2023": {
+        "goods_id": 25337,
+        "reference_price": 0.2
+    },
+    "Sticker | volt (Holo) | Paris 2023": {
+        "goods_id": 25423,
+        "reference_price": 0.18
+    },
+    "Sticker | forZe eSports | Berlin 2019": {
+        "goods_id": 10882,
+        "reference_price": 0.32
+    },
+    "Sticker | Ready For Battle": {
+        "goods_id": 21589,
+        "reference_price": 0.04
+    },
+    "Sticker | Chief": {
+        "goods_id": 13348,
+        "reference_price": 0.08
+    },
+    "Sticker | degster (Holo) | Rio 2022": {
+        "goods_id": 23994,
+        "reference_price": 0.99
+    },
+    "Sticker | oSee (Holo) | Paris 2023": {
+        "goods_id": 25369,
+        "reference_price": 0.17
+    },
+    "Sticker | qikert (Holo) | Rio 2022": {
+        "goods_id": 24142,
+        "reference_price": 0.86
+    },
+    "Sticker | Small Arms": {
+        "goods_id": 4076,
+        "reference_price": 0.21
+    },
+    "Sticker | Free Hugs": {
+        "goods_id": 10600,
+        "reference_price": 0.43
+    },
+    "Sticker | Cyber Romanov (Holo)": {
+        "goods_id": 19450,
+        "reference_price": 0.69
+    },
+    "Sticker | Burn Them All": {
+        "goods_id": 11124,
+        "reference_price": 0.2
+    },
+    "Sticker | Grim (Holo) | Antwerp 2022": {
+        "goods_id": 22802,
+        "reference_price": 0.89
+    },
+    "Sticker | GamerLegion (Holo) | Rio 2022": {
+        "goods_id": 24205,
+        "reference_price": 0.25
+    },
+    "Sticker | EliGE (Glitter) | Rio 2022": {
+        "goods_id": 24227,
+        "reference_price": 0.04
+    },
+    "Sticker | Knives Out": {
+        "goods_id": 21604,
+        "reference_price": 0.12
+    },
+    "Sticker | Jerry (Holo) | Paris 2023": {
+        "goods_id": 25303,
+        "reference_price": 0.18
+    },
+    "Sticker | Easy Peasy": {
+        "goods_id": 11169,
+        "reference_price": 1.11
+    },
+    "Sticker | buster (Holo) | Stockholm 2021": {
+        "goods_id": 21452,
+        "reference_price": 0.17
+    },
+    "Sticker | drop (Holo) | Stockholm 2021": {
+        "goods_id": 21556,
+        "reference_price": 0.32
+    },
+    "Sticker | nicoodoz (Glitter) | Antwerp 2022": {
+        "goods_id": 22210,
+        "reference_price": 0.02
+    },
+    "Sticker | Krimbo (Holo) | Antwerp 2022": {
+        "goods_id": 22527,
+        "reference_price": 0.61
+    },
+    "Sticker | refrezh (Holo) | Antwerp 2022": {
+        "goods_id": 22713,
+        "reference_price": 0.68
+    },
+    "Sticker | chelo (Holo) | Antwerp 2022": {
+        "goods_id": 22743,
+        "reference_price": 0.32
+    },
+    "Sticker | Techno4K (Holo) | Antwerp 2022": {
+        "goods_id": 22769,
+        "reference_price": 0.29
+    },
+    "Sticker | jabbi (Glitter) | Antwerp 2022": {
+        "goods_id": 22822,
+        "reference_price": 0.15
+    },
+    "Sticker | arT (Glitter) | Antwerp 2022": {
+        "goods_id": 22844,
+        "reference_price": 0.07
+    },
+    "Sticker | dav1d (Glitter) | Antwerp 2022": {
+        "goods_id": 22849,
+        "reference_price": 0.13
+    },
+    "Sticker | ropz (Glitter) | Antwerp 2022": {
+        "goods_id": 22885,
+        "reference_price": 0.09
+    },
+    "Sticker | cadiaN (Glitter) | Rio 2022": {
+        "goods_id": 23905,
+        "reference_price": 0.2
+    },
+    "Sticker | n0rb3r7 | Rio 2022": {
+        "goods_id": 24185,
+        "reference_price": 0.03
+    },
+    "Sticker | FL1T (Glitter, Champion) | Rio 2022": {
+        "goods_id": 24296,
+        "reference_price": 0.05
+    },
+    "Sticker | stavn (Holo) | Paris 2023": {
+        "goods_id": 25019,
+        "reference_price": 0.22
+    },
+    "Sticker | maden (Holo) | Paris 2023": {
+        "goods_id": 25046,
+        "reference_price": 0.1
+    },
+    "Sticker | frozen (Glitter) | Paris 2023": {
+        "goods_id": 25126,
+        "reference_price": 0.03
+    },
+    "Sticker | EliGE (Holo) | Paris 2023": {
+        "goods_id": 25198,
+        "reference_price": 0.28
+    },
+    "Sticker | Cypher (Holo) | Paris 2023": {
+        "goods_id": 25231,
+        "reference_price": 0.18
+    },
+    "Sticker | REZ (Holo) | Paris 2023": {
+        "goods_id": 25330,
+        "reference_price": 0.16
+    },
+    "Sticker | r3salt (Holo) | Paris 2023": {
+        "goods_id": 25339,
+        "reference_price": 0.21
+    },
+    "Sticker | CRUC1AL (Holo) | Paris 2023": {
+        "goods_id": 25383,
+        "reference_price": 0.17
+    },
+    "Sticker | nawwk (Holo) | Paris 2023": {
+        "goods_id": 25468,
+        "reference_price": 0.16
+    },
+    "Sticker | Flickshot": {
+        "goods_id": 9303,
+        "reference_price": 0.81
+    },
+    "Sticker | kRaSnaL (Holo) | Paris 2023": {
+        "goods_id": 25142,
+        "reference_price": 0.28
+    },
+    "Sticker | rain (Holo) | Paris 2023": {
+        "goods_id": 25262,
+        "reference_price": 0.71
+    },
+    "Sticker | Noble": {
+        "goods_id": 13225,
+        "reference_price": 0.24
+    },
+    "Sticker | Killjoy": {
+        "goods_id": 14133,
+        "reference_price": 0.98
+    },
+    "Sticker | Manticore": {
+        "goods_id": 9570,
+        "reference_price": 0.15
+    },
+    "Sticker | Eternal Fire (Glitter) | Antwerp 2022": {
+        "goods_id": 22111,
+        "reference_price": 0.62
+    },
+    "Sticker | YEKINDAR (Holo) | Paris 2023": {
+        "goods_id": 25259,
+        "reference_price": 0.29
+    },
+    "Sticker | electronic | Berlin 2019": {
+        "goods_id": 13667,
+        "reference_price": 0.19
+    },
+    "Sticker | Team Liquid | Berlin 2019": {
+        "goods_id": 14522,
+        "reference_price": 0.11
+    },
+    "Sticker | shox (Holo) | Antwerp 2022": {
+        "goods_id": 22775,
+        "reference_price": 0.96
+    },
+    "Sticker | One Sting (Holo)": {
+        "goods_id": 10608,
+        "reference_price": 0.55
+    },
+    "Sticker | The Spartan": {
+        "goods_id": 11042,
+        "reference_price": 0.14
+    },
+    "Sticker | EspiranTo | Berlin 2019": {
+        "goods_id": 12568,
+        "reference_price": 0.12
+    },
+    "Sticker | HooXi (Glitter) | Antwerp 2022": {
+        "goods_id": 22224,
+        "reference_price": 0.03
+    },
+    "Sticker | Rush More": {
+        "goods_id": 23288,
+        "reference_price": 0.13
+    },
+    "Sticker | nexa (Glitter) | Rio 2022": {
+        "goods_id": 23894,
+        "reference_price": 0.45
+    },
+    "Sticker | Chi Bomb": {
+        "goods_id": 7032,
+        "reference_price": 0.67
+    },
+    "Sticker | Cheongsam": {
+        "goods_id": 10533,
+        "reference_price": 1
+    },
+    "Sticker | Devouring Flame": {
+        "goods_id": 11782,
+        "reference_price": 0.24
+    },
+    "Sticker | Adepta Sororitas": {
+        "goods_id": 13250,
+        "reference_price": 0.35
+    },
+    "Sticker | Norwi | Antwerp 2022": {
+        "goods_id": 22208,
+        "reference_price": 0.03
+    },
+    "Sticker | torzsi (Glitter) | Rio 2022": {
+        "goods_id": 23650,
+        "reference_price": 0.1
+    },
+    "Sticker | DemQQ (Holo) | Paris 2023": {
+        "goods_id": 25379,
+        "reference_price": 0.27
+    },
+    "Sticker | Grayhound Gaming (Holo) | Berlin 2019": {
+        "goods_id": 9543,
+        "reference_price": 0.25
+    },
+    "Sticker | Nezha": {
+        "goods_id": 10542,
+        "reference_price": 0.15
+    },
+    "Sticker | Joan": {
+        "goods_id": 10845,
+        "reference_price": 0.37
+    },
+    "Sticker | neaLaN | Berlin 2019": {
+        "goods_id": 12674,
+        "reference_price": 0.25
+    },
+    "Sticker | Silver": {
+        "goods_id": 13507,
+        "reference_price": 0.13
+    },
+    "Sticker | refrezh | Stockholm 2021": {
+        "goods_id": 21408,
+        "reference_price": 0.03
+    },
+    "Sticker | Rat Pack": {
+        "goods_id": 22025,
+        "reference_price": 0.05
+    },
+    "Sticker | Wallbang": {
+        "goods_id": 22041,
+        "reference_price": 0.17
+    },
+    "Sticker | PGL (Holo) | Antwerp 2022": {
+        "goods_id": 22153,
+        "reference_price": 0.81
+    },
+    "Sticker | fnx | Antwerp 2022": {
+        "goods_id": 22531,
+        "reference_price": 0.05
+    },
+    "Sticker | Snappi (Holo) | Antwerp 2022": {
+        "goods_id": 22731,
+        "reference_price": 0.39
+    },
+    "Sticker | buster | Antwerp 2022": {
+        "goods_id": 22779,
+        "reference_price": 0.03
+    },
+    "Sticker | JT (Glitter) | Antwerp 2022": {
+        "goods_id": 22823,
+        "reference_price": 0.05
+    },
+    "Sticker | ZywOo (Glitter) | Antwerp 2022": {
+        "goods_id": 22852,
+        "reference_price": 0.1
+    },
+    "Sticker | Plopski (Holo) | Antwerp 2022": {
+        "goods_id": 22897,
+        "reference_price": 0.35
+    },
+    "Sticker | Grim (Holo) | Paris 2023": {
+        "goods_id": 25039,
+        "reference_price": 0.27
+    },
+    "Sticker | apEX (Holo) | Paris 2023": {
+        "goods_id": 25091,
+        "reference_price": 0.28
+    },
+    "Sticker | BOROS (Glitter) | Paris 2023": {
+        "goods_id": 25171,
+        "reference_price": 0.02
+    },
+    "Sticker | Thomas (Holo) | Paris 2023": {
+        "goods_id": 25335,
+        "reference_price": 0.19
+    },
+    "Sticker | Pegasus": {
+        "goods_id": 9578,
+        "reference_price": 0.45
+    },
+    "Sticker | Heads Up": {
+        "goods_id": 9986,
+        "reference_price": 0.13
+    },
+    "Sticker | Stan": {
+        "goods_id": 10838,
+        "reference_price": 0.2
+    },
+    "Sticker | Hard Cluck Life (Holo)": {
+        "goods_id": 10841,
+        "reference_price": 0.23
+    },
+    "Sticker | Ethan | Berlin 2019": {
+        "goods_id": 11589,
+        "reference_price": 0.18
+    },
+    "Sticker | JUGi | Berlin 2019": {
+        "goods_id": 12363,
+        "reference_price": 0.22
+    },
+    "Sticker | Krad | Berlin 2019": {
+        "goods_id": 12530,
+        "reference_price": 0.46
+    },
+    "Sticker | FL1T | Berlin 2019": {
+        "goods_id": 12555,
+        "reference_price": 0.19
+    },
+    "Sticker | oskar | Berlin 2019": {
+        "goods_id": 12561,
+        "reference_price": 0.07
+    },
+    "Sticker | loWel | Berlin 2019": {
+        "goods_id": 12702,
+        "reference_price": 0.09
+    },
+    "Sticker | Ork Waaagh!": {
+        "goods_id": 12743,
+        "reference_price": 0.21
+    },
+    "Sticker | buster | Berlin 2019": {
+        "goods_id": 13424,
+        "reference_price": 0.1
+    },
+    "Sticker | AdreN | Berlin 2019": {
+        "goods_id": 13684,
+        "reference_price": 0.07
+    },
+    "Sticker | Dessert Eagle": {
+        "goods_id": 16403,
+        "reference_price": 0.12
+    },
+    "Sticker | Speedy T": {
+        "goods_id": 19464,
+        "reference_price": 0.16
+    },
+    "Sticker | buster | Stockholm 2021": {
+        "goods_id": 21210,
+        "reference_price": 0.03
+    },
+    "Sticker | max | Antwerp 2022": {
+        "goods_id": 22104,
+        "reference_price": 0.02
+    },
+    "Sticker | sh1ro | Antwerp 2022": {
+        "goods_id": 22149,
+        "reference_price": 0.03
+    },
+    "Sticker | aliStair (Holo) | Antwerp 2022": {
+        "goods_id": 22789,
+        "reference_price": 0.32
+    },
+    "Sticker | buster (Glitter) | Antwerp 2022": {
+        "goods_id": 22946,
+        "reference_price": 0.05
+    },
+    "Sticker | Twistzz (Glitter, Champion) | Antwerp 2022": {
+        "goods_id": 23004,
+        "reference_price": 0.06
+    },
+    "Sticker | rallen (Holo) | Paris 2023": {
+        "goods_id": 25209,
+        "reference_price": 0.17
+    },
+    "Sticker | xertioN (Holo) | Paris 2023": {
+        "goods_id": 25353,
+        "reference_price": 0.54
+    },
+    "Sticker | Ribbon Tie": {
+        "goods_id": 30336,
+        "reference_price": 0.47
+    },
+    "Sticker | The 'Nader": {
+        "goods_id": 4323,
+        "reference_price": 0.19
+    },
+    "Sticker | Brehze | Berlin 2019": {
+        "goods_id": 6229,
+        "reference_price": 0.15
+    },
+    "Sticker | Luck Skill": {
+        "goods_id": 9050,
+        "reference_price": 0.2
+    },
+    "Sticker | xand | Berlin 2019": {
+        "goods_id": 9542,
+        "reference_price": 0.17
+    },
+    "Sticker | KSCERATO | Berlin 2019": {
+        "goods_id": 9710,
+        "reference_price": 0.2
+    },
+    "Sticker | v4lde | Berlin 2019": {
+        "goods_id": 10869,
+        "reference_price": 0.16
+    },
+    "Sticker | Eco Rush": {
+        "goods_id": 9301,
+        "reference_price": 0.2
+    },
+    "Sticker | KENSi (Holo) | Antwerp 2022": {
+        "goods_id": 22975,
+        "reference_price": 0.3
+    },
+    "Sticker | BIG | London 2018": {
+        "goods_id": 10639,
+        "reference_price": 1.12
+    },
+    "Sticker | Knife Club": {
+        "goods_id": 4317,
+        "reference_price": 0.92
+    },
+    "Sticker | CR4ZY | Berlin 2019": {
+        "goods_id": 14568,
+        "reference_price": 0.44
+    },
+    "Sticker | SENER1 (Holo) | Antwerp 2022": {
+        "goods_id": 22236,
+        "reference_price": 0.36
+    },
+    "Sticker | Calyx (Holo) | Antwerp 2022": {
+        "goods_id": 22658,
+        "reference_price": 0.57
+    },
+    "Sticker | Norwi (Holo) | Antwerp 2022": {
+        "goods_id": 22672,
+        "reference_price": 0.29
+    },
+    "Sticker | Jerry (Holo) | Antwerp 2022": {
+        "goods_id": 22689,
+        "reference_price": 0.21
+    },
+    "Sticker | zorte (Holo) | Antwerp 2022": {
+        "goods_id": 22758,
+        "reference_price": 0.31
+    },
+    "Sticker | dycha (Holo) | Antwerp 2022": {
+        "goods_id": 22772,
+        "reference_price": 0.4
+    },
+    "Sticker | Legendary Eagle (Holo)": {
+        "goods_id": 13430,
+        "reference_price": 0.53
+    },
+    "Sticker | IHC Esports (Gold) | Antwerp 2022": {
+        "goods_id": 22889,
+        "reference_price": 1.13
+    },
+    "Sticker | kyxsan (Gold) | Paris 2023": {
+        "goods_id": 25460,
+        "reference_price": 0.8
+    },
+    "Sticker | Attacker | Berlin 2019": {
+        "goods_id": 11771,
+        "reference_price": 0.32
+    },
+    "Sticker | almazer | Berlin 2019": {
+        "goods_id": 11773,
+        "reference_price": 0.56
+    },
+    "Sticker | exit (Holo) | Antwerp 2022": {
+        "goods_id": 22709,
+        "reference_price": 0.39
+    },
+    "Sticker | npl (Holo) | Paris 2023": {
+        "goods_id": 25055,
+        "reference_price": 0.35
+    },
+    "Sticker | vexite (Gold) | Paris 2023": {
+        "goods_id": 25482,
+        "reference_price": 0.89
+    },
+    "Sticker | Astralis | Berlin 2019": {
+        "goods_id": 5829,
+        "reference_price": 0.37
+    },
+    "Sticker | DemQQ (Gold) | Paris 2023": {
+        "goods_id": 25270,
+        "reference_price": 0.85
+    },
+    "Sticker | INTZ E-SPORTS CLUB | Berlin 2019": {
+        "goods_id": 10873,
+        "reference_price": 0.43
+    },
+    "Sticker | bLitz (Holo) | Antwerp 2022": {
+        "goods_id": 22605,
+        "reference_price": 0.45
+    },
+    "Sticker | Farlig (Holo) | Antwerp 2022": {
+        "goods_id": 22704,
+        "reference_price": 0.34
+    },
+    "Sticker | FURIA | Berlin 2019": {
+        "goods_id": 13486,
+        "reference_price": 0.14
+    },
+    "Sticker | MIBR | Berlin 2019": {
+        "goods_id": 14103,
+        "reference_price": 0.45
+    },
+    "Sticker | Perfecto (Holo) | Paris 2023": {
+        "goods_id": 25216,
+        "reference_price": 0.54
+    },
+    "Sticker | Yellow Lethal": {
+        "goods_id": 20021,
+        "reference_price": 0.28
+    },
+    "Sticker | WOOD7 (Holo) | Antwerp 2022": {
+        "goods_id": 22788,
+        "reference_price": 0.44
+    },
+    "Sticker | rigoN (Holo) | Paris 2023": {
+        "goods_id": 25232,
+        "reference_price": 0.19
+    },
+    "Sticker | ropz | London 2018": {
+        "goods_id": 5271,
+        "reference_price": 1.87
+    },
+    "Sticker | misutaaa (Holo) | Stockholm 2021": {
+        "goods_id": 21551,
+        "reference_price": 0.2
+    },
+    "Sticker | rigoN (Holo) | Antwerp 2022": {
+        "goods_id": 22691,
+        "reference_price": 0.26
+    },
+    "Sticker | Xyp9x (Holo) | Antwerp 2022": {
+        "goods_id": 22726,
+        "reference_price": 1.01
+    },
+    "Sticker | ENCE | Berlin 2019": {
+        "goods_id": 11870,
+        "reference_price": 0.21
+    },
+    "Sticker | dephh | Katowice 2019": {
+        "goods_id": 10015,
+        "reference_price": 0.36
+    },
+    "Sticker | Xyp9x | Katowice 2019": {
+        "goods_id": 11706,
+        "reference_price": 0.35
+    },
+    "Sticker | Ready For Battle (Holo)": {
+        "goods_id": 21619,
+        "reference_price": 0.29
+    },
+    "Sticker | hatz (Holo) | Antwerp 2022": {
+        "goods_id": 22601,
+        "reference_price": 0.56
+    },
+    "Sticker | S1ren (Holo) | Antwerp 2022": {
+        "goods_id": 22609,
+        "reference_price": 0.57
+    },
+    "Sticker | roeJ (Holo) | Antwerp 2022": {
+        "goods_id": 22684,
+        "reference_price": 0.56
+    },
+    "Sticker | oSee (Holo) | Antwerp 2022": {
+        "goods_id": 22841,
+        "reference_price": 0.89
+    },
+    "Sticker | History (Gold) | Paris 2023": {
+        "goods_id": 25367,
+        "reference_price": 0.9
+    },
+    "Sticker | zevy (Gold) | Paris 2023": {
+        "goods_id": 25425,
+        "reference_price": 0.99
+    },
+    "Sticker | Rickeh | Katowice 2019": {
+        "goods_id": 5610,
+        "reference_price": 0.34
+    },
+    "Sticker | AdreN | Katowice 2019": {
+        "goods_id": 5616,
+        "reference_price": 0.33
+    },
+    "Sticker | Brollan | Katowice 2019": {
+        "goods_id": 9880,
+        "reference_price": 0.34
+    },
+    "Sticker | qikert | Katowice 2019": {
+        "goods_id": 10017,
+        "reference_price": 0.38
+    },
+    "Sticker | Mahjong Fa": {
+        "goods_id": 10122,
+        "reference_price": 0.62
+    },
+    "Sticker | StarLadder | Berlin 2019": {
+        "goods_id": 10611,
+        "reference_price": 0.21
+    },
+    "Sticker | device | Berlin 2019": {
+        "goods_id": 14441,
+        "reference_price": 0.44
+    },
+    "Sticker | arT | Stockholm 2021": {
+        "goods_id": 21441,
+        "reference_price": 0.02
+    },
+    "Sticker | kabal (Glitter) | Antwerp 2022": {
+        "goods_id": 22832,
+        "reference_price": 0.04
+    },
+    "Sticker | Skin Lover (Lenticular)": {
+        "goods_id": 23360,
+        "reference_price": 1.1
+    },
+    "Sticker | sjuush (Gold) | Paris 2023": {
+        "goods_id": 25033,
+        "reference_price": 1.14
+    },
+    "Sticker | Brollan (Gold) | Paris 2023": {
+        "goods_id": 25273,
+        "reference_price": 0.79
+    },
+    "Sticker | degster (Gold) | Paris 2023": {
+        "goods_id": 25345,
+        "reference_price": 1.02
+    },
+    "Sticker | ANNIHILATION (Gold) | Paris 2023": {
+        "goods_id": 25377,
+        "reference_price": 0.85
+    },
+    "Sticker | kRaSnaL (Gold) | Paris 2023": {
+        "goods_id": 25465,
+        "reference_price": 0.9
+    },
+    "Sticker | Zombie Lover": {
+        "goods_id": 3455,
+        "reference_price": 1.21
+    },
+    "Sticker | TACO | Boston 2018": {
+        "goods_id": 3861,
+        "reference_price": 1.97
+    },
+    "Sticker | Bossy Burger": {
+        "goods_id": 8026,
+        "reference_price": 0.73
+    },
+    "Sticker | Delicious Tears": {
+        "goods_id": 9324,
+        "reference_price": 0.75
+    },
+    "Sticker | Hello Galil AR (Gold)": {
+        "goods_id": 13120,
+        "reference_price": 1.67
+    },
+    "Sticker | FlameZ (Gold) | Paris 2023": {
+        "goods_id": 25346,
+        "reference_price": 1.31
+    },
+    "Sticker | Bad News Eagles (Gold) | Antwerp 2022": {
+        "goods_id": 22891,
+        "reference_price": 1.4
+    },
+    "Sticker | xseveN | Katowice 2019": {
+        "goods_id": 5429,
+        "reference_price": 0.4
+    },
+    "Sticker | mynio (Gold) | Paris 2023": {
+        "goods_id": 25243,
+        "reference_price": 1.93
+    },
+    "Sticker | magixx (Holo) | Antwerp 2022": {
+        "goods_id": 22724,
+        "reference_price": 0.92
+    },
+    "Sticker | stavn (Holo) | Antwerp 2022": {
+        "goods_id": 22732,
+        "reference_price": 0.82
+    },
+    "Sticker | woxic (Holo) | Antwerp 2022": {
+        "goods_id": 22773,
+        "reference_price": 0.99
+    },
+    "Sticker | FaNg (Holo) | Antwerp 2022": {
+        "goods_id": 22857,
+        "reference_price": 0.62
+    },
+    "Sticker | GuardiaN | Katowice 2019": {
+        "goods_id": 10780,
+        "reference_price": 0.56
+    },
+    "Sticker | Renegades | Katowice 2019": {
+        "goods_id": 10792,
+        "reference_price": 0.82
+    },
+    "Sticker | Ninjas in Pyjamas | Berlin 2019": {
+        "goods_id": 10874,
+        "reference_price": 0.68
+    },
+    "Sticker | AZR | Katowice 2019": {
+        "goods_id": 11693,
+        "reference_price": 0.46
+    },
+    "Sticker | dexter | Berlin 2019": {
+        "goods_id": 11763,
+        "reference_price": 0.27
+    },
+    "Sticker | coldzera | Katowice 2019": {
+        "goods_id": 13251,
+        "reference_price": 0.34
+    },
+    "Sticker | nitr0 (Holo) | Paris 2023": {
+        "goods_id": 25065,
+        "reference_price": 0.17
+    },
+    "Sticker | North | Berlin 2019": {
+        "goods_id": 4488,
+        "reference_price": 0.46
+    },
+    "Sticker | seized | MLG Columbus 2016": {
+        "goods_id": 6453,
+        "reference_price": 2.46
+    },
+    "Sticker | Dima | Katowice 2019": {
+        "goods_id": 9834,
+        "reference_price": 1.38
+    },
+    "Sticker | siuhy (Gold) | Paris 2023": {
+        "goods_id": 25466,
+        "reference_price": 1.98
+    },
+    "Sticker | ENCE (Holo) | Berlin 2019": {
+        "goods_id": 13453,
+        "reference_price": 0.2
+    },
+    "Sticker | electronic | Boston 2018": {
+        "goods_id": 4888,
+        "reference_price": 1.89
+    },
+    "Sticker | MIBR | Katowice 2019": {
+        "goods_id": 10781,
+        "reference_price": 0.62
+    },
+    "Sticker | svyat (Foil) | Berlin 2019": {
+        "goods_id": 9533,
+        "reference_price": 1.27
+    },
+    "Sticker | jks (Foil) | Berlin 2019": {
+        "goods_id": 9541,
+        "reference_price": 1.42
+    },
+    "Sticker | AdreN (Foil) | Berlin 2019": {
+        "goods_id": 9707,
+        "reference_price": 0.41
+    },
+    "Sticker | Avangar | Berlin 2019": {
+        "goods_id": 13393,
+        "reference_price": 0.57
+    },
+    "Sticker | qikert (Holo) | Antwerp 2022": {
+        "goods_id": 22785,
+        "reference_price": 1.08
+    },
+    "Sticker | fnx (Holo) | Antwerp 2022": {
+        "goods_id": 22876,
+        "reference_price": 0.69
+    },
+    "Sticker | zorte (Gold) | Antwerp 2022": {
+        "goods_id": 22966,
+        "reference_price": 1.26
+    },
+    "Sticker | faveN (Holo) | Antwerp 2022": {
+        "goods_id": 22674,
+        "reference_price": 0.31
+    },
+    "Sticker | saffee (Holo) | Antwerp 2022": {
+        "goods_id": 22675,
+        "reference_price": 0.77
+    },
+    "Sticker | Perfecto (Holo) | Antwerp 2022": {
+        "goods_id": 22697,
+        "reference_price": 0.66
+    },
+    "Sticker | nin9 (Holo) | Antwerp 2022": {
+        "goods_id": 22701,
+        "reference_price": 0.89
+    },
+    "Sticker | drop (Holo) | Antwerp 2022": {
+        "goods_id": 22725,
+        "reference_price": 1.11
+    },
+    "Sticker | Don't Worry (Foil)": {
+        "goods_id": 6207,
+        "reference_price": 0.92
+    },
+    "Sticker | n0thing | Katowice 2019": {
+        "goods_id": 11704,
+        "reference_price": 0.34
+    },
+    "Sticker | bodyy | Katowice 2019": {
+        "goods_id": 12489,
+        "reference_price": 0.54
+    },
+    "Sticker | RpK | Katowice 2019": {
+        "goods_id": 9869,
+        "reference_price": 0.49
+    },
+    "Sticker | device | Katowice 2019": {
+        "goods_id": 10779,
+        "reference_price": 1.28
+    },
+    "Sticker | Renegades (Foil) | Berlin 2019": {
+        "goods_id": 14184,
+        "reference_price": 0.77
+    },
+    "Sticker | VINI (Foil) | Berlin 2019": {
+        "goods_id": 9525,
+        "reference_price": 0.98
+    },
+    "Sticker | ShahZaM | Boston 2018": {
+        "goods_id": 10267,
+        "reference_price": 1.77
+    },
+    "Sticker | KRIMZ | Katowice 2019": {
+        "goods_id": 10791,
+        "reference_price": 0.35
+    },
+    "Sticker | Space Marine (Holo)": {
+        "goods_id": 11357,
+        "reference_price": 0.77
+    },
+    "Sticker | felps | Katowice 2019": {
+        "goods_id": 5595,
+        "reference_price": 0.35
+    },
+    "Sticker | KRIMZ | MLG Columbus 2016": {
+        "goods_id": 9467,
+        "reference_price": 2.46
+    },
+    "Sticker | stanislaw (Foil) | Berlin 2019": {
+        "goods_id": 9544,
+        "reference_price": 0.58
+    },
+    "Sticker | stanislaw | Katowice 2019": {
+        "goods_id": 9875,
+        "reference_price": 0.37
+    },
+    "Sticker | WorldEdit | Katowice 2019": {
+        "goods_id": 10776,
+        "reference_price": 1.11
+    },
+    "Sticker | huNter- (Foil) | Berlin 2019": {
+        "goods_id": 10880,
+        "reference_price": 1.81
+    },
+    "Sticker | jabbi | Antwerp 2022": {
+        "goods_id": 22177,
+        "reference_price": 0.02
+    },
+    "Sticker | sinnopsyy (Gold) | Antwerp 2022": {
+        "goods_id": 22655,
+        "reference_price": 0.95
+    },
+    "Sticker | electronic (Holo) | Paris 2023": {
+        "goods_id": 25331,
+        "reference_price": 0.56
+    },
+    "Sticker | Woro2k (Gold) | Paris 2023": {
+        "goods_id": 25387,
+        "reference_price": 1.03
+    },
+    "Sticker | qikert | Boston 2018": {
+        "goods_id": 3673,
+        "reference_price": 2.72
+    },
+    "Sticker | innocent | Krakow 2017": {
+        "goods_id": 3937,
+        "reference_price": 1.38
+    },
+    "Sticker | zehN | Boston 2018": {
+        "goods_id": 4758,
+        "reference_price": 2.22
+    },
+    "Sticker | LUCAS1 (Foil) | Berlin 2019": {
+        "goods_id": 6250,
+        "reference_price": 0.46
+    },
+    "Sticker | Vitality (Foil) | Berlin 2019": {
+        "goods_id": 6251,
+        "reference_price": 1.39
+    },
+    "Sticker | erkaSt (Foil) | Berlin 2019": {
+        "goods_id": 9714,
+        "reference_price": 0.91
+    },
+    "Sticker | k0nfig | Boston 2018": {
+        "goods_id": 11787,
+        "reference_price": 2.05
+    },
+    "Sticker | Shooting Star Return": {
+        "goods_id": 3723,
+        "reference_price": 0.61
+    },
+    "Sticker | Longevity (Foil)": {
+        "goods_id": 5014,
+        "reference_price": 2.81
+    },
+    "Sticker | IEM | Katowice 2019": {
+        "goods_id": 10784,
+        "reference_price": 1.53
+    },
+    "Sticker | boltz (Holo) | Antwerp 2022": {
+        "goods_id": 22835,
+        "reference_price": 1.11
+    },
+    "Sticker | Bish (Holo)": {
+        "goods_id": 7748,
+        "reference_price": 2.56
+    },
+    "Sticker | ENCE (Foil) | Berlin 2019": {
+        "goods_id": 10876,
+        "reference_price": 0.8
+    },
+    "Sticker | dennis | Katowice 2019": {
+        "goods_id": 5705,
+        "reference_price": 0.44
+    },
+    "Sticker | AZR (Foil) | Katowice 2019": {
+        "goods_id": 5612,
+        "reference_price": 3.41
+    },
+    "Sticker | f0rest | MLG Columbus 2016": {
+        "goods_id": 3540,
+        "reference_price": 4.97
+    },
+    "Sticker | chrisJ | Boston 2018": {
+        "goods_id": 10245,
+        "reference_price": 2.83
+    },
+    "Sticker | compLexity Gaming | London 2018": {
+        "goods_id": 9976,
+        "reference_price": 5.25
+    },
+    "Sticker | Grayhound Gaming (Foil) | Berlin 2019": {
+        "goods_id": 6231,
+        "reference_price": 0.89
+    },
+    "Sticker | roeJ (Gold) | Antwerp 2022": {
+        "goods_id": 22584,
+        "reference_price": 1.93
+    },
+    "Sticker | hades (Gold) | Antwerp 2022": {
+        "goods_id": 22613,
+        "reference_price": 1.69
+    },
+    "Sticker | Zeus | Boston 2018": {
+        "goods_id": 4918,
+        "reference_price": 1.22
+    },
+    "Sticker | TaZ | Boston 2018": {
+        "goods_id": 10287,
+        "reference_price": 1.83
+    },
+    "Sticker | Aerial | Katowice 2019": {
+        "goods_id": 12483,
+        "reference_price": 0.46
+    },
+    "Sticker | dav1d (Holo) | Antwerp 2022": {
+        "goods_id": 22693,
+        "reference_price": 1.47
+    },
+    "Sticker | Norwi (Gold) | Antwerp 2022": {
+        "goods_id": 22708,
+        "reference_price": 1.11
+    },
+    "Sticker | BIG (Holo) | Katowice 2019": {
+        "goods_id": 9833,
+        "reference_price": 2.63
+    },
+    "Sticker | Plopski (Gold) | Antwerp 2022": {
+        "goods_id": 22670,
+        "reference_price": 1.76
+    },
+    "Sticker | rain (Holo, Champion) | Antwerp 2022": {
+        "goods_id": 23016,
+        "reference_price": 0.85
+    },
+    "Sticker | Aleksib (Holo) | Paris 2023": {
+        "goods_id": 25244,
+        "reference_price": 0.17
+    },
+    "Sticker | Goofy (Holo) | Paris 2023": {
+        "goods_id": 25344,
+        "reference_price": 0.3
+    },
+    "Sticker | EliGE (Gold) | Paris 2023": {
+        "goods_id": 25364,
+        "reference_price": 2.12
+    },
+    "Sticker | NAF (Holo) | Paris 2023": {
+        "goods_id": 25417,
+        "reference_price": 0.17
+    },
+    "Sticker | Cypher (Gold) | Paris 2023": {
+        "goods_id": 25431,
+        "reference_price": 1.2
+    },
+    "Sticker | Krad (Gold) | Paris 2023": {
+        "goods_id": 25455,
+        "reference_price": 2.13
+    },
+    "Sticker | SicK | Boston 2018": {
+        "goods_id": 4732,
+        "reference_price": 4.27
+    },
+    "Sticker | Max (Holo)": {
+        "goods_id": 6199,
+        "reference_price": 0.78
+    },
+    "Sticker | Keoz (Foil) | Berlin 2019": {
+        "goods_id": 9528,
+        "reference_price": 1.67
+    },
+    "Sticker | 100 Thieves (Gold) | 2020 RMR": {
+        "goods_id": 19173,
+        "reference_price": 1.05
+    },
+    "Sticker | ropz | Boston 2018": {
+        "goods_id": 4844,
+        "reference_price": 4.58
+    },
+    "Sticker | gob b (Foil) | Katowice 2019": {
+        "goods_id": 4520,
+        "reference_price": 2.04
+    },
+    "Sticker | NiKo (Glitter) | Antwerp 2022": {
+        "goods_id": 22847,
+        "reference_price": 1.2
+    },
+    "Sticker | floppy (Gold) | Antwerp 2022": {
+        "goods_id": 22694,
+        "reference_price": 2.84
+    },
+    "Sticker | buster (Gold) | Antwerp 2022": {
+        "goods_id": 22681,
+        "reference_price": 1.78
+    },
+    "Sticker | Hello CZ75-Auto (Gold)": {
+        "goods_id": 11298,
+        "reference_price": 1.21
+    },
+    "Sticker | arT (Holo) | Paris 2023": {
+        "goods_id": 25265,
+        "reference_price": 0.95
+    },
+    "Sticker | Rickeh (Foil) | Katowice 2019": {
+        "goods_id": 9835,
+        "reference_price": 3.25
+    },
+    "Sticker | DeadFox | Katowice 2019": {
+        "goods_id": 10777,
+        "reference_price": 0.37
+    },
+    "Sticker | siuhy (Holo) | Paris 2023": {
+        "goods_id": 25043,
+        "reference_price": 0.38
+    },
+    "Sticker | KRIMZ (Foil) | Katowice 2019": {
+        "goods_id": 5535,
+        "reference_price": 2.03
+    },
+    "Sticker | bodyy | Boston 2018": {
+        "goods_id": 10290,
+        "reference_price": 2.36
+    },
+    "Sticker | hardzao (Gold) | Paris 2023": {
+        "goods_id": 25458,
+        "reference_price": 0.87
+    },
+    "Sticker | Thug Life": {
+        "goods_id": 4320,
+        "reference_price": 0.59
+    },
+    "Sticker | Stewie2K | Katowice 2019": {
+        "goods_id": 11703,
+        "reference_price": 0.7
+    },
+    "Sticker | JaCkz | Katowice 2019": {
+        "goods_id": 11718,
+        "reference_price": 0.42
+    },
+    "Sticker | device (Foil) | Berlin 2019": {
+        "goods_id": 13635,
+        "reference_price": 1.76
+    },
+    "Sticker | NiKo | London 2018": {
+        "goods_id": 14500,
+        "reference_price": 4.41
+    },
+    "Sticker | Techno4K (Gold) | Antwerp 2022": {
+        "goods_id": 22619,
+        "reference_price": 2.8
+    },
+    "Sticker | electronic (Holo) | Rio 2022": {
+        "goods_id": 24208,
+        "reference_price": 0.66
+    },
+    "Sticker | slaxz- (Gold) | Rio 2022": {
+        "goods_id": 24261,
+        "reference_price": 4.82
+    },
+    "Sticker | HooXi (Holo) | Paris 2023": {
+        "goods_id": 25296,
+        "reference_price": 0.43
+    },
+    "Sticker | dupreeh (Holo) | Paris 2023": {
+        "goods_id": 25327,
+        "reference_price": 0.39
+    },
+    "Sticker | ANGE1 (Foil) | Berlin 2019": {
+        "goods_id": 6246,
+        "reference_price": 0.47
+    },
+    "Sticker | KSCERATO (Foil) | Berlin 2019": {
+        "goods_id": 6272,
+        "reference_price": 0.89
+    },
+    "Sticker | chopper | Katowice 2019": {
+        "goods_id": 9829,
+        "reference_price": 0.79
+    },
+    "Sticker | shox (Foil) | Katowice 2019": {
+        "goods_id": 5556,
+        "reference_price": 3.35
+    },
+    "Sticker | ZywOo (Holo) | Antwerp 2022": {
+        "goods_id": 22836,
+        "reference_price": 3.64
+    },
+    "Sticker | nitr0 (Gold) | Antwerp 2022": {
+        "goods_id": 22621,
+        "reference_price": 2.48
+    },
+    "Sticker | Hello XM1014 (Gold)": {
+        "goods_id": 13178,
+        "reference_price": 3.54
+    },
+    "Sticker | Firestarter (Holo)": {
+        "goods_id": 14766,
+        "reference_price": 3.74
+    },
+    "Sticker | torzsi (Holo) | Paris 2023": {
+        "goods_id": 25261,
+        "reference_price": 0.5
+    },
+    "Sticker | NEO | London 2018": {
+        "goods_id": 3875,
+        "reference_price": 2.09
+    },
+    "Sticker | balblna (Foil) | London 2018": {
+        "goods_id": 10069,
+        "reference_price": 6.47
+    },
+    "Sticker | Team EnVyUs | Boston 2018": {
+        "goods_id": 4750,
+        "reference_price": 3.3
+    },
+    "Sticker | gob b | London 2018": {
+        "goods_id": 4224,
+        "reference_price": 1.26
+    },
+    "Sticker | kioShiMa | Cluj-Napoca 2015": {
+        "goods_id": 4165,
+        "reference_price": 4.2
+    },
+    "Sticker | AMANEK (Gold) | Stockholm 2021": {
+        "goods_id": 21560,
+        "reference_price": 4.8
+    },
+    "Sticker | Hello AK-47 (Gold)": {
+        "goods_id": 14164,
+        "reference_price": 3.9
+    },
+    "Sticker | Stan (Holo)": {
+        "goods_id": 9582,
+        "reference_price": 1.41
+    },
+    "Sticker | Ninjas in Pyjamas (Foil) | Berlin 2019": {
+        "goods_id": 13839,
+        "reference_price": 2.19
+    },
+    "Sticker | FURIA (Gold) | Antwerp 2022": {
+        "goods_id": 22551,
+        "reference_price": 2.76
+    },
+    "Sticker | woxic (Gold) | Antwerp 2022": {
+        "goods_id": 22608,
+        "reference_price": 3.97
+    },
+    "Sticker | sjuush (Gold) | Rio 2022": {
+        "goods_id": 24004,
+        "reference_price": 5.97
+    },
+    "Sticker | Goofy (Gold) | Paris 2023": {
+        "goods_id": 25473,
+        "reference_price": 1.36
+    },
+    "Sticker | Happy | Cluj-Napoca 2015": {
+        "goods_id": 9404,
+        "reference_price": 3.93
+    },
+    "Sticker | mousesports | MLG Columbus 2016": {
+        "goods_id": 6429,
+        "reference_price": 5.67
+    },
+    "Sticker | Liazz (Holo) | Antwerp 2022": {
+        "goods_id": 22711,
+        "reference_price": 3.11
+    },
+    "Sticker | NRG (Foil) | Berlin 2019": {
+        "goods_id": 9546,
+        "reference_price": 2.38
+    },
+    "Sticker | BnTeT (Foil) | Katowice 2019": {
+        "goods_id": 5607,
+        "reference_price": 2.02
+    },
+    "Sticker | broky (Gold) | Antwerp 2022": {
+        "goods_id": 22593,
+        "reference_price": 6.4
+    },
+    "Sticker | Sticker Bomb Surf K (Foil)": {
+        "goods_id": 20023,
+        "reference_price": 5.09
+    },
+    "Sticker | Gratisfaction (Gold) | Berlin 2019": {
+        "goods_id": 6155,
+        "reference_price": 5.65
+    },
+    "Sticker | Fire Serpent Surf K (Foil)": {
+        "goods_id": 20305,
+        "reference_price": 4.94
+    },
+    "Sticker | ANGE1 (Gold) | Berlin 2019": {
+        "goods_id": 6253,
+        "reference_price": 9.94
+    },
+    "Sticker | GeT_RiGhT | MLG Columbus 2016": {
+        "goods_id": 6568,
+        "reference_price": 3.94
+    },
+    "Sticker | Zeus (Foil) | London 2018": {
+        "goods_id": 9974,
+        "reference_price": 5.82
+    },
+    "Sticker | Kvik (Foil) | London 2018": {
+        "goods_id": 3651,
+        "reference_price": 5.83
+    },
+    "Sticker | Ninjas in Pyjamas (Holo) | London 2018": {
+        "goods_id": 5272,
+        "reference_price": 3.04
+    },
+    "Sticker | apEX | Cluj-Napoca 2015": {
+        "goods_id": 9398,
+        "reference_price": 3.68
+    },
+    "Sticker | felps | Boston 2018": {
+        "goods_id": 10256,
+        "reference_price": 2.52
+    },
+    "Sticker | gob b | Boston 2018": {
+        "goods_id": 10271,
+        "reference_price": 1.85
+    },
+    "Sticker | bLitz (Gold) | Paris 2023": {
+        "goods_id": 25208,
+        "reference_price": 0.92
+    },
+    "Sticker | REZ (Foil) | Katowice 2019": {
+        "goods_id": 3729,
+        "reference_price": 1.78
+    },
+    "Sticker | dennis (Foil) | Katowice 2019": {
+        "goods_id": 4403,
+        "reference_price": 2.4
+    },
+    "Sticker | Kjaerbye | Boston 2018": {
+        "goods_id": 10244,
+        "reference_price": 1.65
+    },
+    "Sticker | Magisk (Foil) | Katowice 2019": {
+        "goods_id": 10774,
+        "reference_price": 2.23
+    },
+    "Sticker | autimatic | Boston 2018": {
+        "goods_id": 4884,
+        "reference_price": 2.05
+    },
+    "Sticker | ngiN (Foil) | London 2018": {
+        "goods_id": 3904,
+        "reference_price": 4.83
+    },
+    "Sticker | nitr0 | Katowice 2019": {
+        "goods_id": 11698,
+        "reference_price": 2.05
+    },
+    "Sticker | Jerry (Gold) | Antwerp 2022": {
+        "goods_id": 22589,
+        "reference_price": 1.21
+    },
+    "Sticker | hatz (Gold) | Antwerp 2022": {
+        "goods_id": 22631,
+        "reference_price": 1.98
+    },
+    "Sticker | Calyx (Gold) | Antwerp 2022": {
+        "goods_id": 22642,
+        "reference_price": 3.23
+    },
+    "Sticker | XANTARES (Holo) | Antwerp 2022": {
+        "goods_id": 22685,
+        "reference_price": 3.07
+    },
+    "Sticker | FaNg (Gold) | Antwerp 2022": {
+        "goods_id": 22977,
+        "reference_price": 3.92
+    },
+    "Sticker | isak (Gold) | Paris 2023": {
+        "goods_id": 25481,
+        "reference_price": 1.12
+    },
+    "Sticker | Xyp9x | Boston 2018": {
+        "goods_id": 3654,
+        "reference_price": 1.56
+    },
+    "Sticker | Gratisfaction (Foil) | Katowice 2019": {
+        "goods_id": 10012,
+        "reference_price": 2.84
+    },
+    "Sticker | RUSH | Boston 2018": {
+        "goods_id": 10294,
+        "reference_price": 3.11
+    },
+    "Sticker | Jame | Boston 2018": {
+        "goods_id": 11786,
+        "reference_price": 4.69
+    },
+    "Sticker | Freeman (Foil) | Berlin 2019": {
+        "goods_id": 12773,
+        "reference_price": 1.11
+    },
+    "Sticker | Golden (Foil) | Boston 2018": {
+        "goods_id": 15947,
+        "reference_price": 6.79
+    },
+    "Sticker | Candy Buttery (Holo)": {
+        "goods_id": 20318,
+        "reference_price": 4.05
+    },
+    "Sticker | ins | Antwerp 2022": {
+        "goods_id": 22498,
+        "reference_price": 0.03
+    },
+    "Sticker | KENSi (Gold) | Antwerp 2022": {
+        "goods_id": 22612,
+        "reference_price": 1.37
+    },
+    "Sticker | apEX (Gold) | Antwerp 2022": {
+        "goods_id": 22639,
+        "reference_price": 2.77
+    },
+    "Sticker | gxx- (Holo) | Antwerp 2022": {
+        "goods_id": 22787,
+        "reference_price": 0.39
+    },
+    "Sticker | YEKINDAR (Holo) | Antwerp 2022": {
+        "goods_id": 22957,
+        "reference_price": 1.89
+    },
+    "Sticker | Keoz (Holo) | Paris 2023": {
+        "goods_id": 25083,
+        "reference_price": 0.43
+    },
+    "Sticker | acoR (Holo) | Paris 2023": {
+        "goods_id": 25430,
+        "reference_price": 0.29
+    },
+    "Sticker | keshandr | Boston 2018": {
+        "goods_id": 4048,
+        "reference_price": 4.69
+    },
+    "Sticker | Camper (Foil)": {
+        "goods_id": 4774,
+        "reference_price": 1.79
+    },
+    "Sticker | nitr0 | Boston 2018": {
+        "goods_id": 4866,
+        "reference_price": 3.62
+    },
+    "Sticker | hutji (Foil) | Katowice 2019": {
+        "goods_id": 5525,
+        "reference_price": 4.98
+    },
+    "Sticker | The Fragger": {
+        "goods_id": 9481,
+        "reference_price": 0.58
+    },
+    "Sticker | Team Spirit | Katowice 2019": {
+        "goods_id": 9862,
+        "reference_price": 3.11
+    },
+    "Sticker | Basilisk (Foil)": {
+        "goods_id": 3895,
+        "reference_price": 3.91
+    },
+    "Sticker | Counter Logic Gaming | Cluj-Napoca 2015": {
+        "goods_id": 3964,
+        "reference_price": 4.96
+    },
+    "Sticker | Ninjas in Pyjamas | Cluj-Napoca 2015": {
+        "goods_id": 4304,
+        "reference_price": 2.51
+    },
+    "Sticker | bLitz (Gold) | Antwerp 2022": {
+        "goods_id": 22667,
+        "reference_price": 2.84
+    },
+    "Sticker | TACO (Foil) | London 2018": {
+        "goods_id": 5275,
+        "reference_price": 5.67
+    },
+    "Sticker | mousesports | Cluj-Napoca 2015": {
+        "goods_id": 6747,
+        "reference_price": 4.82
+    },
+    "Sticker | compLexity Gaming | Katowice 2019": {
+        "goods_id": 11710,
+        "reference_price": 5.13
+    },
+    "Sticker | Team Liquid (Holo) | London 2018": {
+        "goods_id": 10628,
+        "reference_price": 5.22
+    },
+    "Sticker | ISSAA (Gold) | Berlin 2019": {
+        "goods_id": 6262,
+        "reference_price": 6.96
+    },
+    "Sticker | Kill Count (Holo)": {
+        "goods_id": 20029,
+        "reference_price": 5.02
+    },
+    "Sticker | Tornado Chaos (Foil)": {
+        "goods_id": 21626,
+        "reference_price": 6.23
+    },
+    "Sticker | TeSeS (Gold) | Antwerp 2022": {
+        "goods_id": 22586,
+        "reference_price": 3.24
+    },
+    "Sticker | SENER1 (Gold) | Antwerp 2022": {
+        "goods_id": 22660,
+        "reference_price": 1.34
+    },
+    "Sticker | frozen (Holo) | Paris 2023": {
+        "goods_id": 25288,
+        "reference_price": 0.54
+    },
+    "Sticker | SunPayus (Gold) | Paris 2023": {
+        "goods_id": 25479,
+        "reference_price": 1.29
+    },
+    "Sticker | Attacker | Boston 2018": {
+        "goods_id": 3672,
+        "reference_price": 3.07
+    },
+    "Sticker | NBK- | Cluj-Napoca 2015": {
+        "goods_id": 4200,
+        "reference_price": 3.86
+    },
+    "Sticker | EliGE (Foil) | Katowice 2019": {
+        "goods_id": 10016,
+        "reference_price": 2.99
+    },
+    "Sticker | dexter (Foil) | Katowice 2019": {
+        "goods_id": 4021,
+        "reference_price": 2.28
+    },
+    "Sticker | fitch (Foil) | Katowice 2019": {
+        "goods_id": 5606,
+        "reference_price": 2.24
+    },
+    "Sticker | NertZ (Gold) | Paris 2023": {
+        "goods_id": 25464,
+        "reference_price": 0.93
+    },
+    "Sticker | SicK (Gold) | Berlin 2019": {
+        "goods_id": 6160,
+        "reference_price": 9.44
+    },
+    "Sticker | blameF (Gold) | Antwerp 2022": {
+        "goods_id": 22820,
+        "reference_price": 2.84
+    },
+    "Sticker | Astralis (Holo) | Katowice 2019": {
+        "goods_id": 9846,
+        "reference_price": 2.17
+    },
+    "Sticker | dgt (Gold) | Antwerp 2022": {
+        "goods_id": 22603,
+        "reference_price": 3.34
+    },
+    "Sticker | GeT_RiGhT (Foil) | Katowice 2019": {
+        "goods_id": 5528,
+        "reference_price": 3.2
+    },
+    "Sticker | Abalone Strafe (Holo)": {
+        "goods_id": 19839,
+        "reference_price": 5.46
+    },
+    "Sticker | xccurate (Foil) | London 2018": {
+        "goods_id": 10081,
+        "reference_price": 6.54
+    },
+    "Sticker | coldzera | Boston 2018": {
+        "goods_id": 4905,
+        "reference_price": 1.98
+    },
+    "Sticker | arT (Foil) | Katowice 2019": {
+        "goods_id": 9851,
+        "reference_price": 5.5
+    },
+    "Sticker | Golden | Boston 2018": {
+        "goods_id": 10269,
+        "reference_price": 1.85
+    },
+    "Sticker | kioShiMa | Katowice 2019": {
+        "goods_id": 10786,
+        "reference_price": 1.66
+    },
+    "Sticker | AdreN | Boston 2018": {
+        "goods_id": 13205,
+        "reference_price": 2.26
+    },
+    "Sticker | hutji | Boston 2018": {
+        "goods_id": 4838,
+        "reference_price": 1.96
+    },
+    "Sticker | chopper | Boston 2018": {
+        "goods_id": 4854,
+        "reference_price": 3.55
+    },
+    "Sticker | tabseN | Boston 2018": {
+        "goods_id": 4894,
+        "reference_price": 2.69
+    },
+    "Sticker | shox | Krakow 2017": {
+        "goods_id": 4972,
+        "reference_price": 1.54
+    },
+    "Sticker | felps (Foil) | Katowice 2019": {
+        "goods_id": 5577,
+        "reference_price": 1.82
+    },
+    "Sticker | JW (Foil) | Katowice 2019": {
+        "goods_id": 5581,
+        "reference_price": 2.46
+    },
+    "Sticker | Zeus (Foil) | Katowice 2019": {
+        "goods_id": 10766,
+        "reference_price": 1.7
+    },
+    "Sticker | dephh (Foil) | Katowice 2019": {
+        "goods_id": 3890,
+        "reference_price": 1.76
+    },
+    "Sticker | captainMo | London 2018": {
+        "goods_id": 5326,
+        "reference_price": 3.81
+    },
+    "Sticker | erkaSt (Foil) | Katowice 2019": {
+        "goods_id": 5537,
+        "reference_price": 2.97
+    },
+    "Sticker | nitr0 (Foil) | Katowice 2019": {
+        "goods_id": 9857,
+        "reference_price": 2.82
+    },
+    "Sticker | Xyp9x | Krakow 2017": {
+        "goods_id": 10219,
+        "reference_price": 1.48
+    },
+    "Sticker | Akihabara Accept Surf Ava (Foil)": {
+        "goods_id": 20033,
+        "reference_price": 3.92
+    },
+    "Sticker | Sico (Gold) | Paris 2023": {
+        "goods_id": 25589,
+        "reference_price": 1.28
+    },
+    "Sticker | Team Liquid | Boston 2018": {
+        "goods_id": 4760,
+        "reference_price": 5.22
+    },
+    "Sticker | ISSAA (Foil) | Katowice 2019": {
+        "goods_id": 5527,
+        "reference_price": 2.02
+    },
+    "Sticker | Virtus.Pro | MLG Columbus 2016": {
+        "goods_id": 6450,
+        "reference_price": 2.5
+    },
+    "Sticker | Gambit (Holo) | Krakow 2017": {
+        "goods_id": 10158,
+        "reference_price": 4.02
+    },
+    "Sticker | Hello SG 553 (Gold)": {
+        "goods_id": 13758,
+        "reference_price": 1.14
+    },
+    "Sticker | nexa (Gold) | Stockholm 2021": {
+        "goods_id": 21542,
+        "reference_price": 2.99
+    },
+    "Sticker | VINI (Gold) | Stockholm 2021": {
+        "goods_id": 21568,
+        "reference_price": 4.69
+    },
+    "Sticker | refrezh (Gold) | Antwerp 2022": {
+        "goods_id": 22615,
+        "reference_price": 4.95
+    },
+    "Sticker | cadiaN (Holo) | Antwerp 2022": {
+        "goods_id": 22948,
+        "reference_price": 1.48
+    },
+    "Sticker | Patsi (Holo) | Antwerp 2022": {
+        "goods_id": 22978,
+        "reference_price": 0.68
+    },
+    "Sticker | faveN (Gold) | Rio 2022": {
+        "goods_id": 23944,
+        "reference_price": 4.52
+    },
+    "Sticker | r3salt (Gold) | Paris 2023": {
+        "goods_id": 25409,
+        "reference_price": 0.8
+    },
+    "Sticker | tabseN (Foil) | Boston 2018": {
+        "goods_id": 2879,
+        "reference_price": 10.95
+    },
+    "Sticker | Chaos Marine (Foil)": {
+        "goods_id": 3837,
+        "reference_price": 2.48
+    },
+    "Sticker | electronic (Foil) | Katowice 2019": {
+        "goods_id": 5542,
+        "reference_price": 4.09
+    },
+    "Sticker | friberg | Cluj-Napoca 2015": {
+        "goods_id": 6717,
+        "reference_price": 4.27
+    },
+    "Sticker | dennis | Cologne 2015": {
+        "goods_id": 6859,
+        "reference_price": 3.97
+    },
+    "Sticker | fer (Foil) | Katowice 2019": {
+        "goods_id": 9824,
+        "reference_price": 1.78
+    },
+    "Sticker | Flipsid3 Tactics | Boston 2018": {
+        "goods_id": 4903,
+        "reference_price": 7.07
+    },
+    "Sticker | mir (Foil) | London 2018": {
+        "goods_id": 5291,
+        "reference_price": 7.53
+    },
+    "Sticker | RpK (Gold) | Berlin 2019": {
+        "goods_id": 3299,
+        "reference_price": 7.11
+    },
+    "Sticker | qikert (Gold) | Berlin 2019": {
+        "goods_id": 6154,
+        "reference_price": 7
+    },
+    "Sticker | Avangar | Boston 2018": {
+        "goods_id": 4913,
+        "reference_price": 4.68
+    },
+    "Sticker | yam | Cologne 2015": {
+        "goods_id": 6704,
+        "reference_price": 16.2
+    },
+    "Sticker | Sprout Esports | Boston 2018": {
+        "goods_id": 4920,
+        "reference_price": 6.38
+    },
+    "Sticker | Team Liquid | Cologne 2016": {
+        "goods_id": 6344,
+        "reference_price": 8.66
+    },
+    "Sticker | Hypnotic Surf K (Foil)": {
+        "goods_id": 20270,
+        "reference_price": 4.59
+    },
+    "Sticker | Astralis | Cologne 2016": {
+        "goods_id": 6362,
+        "reference_price": 6.68
+    },
+    "Sticker | G2 Esports | Cluj-Napoca 2015": {
+        "goods_id": 6576,
+        "reference_price": 5.4
+    },
+    "Sticker | Astralis (Holo) | London 2018": {
+        "goods_id": 5126,
+        "reference_price": 7.09
+    },
+    "Sticker | sk0R (Gold) | Paris 2023": {
+        "goods_id": 25349,
+        "reference_price": 0.82
+    },
+    "Sticker | ELEAGUE (Foil) | Boston 2018": {
+        "goods_id": 3941,
+        "reference_price": 5.68
+    },
+    "Sticker | KrizzeN (Foil) | Katowice 2019": {
+        "goods_id": 5615,
+        "reference_price": 2.16
+    },
+    "Sticker | GeT_RiGhT (Foil) | London 2018": {
+        "goods_id": 5503,
+        "reference_price": 5.66
+    },
+    "Sticker | Counter Logic Gaming | Cologne 2015": {
+        "goods_id": 3965,
+        "reference_price": 5.78
+    },
+    "Sticker | v4lde | London 2018": {
+        "goods_id": 3846,
+        "reference_price": 2
+    },
+    "Sticker | flusha | Cluj-Napoca 2015": {
+        "goods_id": 3748,
+        "reference_price": 4.27
+    },
+    "Sticker | stavn (Gold) | Stockholm 2021": {
+        "goods_id": 21541,
+        "reference_price": 3.2
+    },
+    "Sticker | refrezh (Gold) | Stockholm 2021": {
+        "goods_id": 21565,
+        "reference_price": 3.81
+    },
+    "Sticker | Techno4K (Gold) | Paris 2023": {
+        "goods_id": 25470,
+        "reference_price": 0.97
+    },
+    "Sticker | Aerial (Foil) | Katowice 2019": {
+        "goods_id": 5539,
+        "reference_price": 2.29
+    },
+    "Sticker | RpK (Foil) | Katowice 2019": {
+        "goods_id": 5588,
+        "reference_price": 3.56
+    },
+    "Sticker | Calyx | Boston 2018": {
+        "goods_id": 10265,
+        "reference_price": 2.83
+    },
+    "Sticker | shalfey (Gold) | Paris 2023": {
+        "goods_id": 25454,
+        "reference_price": 0.82
+    },
+    "Sticker | NEKiZ (Gold) | Paris 2023": {
+        "goods_id": 25478,
+        "reference_price": 0.75
+    },
+    "Sticker | dupreeh | Cologne 2015": {
+        "goods_id": 6837,
+        "reference_price": 4.25
+    },
+    "Sticker | Brollan (Foil) | Katowice 2019": {
+        "goods_id": 5541,
+        "reference_price": 1.74
+    },
+    "Sticker | Natus Vincere | Cologne 2015": {
+        "goods_id": 10899,
+        "reference_price": 6.81
+    },
+    "Sticker | S1ren (Gold) | Antwerp 2022": {
+        "goods_id": 22651,
+        "reference_price": 2.28
+    },
+    "Sticker | KRIMZ | Boston 2018": {
+        "goods_id": 4896,
+        "reference_price": 1.41
+    },
+    "Sticker | FaNg (Gold) | Paris 2023": {
+        "goods_id": 25449,
+        "reference_price": 0.77
+    },
+    "Sticker | REZ (Gold) | Paris 2023": {
+        "goods_id": 25487,
+        "reference_price": 1.14
+    },
+    "Sticker | Lucky (Foil) | Berlin 2019": {
+        "goods_id": 6087,
+        "reference_price": 2.02
+    },
+    "Sticker | Farlig (Gold) | Antwerp 2022": {
+        "goods_id": 22585,
+        "reference_price": 2.67
+    },
+    "Sticker | huNter (Holo) | Antwerp 2022": {
+        "goods_id": 22716,
+        "reference_price": 1.45
+    },
+    "Sticker | interz (Holo) | Antwerp 2022": {
+        "goods_id": 22837,
+        "reference_price": 2.03
+    },
+    "Sticker | b1t (Holo) | Paris 2023": {
+        "goods_id": 25062,
+        "reference_price": 1.26
+    },
+    "Sticker | Lucaozy (Gold) | Paris 2023": {
+        "goods_id": 25196,
+        "reference_price": 1.62
+    },
+    "Sticker | gxx- (Holo) | Paris 2023": {
+        "goods_id": 25380,
+        "reference_price": 0.36
+    },
+    "Sticker | skullz (Gold) | Paris 2023": {
+        "goods_id": 25439,
+        "reference_price": 1.32
+    },
+    "Sticker | AdreN | London 2018": {
+        "goods_id": 3255,
+        "reference_price": 4.12
+    },
+    "Sticker | RUSH | London 2018": {
+        "goods_id": 3304,
+        "reference_price": 2.24
+    },
+    "Sticker | KRIMZ (Foil) | Boston 2018": {
+        "goods_id": 4847,
+        "reference_price": 4.52
+    },
+    "Sticker | xccurate (Foil) | Katowice 2019": {
+        "goods_id": 5580,
+        "reference_price": 2.36
+    },
+    "Sticker | kennyS | Katowice 2019": {
+        "goods_id": 5620,
+        "reference_price": 4.06
+    },
+    "Sticker | NRG (Foil) | Katowice 2019": {
+        "goods_id": 5717,
+        "reference_price": 5.41
+    },
+    "Sticker | gla1ve (Foil) | Katowice 2019": {
+        "goods_id": 9825,
+        "reference_price": 1.91
+    },
+    "Sticker | smooya (Foil) | Katowice 2019": {
+        "goods_id": 9826,
+        "reference_price": 2.64
+    },
+    "Sticker | advent | Katowice 2019": {
+        "goods_id": 9879,
+        "reference_price": 1.46
+    },
+    "Sticker | apEX (Gold) | Berlin 2019": {
+        "goods_id": 3462,
+        "reference_price": 8.06
+    },
+    "Sticker | juanflatroo (Gold) | Paris 2023": {
+        "goods_id": 25366,
+        "reference_price": 1.39
+    },
+    "Sticker | denis (Foil) | Boston 2018": {
+        "goods_id": 10262,
+        "reference_price": 7.82
+    },
+    "Sticker | Astralis (Gold) | Antwerp 2022": {
+        "goods_id": 22544,
+        "reference_price": 3.92
+    },
+    "Sticker | byali | Atlanta 2017": {
+        "goods_id": 4435,
+        "reference_price": 5.62
+    },
+    "Sticker | compLexity Gaming (Holo) | London 2018": {
+        "goods_id": 5338,
+        "reference_price": 5.04
+    },
+    "Sticker | aliStair (Gold) | Antwerp 2022": {
+        "goods_id": 22538,
+        "reference_price": 2.05
+    },
+    "Sticker | TACO (Foil) | Boston 2018": {
+        "goods_id": 4897,
+        "reference_price": 7.81
+    },
+    "Sticker | OpTic Gaming | Cologne 2016": {
+        "goods_id": 6361,
+        "reference_price": 8.18
+    },
+    "Sticker | G2 Esports | MLG Columbus 2016": {
+        "goods_id": 6443,
+        "reference_price": 7.72
+    },
+    "Sticker | karrigan | Cluj-Napoca 2015": {
+        "goods_id": 3467,
+        "reference_price": 5.96
+    },
+    "Sticker | jkaem | Cluj-Napoca 2015": {
+        "goods_id": 3628,
+        "reference_price": 5.68
+    },
+    "Sticker | Team Spirit (Holo) | London 2018": {
+        "goods_id": 13958,
+        "reference_price": 5.69
+    },
+    "Sticker | EspiranTo (Gold) | Berlin 2019": {
+        "goods_id": 2300,
+        "reference_price": 8.51
+    },
+    "Sticker | BIG (Holo) | Boston 2018": {
+        "goods_id": 4858,
+        "reference_price": 4.78
+    },
+    "Sticker | Counter Logic Gaming | Cologne 2016": {
+        "goods_id": 6320,
+        "reference_price": 8.66
+    },
+    "Sticker | xseveN (Gold) | Berlin 2019": {
+        "goods_id": 3370,
+        "reference_price": 5.72
+    },
+    "Sticker | CeRq (Foil) | Katowice 2019": {
+        "goods_id": 5614,
+        "reference_price": 3.27
+    },
+    "Sticker | Aerial (Gold) | Berlin 2019": {
+        "goods_id": 9674,
+        "reference_price": 12.73
+    },
+    "Sticker | Flipsid3 Tactics | MLG Columbus 2016": {
+        "goods_id": 6426,
+        "reference_price": 6.96
+    },
+    "Sticker | G2 (Gold) | 2020 RMR": {
+        "goods_id": 19115,
+        "reference_price": 4.55
+    },
+    "Sticker | rain | MLG Columbus 2016": {
+        "goods_id": 3180,
+        "reference_price": 9.1
+    },
+    "Sticker | woxic (Foil) | Katowice 2019": {
+        "goods_id": 4030,
+        "reference_price": 3.4
+    },
+    "Sticker | jabbi (Holo) | Antwerp 2022": {
+        "goods_id": 22839,
+        "reference_price": 1.13
+    },
+    "Sticker | Zeus (Gold) | Berlin 2019": {
+        "goods_id": 6097,
+        "reference_price": 7.68
+    },
+    "Sticker | NAF (Foil) | Katowice 2019": {
+        "goods_id": 10768,
+        "reference_price": 2.77
+    },
+    "Sticker | faveN (Gold) | Antwerp 2022": {
+        "goods_id": 22638,
+        "reference_price": 3.83
+    },
+    "Sticker | sjuush (Gold) | Antwerp 2022": {
+        "goods_id": 22646,
+        "reference_price": 1.93
+    },
+    "Sticker | oSee (Gold) | Paris 2023": {
+        "goods_id": 25287,
+        "reference_price": 1
+    },
+    "Sticker | Kylar (Gold) | Paris 2023": {
+        "goods_id": 25412,
+        "reference_price": 1.26
+    },
+    "Sticker | nicoodoz (Gold) | Paris 2023": {
+        "goods_id": 25443,
+        "reference_price": 0.85
+    },
+    "Sticker | yuurih (Foil) | Katowice 2019": {
+        "goods_id": 5721,
+        "reference_price": 2.29
+    },
+    "Sticker | s1mple | Katowice 2019": {
+        "goods_id": 9821,
+        "reference_price": 3.18
+    },
+    "Sticker | Nemiga (Gold) | 2020 RMR": {
+        "goods_id": 19190,
+        "reference_price": 2.28
+    },
+    "Sticker | es3tag (Gold) | Antwerp 2022": {
+        "goods_id": 22712,
+        "reference_price": 1.56
+    },
+    "Sticker | byali | Boston 2018": {
+        "goods_id": 3806,
+        "reference_price": 2.26
+    },
+    "Sticker | twist (Foil) | Katowice 2019": {
+        "goods_id": 4056,
+        "reference_price": 1.76
+    },
+    "Sticker | olofmeister | Boston 2018": {
+        "goods_id": 4904,
+        "reference_price": 1.78
+    },
+    "Sticker | DeadFox (Foil) | Katowice 2019": {
+        "goods_id": 5569,
+        "reference_price": 2.26
+    },
+    "Sticker | nex | Cologne 2015": {
+        "goods_id": 3612,
+        "reference_price": 11.38
+    },
+    "Sticker | Vitality (Foil) | Katowice 2019": {
+        "goods_id": 9872,
+        "reference_price": 4.82
+    },
+    "Sticker | Snax | Boston 2018": {
+        "goods_id": 4887,
+        "reference_price": 4.27
+    },
+    "Sticker | Kjaerbye | Krakow 2017": {
+        "goods_id": 4954,
+        "reference_price": 1.45
+    },
+    "Sticker | Winstrike Team (Foil) | Katowice 2019": {
+        "goods_id": 9867,
+        "reference_price": 4.45
+    },
+    "Sticker | GuardiaN (Foil) | London 2018": {
+        "goods_id": 10055,
+        "reference_price": 5.79
+    },
+    "Sticker | Rogue (Holo) | London 2018": {
+        "goods_id": 10670,
+        "reference_price": 5.97
+    },
+    "Sticker | Pink Jaggyfish": {
+        "goods_id": 20064,
+        "reference_price": 0.79
+    },
+    "Sticker | sh1ro (Gold) | Antwerp 2022": {
+        "goods_id": 22854,
+        "reference_price": 8.5
+    },
+    "Sticker | Hobbit (Holo) | Antwerp 2022": {
+        "goods_id": 22883,
+        "reference_price": 1.93
+    },
+    "Sticker | maden (Gold) | Paris 2023": {
+        "goods_id": 25347,
+        "reference_price": 0.75
+    },
+    "Sticker | Calyx (Foil) | London 2018": {
+        "goods_id": 3332,
+        "reference_price": 5.69
+    },
+    "Sticker | NEO (Foil) | Boston 2018": {
+        "goods_id": 3623,
+        "reference_price": 6.37
+    },
+    "Sticker | pronax | Cluj-Napoca 2015": {
+        "goods_id": 3739,
+        "reference_price": 3.84
+    },
+    "Sticker | ottoNd (Foil) | Berlin 2019": {
+        "goods_id": 5479,
+        "reference_price": 1.07
+    },
+    "Sticker | xseveN (Foil) | Katowice 2019": {
+        "goods_id": 9830,
+        "reference_price": 2.84
+    },
+    "Sticker | wayLander | Boston 2018": {
+        "goods_id": 10284,
+        "reference_price": 2.31
+    },
+    "Sticker | electronic (Gold) | Berlin 2019": {
+        "goods_id": 3006,
+        "reference_price": 9.1
+    },
+    "Sticker | NBK- | Atlanta 2017": {
+        "goods_id": 3824,
+        "reference_price": 5.4
+    },
+    "Sticker | Xizt (Foil) | MLG Columbus 2016": {
+        "goods_id": 2798,
+        "reference_price": 17.78
+    },
+    "Sticker | olofmeister (Foil) | London 2018": {
+        "goods_id": 5282,
+        "reference_price": 4.96
+    },
+    "Sticker | apEX | Atlanta 2017": {
+        "goods_id": 4618,
+        "reference_price": 5.35
+    },
+    "Sticker | Seeing Red (Foil)": {
+        "goods_id": 20086,
+        "reference_price": 4.25
+    },
+    "Sticker | ropz (Gold, Champion) | Antwerp 2022": {
+        "goods_id": 23023,
+        "reference_price": 6.06
+    },
+    "Sticker | TeSeS (Gold) | Rio 2022": {
+        "goods_id": 23995,
+        "reference_price": 3.27
+    },
+    "Sticker | jdm64 | Cluj-Napoca 2015": {
+        "goods_id": 2906,
+        "reference_price": 12.36
+    },
+    "Sticker | BIG | Katowice 2019": {
+        "goods_id": 5550,
+        "reference_price": 5.14
+    },
+    "Sticker | IEM (Foil) | Katowice 2019": {
+        "goods_id": 5613,
+        "reference_price": 7.16
+    },
+    "Sticker | DreamHack | Cluj-Napoca 2015": {
+        "goods_id": 6727,
+        "reference_price": 6.83
+    },
+    "Sticker | JW | Cluj-Napoca 2015": {
+        "goods_id": 9397,
+        "reference_price": 3.81
+    },
+    "Sticker | G2 Esports (Holo) | Boston 2018": {
+        "goods_id": 10292,
+        "reference_price": 7.69
+    },
+    "Sticker | Lucky 13 (Foil)": {
+        "goods_id": 7188,
+        "reference_price": 8.43
+    },
+    "Sticker | coldzera (Foil) | Katowice 2019": {
+        "goods_id": 10787,
+        "reference_price": 2.11
+    },
+    "Sticker | AdreN (Foil) | Boston 2018": {
+        "goods_id": 4756,
+        "reference_price": 10.53
+    },
+    "Sticker | Kjaerbye (Foil) | Boston 2018": {
+        "goods_id": 4767,
+        "reference_price": 5.69
+    },
+    "Sticker | Virtus.Pro (Holo) | London 2018": {
+        "goods_id": 3757,
+        "reference_price": 6.24
+    },
+    "Sticker | Snappi (Gold) | Antwerp 2022": {
+        "goods_id": 22683,
+        "reference_price": 2.52
+    },
+    "Sticker | npl (Gold) | Paris 2023": {
+        "goods_id": 25452,
+        "reference_price": 1.71
+    },
+    "Sticker | AdreN | Atlanta 2017": {
+        "goods_id": 3064,
+        "reference_price": 10.65
+    },
+    "Sticker | rain | Krakow 2017": {
+        "goods_id": 10215,
+        "reference_price": 4.76
+    },
+    "Sticker | JaCkz (Gold) | Berlin 2019": {
+        "goods_id": 6090,
+        "reference_price": 6.78
+    },
+    "Sticker | Natus Vincere (Gold) | Antwerp 2022": {
+        "goods_id": 22511,
+        "reference_price": 3.85
+    },
+    "Sticker | SmithZz | Atlanta 2017": {
+        "goods_id": 10327,
+        "reference_price": 4.51
+    },
+    "Sticker | misutaaa (Gold) | Stockholm 2021": {
+        "goods_id": 21445,
+        "reference_price": 2.77
+    },
+    "Sticker | exit (Gold) | Antwerp 2022": {
+        "goods_id": 22641,
+        "reference_price": 3.2
+    },
+    "Sticker | Team Spirit (Gold) | Antwerp 2022": {
+        "goods_id": 22878,
+        "reference_price": 5.11
+    },
+    "Sticker | syrsoN (Gold) | Antwerp 2022": {
+        "goods_id": 22954,
+        "reference_price": 3.4
+    },
+    "Sticker | drop (Gold) | Rio 2022": {
+        "goods_id": 24252,
+        "reference_price": 4.41
+    },
+    "Sticker | frozen (Gold) | Paris 2023": {
+        "goods_id": 25226,
+        "reference_price": 2.42
+    },
+    "Sticker | hallzerk (Gold) | Paris 2023": {
+        "goods_id": 25256,
+        "reference_price": 0.91
+    },
+    "Sticker | STYKO (Gold) | Paris 2023": {
+        "goods_id": 25320,
+        "reference_price": 0.84
+    },
+    "Sticker | Rickeh (Gold) | Berlin 2019": {
+        "goods_id": 3199,
+        "reference_price": 8.53
+    },
+    "Sticker | b1t (Holo) | Antwerp 2022": {
+        "goods_id": 22866,
+        "reference_price": 2.09
+    },
+    "Sticker | TaZ | Atlanta 2017": {
+        "goods_id": 3878,
+        "reference_price": 3.82
+    },
+    "Sticker | GuardiaN (Foil) | Katowice 2019": {
+        "goods_id": 5522,
+        "reference_price": 3.47
+    },
+    "Sticker | denis | Boston 2018": {
+        "goods_id": 10278,
+        "reference_price": 2.6
     }
 }

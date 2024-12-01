@@ -6,7 +6,7 @@ import path from 'path'
 import { sleep } from '../utils'
 import { SteamDBItem } from '../types'
 ;(async () => {
-  const pages = Array.from({ length: 1 }, (_, i) => i + 1)
+  const pages = Array.from({ length: 100 }, (_, i) => i + 1)
   const pathname = path.join(__dirname, '../../buff.json')
 
   for (const page_num of pages) {
@@ -15,7 +15,7 @@ import { SteamDBItem } from '../types'
     const goods = await getMarketGoods({
       page_num,
       category_group: 'sticker',
-      search: 'cerberus',
+      search: '2024',
     })
     for (const item of goods.data.items) {
       const data: SteamDBItem = JSON.parse(readFileSync(pathname, 'utf8'))

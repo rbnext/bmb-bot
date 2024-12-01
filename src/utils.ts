@@ -92,7 +92,7 @@ export const generateSteamMessage = ({
 
   if (stickers.length !== 0) {
     message.push(
-      `<a href="${steamUrl}?filter=${stickers.join(',')}">FAST OPEN</a> | <a href="https://floats.steaminventoryhelper.com/?url=${inspectLink}">SIH</a>`
+      `<a href="${steamUrl}?filter=${stickers.join(',')}">FAST OPEN</a> | <a href="https://screenshot.skinport.com/?link=${inspectLink}">INSPECT</a>`
     )
   }
 

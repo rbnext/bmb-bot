@@ -11034,5 +11034,53 @@
     "Sticker | Flex": {
         "goods_id": 30446,
         "reference_price": 0.47
+    },
+    "Sticker | Gnome Mercy": {
+        "goods_id": 13659,
+        "reference_price": 0.1
+    },
+    "Sticker | Extermination": {
+        "goods_id": 12807,
+        "reference_price": 0.47
+    },
+    "Sticker | FalleN | Cologne 2016": {
+        "goods_id": 6343,
+        "reference_price": 10.79
+    },
+    "Sticker | FalleN (Foil) | MLG Columbus 2016": {
+        "goods_id": 15912,
+        "reference_price": 58.32
+    },
+    "Sticker | FalleN (Glitter) | Rio 2022": {
+        "goods_id": 24199,
+        "reference_price": 0.41
+    },
+    "Sticker | FalleN (Glitter) | Copenhagen 2024": {
+        "goods_id": 29765,
+        "reference_price": 0.18
+    },
+    "Sticker | FalleN (Foil) | Katowice 2019": {
+        "goods_id": 5427,
+        "reference_price": 3.06
+    },
+    "Sticker | FalleN | Berlin 2019": {
+        "goods_id": 13512,
+        "reference_price": 0.22
+    },
+    "Sticker | FalleN (Foil) | Berlin 2019": {
+        "goods_id": 10609,
+        "reference_price": 0.97
+    },
+    "Sticker | FalleN (Foil) | Cologne 2015": {
+        "goods_id": 3171,
+        "reference_price": 42.6
+    },
+    "Sticker | FalleN (Gold) | Katowice 2019": {
+        "goods_id": 2400,
+        "reference_price": 78.23
+    },
+    "Sticker | FalleN (Gold) | London 2018": {
+        "goods_id": 5373,
+        "reference_price": 163.27
     }
 }

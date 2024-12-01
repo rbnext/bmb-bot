@@ -9922,5 +9922,93 @@
     "Sticker | EmiliaQAQ (Gold) | Copenhagen 2024": {
         "goods_id": 29985,
         "reference_price": 5.62
+    },
+    "Sticker | Jack": {
+        "goods_id": 9573,
+        "reference_price": 0.48
+    },
+    "Sticker | Jack (Holo)": {
+        "goods_id": 9567,
+        "reference_price": 2.19
+    },
+    "Sticker | JaCkz (Foil) | Katowice 2019": {
+        "goods_id": 5719,
+        "reference_price": 3.68
+    },
+    "Sticker | JaCkz (Holo) | Antwerp 2022": {
+        "goods_id": 22721,
+        "reference_price": 0.69
+    },
+    "Sticker | Perry": {
+        "goods_id": 9575,
+        "reference_price": 0.29
+    },
+    "Sticker | Perry (Holo)": {
+        "goods_id": 6200,
+        "reference_price": 2.81
+    },
+    "Sticker | Viggo (Holo)": {
+        "goods_id": 9576,
+        "reference_price": 1.37
+    },
+    "Sticker | Viggo": {
+        "goods_id": 10843,
+        "reference_price": 0.44
+    },
+    "Sticker | Poorly Drawn Leet Crew (Holo)": {
+        "goods_id": 19231,
+        "reference_price": 1.08
+    },
+    "Sticker | Poorly Drawn Terrorist (Holo)": {
+        "goods_id": 19228,
+        "reference_price": 2.13
+    },
+    "Sticker | Poorly Drawn SAS (Holo)": {
+        "goods_id": 19224,
+        "reference_price": 1.3
+    },
+    "Sticker | Poorly Drawn Chicken (Holo)": {
+        "goods_id": 19226,
+        "reference_price": 2.05
+    },
+    "Sticker | Poorly Drawn Leet Crew": {
+        "goods_id": 19208,
+        "reference_price": 0.23
+    },
+    "Sticker | Poorly Drawn Bloody Darryl": {
+        "goods_id": 19213,
+        "reference_price": 0.19
+    },
+    "Sticker | Natus Vincere (Gold) | Rio 2022": {
+        "goods_id": 23711,
+        "reference_price": 4.48
+    },
+    "Sticker | Natus Vincere | Antwerp 2022": {
+        "goods_id": 22137,
+        "reference_price": 0.02
+    },
+    "Sticker | Natus Vincere | Katowice 2015": {
+        "goods_id": 9309,
+        "reference_price": 19.27
+    },
+    "Sticker | Natus Vincere (Foil) | Cluj-Napoca 2015": {
+        "goods_id": 3711,
+        "reference_price": 11.08
+    },
+    "Sticker | Natus Vincere (Holo) | Atlanta 2017": {
+        "goods_id": 3551,
+        "reference_price": 36.77
+    },
+    "Sticker | Natus Vincere (Holo) | Cologne 2016": {
+        "goods_id": 9620,
+        "reference_price": 11.09
+    },
+    "Sticker | Natus Vincere | Katowice 2014": {
+        "goods_id": 16039,
+        "reference_price": 625.61
+    },
+    "Sticker | Natus Vincere (Foil) | Krakow 2017": {
+        "goods_id": 4977,
+        "reference_price": 23.69
     }
 }

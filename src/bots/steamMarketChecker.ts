@@ -18,6 +18,9 @@ const steam_db: SteamDBItem = JSON.parse(readFileSync(pathname, 'utf8'))
 
 console.log('Stickers in DB:', Object.keys(steam_db).length)
 
+// Desert Eagle | Heat Treated (Minimal Wear)
+// M4A4 | 龍王 (Dragon King) (Field-Tested)
+
 const CONFIG = [
   {
     market_hash_names: [
@@ -53,11 +56,38 @@ const CONFIG = [
       'AK-47 | Slate (Factory New)',
       'AK-47 | Slate (Minimal Wear)',
     ],
-    proxy: 'http://jqhH85slcm:7NhQuTt8jm@78.153.143.128:11869', // test
+    proxy: 'http://jqhH85slcm:7NhQuTt8jm@78.153.143.128:11869', // ru
+  },
+  {
+    market_hash_names: [
+      'AK-47 | Rat Rod (Minimal Wear)',
+      'M4A1-S | Basilisk (Field-Tested)',
+      'AK-47 | Legion of Anubis (Field-Tested)',
+      'AWP | POP AWP (Minimal Wear)',
+    ],
+    proxy: 'http://O40vIdkJYS:egrVx2iLvB@194.67.204.16:17206', // ru
+  },
+  {
+    market_hash_names: [
+      'AWP | Atheris (Minimal Wear)',
+      'AK-47 | Phantom Disruptor (Minimal Wear)',
+      'M4A4 | Neo-Noir (Field-Tested)',
+      'Glock-18 | Water Elemental (Minimal Wear)',
+    ],
+    proxy: 'http://8cSG4Tgj0R:qjSxLU7hrg@81.176.239.24:23303', // ru
+  },
+  {
+    market_hash_names: [
+      'P90 | Asiimov (Field-Tested)',
+      'Desert Eagle | Mecha Industries (Minimal Wear)',
+      'AWP | Chromatic Aberration (Field-Tested)',
+      'Desert Eagle | Conspiracy (Minimal Wear)',
+    ],
+    proxy: 'http://S0oH5AJkr2:hCdq69iwKV@185.156.75.160:15017', // ru
   },
 ]
 
-const limiter = new Bottleneck({ maxConcurrent: CONFIG.length })
+const limiter = new Bottleneck({ maxConcurrent: 4 })
 
 const getStickerDetails = async (stickers: string[]) => {
   const details: Record<string, number> = {}
@@ -120,7 +150,7 @@ const findSteamItemInfo = async (config: SteamMarketConfig, start: number = 0) =
 
       const stickers = extractStickers(htmlDescription)
 
-      if (stickers.length > 1 && config.canSendToTelegram) {
+      if (stickers.length !== 0 && config.canSendToTelegram) {
         const details = await getStickerDetails(stickers)
 
         const stickerTotalPrice = stickers.reduce((acc, name) => acc + (details[name] ?? 0), 0)
@@ -145,6 +175,7 @@ const findSteamItemInfo = async (config: SteamMarketConfig, start: number = 0) =
     }
   } catch (error) {
     console.log('STEAM_ERROR', error.message)
+    console.log(JSON.stringify(config))
     await sleep(60_000 * 4)
 
     return
@@ -174,6 +205,8 @@ const findSteamItemInfo = async (config: SteamMarketConfig, start: number = 0) =
       await sleep(5_000)
     }
   }
+
+  console.log('Items to observe:', MARKET_HASH_NAMES.length)
 
   do {
     await Promise.all(

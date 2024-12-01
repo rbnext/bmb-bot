@@ -15,7 +15,7 @@ import { SteamDBItem } from '../types'
     const goods = await getMarketGoods({
       page_num,
       category_group: 'sticker',
-      search: 'natus',
+      search: 'flex',
     })
     for (const item of goods.data.items) {
       const data: SteamDBItem = JSON.parse(readFileSync(pathname, 'utf8'))

@@ -5,6 +5,7 @@ import { SteamMarketConfig } from '../types'
 import { getGoodsInfo, getMarketGoods } from '../api/buff'
 import { sleep } from '../utils'
 import { findSteamItemInfo } from './utils'
+import Bottleneck from 'bottleneck'
 
 const CONFIG = [
   {
@@ -63,6 +64,8 @@ const CONFIG = [
   },
 ]
 
+const limiter = new Bottleneck({ maxConcurrent: 4 })
+
 ;(async () => {
   const MARKET_HASH_NAMES: SteamMarketConfig[] = []
 
@@ -86,13 +89,17 @@ const CONFIG = [
   }
 
   do {
-    for (const config of MARKET_HASH_NAMES) {
-      await findSteamItemInfo(config).then(() => sleep(500))
-    }
+    await Promise.all(
+      MARKET_HASH_NAMES.map((config) => {
+        return limiter.schedule(() => findSteamItemInfo(config))
+      })
+    )
 
     MARKET_HASH_NAMES.forEach((_, index) => {
       MARKET_HASH_NAMES[index].canSendToTelegram = true
     })
+
+    await sleep(25_000)
 
     // eslint-disable-next-line no-constant-condition
   } while (true)

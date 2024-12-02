@@ -18,9 +18,6 @@ const steam_db: SteamDBItem = JSON.parse(readFileSync(pathname, 'utf8'))
 
 console.log('Stickers in DB:', Object.keys(steam_db).length)
 
-// Desert Eagle | Heat Treated (Minimal Wear)
-// M4A4 | 龍王 (Dragon King) (Field-Tested)
-
 const CONFIG = [
   {
     market_hash_names: [
@@ -84,6 +81,42 @@ const CONFIG = [
       'Desert Eagle | Conspiracy (Minimal Wear)',
     ],
     proxy: 'http://S0oH5AJkr2:hCdq69iwKV@185.156.75.160:15017', // ru
+  },
+  {
+    market_hash_names: [
+      'Desert Eagle | Heat Treated (Minimal Wear)',
+      'M4A4 | 龍王 (Dragon King) (Field-Tested)',
+      'M4A4 | 龍王 (Dragon King) (Minimal Wear)',
+      'M4A4 | X-Ray (Minimal Wear)',
+    ],
+    proxy: 'http://TNJr9sjaxY:wJcQyV6T1o@185.156.75.126:13350', // new ru
+  },
+  {
+    market_hash_names: [
+      'AK-47 | Phantom Disruptor (Factory New)',
+      'USP-S | The Traitor (Field-Tested)',
+      'AWP | Chromatic Aberration (Minimal Wear)',
+      'AWP | Atheris (Factory New)',
+    ],
+    proxy: 'http://L5B6t89Uef:EhqDzFUpJi@194.63.143.13:14362', // new ru
+  },
+  {
+    market_hash_names: [
+      'AWP | Fever Dream (Field-Tested)',
+      'M4A4 | The Emperor (Field-Tested)',
+      'M4A4 | Neo-Noir (Minimal Wear)',
+      'M4A1-S | Decimator (Field-Tested)',
+    ],
+    proxy: 'http://zhDFociVpC:4cjHL08TwR@185.5.251.252:14016', // new ru
+  },
+  {
+    market_hash_names: [
+      'AK-47 | Blue Laminate (Factory New)',
+      'M4A4 | Buzz Kill (Minimal Wear)',
+      'M4A1-S | Basilisk (Factory New)',
+      'Glock-18 | Water Elemental (Factory New)',
+    ],
+    proxy: 'http://v1NLVgpJBt:axmFWc47sd@185.5.250.21:13626', // new ru
   },
 ]
 
@@ -182,7 +215,7 @@ const findSteamItemInfo = async (config: SteamMarketConfig, start: number = 0) =
     }
   } catch (error) {
     console.log('STEAM_ERROR', config.proxy, error.message)
-    await sleep(60_000 * 4)
+    await sleep(60_000 * 2)
 
     return
   }
@@ -225,7 +258,7 @@ const findSteamItemInfo = async (config: SteamMarketConfig, start: number = 0) =
       MARKET_HASH_NAMES[index].canSendToTelegram = true
     })
 
-    await sleep(25_000)
+    await sleep(18_000)
 
     // eslint-disable-next-line no-constant-condition
   } while (true)

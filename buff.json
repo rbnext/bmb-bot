@@ -15178,5 +15178,381 @@
     "Sticker | denis | Boston 2018": {
         "goods_id": 10278,
         "reference_price": 2.6
+    },
+    "Sticker | CacaNito | Copenhagen 2024": {
+        "goods_id": 29469,
+        "reference_price": 0.03
+    },
+    "Sticker | nawwk | Copenhagen 2024": {
+        "goods_id": 29423,
+        "reference_price": 0.04
+    },
+    "Sticker | sdy (Foil) | London 2018": {
+        "goods_id": 5340,
+        "reference_price": 39.75
+    },
+    "Sticker | Global Elite (Foil)": {
+        "goods_id": 10660,
+        "reference_price": 9.45
+    },
+    "Sticker | Team Dignitas (Holo) | DreamHack 2014": {
+        "goods_id": 7996,
+        "reference_price": 320.66
+    },
+    "Sticker | SK Gaming (Holo) | Atlanta 2017": {
+        "goods_id": 3208,
+        "reference_price": 89.53
+    },
+    "Sticker | Team Dignitas | Cologne 2014": {
+        "goods_id": 11250,
+        "reference_price": 41.73
+    },
+    "Sticker | GODSENT (Foil) | Atlanta 2017": {
+        "goods_id": 2617,
+        "reference_price": 35.71
+    },
+    "Sticker | Gambit Gaming (Foil) | MLG Columbus 2016": {
+        "goods_id": 3794,
+        "reference_price": 8.17
+    },
+    "Sticker | NEO | Atlanta 2017": {
+        "goods_id": 4457,
+        "reference_price": 5.11
+    },
+    "Sticker | Zeus | MLG Columbus 2016": {
+        "goods_id": 9445,
+        "reference_price": 2.52
+    },
+    "Sticker | GeT_RiGhT | Cologne 2015": {
+        "goods_id": 6827,
+        "reference_price": 3.87
+    },
+    "Sticker | Virtus.Pro (Holo) | MLG Columbus 2016": {
+        "goods_id": 6430,
+        "reference_price": 14.93
+    },
+    "Sticker | Team Liquid | Atlanta 2017": {
+        "goods_id": 4451,
+        "reference_price": 13.4
+    },
+    "Sticker | MLG (Foil) | MLG Columbus 2016": {
+        "goods_id": 4001,
+        "reference_price": 63.29
+    },
+    "Sticker | iBUYPOWER (Holo) | Cologne 2014": {
+        "goods_id": 3717,
+        "reference_price": 238.44
+    },
+    "Sticker | Titan (Foil) | Cluj-Napoca 2015": {
+        "goods_id": 6758,
+        "reference_price": 120.75
+    },
+    "Sticker | fox (Foil) | MLG Columbus 2016": {
+        "goods_id": 2126,
+        "reference_price": 55.19
+    },
+    "Sticker | iBUYPOWER | DreamHack 2014": {
+        "goods_id": 11436,
+        "reference_price": 141.52
+    },
+    "Sticker | Team Liquid (Foil) | Katowice 2019": {
+        "goods_id": 5428,
+        "reference_price": 10.61
+    },
+    "Sticker | ScreaM | Atlanta 2017": {
+        "goods_id": 10339,
+        "reference_price": 12.8
+    },
+    "Sticker | GuardiaN | MLG Columbus 2016": {
+        "goods_id": 4199,
+        "reference_price": 39.68
+    },
+    "Sticker | abE (Foil) | MLG Columbus 2016": {
+        "goods_id": 2456,
+        "reference_price": 14.19
+    },
+    "Sticker | loWel (Foil) | Atlanta 2017": {
+        "goods_id": 2619,
+        "reference_price": 41.03
+    },
+    "Sticker | Luminosity Gaming | Cologne 2015": {
+        "goods_id": 6705,
+        "reference_price": 8.8
+    },
+    "Sticker | Neon Opal Strafe (Holo)": {
+        "goods_id": 20053,
+        "reference_price": 8.24
+    },
+    "Sticker | WorldEdit | Boston 2018": {
+        "goods_id": 3699,
+        "reference_price": 1.99
+    },
+    "Sticker | stanislaw | Boston 2018": {
+        "goods_id": 4837,
+        "reference_price": 3.54
+    },
+    "Sticker | TaZ | Cluj-Napoca 2015": {
+        "goods_id": 3712,
+        "reference_price": 5.39
+    },
+    "Sticker | wayLander | MLG Columbus 2016": {
+        "goods_id": 16086,
+        "reference_price": 11.09
+    },
+    "Sticker | friberg | Cologne 2016": {
+        "goods_id": 2896,
+        "reference_price": 7.09
+    },
+    "Sticker | GuardiaN | Cluj-Napoca 2015": {
+        "goods_id": 6748,
+        "reference_price": 8.52
+    },
+    "Sticker | Showdown (Foil)": {
+        "goods_id": 23361,
+        "reference_price": 3.41
+    },
+    "Sticker | DEVIL | MLG Columbus 2016": {
+        "goods_id": 6377,
+        "reference_price": 5.49
+    },
+    "Sticker | wayLander | Atlanta 2017": {
+        "goods_id": 2117,
+        "reference_price": 13.94
+    },
+    "Sticker | buster (Gold) | Katowice 2019": {
+        "goods_id": 2030,
+        "reference_price": 30.79
+    },
+    "Sticker | jkaem (Foil) | Cluj-Napoca 2015": {
+        "goods_id": 2638,
+        "reference_price": 13.18
+    },
+    "Sticker | kennyS | Cologne 2015": {
+        "goods_id": 4417,
+        "reference_price": 10.54
+    },
+    "Sticker | Maikelele (Foil) | Cologne 2015": {
+        "goods_id": 3461,
+        "reference_price": 11.51
+    },
+    "Sticker | DavCost (Foil) | Cologne 2015": {
+        "goods_id": 3172,
+        "reference_price": 25.6
+    },
+    "Sticker | kennyS | MLG Columbus 2016": {
+        "goods_id": 6386,
+        "reference_price": 12.33
+    },
+    "Sticker | flusha (Foil) | Cluj-Napoca 2015": {
+        "goods_id": 3352,
+        "reference_price": 15.27
+    },
+    "Sticker | mixwell | Atlanta 2017": {
+        "goods_id": 4567,
+        "reference_price": 94.73
+    },
+    "Sticker | jdm64 (Foil) | Cologne 2015": {
+        "goods_id": 3265,
+        "reference_price": 33.19
+    },
+    "Sticker | fox (Foil) | Cluj-Napoca 2015": {
+        "goods_id": 2636,
+        "reference_price": 41.09
+    },
+    "Sticker | LGB eSports (Holo) | Katowice 2015": {
+        "goods_id": 2646,
+        "reference_price": 303.59
+    },
+    "Sticker | hazed | Cluj-Napoca 2015": {
+        "goods_id": 15904,
+        "reference_price": 36.7
+    },
+    "Sticker | adreN (Foil) | Cluj-Napoca 2015": {
+        "goods_id": 1887,
+        "reference_price": 46.94
+    },
+    "Sticker | Googly Eye (Lenticular)": {
+        "goods_id": 30382,
+        "reference_price": 10.06
+    },
+    "Sticker | Havoc | Cologne 2015": {
+        "goods_id": 6843,
+        "reference_price": 17.07
+    },
+    "Sticker | Team eBettle | Cologne 2015": {
+        "goods_id": 6713,
+        "reference_price": 4.41
+    },
+    "Sticker | B1ad3 | Cluj-Napoca 2015": {
+        "goods_id": 6570,
+        "reference_price": 28.44
+    },
+    "Sticker | shox | MLG Columbus 2016": {
+        "goods_id": 3087,
+        "reference_price": 9.37
+    },
+    "Sticker | jasonR | MLG Columbus 2016": {
+        "goods_id": 15939,
+        "reference_price": 15.5
+    },
+    "Sticker | MSL (Gold) | London 2018": {
+        "goods_id": 1399,
+        "reference_price": 426.7
+    },
+    "Sticker | MICHU (Gold) | London 2018": {
+        "goods_id": 1400,
+        "reference_price": 1011.41
+    },
+    "Sticker | adreN | MLG Columbus 2016": {
+        "goods_id": 9450,
+        "reference_price": 8.53
+    },
+    "Sticker | NBK- | Cologne 2015": {
+        "goods_id": 6855,
+        "reference_price": 2.99
+    },
+    "Sticker | friberg (Foil) | MLG Columbus 2016": {
+        "goods_id": 3117,
+        "reference_price": 9.37
+    },
+    "Sticker | flusha | MLG Columbus 2016": {
+        "goods_id": 9468,
+        "reference_price": 3.27
+    },
+    "Sticker | GeT_RiGhT | Cluj-Napoca 2015": {
+        "goods_id": 6719,
+        "reference_price": 4.27
+    },
+    "Sticker | KRIMZ (Foil) | MLG Columbus 2016": {
+        "goods_id": 6440,
+        "reference_price": 12.66
+    },
+    "Sticker | Ninjas in Pyjamas (Holo) | Cologne 2014": {
+        "goods_id": 8129,
+        "reference_price": 22.26
+    },
+    "Sticker | Vox Eminor  | Katowice 2015": {
+        "goods_id": 6009,
+        "reference_price": 60.46
+    },
+    "Sticker | Dosia (Gold) | London 2018": {
+        "goods_id": 794,
+        "reference_price": 486.36
+    },
+    "Sticker | myXMG | DreamHack 2014": {
+        "goods_id": 15942,
+        "reference_price": 46.51
+    },
+    "Sticker | DickStacy | Berlin 2019": {
+        "goods_id": 14918,
+        "reference_price": 15.64
+    },
+    "Sticker | FNS (Foil) | Cluj-Napoca 2015": {
+        "goods_id": 6578,
+        "reference_price": 45.44
+    },
+    "Sticker | Bosh (Holo)": {
+        "goods_id": 3957,
+        "reference_price": 2.33
+    },
+    "Sticker | ESC Gaming | DreamHack 2014": {
+        "goods_id": 3997,
+        "reference_price": 23.82
+    },
+    "Sticker | HellRaisers | DreamHack 2014": {
+        "goods_id": 7985,
+        "reference_price": 51.27
+    },
+    "Sticker | FaZe Clan (Holo) | Atlanta 2017": {
+        "goods_id": 3308,
+        "reference_price": 40.17
+    },
+    "Sticker | Gambit Gaming (Foil) | Cologne 2016": {
+        "goods_id": 3291,
+        "reference_price": 12.76
+    },
+    "Sticker | NiKo (Holo) | Antwerp 2022": {
+        "goods_id": 22894,
+        "reference_price": 8.42
+    },
+    "Sticker | ropz (Gold) | Berlin 2019": {
+        "goods_id": 1772,
+        "reference_price": 43.97
+    },
+    "Sticker | Gambit Gaming (Holo) | MLG Columbus 2016": {
+        "goods_id": 6436,
+        "reference_price": 5.62
+    },
+    "Sticker | qikert (Foil) | Katowice 2019": {
+        "goods_id": 3840,
+        "reference_price": 2.99
+    },
+    "Sticker | Vox Eminor (Holo) | Katowice 2015": {
+        "goods_id": 2647,
+        "reference_price": 1120.79
+    },
+    "Sticker | kNgV- (Gold) | Berlin 2019": {
+        "goods_id": 2490,
+        "reference_price": 75.38
+    },
+    "Sticker | ableJ (Gold) | Berlin 2019": {
+        "goods_id": 16023,
+        "reference_price": 12.09
+    },
+    "Sticker | Astralis (Foil) | Katowice 2019": {
+        "goods_id": 9855,
+        "reference_price": 9.95
+    },
+    "Sticker | ELEAGUE (Foil) | Atlanta 2017": {
+        "goods_id": 3515,
+        "reference_price": 10.05
+    },
+    "Sticker | Renegades (Foil) | London 2018": {
+        "goods_id": 10067,
+        "reference_price": 5.26
+    },
+    "Sticker | HellRaisers (Holo) | London 2018": {
+        "goods_id": 5264,
+        "reference_price": 11.67
+    },
+    "Sticker | Team Liquid | Cluj-Napoca 2015": {
+        "goods_id": 6761,
+        "reference_price": 6.22
+    },
+    "Sticker | dennis | Cluj-Napoca 2015": {
+        "goods_id": 3184,
+        "reference_price": 7.36
+    },
+    "Sticker | shroud (Foil) | Cologne 2015": {
+        "goods_id": 2641,
+        "reference_price": 88.18
+    },
+    "Sticker | Titan (Foil) | Katowice 2015": {
+        "goods_id": 2370,
+        "reference_price": 327.13
+    },
+    "Sticker | n0thing | Cluj-Napoca 2015": {
+        "goods_id": 3031,
+        "reference_price": 26.74
+    },
+    "Sticker | jdm64 | Atlanta 2017": {
+        "goods_id": 15931,
+        "reference_price": 49.07
+    },
+    "Sticker | pashaBiceps (Foil) | Cologne 2015": {
+        "goods_id": 2714,
+        "reference_price": 29.02
+    },
+    "Sticker | Titan | Cologne 2015": {
+        "goods_id": 9405,
+        "reference_price": 43.09
+    },
+    "Sticker | kennyS (Foil) | Cluj-Napoca 2015": {
+        "goods_id": 2635,
+        "reference_price": 49.5
+    },
+    "Sticker | mou (Foil) | Cologne 2016": {
+        "goods_id": 2507,
+        "reference_price": 23.82
     }
 }

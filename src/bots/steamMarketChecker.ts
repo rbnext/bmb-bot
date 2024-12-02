@@ -258,7 +258,7 @@ const findSteamItemInfo = async (config: SteamMarketConfig, start: number = 0) =
       MARKET_HASH_NAMES[index].canSendToTelegram = true
     })
 
-    await sleep(18_000)
+    await sleep(20_000)
 
     // eslint-disable-next-line no-constant-condition
   } while (true)

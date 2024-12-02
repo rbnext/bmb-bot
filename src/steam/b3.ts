@@ -55,7 +55,7 @@ const CONFIG = [
   },
 ]
 
-const limiter = new Bottleneck({ maxConcurrent: 4 })
+const limiter = new Bottleneck({ maxConcurrent: 4, minTime: 200 })
 
 ;(async () => {
   const MARKET_HASH_NAMES: SteamMarketConfig[] = []
@@ -80,7 +80,11 @@ const limiter = new Bottleneck({ maxConcurrent: 4 })
   }
 
   do {
-    await Promise.all(MARKET_HASH_NAMES.map(findSteamItemInfo))
+    await Promise.all(
+      MARKET_HASH_NAMES.map((config) => {
+        return limiter.schedule(() => findSteamItemInfo(config))
+      })
+    )
 
     MARKET_HASH_NAMES.forEach((_, index) => {
       MARKET_HASH_NAMES[index].canSendToTelegram = true

@@ -207,7 +207,12 @@ export function getRandomNumber(min: number, max: number): number {
 }
 
 export function extractStickers(input: string): string[] {
-  const match = input.match(/Sticker:\s*([^<]*)/)
+  let match
 
-  return match && match[1] ? match[1].split(',').map((sticker) => sticker.trim()) : []
+  const stickers: string[] = []
+  const titleRegex = /title="([^"]+)"/g
+
+  while ((match = titleRegex.exec(input)) !== null) stickers.push(match[1])
+
+  return stickers.map((name) => name.replace('Sticker: ', ''))
 }

@@ -28,8 +28,9 @@ export const getStickerDetails = async (stickers: string[]) => {
         if (goods_id) {
           const goodsInfo = await getGoodsInfo({ goods_id })
           details[sticker] = Number(goodsInfo.data.goods_info.goods_ref_price)
-          console.log('-', market_hash_name)
         }
+
+        console.log('-', market_hash_name)
 
         await sleep(1_000)
       }

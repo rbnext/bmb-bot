@@ -66,12 +66,8 @@ const CONFIG = [
 
 const limiter = new Bottleneck({ maxConcurrent: 4, minTime: 200 })
 
-limiter.on('failed', (error) => {
-  console.error(`Job failed with ${error}`)
-})
-
-limiter.on('idle', () => {
-  console.log('All tasks are completed.')
+limiter.on('failed', (err) => {
+  console.error(`Job failed with: `, err)
 })
 
 limiter.on('error', (err) => {

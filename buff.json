@@ -15754,5 +15754,313 @@
     "Sticker | dav1deuS (Glitter) | Rio 2022": {
         "goods_id": 23791,
         "reference_price": 0.18
+    },
+    "Sticker | Snax (Foil) | Atlanta 2017": {
+        "goods_id": 2054,
+        "reference_price": 55.06
+    },
+    "Sticker | disco doplan | Atlanta 2017": {
+        "goods_id": 3580,
+        "reference_price": 5.51
+    },
+    "Sticker | bodyy | Atlanta 2017": {
+        "goods_id": 3608,
+        "reference_price": 4.09
+    },
+    "Sticker | dupreeh | Atlanta 2017": {
+        "goods_id": 3160,
+        "reference_price": 5.36
+    },
+    "Sticker | STYKO | Atlanta 2017": {
+        "goods_id": 2314,
+        "reference_price": 16.66
+    },
+    "Sticker | Hiko | Atlanta 2017": {
+        "goods_id": 3492,
+        "reference_price": 12
+    },
+    "Sticker | gla1ve | Atlanta 2017": {
+        "goods_id": 3563,
+        "reference_price": 4.07
+    },
+    "Sticker | ELEAGUE (Holo) | Atlanta 2017": {
+        "goods_id": 10340,
+        "reference_price": 7.55
+    },
+    "Sticker | kioShiMa | Atlanta 2017": {
+        "goods_id": 2827,
+        "reference_price": 12.12
+    },
+    "Sticker | Zeus | Atlanta 2017": {
+        "goods_id": 3207,
+        "reference_price": 8.44
+    },
+    "Sticker | k0nfig | Atlanta 2017": {
+        "goods_id": 4454,
+        "reference_price": 12.69
+    },
+    "Sticker | B1ad3 | Atlanta 2017": {
+        "goods_id": 2732,
+        "reference_price": 14.24
+    },
+    "Sticker | Flipsid3 Tactics | Atlanta 2017": {
+        "goods_id": 4427,
+        "reference_price": 12.38
+    },
+    "Sticker | OpTic Gaming | Atlanta 2017": {
+        "goods_id": 4277,
+        "reference_price": 11.97
+    },
+    "Sticker | MSL | Atlanta 2017": {
+        "goods_id": 15854,
+        "reference_price": 12.16
+    },
+    "Sticker | Hobbit | Atlanta 2017": {
+        "goods_id": 4426,
+        "reference_price": 6.32
+    },
+    "Sticker | Edward | Atlanta 2017": {
+        "goods_id": 10322,
+        "reference_price": 7.06
+    },
+    "Sticker | mousesports | Atlanta 2017": {
+        "goods_id": 4070,
+        "reference_price": 13.49
+    },
+    "Sticker | dennis | Atlanta 2017": {
+        "goods_id": 4619,
+        "reference_price": 7.04
+    },
+    "Sticker | aizy | Atlanta 2017": {
+        "goods_id": 3368,
+        "reference_price": 10.86
+    },
+    "Sticker | Happy | Atlanta 2017": {
+        "goods_id": 3379,
+        "reference_price": 6.74
+    },
+    "Sticker | RpK | Atlanta 2017": {
+        "goods_id": 3380,
+        "reference_price": 5.92
+    },
+    "Sticker | Kjaerbye | Atlanta 2017": {
+        "goods_id": 3679,
+        "reference_price": 7.68
+    },
+    "Sticker | fer | Atlanta 2017": {
+        "goods_id": 4428,
+        "reference_price": 8.44
+    },
+    "Sticker | loWel | Atlanta 2017": {
+        "goods_id": 15902,
+        "reference_price": 7.04
+    },
+    "Sticker | WorldEdit | Atlanta 2017": {
+        "goods_id": 3109,
+        "reference_price": 94.02
+    },
+    "Sticker | disco doplan (Foil) | Atlanta 2017": {
+        "goods_id": 2062,
+        "reference_price": 42.28
+    },
+    "Sticker | Dosia (Foil) | Atlanta 2017": {
+        "goods_id": 2311,
+        "reference_price": 27.44
+    },
+    "Sticker | Magisk | Atlanta 2017": {
+        "goods_id": 2618,
+        "reference_price": 9.88
+    },
+    "Sticker | EliGE | Atlanta 2017": {
+        "goods_id": 4623,
+        "reference_price": 20.29
+    },
+    "Sticker | Spiidi | Atlanta 2017": {
+        "goods_id": 2733,
+        "reference_price": 12.56
+    },
+    "Sticker | seized | Atlanta 2017": {
+        "goods_id": 3013,
+        "reference_price": 9.88
+    },
+    "Sticker | pashaBiceps | Atlanta 2017": {
+        "goods_id": 3850,
+        "reference_price": 12.7
+    },
+    "Sticker | Gambit Gaming (Foil) | Atlanta 2017": {
+        "goods_id": 15897,
+        "reference_price": 23.91
+    },
+    "Sticker | aizy (Foil) | Atlanta 2017": {
+        "goods_id": 2503,
+        "reference_price": 33.6
+    },
+    "Sticker | nitr0 | Atlanta 2017": {
+        "goods_id": 2885,
+        "reference_price": 9.87
+    },
+    "Sticker | Edward (Foil) | Atlanta 2017": {
+        "goods_id": 1812,
+        "reference_price": 31.06
+    },
+    "Sticker | SmithZz (Foil) | Atlanta 2017": {
+        "goods_id": 2060,
+        "reference_price": 43.76
+    },
+    "Sticker | twist (Foil) | Atlanta 2017": {
+        "goods_id": 2271,
+        "reference_price": 41.7
+    },
+    "Sticker | Fnatic (Holo) | Atlanta 2017": {
+        "goods_id": 3539,
+        "reference_price": 43.69
+    },
+    "Sticker | Team EnVyUs (Holo) | Atlanta 2017": {
+        "goods_id": 4439,
+        "reference_price": 42.99
+    },
+    "Sticker | RUBINO | Atlanta 2017": {
+        "goods_id": 3306,
+        "reference_price": 11.42
+    },
+    "Sticker | Virtus.Pro (Holo) | Atlanta 2017": {
+        "goods_id": 4568,
+        "reference_price": 38.82
+    },
+    "Sticker | Pimp | Atlanta 2017": {
+        "goods_id": 15922,
+        "reference_price": 20.64
+    },
+    "Sticker | RpK (Foil) | Atlanta 2017": {
+        "goods_id": 2188,
+        "reference_price": 58.59
+    },
+    "Sticker | nitr0 (Foil) | Atlanta 2017": {
+        "goods_id": 2116,
+        "reference_price": 84.7
+    },
+    "Sticker | Team EnVyUs (Foil) | Atlanta 2017": {
+        "goods_id": 2476,
+        "reference_price": 56.89
+    },
+    "Sticker | znajder | Atlanta 2017": {
+        "goods_id": 3812,
+        "reference_price": 4.1
+    },
+    "Sticker | mousesports (Holo) | Atlanta 2017": {
+        "goods_id": 10337,
+        "reference_price": 63.52
+    },
+    "Sticker | s1mple | Atlanta 2017": {
+        "goods_id": 3479,
+        "reference_price": 33.88
+    },
+    "Sticker | North (Foil) | Atlanta 2017": {
+        "goods_id": 3015,
+        "reference_price": 60.49
+    },
+    "Sticker | shox (Foil) | Atlanta 2017": {
+        "goods_id": 1811,
+        "reference_price": 42.28
+    },
+    "Sticker | Zeus (Foil) | Atlanta 2017": {
+        "goods_id": 10334,
+        "reference_price": 63.46
+    },
+    "Sticker | Flipsid3 Tactics (Holo) | Atlanta 2017": {
+        "goods_id": 4437,
+        "reference_price": 73.75
+    },
+    "Sticker | G2 Esports (Holo) | Atlanta 2017": {
+        "goods_id": 2856,
+        "reference_price": 68.57
+    },
+    "Sticker | stanislaw | Atlanta 2017": {
+        "goods_id": 2730,
+        "reference_price": 28.23
+    },
+    "Sticker | Natus Vincere (Foil) | Atlanta 2017": {
+        "goods_id": 2064,
+        "reference_price": 80.9
+    },
+    "Sticker | coldzera (Foil) | Atlanta 2017": {
+        "goods_id": 1818,
+        "reference_price": 53.5
+    },
+    "Sticker | Flipsid3 Tactics (Foil) | Atlanta 2017": {
+        "goods_id": 15851,
+        "reference_price": 97.41
+    },
+    "Sticker | Virtus.Pro (Foil) | Atlanta 2017": {
+        "goods_id": 3108,
+        "reference_price": 65.29
+    },
+    "Sticker | mousesports (Foil) | Atlanta 2017": {
+        "goods_id": 2415,
+        "reference_price": 86.53
+    },
+    "Sticker | Hobbit (Foil) | Atlanta 2017": {
+        "goods_id": 2113,
+        "reference_price": 21.03
+    },
+    "Sticker | Hobbit (Foil) | Krakow 2017": {
+        "goods_id": 3702,
+        "reference_price": 8.75
+    },
+    "Sticker | Xyp9x (Foil) | Krakow 2017": {
+        "goods_id": 3422,
+        "reference_price": 8.47
+    },
+    "Sticker | Dosia (Foil) | Krakow 2017": {
+        "goods_id": 3423,
+        "reference_price": 9.32
+    },
+    "Sticker | GuardiaN (Foil) | Boston 2018": {
+        "goods_id": 3509,
+        "reference_price": 9.16
+    },
+    "Sticker | nex (Foil) | Boston 2018": {
+        "goods_id": 16009,
+        "reference_price": 13.98
+    },
+    "Sticker | Flipsid3 Tactics (Foil) | Cologne 2015": {
+        "goods_id": 3613,
+        "reference_price": 24.05
+    },
+    "Sticker | ESL (Foil) | Cologne 2016": {
+        "goods_id": 3113,
+        "reference_price": 11.15
+    },
+    "Sticker | Happy (Foil) | Cologne 2015": {
+        "goods_id": 2988,
+        "reference_price": 26.47
+    },
+    "Sticker | Happy (Foil) | Cluj-Napoca 2015": {
+        "goods_id": 2674,
+        "reference_price": 22.59
+    },
+    "Sticker | Tyloo (Foil) | Katowice 2019": {
+        "goods_id": 5711,
+        "reference_price": 11.24
+    },
+    "Sticker | tarik (Foil) | Cologne 2015": {
+        "goods_id": 2136,
+        "reference_price": 16.66
+    },
+    "Sticker | Golden (Foil) | Katowice 2019": {
+        "goods_id": 3671,
+        "reference_price": 6
+    },
+    "Sticker | f0rest (Foil) | MLG Columbus 2016": {
+        "goods_id": 2967,
+        "reference_price": 13.24
+    },
+    "Sticker | Spiidi (Foil) | Cologne 2015": {
+        "goods_id": 2682,
+        "reference_price": 28.02
+    },
+    "Sticker | GruBy (Foil) | Cluj-Napoca 2015": {
+        "goods_id": 2201,
+        "reference_price": 113.24
     }
 }

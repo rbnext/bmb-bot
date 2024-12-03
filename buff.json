@@ -15554,5 +15554,205 @@
     "Sticker | mou (Foil) | Cologne 2016": {
         "goods_id": 2507,
         "reference_price": 23.82
+    },
+    "Sticker | mousesports | Katowice 2014": {
+        "goods_id": 2180,
+        "reference_price": 633.22
+    },
+    "Sticker | HellRaisers | Atlanta 2017": {
+        "goods_id": 4461,
+        "reference_price": 9.02
+    },
+    "Sticker | rain (Foil) | London 2018": {
+        "goods_id": 5267,
+        "reference_price": 9.13
+    },
+    "Sticker | OpTic Gaming (Holo) | Cologne 2016": {
+        "goods_id": 3738,
+        "reference_price": 27.5
+    },
+    "Sticker | LUCAS1 (Gold) | Berlin 2019": {
+        "goods_id": 6084,
+        "reference_price": 8.73
+    },
+    "Sticker | s1mple (Gold) | Berlin 2019": {
+        "goods_id": 3409,
+        "reference_price": 33.88
+    },
+    "Sticker | kinqie (Gold) | Berlin 2019": {
+        "goods_id": 2303,
+        "reference_price": 15.53
+    },
+    "Sticker | loWel (Gold) | Berlin 2019": {
+        "goods_id": 6249,
+        "reference_price": 9.88
+    },
+    "Sticker | fer (Gold) | Berlin 2019": {
+        "goods_id": 10878,
+        "reference_price": 13.78
+    },
+    "Sticker | jkaem (Gold) | Berlin 2019": {
+        "goods_id": 6255,
+        "reference_price": 7.06
+    },
+    "Sticker | ShahZaM (Gold) | Berlin 2019": {
+        "goods_id": 3148,
+        "reference_price": 7.91
+    },
+    "Sticker | AZR (Gold) | Berlin 2019": {
+        "goods_id": 6219,
+        "reference_price": 5.29
+    },
+    "Sticker | DickStacy (Foil) | Berlin 2019": {
+        "goods_id": 9713,
+        "reference_price": 25.54
+    },
+    "Sticker | EliGE (Gold) | Berlin 2019": {
+        "goods_id": 6264,
+        "reference_price": 13.11
+    },
+    "Sticker | olofmeister (Gold) | Berlin 2019": {
+        "goods_id": 6080,
+        "reference_price": 9.2
+    },
+    "Sticker | GuardiaN (Gold) | Berlin 2019": {
+        "goods_id": 3101,
+        "reference_price": 16.23
+    },
+    "Sticker | GeT_RiGhT (Gold) | Berlin 2019": {
+        "goods_id": 6257,
+        "reference_price": 10.16
+    },
+    "Sticker | Natus Vincere (Foil) | Berlin 2019": {
+        "goods_id": 9549,
+        "reference_price": 3.76
+    },
+    "Sticker | Sico (Gold) | Berlin 2019": {
+        "goods_id": 2565,
+        "reference_price": 50.82
+    },
+    "Sticker | Jerry (Gold) | Berlin 2019": {
+        "goods_id": 9715,
+        "reference_price": 20.45
+    },
+    "Sticker | Lekr0 (Gold) | Berlin 2019": {
+        "goods_id": 6245,
+        "reference_price": 9.54
+    },
+    "Sticker | xsepower (Gold) | Berlin 2019": {
+        "goods_id": 2304,
+        "reference_price": 10.94
+    },
+    "Sticker | coldzera (Gold) | Berlin 2019": {
+        "goods_id": 9531,
+        "reference_price": 7.18
+    },
+    "Sticker | Magisk (Gold) | Berlin 2019": {
+        "goods_id": 6236,
+        "reference_price": 7
+    },
+    "Sticker | oskar (Gold) | Berlin 2019": {
+        "goods_id": 3408,
+        "reference_price": 8.15
+    },
+    "Sticker | oBo (Foil) | Berlin 2019": {
+        "goods_id": 9720,
+        "reference_price": 0.59
+    },
+    "Sticker | dupreeh (Gold) | Berlin 2019": {
+        "goods_id": 6220,
+        "reference_price": 13.31
+    },
+    "Sticker | kennyS (Gold) | Berlin 2019": {
+        "goods_id": 2602,
+        "reference_price": 65.2
+    },
+    "Sticker | DickStacy (Gold) | Berlin 2019": {
+        "goods_id": 2093,
+        "reference_price": 352.36
+    },
+    "Sticker | ZywOo (Gold) | Berlin 2019": {
+        "goods_id": 6157,
+        "reference_price": 27.25
+    },
+    "Sticker | kennyS (Foil) | Berlin 2019": {
+        "goods_id": 14891,
+        "reference_price": 4.21
+    },
+    "Sticker | yel (Gold) | Berlin 2019": {
+        "goods_id": 2390,
+        "reference_price": 11.27
+    },
+    "Sticker | NEO (Gold) | Berlin 2019": {
+        "goods_id": 3373,
+        "reference_price": 10.32
+    },
+    "Sticker | shox (Gold) | Berlin 2019": {
+        "goods_id": 6152,
+        "reference_price": 8.33
+    },
+    "Sticker | gla1ve (Gold) | Berlin 2019": {
+        "goods_id": 6237,
+        "reference_price": 6.71
+    },
+    "Sticker | stanislaw (Gold) | Berlin 2019": {
+        "goods_id": 2722,
+        "reference_price": 10.09
+    },
+    "Sticker | Krad (Gold) | Berlin 2019": {
+        "goods_id": 2395,
+        "reference_price": 14.12
+    },
+    "Sticker | s1mple (Gold) | Rio 2022": {
+        "goods_id": 24047,
+        "reference_price": 56.33
+    },
+    "Sticker | tabseN (Gold) | Rio 2022": {
+        "goods_id": 24237,
+        "reference_price": 12.39
+    },
+    "Sticker | dexter (Gold) | Rio 2022": {
+        "goods_id": 23989,
+        "reference_price": 9.08
+    },
+    "Sticker | acoR (Gold) | Rio 2022": {
+        "goods_id": 23984,
+        "reference_price": 3.35
+    },
+    "Sticker | arT (Gold) | Rio 2022": {
+        "goods_id": 24222,
+        "reference_price": 21.18
+    },
+    "Sticker | latto (Gold) | Rio 2022": {
+        "goods_id": 24075,
+        "reference_price": 6.63
+    },
+    "Sticker | Ax1Le (Holo) | Rio 2022": {
+        "goods_id": 24032,
+        "reference_price": 1.68
+    },
+    "Sticker | NAF (Gold) | Rio 2022": {
+        "goods_id": 23960,
+        "reference_price": 5.36
+    },
+    "Sticker | dumau (Holo) | Rio 2022": {
+        "goods_id": 24052,
+        "reference_price": 1.16
+    },
+    "Sticker | saffee (Gold) | Rio 2022": {
+        "goods_id": 23928,
+        "reference_price": 4.49
+    },
+    "Sticker | TRY (Gold) | Rio 2022": {
+        "goods_id": 23955,
+        "reference_price": 5.9
+    },
+    "Sticker | frozen (Gold) | Rio 2022": {
+        "goods_id": 23918,
+        "reference_price": 9.3
+    },
+    "Sticker | dav1deuS (Glitter) | Rio 2022": {
+        "goods_id": 23791,
+        "reference_price": 0.18
     }
 }

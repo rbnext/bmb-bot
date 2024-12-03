@@ -55,7 +55,7 @@ const CONFIG = [
   },
 ]
 
-const limiter = new Bottleneck({ maxConcurrent: 4, minTime: 200 })
+const limiter = new Bottleneck({ maxConcurrent: 4 })
 
 ;(async () => {
   const MARKET_HASH_NAMES: SteamMarketConfig[] = []

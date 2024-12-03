@@ -53,6 +53,10 @@ export const findSteamItemInfo = async (config: SteamMarketConfig, start: number
       count: 50,
     })
 
+    if (!steam.success) {
+      throw new Error('Steam response if not success!')
+    }
+
     for (const [index, listingId] of Object.keys(steam.listinginfo).entries()) {
       const position = start + index + 1
 
@@ -62,12 +66,14 @@ export const findSteamItemInfo = async (config: SteamMarketConfig, start: number
       const link = currentListing.asset.market_actions[0].link
       const inspectLink = getInspectLink(link, currentListing.asset.id, listingId)
 
+      const referenceId = listingId + currentListing.asset.id
+
       const assetInfo = steam.assets[730][currentListing.asset.contextid][currentListing.asset.id]
       const htmlDescription = assetInfo.descriptions.find((el) => el.value.includes('sticker_info'))?.value || ''
 
       const stickers = extractStickers(htmlDescription)
 
-      if (CASHED_LISTINGS.has(inspectLink)) continue
+      if (CASHED_LISTINGS.has(referenceId)) continue
 
       if (stickers.length !== 0 && config.canSendToTelegram) {
         const details = await getStickerDetails(stickers)
@@ -97,7 +103,7 @@ export const findSteamItemInfo = async (config: SteamMarketConfig, start: number
         }
       }
 
-      CASHED_LISTINGS.add(inspectLink)
+      CASHED_LISTINGS.add(referenceId)
     }
   } catch (error) {
     console.log('STEAM_ERROR', config.proxy, error.message)

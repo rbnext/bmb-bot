@@ -66,6 +66,21 @@ const CONFIG = [
 
 const limiter = new Bottleneck({ maxConcurrent: 4, minTime: 200 })
 
+limiter.on('failed', (error, jobInfo) => {
+  console.error(`Job ${jobInfo.id} failed with ${error}`)
+})
+
+limiter.on('idle', () => {
+  console.log('All tasks are completed.')
+})
+
+limiter.on('error', (err) => {
+  console.error('Error in Bottleneck:', err)
+})
+
+limiter.on('debug', function (message, data) {
+  console.log(message, data)
+})
 ;(async () => {
   const MARKET_HASH_NAMES: SteamMarketConfig[] = []
 
@@ -80,7 +95,7 @@ const limiter = new Bottleneck({ maxConcurrent: 4, minTime: 200 })
       if (goods_id) {
         const goodsInfo = await getGoodsInfo({ goods_id })
         const referencePrice = Number(goodsInfo.data.goods_info.goods_ref_price)
-        MARKET_HASH_NAMES.push({ proxy, market_hash_name, canSendToTelegram, userAgent, referencePrice })
+        MARKET_HASH_NAMES.push({ proxy, market_hash_name, canSendToTelegram, userAgent, referencePrice: 0 })
         console.log(market_hash_name, `$${referencePrice}`)
       }
 

@@ -87,7 +87,7 @@ limiter.on('error', (err) => {
       if (goods_id) {
         const goodsInfo = await getGoodsInfo({ goods_id })
         const referencePrice = Number(goodsInfo.data.goods_info.goods_ref_price)
-        MARKET_HASH_NAMES.push({ proxy, market_hash_name, canSendToTelegram, userAgent, referencePrice: 0 })
+        MARKET_HASH_NAMES.push({ proxy, market_hash_name, canSendToTelegram, userAgent, referencePrice })
         console.log(market_hash_name, `$${referencePrice}`)
       }
 

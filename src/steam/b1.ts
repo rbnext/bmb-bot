@@ -77,10 +77,6 @@ limiter.on('idle', () => {
 limiter.on('error', (err) => {
   console.error('Error in Bottleneck:', err)
 })
-
-limiter.on('debug', function (message, data) {
-  console.log(message, data)
-})
 ;(async () => {
   const MARKET_HASH_NAMES: SteamMarketConfig[] = []
 

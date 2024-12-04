@@ -19,7 +19,7 @@ const CONFIG = [
   },
   {
     market_hash_names: [
-      'Desert Eagle | Heat Treated (Minimal Wear)',
+      // 'Desert Eagle | Heat Treated (Minimal Wear)',
       'M4A4 | 龍王 (Dragon King) (Field-Tested)',
       'M4A4 | 龍王 (Dragon King) (Minimal Wear)',
       'M4A4 | X-Ray (Minimal Wear)',

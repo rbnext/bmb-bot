@@ -109,8 +109,8 @@ export const findSteamItemInfo = async (config: SteamMarketConfig, start: number
   } catch (error) {
     console.log('STEAM_ERROR', config.proxy, error.message)
 
-    if (error.message.includes('canceled')) await sleep(5_000)
-    else if (error.message.includes('bad response')) await sleep(5_000)
+    if (error.message.includes('canceled')) await sleep(500)
+    else if (error.message.includes('bad response')) await sleep(500)
     else if (error.message.includes('status code 502')) await sleep(20_000)
     else await sleep(60_000 * 2)
 

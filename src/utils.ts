@@ -48,6 +48,7 @@ export const generateSteamMessage = ({
   stickerTotal,
   position,
   templateId,
+  estimatedProfit,
   referencePrice,
   buffFirstPrice,
   inspectLink,
@@ -61,6 +62,7 @@ export const generateSteamMessage = ({
   stickerTotal?: number
   position: number
   templateId?: number | null
+  estimatedProfit?: number
   referencePrice?: number
   buffFirstPrice?: number
   id?: number
@@ -83,7 +85,9 @@ export const generateSteamMessage = ({
   }
 
   message.push(`\n`)
-  if (price) message.push(`<b>Steam price</b>: $${price.toFixed(2)}\n`)
+  if (price && estimatedProfit) {
+    message.push(`<b>Steam price</b>: $${price.toFixed(2)} (${estimatedProfit.toFixed(2)}%)\n`)
+  }
   if (referencePrice) message.push(`<b>Reference price</b>: $${referencePrice.toFixed(2)}\n`)
   if (stickerTotal) message.push(`<b>Sticker total price</b>: $${stickerTotal.toFixed(2)}\n\n`)
 

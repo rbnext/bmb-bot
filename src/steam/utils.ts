@@ -76,19 +76,21 @@ export const findSteamItemInfo = async (config: SteamMarketConfig, start: number
 
       if (CASHED_LISTINGS.has(referenceId)) continue
 
-      if (stickers.length !== 0 && config.canSendToTelegram) {
+      if (price && stickers.length !== 0 && config.canSendToTelegram) {
         const details = await getStickerDetails(stickers)
+        const totalCost = calculateTotalCost(stickers, details)
 
+        const estimatedProfit = ((config.referencePrice + totalCost - price) / price) * 100
         const stickerTotalPrice = stickers.reduce((acc, name) => acc + (details[name] ?? 0), 0)
 
         console.log(
           format(new Date(), 'HH:mm:ss'),
           config.market_hash_name,
-          `$${stickerTotalPrice.toFixed(2)}`,
+          `${estimatedProfit.toFixed(2)}%`,
           `#${position}`
         )
 
-        if (price && stickerTotalPrice >= price) {
+        if (estimatedProfit >= 0) {
           await sendMessage(
             generateSteamMessage({
               price: price,
@@ -96,6 +98,7 @@ export const findSteamItemInfo = async (config: SteamMarketConfig, start: number
               position,
               referencePrice: config.referencePrice,
               stickerTotal: stickerTotalPrice,
+              estimatedProfit,
               inspectLink,
               stickers,
               details,
@@ -120,4 +123,20 @@ export const findSteamItemInfo = async (config: SteamMarketConfig, start: number
 
 export const getInspectLink = (link: string, assetId: string, listingId: string): string => {
   return link.replace('%assetid%', assetId).replace('%listingid%', listingId)
+}
+
+export const calculateTotalCost = (stickers: string[], details: Record<string, number>): number => {
+  const groupByStickerName = stickers.reduce((acc, name) => {
+    return { ...acc, [name]: (acc[name] || 0) + 1 }
+  }, {})
+
+  const totalCost = Object.keys(groupByStickerName).reduce((acc, name) => {
+    const price = details[name] || 0
+    const stickerCount = groupByStickerName[name]
+    const discountRate = stickerCount >= 4 ? 0.4 : 0.15
+
+    return acc + price * discountRate * stickerCount
+  }, 0)
+
+  return totalCost
 }

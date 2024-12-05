@@ -126,6 +126,9 @@ export const findSteamItemInfo = async (config: SteamMarketConfig, start: number
     if (proxyData && !['canceled', 'bad response', 'status code 502'].includes(error.message)) {
       proxyData.active = false
       proxyData.bannedUntil = Date.now() + PROXY_BAN_TIME
+    } else {
+      if (proxyData) proxyData.lastUsed = Date.now()
+      if (marketHashNameData) marketHashNameData.lastRequested = Date.now()
     }
   }
 }

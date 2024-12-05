@@ -7,13 +7,13 @@ import { getMarketRender } from '../api/steam'
 import { format } from 'date-fns'
 import { sendMessage } from '../api/telegram'
 
-const pathname = path.join(__dirname, '../../buff.json')
-const steam_db: SteamDBItem = JSON.parse(readFileSync(pathname, 'utf8'))
-
 const CASHED_LISTINGS = new Set<string>()
 
 export const getStickerDetails = async (stickers: string[]) => {
   const details: Record<string, number> = {}
+
+  const pathname = path.join(__dirname, '../../buff.json')
+  const steam_db: SteamDBItem = JSON.parse(readFileSync(pathname, 'utf8'))
 
   try {
     for (const sticker of [...new Set(stickers)]) {

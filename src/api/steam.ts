@@ -149,7 +149,12 @@ export const getMarketRender = async ({
       headers: {
         'User-Agent': userAgent,
         Host: 'steamcommunity.com',
+        Accept: 'text/html,*/*;q=0.9',
+        'Accept-Encoding': 'gzip,identity,*;q=0',
+        'Accept-Charset': 'ISO-8859-1,utf-8,*;q=0.7',
         Referer: `https://steamcommunity.com/market/listings/${appid}/` + encodeURIComponent(market_hash_name),
+        'X-Prototype-Version': '1.7',
+        'X-Requested-With': 'XMLHttpRequest',
       },
       httpsAgent: proxy && proxy !== 'localhost' ? new HttpsProxyAgent(proxy) : undefined,
       signal: AbortSignal.timeout(5000),

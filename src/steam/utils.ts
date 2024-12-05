@@ -6,6 +6,7 @@ import { extractStickers, generateSteamMessage, sleep } from '../utils'
 import { getMarketRender } from '../api/steam'
 import { format } from 'date-fns'
 import { sendMessage } from '../api/telegram'
+import { PROXY_BAN_TIME, marketHashNameState, proxyState } from './steam-gold'
 
 const CASHED_LISTINGS = new Set<string>()
 
@@ -45,18 +46,26 @@ export const getStickerDetails = async (stickers: string[]) => {
 }
 
 export const findSteamItemInfo = async (config: SteamMarketConfig, start: number = 0) => {
+  const proxyData = proxyState.find((item) => item.proxy === config.proxy)
+  const marketHashNameData = marketHashNameState.find((item) => item.name === config.market_hash_name)
+
   try {
     const steam = await getMarketRender({
       proxy: config.proxy,
-      userAgent: config.userAgent,
+      userAgent: marketHashNameData?.userAgent ?? '',
       market_hash_name: config.market_hash_name,
       start,
       count: 50,
     })
 
+    console.log(format(new Date(), 'HH:mm:ss'), config.market_hash_name, steam.success)
+
     if (!steam.success) {
       throw new Error('bad response')
     }
+
+    if (proxyData) proxyData.lastUsed = Date.now()
+    if (marketHashNameData) marketHashNameData.lastRequested = Date.now()
 
     for (const [index, listingId] of Object.keys(steam.listinginfo).entries()) {
       const position = start + index + 1
@@ -76,11 +85,11 @@ export const findSteamItemInfo = async (config: SteamMarketConfig, start: number
 
       if (CASHED_LISTINGS.has(referenceId)) continue
 
-      if (price && stickers.length !== 0 && config.canSendToTelegram) {
+      if (price && stickers.length !== 0 && marketHashNameData?.steamDataFetched) {
         const details = await getStickerDetails(stickers)
         const totalCost = calculateTotalCost(stickers, details)
 
-        const estimatedProfit = ((config.referencePrice + totalCost - price) / price) * 100
+        const estimatedProfit = ((marketHashNameData.referencePrice + totalCost - price) / price) * 100
         const stickerTotalPrice = stickers.reduce((acc, name) => acc + (details[name] ?? 0), 0)
 
         console.log(
@@ -96,7 +105,7 @@ export const findSteamItemInfo = async (config: SteamMarketConfig, start: number
               price: price,
               name: config.market_hash_name,
               position,
-              referencePrice: config.referencePrice,
+              referencePrice: marketHashNameData.referencePrice,
               stickerTotal: stickerTotalPrice,
               estimatedProfit,
               inspectLink,
@@ -109,15 +118,15 @@ export const findSteamItemInfo = async (config: SteamMarketConfig, start: number
 
       CASHED_LISTINGS.add(referenceId)
     }
+
+    if (marketHashNameData) marketHashNameData.steamDataFetched = true
   } catch (error) {
     console.log('STEAM_ERROR', config.proxy, error.message)
 
-    if (error.message.includes('canceled')) await sleep(500)
-    else if (error.message.includes('bad response')) await sleep(500)
-    else if (error.message.includes('status code 502')) await sleep(20_000)
-    else await sleep(60_000 * 2)
-
-    return
+    if (proxyData && !['canceled', 'bad response', 'status code 502'].includes(error.message)) {
+      proxyData.active = false
+      proxyData.bannedUntil = Date.now() + PROXY_BAN_TIME
+    }
   }
 }
 

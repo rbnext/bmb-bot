@@ -553,10 +553,22 @@ export type SteamInventoryHelperDetails = {
 
 export type SteamMarketConfig = {
   market_hash_name: string
-  canSendToTelegram: boolean
   proxy: string | null
-  userAgent: string
-  referencePrice: number
 }
 
 export type SteamDBItem = Record<string, { goods_id: number; reference_price: number }>
+
+export type ProxyState = {
+  proxy: string
+  active: boolean
+  lastUsed: number
+  bannedUntil: number
+}
+
+export type MarketHashNameState = {
+  name: string
+  lastRequested: number
+  steamDataFetched: boolean
+  referencePrice: number
+  userAgent: string
+}

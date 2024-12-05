@@ -49,6 +49,8 @@ export const findSteamItemInfo = async (config: SteamMarketConfig, start: number
   const proxyData = proxyState.find((item) => item.proxy === config.proxy)
   const marketHashNameData = marketHashNameState.find((item) => item.name === config.market_hash_name)
 
+  if (proxyData) proxyData.lastUsed = Date.now()
+
   try {
     const steam = await getMarketRender({
       proxy: config.proxy,
@@ -58,13 +60,10 @@ export const findSteamItemInfo = async (config: SteamMarketConfig, start: number
       count: 50,
     })
 
-    console.log(format(new Date(), 'HH:mm:ss'), config.market_hash_name, steam.success)
-
     if (!steam.success) {
       throw new Error('bad response')
     }
 
-    if (proxyData) proxyData.lastUsed = Date.now()
     if (marketHashNameData) marketHashNameData.lastRequested = Date.now()
 
     for (const [index, listingId] of Object.keys(steam.listinginfo).entries()) {

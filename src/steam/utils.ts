@@ -126,7 +126,7 @@ export const getInspectLink = (link: string, assetId: string, listingId: string)
 }
 
 export const calculateTotalCost = (stickers: string[], details: Record<string, number>): number => {
-  const groupByStickerName = stickers.reduce((acc, name) => {
+  const groupByStickerName = stickers.reduce<Record<string, number>>((acc, name) => {
     return { ...acc, [name]: (acc[name] || 0) + 1 }
   }, {})
 

@@ -163,7 +163,7 @@ const fetchSteamMarketItem = async (config: { market_hash_name: string; proxy: s
   } catch (error) {
     console.log(format(new Date(), 'HH:mm:ss'), error.message)
 
-    if (proxyData && !error.message.includes('429')) {
+    if (proxyData && error.message.includes('429')) {
       proxyData.active = false
       proxyData.bannedUntil = Date.now() + PROXY_BAN_TIME
     }

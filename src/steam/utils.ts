@@ -40,6 +40,7 @@ export const getStickerDetails = async (stickers: string[]) => {
     return details
   } catch (error) {
     console.log('BUFF.MARKET', error.message)
+    await sendMessage(error.message)
 
     return {}
   }
@@ -49,12 +50,13 @@ export const findSteamItemInfo = async (config: SteamMarketConfig, start: number
   const proxyData = proxyState.find((item) => item.proxy === config.proxy)
   const marketHashNameData = marketHashNameState.find((item) => item.name === config.market_hash_name)
 
-  if (proxyData) proxyData.lastUsed = Date.now()
+  if (proxyData) proxyData.isBusy = true
+  if (marketHashNameData) marketHashNameData.isInProgress = true
 
   try {
     const steam = await getMarketRender({
       proxy: config.proxy,
-      userAgent: marketHashNameData?.userAgent ?? '',
+      userAgent: proxyData?.userAgent ?? '',
       market_hash_name: config.market_hash_name,
       start,
       count: 50,
@@ -64,6 +66,7 @@ export const findSteamItemInfo = async (config: SteamMarketConfig, start: number
       throw new Error('bad response')
     }
 
+    if (proxyData) proxyData.lastUsed = Date.now()
     if (marketHashNameData) marketHashNameData.lastRequested = Date.now()
 
     for (const [index, listingId] of Object.keys(steam.listinginfo).entries()) {
@@ -122,12 +125,17 @@ export const findSteamItemInfo = async (config: SteamMarketConfig, start: number
   } catch (error) {
     console.log('STEAM_ERROR', config.proxy, error.message)
 
-    if (proxyData && !['canceled', 'bad response', 'status code 502'].includes(error.message)) {
-      proxyData.active = false
-      proxyData.bannedUntil = Date.now() + PROXY_BAN_TIME
-    } else if (proxyData) {
-      proxyData.lastUsed = Date.now()
+    if (proxyData) {
+      if (['canceled', 'bad response'].includes(error.message)) {
+        proxyData.lastUsed = Date.now()
+      } else {
+        proxyData.active = false
+        proxyData.bannedUntil = Date.now() + PROXY_BAN_TIME
+      }
     }
+  } finally {
+    if (proxyData) proxyData.isBusy = false
+    if (marketHashNameData) marketHashNameData.isInProgress = false
   }
 }
 

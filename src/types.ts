@@ -563,6 +563,8 @@ export type ProxyState = {
   active: boolean
   lastUsed: number
   bannedUntil: number
+  userAgent: string
+  isBusy: boolean
 }
 
 export type MarketHashNameState = {
@@ -570,5 +572,5 @@ export type MarketHashNameState = {
   lastRequested: number
   steamDataFetched: boolean
   referencePrice: number
-  userAgent: string
+  isInProgress: boolean
 }

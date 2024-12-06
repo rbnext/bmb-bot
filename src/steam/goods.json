@@ -1,0 +1,258 @@
+{
+  "M4A1-S | Nitro (Factory New)": {
+    "goods_id": 14545,
+    "reference_price": 3.55
+  },
+  "AK-47 | Rat Rod (Minimal Wear)": {
+    "goods_id": 15272,
+    "reference_price": 4.18
+  },
+  "M4A1-S | Blood Tiger (Minimal Wear)": {
+    "goods_id": 14533,
+    "reference_price": 4.49
+  },
+  "AK-47 | Slate (Minimal Wear)": {
+    "goods_id": 19240,
+    "reference_price": 4.85
+  },
+  "AK-47 | Legion of Anubis (Field-Tested)": {
+    "goods_id": 15315,
+    "reference_price": 4.88
+  },
+  "M4A1-S | Basilisk (Field-Tested)": {
+    "goods_id": 14920,
+    "reference_price": 5.01
+  },
+  "AWP | POP AWP (Minimal Wear)": {
+    "goods_id": 19647,
+    "reference_price": 5.11
+  },
+  "AWP | Atheris (Minimal Wear)": {
+    "goods_id": 36,
+    "reference_price": 5.43
+  },
+  "M4A4 | Neo-Noir (Field-Tested)": {
+    "goods_id": 71,
+    "reference_price": 5.46
+  },
+  "AK-47 | Phantom Disruptor (Minimal Wear)": {
+    "goods_id": 15326,
+    "reference_price": 5.5
+  },
+  "Glock-18 | Water Elemental (Minimal Wear)": {
+    "goods_id": 5808,
+    "reference_price": 5.64
+  },
+  "Desert Eagle | Mecha Industries (Minimal Wear)": {
+    "goods_id": 5777,
+    "reference_price": 5.69
+  },
+  "StatTrak™ AWP | Worm God (Factory New)": {
+    "goods_id": 14355,
+    "reference_price": 5.89
+  },
+  "AWP | Chromatic Aberration (Field-Tested)": {
+    "goods_id": 23114,
+    "reference_price": 5.99
+  },
+  "P90 | Asiimov (Field-Tested)": {
+    "goods_id": 5792,
+    "reference_price": 6.18
+  },
+  "M4A4 | 龍王 (Dragon King) (Field-Tested)": {
+    "goods_id": 15342,
+    "reference_price": 6.31
+  },
+  "M4A1-S | Basilisk (Minimal Wear)": {
+    "goods_id": 14913,
+    "reference_price": 6.32
+  },
+  "StatTrak™ USP-S | Guardian (Field-Tested)": {
+    "goods_id": 14944,
+    "reference_price": 6.69
+  },
+  "Desert Eagle | Conspiracy (Minimal Wear)": {
+    "goods_id": 15368,
+    "reference_price": 6.79
+  },
+  "StatTrak™ AWP | Atheris (Field-Tested)": {
+    "goods_id": 15250,
+    "reference_price": 6.88
+  },
+  "Desert Eagle | Heat Treated (Minimal Wear)": {
+    "goods_id": 30235,
+    "reference_price": 8.01
+  },
+  "StatTrak™ AK-47 | Phantom Disruptor (Field-Tested)": {
+    "goods_id": 15466,
+    "reference_price": 8.49
+  },
+  "StatTrak™ AK-47 | Ice Coaled (Field-Tested)": {
+    "goods_id": 23231,
+    "reference_price": 8.79
+  },
+  "StatTrak™ USP-S | Cyrex (Factory New)": {
+    "goods_id": 5941,
+    "reference_price": 9.05
+  },
+  "Desert Eagle | Crimson Web (Field-Tested)": {
+    "goods_id": 15270,
+    "reference_price": 9.15
+  },
+  "AWP | Chromatic Aberration (Minimal Wear)": {
+    "goods_id": 23152,
+    "reference_price": 9.49
+  },
+  "USP-S | The Traitor (Field-Tested)": {
+    "goods_id": 19373,
+    "reference_price": 9.74
+  },
+  "AK-47 | Phantom Disruptor (Factory New)": {
+    "goods_id": 14564,
+    "reference_price": 9.77
+  },
+  "StatTrak™ AK-47 | Slate (Field-Tested)": {
+    "goods_id": 19372,
+    "reference_price": 10.06
+  },
+  "Glock-18 | Water Elemental (Factory New)": {
+    "goods_id": 14714,
+    "reference_price": 10.06
+  },
+  "StatTrak™ USP-S | Guardian (Minimal Wear)": {
+    "goods_id": 5850,
+    "reference_price": 10.07
+  },
+  "M4A4 | Temukau (Field-Tested)": {
+    "goods_id": 24322,
+    "reference_price": 10.17
+  },
+  "M4A4 | The Emperor (Field-Tested)": {
+    "goods_id": 27,
+    "reference_price": 10.17
+  },
+  "M4A1-S | Decimator (Field-Tested)": {
+    "goods_id": 94,
+    "reference_price": 10.18
+  },
+  "AK-47 | Cartel (Field-Tested)": {
+    "goods_id": 15392,
+    "reference_price": 10.21
+  },
+  "M4A1-S | Basilisk (Factory New)": {
+    "goods_id": 13943,
+    "reference_price": 10.3
+  },
+  "AWP | Fever Dream (Field-Tested)": {
+    "goods_id": 91,
+    "reference_price": 10.34
+  },
+  "M4A4 | Neo-Noir (Minimal Wear)": {
+    "goods_id": 5799,
+    "reference_price": 10.35
+  },
+  "AK-47 | Blue Laminate (Minimal Wear)": {
+    "goods_id": 6028,
+    "reference_price": 10.42
+  },
+  "AK-47 | Slate (Factory New)": {
+    "goods_id": 19259,
+    "reference_price": 10.48
+  },
+  "M4A4 | Buzz Kill (Minimal Wear)": {
+    "goods_id": 5914,
+    "reference_price": 10.78
+  },
+  "M4A4 | 龍王 (Dragon King) (Minimal Wear)": {
+    "goods_id": 15278,
+    "reference_price": 10.86
+  },
+  "AWP | Atheris (Factory New)": {
+    "goods_id": 15267,
+    "reference_price": 11.46
+  },
+  "AK-47 | Frontside Misty (Field-Tested)": {
+    "goods_id": 63,
+    "reference_price": 11.58
+  },
+  "M4A4 | X-Ray (Minimal Wear)": {
+    "goods_id": 7162,
+    "reference_price": 11.77
+  },
+  "StatTrak™ M4A4 | Evil Daimyo (Factory New)": {
+    "goods_id": 11023,
+    "reference_price": 12.28
+  },
+  "StatTrak™ USP-S | Guardian (Factory New)": {
+    "goods_id": 9007,
+    "reference_price": 12.31
+  },
+  "AK-47 | Blue Laminate (Factory New)": {
+    "goods_id": 5798,
+    "reference_price": 12.5
+  },
+  "StatTrak™ Desert Eagle | Crimson Web (Field-Tested)": {
+    "goods_id": 14609,
+    "reference_price": 13.33
+  },
+  "AK-47 | Cartel (Minimal Wear)": {
+    "goods_id": 15086,
+    "reference_price": 13.43
+  },
+  "StatTrak™ AWP | Atheris (Minimal Wear)": {
+    "goods_id": 14534,
+    "reference_price": 13.63
+  },
+  "AK-47 | Ice Coaled (Factory New)": {
+    "goods_id": 23230,
+    "reference_price": 13.76
+  },
+  "M4A4 | Bullet Rain (Minimal Wear)": {
+    "goods_id": 14528,
+    "reference_price": 14.66
+  },
+  "StatTrak™ AK-47 | Slate (Minimal Wear)": {
+    "goods_id": 19244,
+    "reference_price": 15.6
+  },
+  "StatTrak™ AK-47 | Ice Coaled (Minimal Wear)": {
+    "goods_id": 23228,
+    "reference_price": 18.29
+  },
+  "M4A1-S | Player Two (Field-Tested)": {
+    "goods_id": 89,
+    "reference_price": 19.92
+  },
+  "StatTrak™ M4A1-S | Decimator (Field-Tested)": {
+    "goods_id": 15029,
+    "reference_price": 24.04
+  },
+  "USP-S | Blueprint (Factory New)": {
+    "goods_id": 4799,
+    "reference_price": 26.16
+  },
+  "StatTrak™ AK-47 | Blue Laminate (Field-Tested)": {
+    "goods_id": 11563,
+    "reference_price": 28.51
+  },
+  "StatTrak™ AK-47 | Blue Laminate (Minimal Wear)": {
+    "goods_id": 14593,
+    "reference_price": 28.84
+  },
+  "StatTrak™ AK-47 | Slate (Factory New)": {
+    "goods_id": 19408,
+    "reference_price": 35.25
+  },
+  "StatTrak™ AK-47 | Blue Laminate (Factory New)": {
+    "goods_id": 11162,
+    "reference_price": 36.79
+  },
+  "AK-47 | Red Laminate (Field-Tested)": {
+    "goods_id": 14558,
+    "reference_price": 42.55
+  },
+  "StatTrak™ AK-47 | Redline (Field-Tested)": {
+    "goods_id": 11110,
+    "reference_price": 55.88
+  }
+}

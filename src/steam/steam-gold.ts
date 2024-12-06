@@ -1,19 +1,22 @@
 import 'dotenv/config'
 import { sleep } from '../utils'
 import { findSteamItemInfo } from './utils'
-import { MarketHashNameState, ProxyState } from '../types'
+import { MarketHashNameState, ProxyState, SteamDBItem } from '../types'
 import UserAgent from 'user-agents'
-import { getGoodsInfo, getMarketGoods } from '../api/buff'
+import { readFileSync } from 'fs'
+import path from 'path'
+
+const pathname = path.join(__dirname, './goods.json')
+const goods: SteamDBItem = JSON.parse(readFileSync(pathname, 'utf8'))
 
 const PROXIES: string[] = process.env.STEAM_PROXY?.split(';').map((name) => name.trim()) as string[]
-const MARKET_HASH_NAMES = process.env.STEAM_MARKET_HASH_NAMES?.split(';').map((name) => name.trim()) as string[]
 
-if (!Array.isArray(PROXIES) || !Array.isArray(MARKET_HASH_NAMES)) {
-  throw new Error(`PROXY and MARKET_HASH_NAMES env's are required.`)
+if (!Array.isArray(PROXIES)) {
+  throw new Error(`PROXY env is required.`)
 }
 
 export const REQUEST_TIMEOUT = 2500
-export const LINK_INTERVAL = 60000
+export const LINK_INTERVAL = 55000
 export const PROXY_INTERVAL = 15000
 export const PROXY_BAN_TIME = 120000
 
@@ -22,23 +25,29 @@ export const proxyState: ProxyState[] = PROXIES.map((proxy) => ({
   active: true,
   lastUsed: 0,
   bannedUntil: 0,
+  userAgent: new UserAgent({ deviceCategory: 'desktop' }).toString(),
+  isBusy: false,
 }))
 
-export const marketHashNameState: MarketHashNameState[] = MARKET_HASH_NAMES.map((name) => ({
+export const marketHashNameState: MarketHashNameState[] = Object.keys(goods).map((name) => ({
   name,
   lastRequested: 0,
   steamDataFetched: false,
-  referencePrice: 0,
-  userAgent: '',
+  referencePrice: Number(goods[name].reference_price),
+  isInProgress: false,
 }))
 
 const getNextProxy = (): string | null => {
   const now = Date.now()
 
   for (const proxyData of proxyState) {
-    if (proxyData.active && now >= proxyData.bannedUntil && now - proxyData.lastUsed >= PROXY_INTERVAL) {
+    if (
+      proxyData.active &&
+      !proxyData.isBusy &&
+      now >= proxyData.bannedUntil &&
+      now - proxyData.lastUsed >= PROXY_INTERVAL
+    ) {
       proxyData.lastUsed = now
-
       return proxyData.proxy
     }
 
@@ -52,36 +61,21 @@ const getNextProxy = (): string | null => {
 }
 
 async function init(): Promise<void> {
-  for (const config of marketHashNameState) {
-    const userAgent = new UserAgent().toString()
+  console.log('Goods:', marketHashNameState.length)
+  console.log('Proxies:', proxyState.length, '\n')
 
-    const goods = await getMarketGoods({ search: config.name })
-    const goods_id = goods.data.items.find((el) => el.market_hash_name === config.name)?.id
-
-    if (goods_id) {
-      const goodsInfo = await getGoodsInfo({ goods_id })
-      const referencePrice = Number(goodsInfo.data.goods_info.goods_ref_price)
-
-      config.userAgent = userAgent
-      config.referencePrice = referencePrice
-    } else {
-      throw new Error(`Item ${config.name} is not valid.`)
-    }
-
-    await sleep(5_000)
-  }
-
+  // eslint-disable-next-line no-constant-condition
   while (true) {
     const now = Date.now()
 
     for (const linkData of marketHashNameState) {
       const timeSinceLastRequest = now - linkData.lastRequested
 
-      if (timeSinceLastRequest >= LINK_INTERVAL) {
+      if (timeSinceLastRequest >= LINK_INTERVAL && !linkData.isInProgress) {
         const proxy = getNextProxy()
 
         if (proxy) {
-          findSteamItemInfo({ market_hash_name: linkData.name, proxy: proxy })
+          findSteamItemInfo({ market_hash_name: linkData.name, proxy })
         }
       }
     }

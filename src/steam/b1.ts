@@ -1,7 +1,7 @@
 import 'dotenv/config'
 
 import { getMarketPage } from '../api/steam'
-import { Nullable, SteamMarketAssets, SteamMarketListingInfo } from '../types'
+import { CurrencyRates, Nullable, SteamMarketAssets, SteamMarketListingInfo } from '../types'
 import { extractStickers, generateSteamMessage, sleep } from '../utils'
 import { MarketHashNameState, ProxyState, SteamDBItem } from '../types'
 import UserAgent from 'user-agents'
@@ -19,6 +19,8 @@ const pathname = path.join(__dirname, './goods.json')
 const goods: SteamDBItem = JSON.parse(readFileSync(pathname, 'utf8'))
 
 const PROXIES: string[] = process.env.STEAM_PROXY?.split(';').map((name) => name.trim()) as string[]
+
+let currencyRates: CurrencyRates['rates'] = {}
 
 if (!Array.isArray(PROXIES)) {
   throw new Error(`PROXY env is required.`)
@@ -73,8 +75,6 @@ const getNextProxy = (): string | null => {
 }
 
 const fetchSteamMarketItem = async (config: { market_hash_name: string; proxy: string }) => {
-  const rates = await getLatestCurrencyRates()
-
   const proxyData = proxyState.find((item) => item.proxy === config.proxy)
   const marketHashNameData = marketHashNameState.find((item) => item.name === config.market_hash_name)
 
@@ -120,7 +120,7 @@ const fetchSteamMarketItem = async (config: { market_hash_name: string; proxy: s
       }
 
       const price = Number(currentListingInfo.price + currentListingInfo.fee) / 100
-      const convertedPrice = Number((price / Number(rates.rates[currencyCode])).toFixed(2))
+      const convertedPrice = Number((price / Number(currencyRates[currencyCode])).toFixed(2))
 
       if (!CASHED_LISTINGS.has(referenceId)) CASHED_LISTINGS.add(referenceId)
       else continue
@@ -176,6 +176,10 @@ const fetchSteamMarketItem = async (config: { market_hash_name: string; proxy: s
 }
 
 async function init(): Promise<void> {
+  const rates = await getLatestCurrencyRates()
+
+  currencyRates = { ...rates.rates }
+
   console.log('Goods:', marketHashNameState.length)
   console.log('Proxies:', proxyState.length, '\n')
 

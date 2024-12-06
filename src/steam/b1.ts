@@ -29,7 +29,7 @@ if (!Array.isArray(PROXIES)) {
 export const REQUEST_TIMEOUT = 2500
 export const LINK_INTERVAL = 60000
 export const PROXY_INTERVAL = 20000
-export const PROXY_BAN_TIME = 120000
+export const PROXY_BAN_TIME = 60000 * 5
 
 const assetsRegex = /var g_rgAssets = ({.*?});/
 const listingInfoRegex = /var g_rgListingInfo = ({.*?});/
@@ -161,7 +161,7 @@ const fetchSteamMarketItem = async (config: { market_hash_name: string; proxy: s
     if (marketHashNameData) marketHashNameData.steamDataFetched = true
     if (marketHashNameData) marketHashNameData.lastRequested = Date.now()
   } catch (error) {
-    console.log(format(new Date(), 'HH:mm:ss'), error.message)
+    console.log(format(new Date(), 'HH:mm:ss'), config.proxy, error.message)
 
     if (proxyData && error.message.includes('429')) {
       proxyData.active = false

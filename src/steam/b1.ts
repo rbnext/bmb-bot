@@ -25,7 +25,7 @@ if (!Array.isArray(PROXIES)) {
 }
 
 export const REQUEST_TIMEOUT = 2500
-export const LINK_INTERVAL = 55000
+export const LINK_INTERVAL = 60000
 export const PROXY_INTERVAL = 20000
 export const PROXY_BAN_TIME = 120000
 

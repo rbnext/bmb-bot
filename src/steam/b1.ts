@@ -26,7 +26,7 @@ if (!Array.isArray(PROXIES)) {
 
 export const REQUEST_TIMEOUT = 2500
 export const LINK_INTERVAL = 55000
-export const PROXY_INTERVAL = 15000
+export const PROXY_INTERVAL = 20000
 export const PROXY_BAN_TIME = 120000
 
 const assetsRegex = /var g_rgAssets = ({.*?});/
@@ -163,7 +163,7 @@ const fetchSteamMarketItem = async (config: { market_hash_name: string; proxy: s
   } catch (error) {
     console.log(format(new Date(), 'HH:mm:ss'), error.message)
 
-    if (proxyData && !error.message.includes('CURRENCY_CODE_NOT_FOUND')) {
+    if (proxyData && !error.message.includes('429')) {
       proxyData.active = false
       proxyData.bannedUntil = Date.now() + PROXY_BAN_TIME
     }

@@ -190,7 +190,7 @@ export const getMarketPage = async ({
         'Accept-Language': 'en-GB,en-US;q=0.9,en;q=0.8,ru;q=0.7',
       },
       httpsAgent: proxy && proxy !== 'localhost' ? new HttpsProxyAgent(proxy) : undefined,
-      signal: AbortSignal.timeout(5000),
+      signal: AbortSignal.timeout(10_000),
       timeout: 5000,
     }
   )

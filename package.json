@@ -42,9 +42,10 @@
     "https-proxy-agent": "^7.0.5",
     "i": "^0.3.7",
     "interceptors": "^1.0.2",
+    "jsdom": "^25.0.1",
     "node-schedule": "^2.1.1",
     "nodemon": "^3.1.0",
-    "npm": "^10.8.3",
+    "npm": "^10.9.2",
     "prettier": "^3.2.5",
     "puppeteer": "^15.1.0",
     "puppeteer-extra": "^3.3.6",
@@ -59,6 +60,7 @@
     "user-agents": "^1.1.359"
   },
   "devDependencies": {
+    "@types/jsdom": "^21.1.7",
     "@types/set-cookie-parser": "^2.4.7"
   }
 }

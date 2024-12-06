@@ -467,6 +467,12 @@ export type InspectItemInfo = {
   }
 }
 
+export type CurrencyRates = {
+  date: string
+  base: 'USD'
+  rates: Record<string, string>
+}
+
 type FloatItemFinderStickerItem = {
   name: string
   wear: number | null
@@ -574,3 +580,31 @@ export type MarketHashNameState = {
   referencePrice: number
   isInProgress: boolean
 }
+
+export type SteamMarketListingInfo = {
+  [listingId: string]: {
+    listingid: string
+    price: number
+    fee: number
+    currencyid: number
+    asset: {
+      id: string
+      market_actions: SteamListingInfoAsset[]
+    }
+  }
+}
+
+export type SteamMarketAssets = {
+  [appid: number]: {
+    [contextId: string]: {
+      [id: string]: {
+        id: string
+        currencyid: number
+        descriptions: SteamAssetDescription[]
+        idListing: string
+      }
+    }
+  }
+}
+
+export type Nullable<T> = T | null

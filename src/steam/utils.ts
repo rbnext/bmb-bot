@@ -6,15 +6,15 @@ import { extractStickers, generateSteamMessage, sleep } from '../utils'
 import { getMarketRender } from '../api/steam'
 import { format } from 'date-fns'
 import { sendMessage } from '../api/telegram'
-import { PROXY_BAN_TIME, marketHashNameState, proxyState } from './steam-gold'
+// import { PROXY_BAN_TIME, marketHashNameState, proxyState } from './steam-gold'
 
 const CASHED_LISTINGS = new Set<string>()
 
+const pathname = path.join(__dirname, '../../buff.json')
+const steam_db: SteamDBItem = JSON.parse(readFileSync(pathname, 'utf8'))
+
 export const getStickerDetails = async (stickers: string[]) => {
   const details: Record<string, number> = {}
-
-  const pathname = path.join(__dirname, '../../buff.json')
-  const steam_db: SteamDBItem = JSON.parse(readFileSync(pathname, 'utf8'))
 
   try {
     for (const sticker of [...new Set(stickers)]) {
@@ -46,98 +46,98 @@ export const getStickerDetails = async (stickers: string[]) => {
   }
 }
 
-export const findSteamItemInfo = async (config: SteamMarketConfig, start: number = 0) => {
-  const proxyData = proxyState.find((item) => item.proxy === config.proxy)
-  const marketHashNameData = marketHashNameState.find((item) => item.name === config.market_hash_name)
+// export const findSteamItemInfo = async (config: SteamMarketConfig, start: number = 0) => {
+//   const proxyData = proxyState.find((item) => item.proxy === config.proxy)
+//   const marketHashNameData = marketHashNameState.find((item) => item.name === config.market_hash_name)
 
-  if (proxyData) proxyData.isBusy = true
-  if (marketHashNameData) marketHashNameData.isInProgress = true
+//   if (proxyData) proxyData.isBusy = true
+//   if (marketHashNameData) marketHashNameData.isInProgress = true
 
-  try {
-    const steam = await getMarketRender({
-      proxy: config.proxy,
-      userAgent: proxyData?.userAgent ?? '',
-      market_hash_name: config.market_hash_name,
-      start,
-      count: 50,
-    })
+//   try {
+//     const steam = await getMarketRender({
+//       proxy: config.proxy,
+//       userAgent: proxyData?.userAgent ?? '',
+//       market_hash_name: config.market_hash_name,
+//       start,
+//       count: 50,
+//     })
 
-    if (!steam.success) {
-      throw new Error('bad response')
-    }
+//     if (!steam.success) {
+//       throw new Error('bad response')
+//     }
 
-    if (proxyData) proxyData.lastUsed = Date.now()
-    if (marketHashNameData) marketHashNameData.lastRequested = Date.now()
+//     if (proxyData) proxyData.lastUsed = Date.now()
+//     if (marketHashNameData) marketHashNameData.lastRequested = Date.now()
 
-    for (const [index, listingId] of Object.keys(steam.listinginfo).entries()) {
-      const position = start + index + 1
+//     for (const [index, listingId] of Object.keys(steam.listinginfo).entries()) {
+//       const position = start + index + 1
 
-      const currentListing = steam.listinginfo[listingId]
-      const price = Number(((currentListing.converted_price + currentListing.converted_fee) / 100).toFixed(2))
+//       const currentListing = steam.listinginfo[listingId]
+//       const price = Number(((currentListing.converted_price + currentListing.converted_fee) / 100).toFixed(2))
 
-      const link = currentListing.asset.market_actions[0].link
-      const inspectLink = getInspectLink(link, currentListing.asset.id, listingId)
+//       const link = currentListing.asset.market_actions[0].link
+//       const inspectLink = getInspectLink(link, currentListing.asset.id, listingId)
 
-      const referenceId = listingId + currentListing.asset.id
+//       const referenceId = listingId + currentListing.asset.id
 
-      const assetInfo = steam.assets[730][currentListing.asset.contextid][currentListing.asset.id]
-      const htmlDescription = assetInfo.descriptions.find((el) => el.value.includes('sticker_info'))?.value || ''
+//       const assetInfo = steam.assets[730][currentListing.asset.contextid][currentListing.asset.id]
+//       const htmlDescription = assetInfo.descriptions.find((el) => el.value.includes('sticker_info'))?.value || ''
 
-      const stickers = extractStickers(htmlDescription)
+//       const stickers = extractStickers(htmlDescription)
 
-      if (CASHED_LISTINGS.has(referenceId)) continue
+//       if (CASHED_LISTINGS.has(referenceId)) continue
 
-      if (price && stickers.length !== 0 && marketHashNameData?.steamDataFetched) {
-        const details = await getStickerDetails(stickers)
-        const totalCost = calculateTotalCost(stickers, details)
+//       if (price && stickers.length !== 0 && marketHashNameData?.steamDataFetched) {
+//         const details = await getStickerDetails(stickers)
+//         const totalCost = calculateTotalCost(stickers, details)
 
-        const estimatedProfit = ((marketHashNameData.referencePrice + totalCost - price) / price) * 100
-        const stickerTotalPrice = stickers.reduce((acc, name) => acc + (details[name] ?? 0), 0)
+//         const estimatedProfit = ((marketHashNameData.referencePrice + totalCost - price) / price) * 100
+//         const stickerTotalPrice = stickers.reduce((acc, name) => acc + (details[name] ?? 0), 0)
 
-        console.log(
-          format(new Date(), 'HH:mm:ss'),
-          config.market_hash_name,
-          `${estimatedProfit.toFixed(2)}%`,
-          `#${position}`
-        )
+//         console.log(
+//           format(new Date(), 'HH:mm:ss'),
+//           config.market_hash_name,
+//           `${estimatedProfit.toFixed(2)}%`,
+//           `#${position}`
+//         )
 
-        if (estimatedProfit >= 0) {
-          await sendMessage(
-            generateSteamMessage({
-              price: price,
-              name: config.market_hash_name,
-              position,
-              referencePrice: marketHashNameData.referencePrice,
-              stickerTotal: stickerTotalPrice,
-              estimatedProfit,
-              inspectLink,
-              stickers,
-              details,
-            })
-          )
-        }
-      }
+//         if (estimatedProfit >= 0) {
+//           await sendMessage(
+//             generateSteamMessage({
+//               price: price,
+//               name: config.market_hash_name,
+//               position,
+//               referencePrice: marketHashNameData.referencePrice,
+//               stickerTotal: stickerTotalPrice,
+//               estimatedProfit,
+//               inspectLink,
+//               stickers,
+//               details,
+//             })
+//           )
+//         }
+//       }
 
-      CASHED_LISTINGS.add(referenceId)
-    }
+//       CASHED_LISTINGS.add(referenceId)
+//     }
 
-    if (marketHashNameData) marketHashNameData.steamDataFetched = true
-  } catch (error) {
-    console.log('STEAM_ERROR', config.proxy, error.message)
+//     if (marketHashNameData) marketHashNameData.steamDataFetched = true
+//   } catch (error) {
+//     console.log('STEAM_ERROR', config.proxy, error.message)
 
-    if (proxyData) {
-      if (['canceled', 'bad response'].includes(error.message)) {
-        proxyData.lastUsed = Date.now()
-      } else {
-        proxyData.active = false
-        proxyData.bannedUntil = Date.now() + PROXY_BAN_TIME
-      }
-    }
-  } finally {
-    if (proxyData) proxyData.isBusy = false
-    if (marketHashNameData) marketHashNameData.isInProgress = false
-  }
-}
+//     if (proxyData) {
+//       if (['canceled', 'bad response'].includes(error.message)) {
+//         proxyData.lastUsed = Date.now()
+//       } else {
+//         proxyData.active = false
+//         proxyData.bannedUntil = Date.now() + PROXY_BAN_TIME
+//       }
+//     }
+//   } finally {
+//     if (proxyData) proxyData.isBusy = false
+//     if (marketHashNameData) marketHashNameData.isInProgress = false
+//   }
+// }
 
 export const getInspectLink = (link: string, assetId: string, listingId: string): string => {
   return link.replace('%assetid%', assetId).replace('%listingid%', listingId)

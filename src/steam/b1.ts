@@ -96,7 +96,7 @@ const fetchSteamMarketItem = async (config: { market_hash_name: string; proxy: s
     const listingInfo: Nullable<SteamMarketListingInfo> = match2?.[1] ? JSON.parse(match2[1]) : null
 
     if (!assets || !listingInfo) {
-      throw new Error(`Failed to get data from Steam. Proxy: ${config.proxy}`)
+      throw new Error('Failed to get data from Steam')
     }
 
     for (const [index, id] of Object.keys(listingInfo).entries()) {

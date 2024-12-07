@@ -191,7 +191,7 @@ export const getMarketPage = async ({
       },
       httpsAgent: proxy && proxy !== 'localhost' ? new HttpsProxyAgent(proxy) : undefined,
       signal: AbortSignal.timeout(10_000),
-      timeout: 5000,
+      timeout: 10_000,
     }
   )
 

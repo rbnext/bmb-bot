@@ -26,10 +26,10 @@ if (!Array.isArray(PROXIES)) {
   throw new Error(`PROXY env is required.`)
 }
 
-export const REQUEST_TIMEOUT = 2500
-export const LINK_INTERVAL = 60000
-export const PROXY_INTERVAL = 20000
-export const PROXY_BAN_TIME = 60000 * 5
+export const REQUEST_TIMEOUT = 2_500
+export const LINK_INTERVAL = 60_000
+export const PROXY_INTERVAL = 20_000
+export const PROXY_BAN_TIME = 60_000 * 10
 
 const assetsRegex = /var g_rgAssets = ({.*?});/
 const listingInfoRegex = /var g_rgListingInfo = ({.*?});/

@@ -14,7 +14,7 @@
     "sellBuff": "ts-node src/bots/sellBuff.ts",
     "playground": "ts-node src/playground.ts",
     "loadBuffRef": "ts-node src/scripts/loadReferencePrices.ts",
-    "steam": "ts-node src/steam/b1.ts"
+    "steam": "ts-node src/steam/steam.ts"
   },
   "author": "",
   "license": "ISC",

@@ -156,7 +156,6 @@ const fetchSteamMarketItem = async (config: { market_hash_name: string; proxy: s
     if (marketHashNameData) marketHashNameData.steamDataFetched = true
     if (marketHashNameData) marketHashNameData.lastRequested = Date.now()
   } catch (error) {
-    console.log(error)
     console.log(format(new Date(), 'HH:mm:ss'), config.proxy, error.message)
 
     if (proxyData && error.message.includes('429')) {

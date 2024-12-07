@@ -32,7 +32,7 @@ const listingInfoRegex = /var g_rgListingInfo = ({.*?});/
 export const proxyState: ProxyState[] = proxyList.map((proxy) => ({
   proxy,
   active: true,
-  lastUsed: Date.now() - Math.floor(Math.random() * (PROXY_INTERVAL - REQUEST_TIMEOUT + 1)) + REQUEST_TIMEOUT,
+  lastUsed: 0,
   bannedUntil: 0,
   userAgent: new UserAgent({ deviceCategory: 'desktop' }).toString(),
   isBusy: false,

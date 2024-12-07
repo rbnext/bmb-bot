@@ -22,8 +22,8 @@ const proxy: string = readFileSync(path.join(__dirname, '../../proxy.txt'), 'utf
 const proxyList: string[] = proxy.split('\n').filter((p) => !!p.trim())
 
 export const REQUEST_TIMEOUT = 2_500
-export const LINK_INTERVAL = 50_000
-export const PROXY_INTERVAL = 60_000
+export const LINK_INTERVAL = 60_000
+export const PROXY_INTERVAL = 20_000
 export const PROXY_BAN_TIME = 60_000 * 10
 
 const assetsRegex = /var g_rgAssets = ({.*?});/
@@ -94,6 +94,8 @@ const fetchSteamMarketItem = async (config: { market_hash_name: string; proxy: s
     if (!assets || !listingInfo) {
       throw new Error('LISTING_INFO_NOT_FOUND')
     }
+
+    console.log(config.market_hash_name)
 
     for (const [index, id] of Object.keys(listingInfo).entries()) {
       const currentListingInfo = listingInfo[id]

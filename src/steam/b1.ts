@@ -95,8 +95,6 @@ const fetchSteamMarketItem = async (config: { market_hash_name: string; proxy: s
       throw new Error('LISTING_INFO_NOT_FOUND')
     }
 
-    console.log(config.market_hash_name)
-
     for (const [index, id] of Object.keys(listingInfo).entries()) {
       const currentListingInfo = listingInfo[id]
       const currentAsset = assets[730][2][currentListingInfo.asset.id]

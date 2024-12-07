@@ -15,29 +15,24 @@ import { sendMessage } from '../api/telegram'
 
 const CASHED_LISTINGS = new Set<string>()
 
-const pathname = path.join(__dirname, './goods.json')
-const goods: SteamDBItem = JSON.parse(readFileSync(pathname, 'utf8'))
-
-const PROXIES: string[] = process.env.STEAM_PROXY?.split(';').map((name) => name.trim()) as string[]
-
 let currencyRates: CurrencyRates['rates'] = {}
 
-if (!Array.isArray(PROXIES)) {
-  throw new Error(`PROXY env is required.`)
-}
+const goods: SteamDBItem = JSON.parse(readFileSync(path.join(__dirname, './goods.json'), 'utf8'))
+const proxy: string = readFileSync(path.join(__dirname, '../../proxy.txt'), 'utf8')
+const proxyList: string[] = proxy.split('\n').filter((p) => !!p.trim())
 
 export const REQUEST_TIMEOUT = 2_500
-export const LINK_INTERVAL = 60_000
-export const PROXY_INTERVAL = 20_000
+export const LINK_INTERVAL = 50_000
+export const PROXY_INTERVAL = 60_000
 export const PROXY_BAN_TIME = 60_000 * 10
 
 const assetsRegex = /var g_rgAssets = ({.*?});/
 const listingInfoRegex = /var g_rgListingInfo = ({.*?});/
 
-export const proxyState: ProxyState[] = PROXIES.map((proxy) => ({
+export const proxyState: ProxyState[] = proxyList.map((proxy) => ({
   proxy,
   active: true,
-  lastUsed: 0,
+  lastUsed: Date.now() - Math.floor(Math.random() * (PROXY_INTERVAL - REQUEST_TIMEOUT + 1)) + REQUEST_TIMEOUT,
   bannedUntil: 0,
   userAgent: new UserAgent({ deviceCategory: 'desktop' }).toString(),
   isBusy: false,
@@ -85,6 +80,7 @@ const fetchSteamMarketItem = async (config: { market_hash_name: string; proxy: s
     const html = await getMarketPage({
       market_hash_name: config.market_hash_name,
       proxy: config.proxy,
+      count: 30,
     })
 
     if (proxyData) proxyData.lastUsed = Date.now()

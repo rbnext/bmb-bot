@@ -169,17 +169,22 @@ export const getMarketPage = async ({
   appid = 730,
   market_hash_name,
   userAgent,
+  count = 10,
   proxy,
 }: {
   appid?: number
   market_hash_name: string
   userAgent?: string
   filter?: string
+  count?: number
   proxy?: string | 'localhost' | null
 }): Promise<string> => {
   const { data } = await axios.get(
     `https://steamcommunity.com/market/listings/${appid}/${encodeURIComponent(market_hash_name)}`,
     {
+      params: {
+        count,
+      },
       headers: {
         'User-Agent': userAgent,
         'Cache-Control': 'no-cache',
@@ -189,7 +194,7 @@ export const getMarketPage = async ({
         Accept: 'text/html,*/*;q=0.9',
         'Accept-Language': 'en-GB,en-US;q=0.9,en;q=0.8,ru;q=0.7',
       },
-      httpsAgent: proxy && proxy !== 'localhost' ? new HttpsProxyAgent(proxy) : undefined,
+      httpAgent: proxy && proxy !== 'localhost' ? new HttpsProxyAgent(`http://${proxy}`) : undefined,
       signal: AbortSignal.timeout(10_000),
       timeout: 10_000,
     }

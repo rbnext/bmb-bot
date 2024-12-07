@@ -362,6 +362,7 @@ export type GoodsInfo = {
     goods_info: {
       goods_ref_price: string
     }
+    market_hash_name: string
   }
   code: string
 }

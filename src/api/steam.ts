@@ -187,6 +187,7 @@ export const getMarketPage = async ({
         Host: 'steamcommunity.com',
         Accept: 'text/html,*/*;q=0.9',
         'Accept-Language': 'en-GB,en-US;q=0.9,en;q=0.8,ru;q=0.7',
+        Referer: `https://steamcommunity.com/market/listings/${appid}/${encodeURIComponent(market_hash_name)}`,
       },
       httpsAgent: proxy && proxy !== 'localhost' ? new HttpsProxyAgent(`http://${proxy}`) : undefined,
       signal: AbortSignal.timeout(10_000),

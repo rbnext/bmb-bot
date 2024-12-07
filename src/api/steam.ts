@@ -184,8 +184,6 @@ export const getMarketPage = async ({
     {
       headers: {
         'User-Agent': userAgent,
-        'Cache-Control': 'no-cache',
-        Pragma: 'no-cache',
         Host: 'steamcommunity.com',
         Accept: 'text/html,*/*;q=0.9',
         'Accept-Language': 'en-GB,en-US;q=0.9,en;q=0.8,ru;q=0.7',

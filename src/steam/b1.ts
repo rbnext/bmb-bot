@@ -129,7 +129,7 @@ const fetchSteamMarketItem = async (config: { market_hash_name: string; proxy: s
 
       const stickers = extractStickers(htmlDescription)
 
-      if (stickers.length !== 0 && marketHashNameData?.steamDataFetched) {
+      if (convertedPrice && stickers.length !== 0 && marketHashNameData?.steamDataFetched) {
         const details = await getStickerDetails(stickers)
         const totalCost = calculateTotalCost(stickers, details)
 

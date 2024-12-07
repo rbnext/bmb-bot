@@ -80,7 +80,6 @@ const fetchSteamMarketItem = async (config: { market_hash_name: string; proxy: s
     const html = await getMarketPage({
       market_hash_name: config.market_hash_name,
       proxy: config.proxy,
-      count: 30,
     })
 
     if (proxyData) proxyData.lastUsed = Date.now()

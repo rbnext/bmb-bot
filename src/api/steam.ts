@@ -182,9 +182,6 @@ export const getMarketPage = async ({
   const { data } = await axios.get(
     `https://steamcommunity.com/market/listings/${appid}/${encodeURIComponent(market_hash_name)}`,
     {
-      params: {
-        count,
-      },
       headers: {
         'User-Agent': userAgent,
         'Cache-Control': 'no-cache',

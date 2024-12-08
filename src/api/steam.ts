@@ -4,7 +4,7 @@ import UserAgent from 'user-agents'
 
 import { SearchMarketRender, SteamMarketPriceHistory, SteamMarketPriceOverview, SteamMarketRender } from '../types'
 import { HttpsProxyAgent } from 'https-proxy-agent'
-import { getRandomNumber } from '../utils'
+import { getRandomNumber, sleep } from '../utils'
 
 const instance = axios.create({
   baseURL: 'https://steamcommunity.com',
@@ -169,31 +169,42 @@ export const getMarketPage = async ({
   appid = 730,
   market_hash_name,
   userAgent,
-  count = 10,
   proxy,
+  retries = 3,
 }: {
   appid?: number
   market_hash_name: string
   userAgent?: string
   filter?: string
   count?: number
+  retries?: number
   proxy?: string | 'localhost' | null
-}): Promise<string> => {
-  const { data } = await axios.get(
-    `https://steamcommunity.com/market/listings/${appid}/${encodeURIComponent(market_hash_name)}`,
-    {
-      headers: {
-        'User-Agent': userAgent,
-        Host: 'steamcommunity.com',
-        Accept: 'text/html,*/*;q=0.9',
-        'Accept-Language': 'en-GB,en-US;q=0.9,en;q=0.8,ru;q=0.7',
-        Referer: `https://steamcommunity.com/market/listings/${appid}/${encodeURIComponent(market_hash_name)}`,
-      },
-      httpsAgent: proxy && proxy !== 'localhost' ? new HttpsProxyAgent(`http://${proxy}`) : undefined,
-      signal: AbortSignal.timeout(10_000),
-      timeout: 10_000,
-    }
-  )
+}) => {
+  for (let attempt = 0; attempt < retries; attempt++) {
+    try {
+      const { data } = await axios.get(
+        `https://steamcommunity.com/market/listings/${appid}/${encodeURIComponent(market_hash_name)}`,
+        {
+          headers: {
+            'User-Agent': userAgent,
+            Host: 'steamcommunity.com',
+            Accept: 'text/html,*/*;q=0.9',
+            'Accept-Language': 'en-GB,en-US;q=0.9,en;q=0.8,ru;q=0.7',
+            Referer: `https://steamcommunity.com/market/listings/${appid}/${encodeURIComponent(market_hash_name)}`,
+          },
+          httpsAgent: proxy && proxy !== 'localhost' ? new HttpsProxyAgent(`http://${proxy}`) : undefined,
+          signal: AbortSignal.timeout(5_000),
+          timeout: 5_000,
+        }
+      )
 
-  return data
+      return data
+    } catch (error) {
+      if (attempt === retries - 1) {
+        throw error
+      }
+
+      await sleep(1_000)
+    }
+  }
 }

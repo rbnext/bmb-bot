@@ -43,8 +43,6 @@
     "nodemon": "^3.1.0",
     "npm": "^10.9.2",
     "prettier": "^3.2.5",
-    "puppeteer": "^15.1.0",
-    "puppeteer-extra": "^3.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2",
     "query-string": "^9.0.0",
     "set-cookie-parser": "^2.6.0",

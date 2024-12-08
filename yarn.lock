@@ -2930,7 +2930,7 @@ puppeteer-extra-plugin@^3.2.3:
     debug "^4.1.1"
     merge-deep "^3.0.1"
 
-puppeteer-extra@*, puppeteer-extra@^3.3.6:
+puppeteer-extra@*:
   version "3.3.6"
   resolved "https://registry.npmjs.org/puppeteer-extra/-/puppeteer-extra-3.3.6.tgz"
   integrity sha512-rsLBE/6mMxAjlLd06LuGacrukP2bqbzKCLzV1vrhHFavqQE/taQ2UXv3H5P0Ls7nsrASa+6x3bDbXHpqMwq+7A==
@@ -2939,7 +2939,7 @@ puppeteer-extra@*, puppeteer-extra@^3.3.6:
     debug "^4.1.1"
     deepmerge "^4.2.2"
 
-puppeteer@*, puppeteer@^15.1.0:
+puppeteer@*:
   version "15.1.0"
   resolved "https://registry.npmjs.org/puppeteer/-/puppeteer-15.1.0.tgz"
   integrity sha512-AZLQs6QB7tcYV4r7SRh8tN1OyTGI1hUBy5FDyd9Ry5wyfo1h2Tgl1uhT49sG2T8jI6JFuBXr+ratj9+zvNlx2g==

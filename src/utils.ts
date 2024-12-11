@@ -85,8 +85,11 @@ export const generateSteamMessage = ({
   }
 
   message.push(`\n`)
-  if (price && estimatedProfit) {
-    message.push(`<b>Steam price</b>: $${price.toFixed(2)} (${estimatedProfit.toFixed(2)}%)\n`)
+
+  if (price) {
+    message.push(
+      `<b>Steam price</b>: $${price.toFixed(2)} ${estimatedProfit ? `(${estimatedProfit.toFixed(2)}%)` : ''}\n`
+    )
   }
   if (referencePrice) message.push(`<b>Reference price</b>: $${referencePrice.toFixed(2)}\n`)
   if (stickerTotal) message.push(`<b>Sticker total price</b>: $${stickerTotal.toFixed(2)}\n\n`)

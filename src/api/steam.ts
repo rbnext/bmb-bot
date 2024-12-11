@@ -65,12 +65,12 @@ export const getSearchMarketRender = async ({
   appid = 730,
   query,
   start = 0,
-  count = 60,
+  count = 100,
   search_descriptions = 1,
   sort_column = 'price',
   sort_dir = 'asc',
   norender = 1,
-  type,
+  types = [],
 }: {
   appid?: number
   query: string
@@ -80,10 +80,9 @@ export const getSearchMarketRender = async ({
   sort_column?: 'price'
   sort_dir?: 'asc'
   norender?: number
-  type: string
+  types?: string[]
 }): Promise<SearchMarketRender> => {
   const userAgent = new UserAgent()
-  const PORT = getRandomNumber(10000, 10999)
 
   const { data } = await axios.get(`https://steamcommunity.com/market/search/render/`, {
     params: {
@@ -102,17 +101,13 @@ export const getSearchMarketRender = async ({
         'tag_Rarity_Legendary_Weapon',
         'tag_Rarity_Ancient_Weapon',
       ],
-      'category_730_Weapon[]': [type],
-      ...(type !== 'any' && {
-        'category_730_Type[]': ['tag_CSGO_Type_Rifle'],
-      }),
+      'category_730_Weapon[]': types,
     },
     headers: {
       Host: 'steamcommunity.com',
       'User-Agent': userAgent.toString(),
       Referer: 'https://steamcommunity.com/market/search/',
     },
-    httpsAgent: new HttpsProxyAgent(`${process.env.POOL_PROXY_URL}:${PORT}`),
     timeout: 3000,
   })
 
@@ -171,6 +166,7 @@ export const getMarketPage = async ({
   userAgent,
   proxy,
   retries = 3,
+  filter,
 }: {
   appid?: number
   market_hash_name: string
@@ -184,7 +180,9 @@ export const getMarketPage = async ({
     try {
       const { data } = await axios.get(
         `https://steamcommunity.com/market/listings/${appid}/${encodeURIComponent(market_hash_name)}`,
+
         {
+          params: { filter },
           headers: {
             'User-Agent': userAgent,
             Host: 'steamcommunity.com',

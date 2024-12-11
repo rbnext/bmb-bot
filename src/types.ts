@@ -537,6 +537,7 @@ export type SearchMarketRenderResultItem = {
 }
 
 export type SearchMarketRender = {
+  success: boolean
   searchdata: {
     query: string
   }

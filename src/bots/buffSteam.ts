@@ -6,7 +6,7 @@ import { format } from 'date-fns'
 import { sendMessage } from '../api/telegram'
 import { Source } from '../types'
 import { executeBuffToSteamTrade } from '../helpers/executeBuffToSteamTrade'
-import { BARGAIN_PROFIT_THRESHOLD, BLACKLISTED_CATEGORY, BLACKLISTED_ITEMSET, STEAM_CHECK_THRESHOLD } from '../config'
+import { BARGAIN_PROFIT_THRESHOLD, BLACKLISTED_CATEGORY, BLACKLISTED_ITEMSET } from '../config'
 import { executeBuffBargainTrade } from '../helpers/executeBuffBargainTrade'
 
 export const GOODS_CACHE: Record<number, { price: number }> = {}

@@ -6,12 +6,28 @@ import { extractStickers, generateSteamMessage, sleep } from '../utils'
 import { getMarketRender } from '../api/steam'
 import { format } from 'date-fns'
 import { sendMessage } from '../api/telegram'
-// import { PROXY_BAN_TIME, marketHashNameState, proxyState } from './steam-gold'
-
-const CASHED_LISTINGS = new Set<string>()
 
 const pathname = path.join(__dirname, '../../buff.json')
 const steam_db: SteamDBItem = JSON.parse(readFileSync(pathname, 'utf8'))
+
+export const getItemReferencePrice = async (market_hash_name: string): Promise<number> => {
+  try {
+    const goods = await getMarketGoods({ search: market_hash_name })
+    const goods_id = goods.data.items.find((el) => el.market_hash_name === market_hash_name)?.id
+
+    if (goods_id) {
+      const goodsInfo = await getGoodsInfo({ goods_id })
+
+      return Number(goodsInfo.data.goods_info.goods_ref_price)
+    }
+
+    return 0
+  } catch (error) {
+    await sendMessage('BUFF.MARKET: ' + error.message)
+
+    return 0
+  }
+}
 
 export const getStickerDetails = async (stickers: string[]) => {
   const details: Record<string, number> = {}
@@ -39,8 +55,7 @@ export const getStickerDetails = async (stickers: string[]) => {
 
     return details
   } catch (error) {
-    console.log('BUFF.MARKET', error.message)
-    await sendMessage(error.message)
+    await sendMessage('BUFF.MARKET: ' + error.message)
 
     return {}
   }

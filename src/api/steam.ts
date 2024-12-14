@@ -71,6 +71,7 @@ export const getSearchMarketRender = async ({
   sort_dir = 'asc',
   norender = 1,
   types = [],
+  proxy,
 }: {
   appid?: number
   query: string
@@ -81,6 +82,7 @@ export const getSearchMarketRender = async ({
   sort_dir?: 'asc'
   norender?: number
   types?: string[]
+  proxy?: string
 }): Promise<SearchMarketRender> => {
   const userAgent = new UserAgent()
 
@@ -108,7 +110,9 @@ export const getSearchMarketRender = async ({
       'User-Agent': userAgent.toString(),
       Referer: 'https://steamcommunity.com/market/search/',
     },
-    timeout: 3000,
+    httpsAgent: proxy ? new HttpsProxyAgent(`http://${proxy}`) : undefined,
+    signal: AbortSignal.timeout(5000),
+    timeout: 5000,
   })
 
   return data

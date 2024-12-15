@@ -540,6 +540,7 @@ export type SearchMarketRender = {
   success: boolean
   searchdata: {
     query: string
+    total_count: number
   }
   results: SearchMarketRenderResultItem[]
 }

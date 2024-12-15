@@ -117,6 +117,7 @@ async function init(): Promise<void> {
     try {
       const response = await getSearchMarketRender({
         query: 'Sticker',
+        quality: ['tag_normal', 'tag_strange'],
         start: STEAM_SEARCH_START,
         proxy: STEAM_PROXY,
       })

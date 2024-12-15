@@ -70,7 +70,7 @@ export const getSearchMarketRender = async ({
   sort_column = 'price',
   sort_dir = 'asc',
   norender = 1,
-  types = [],
+  quality = [],
   proxy,
 }: {
   appid?: number
@@ -81,7 +81,7 @@ export const getSearchMarketRender = async ({
   sort_column?: 'price'
   sort_dir?: 'asc'
   norender?: number
-  types?: string[]
+  quality?: string[]
   proxy?: string
 }): Promise<SearchMarketRender> => {
   const userAgent = new UserAgent()
@@ -97,13 +97,13 @@ export const getSearchMarketRender = async ({
       sort_dir,
       norender,
       'category_730_Exterior[]': ['tag_WearCategory0', 'tag_WearCategory1', 'tag_WearCategory2'],
-      'category_730_Quality[]': ['tag_normal'],
       'category_730_Rarity[]': [
         'tag_Rarity_Mythical_Weapon',
         'tag_Rarity_Legendary_Weapon',
         'tag_Rarity_Ancient_Weapon',
       ],
-      'category_730_Weapon[]': types,
+      'category_730_Weapon[]': ['any'],
+      'category_730_Quality[]': quality,
     },
     headers: {
       Host: 'steamcommunity.com',
@@ -184,7 +184,6 @@ export const getMarketPage = async ({
     try {
       const { data } = await axios.get(
         `https://steamcommunity.com/market/listings/${appid}/${encodeURIComponent(market_hash_name)}`,
-
         {
           params: { filter },
           headers: {

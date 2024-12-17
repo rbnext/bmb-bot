@@ -138,7 +138,7 @@ async function init(): Promise<void> {
         }
       }
     } catch (error) {
-      console.log(error.message)
+      console.log('SearchMarketRender', error.message)
     } finally {
       await sleep(hasMarketUpdated ? 170_000 : 20_000)
       hasMarketUpdated = false

@@ -69,6 +69,7 @@ export const getSearchMarketRender = async ({
   search_descriptions = 1,
   sort_column = 'price',
   sort_dir = 'asc',
+  retries = 3,
   norender = 1,
   quality = [],
   proxy,
@@ -82,40 +83,51 @@ export const getSearchMarketRender = async ({
   sort_dir?: 'asc'
   norender?: number
   quality?: string[]
+  retries?: number
   proxy?: string
-}): Promise<SearchMarketRender> => {
+}) => {
   const userAgent = new UserAgent()
 
-  const { data } = await axios.get(`https://steamcommunity.com/market/search/render/`, {
-    params: {
-      appid,
-      query,
-      start,
-      count,
-      search_descriptions,
-      sort_column,
-      sort_dir,
-      norender,
-      'category_730_Exterior[]': ['tag_WearCategory0', 'tag_WearCategory1', 'tag_WearCategory2'],
-      'category_730_Rarity[]': [
-        'tag_Rarity_Mythical_Weapon',
-        'tag_Rarity_Legendary_Weapon',
-        'tag_Rarity_Ancient_Weapon',
-      ],
-      'category_730_Weapon[]': ['any'],
-      'category_730_Quality[]': quality,
-    },
-    headers: {
-      Host: 'steamcommunity.com',
-      'User-Agent': userAgent.toString(),
-      Referer: 'https://steamcommunity.com/market/search/',
-    },
-    httpsAgent: proxy ? new HttpsProxyAgent(`http://${proxy}`) : undefined,
-    signal: AbortSignal.timeout(5000),
-    timeout: 5000,
-  })
+  for (let attempt = 0; attempt < retries; attempt++) {
+    try {
+      const { data } = await axios.get(`https://steamcommunity.com/market/search/render/`, {
+        params: {
+          appid,
+          query,
+          start,
+          count,
+          search_descriptions,
+          sort_column,
+          sort_dir,
+          norender,
+          'category_730_Exterior[]': ['tag_WearCategory0', 'tag_WearCategory1', 'tag_WearCategory2'],
+          'category_730_Rarity[]': [
+            'tag_Rarity_Mythical_Weapon',
+            'tag_Rarity_Legendary_Weapon',
+            'tag_Rarity_Ancient_Weapon',
+          ],
+          'category_730_Weapon[]': ['any'],
+          'category_730_Quality[]': quality,
+        },
+        headers: {
+          Host: 'steamcommunity.com',
+          'User-Agent': userAgent.toString(),
+          Referer: 'https://steamcommunity.com/market/search/',
+        },
+        httpsAgent: proxy ? new HttpsProxyAgent(`http://${proxy}`) : undefined,
+        signal: AbortSignal.timeout(5000),
+        timeout: 5000,
+      })
 
-  return data
+      return data
+    } catch (error) {
+      if (attempt === retries - 1) {
+        throw error
+      }
+
+      await sleep(1_000)
+    }
+  }
 }
 
 export const getMarketRender = async ({

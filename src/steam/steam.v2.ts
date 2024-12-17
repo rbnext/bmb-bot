@@ -6,7 +6,7 @@ import { extractStickers, generateSteamMessage, sleep } from '../utils'
 import { getLatestCurrencyRates } from '../api/currencyfreaks'
 import { calculateTotalCost, getInspectLink, getItemReferencePrice, getStickerDetails } from './utils'
 import { format } from 'date-fns'
-import { CURRENCY_MAPPING } from './config'
+import { CURRENCY_MAPPING, STICKER_TOTAL_THRESHOLD } from './config'
 import { sendMessage } from '../api/telegram'
 
 const CASHED_LISTINGS = new Set<string>()
@@ -72,7 +72,7 @@ const fetchSteamMarketItem = async (config: { market_hash_name: string; proxy: s
 
         console.log(format(new Date(), 'HH:mm:ss'), config.market_hash_name, `$${stickerTotal.toFixed(2)}`)
 
-        if (convertedPrice >= stickerTotal) {
+        if (stickerTotal < STICKER_TOTAL_THRESHOLD) {
           continue
         }
 

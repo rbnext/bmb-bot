@@ -1,3 +1,5 @@
+export const STICKER_TOTAL_THRESHOLD = 10
+
 export const CURRENCY_MAPPING: Record<number, string> = {
   2001: 'USD',
   2002: 'GBP',

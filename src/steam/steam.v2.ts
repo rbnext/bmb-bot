@@ -92,7 +92,9 @@ const fetchSteamMarketItem = async (config: { market_hash_name: string; proxy: s
           details,
         }
 
-        await sendMessage(generateSteamMessage(payload))
+        if (estimatedProfit >= -10) {
+          await sendMessage(generateSteamMessage(payload))
+        }
       }
     }
   } catch (error) {

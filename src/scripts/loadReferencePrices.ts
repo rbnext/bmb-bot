@@ -14,7 +14,9 @@ import { SteamDBItem } from '../types'
       continue
     }
 
-    const goodsInfo = await getGoodsInfo({ goods_id: data[market_hash_name].goods_id })
+    const goods_id = data[market_hash_name].goods_id
+
+    const goodsInfo = await getGoodsInfo({ goods_id })
     const reference_price = Number(goodsInfo.data.goods_info.goods_ref_price)
 
     if (goodsInfo.data.market_hash_name === market_hash_name) {
@@ -22,12 +24,17 @@ import { SteamDBItem } from '../types'
 
       console.log(data[market_hash_name].reference_price, '->', reference_price)
 
+      delete data[market_hash_name]
+
       writeFileSync(
         pathname,
         JSON.stringify(
           {
             ...data,
-            [market_hash_name]: { ...data[market_hash_name], reference_price },
+            [market_hash_name]: {
+              goods_id,
+              reference_price,
+            },
           },
           null,
           4

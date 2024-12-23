@@ -16746,5 +16746,585 @@
     "Sticker | stavn (Gold) | Rio 2022": {
         "goods_id": 24023,
         "reference_price": 3.33
+    },
+    "Sticker | mezii (Gold) | Shanghai 2024": {
+        "goods_id": 32646,
+        "reference_price": 2.53
+    },
+    "Sticker | Spinx (Gold) | Shanghai 2024": {
+        "goods_id": 32310,
+        "reference_price": 9.17
+    },
+    "Sticker | Shara (Foil) | Cologne 2016": {
+        "goods_id": 1828,
+        "reference_price": 26.94
+    },
+    "Sticker | Quantum Bellator Fire (Holo) | Boston 2018": {
+        "goods_id": 3986,
+        "reference_price": 5.65
+    },
+    "Sticker | Black Jaggyfish": {
+        "goods_id": 19884,
+        "reference_price": 0.98
+    },
+    "Sticker | cajunb | MLG Columbus 2016": {
+        "goods_id": 3565,
+        "reference_price": 4.66
+    },
+    "Sticker | Xyp9x | MLG Columbus 2016": {
+        "goods_id": 6452,
+        "reference_price": 4.86
+    },
+    "Sticker | huNter- (Gold) | Shanghai 2024": {
+        "goods_id": 32675,
+        "reference_price": 9.88
+    },
+    "Sticker | jL (Holo) | Shanghai 2024": {
+        "goods_id": 32443,
+        "reference_price": 0.99
+    },
+    "Sticker | FlameZ (Holo) | Shanghai 2024": {
+        "goods_id": 32399,
+        "reference_price": 0.16
+    },
+    "Sticker | Ex3rcice (Glitter) | Shanghai 2024": {
+        "goods_id": 32299,
+        "reference_price": 0.04
+    },
+    "Sticker | frozen (Glitter) | Shanghai 2024": {
+        "goods_id": 32298,
+        "reference_price": 0.06
+    },
+    "Sticker | Luminosity Gaming (Holo) | MLG Columbus 2016": {
+        "goods_id": 9448,
+        "reference_price": 72.55
+    },
+    "Sticker | magixx | Shanghai 2024": {
+        "goods_id": 31941,
+        "reference_price": 0.04
+    },
+    "Sticker | NiKo (Gold) | Shanghai 2024": {
+        "goods_id": 32689,
+        "reference_price": 69.8
+    },
+    "Sticker | Team Spirit (Glitter) | Shanghai 2024": {
+        "goods_id": 32018,
+        "reference_price": 0.41
+    },
+    "Sticker | Kaze | Shanghai 2024": {
+        "goods_id": 32223,
+        "reference_price": 0.36
+    },
+    "Sticker | NBK- (Foil) | Krakow 2017": {
+        "goods_id": 10134,
+        "reference_price": 19.76
+    },
+    "Sticker | devoduvek | Boston 2018": {
+        "goods_id": 3439,
+        "reference_price": 2.75
+    },
+    "Sticker | Cloud9 (Glitter) | Shanghai 2024": {
+        "goods_id": 32123,
+        "reference_price": 0.48
+    },
+    "Sticker | Passion UA (Glitter) | Shanghai 2024": {
+        "goods_id": 32016,
+        "reference_price": 0.26
+    },
+    "Sticker | Perfect World (Glitter) | Shanghai 2024": {
+        "goods_id": 31945,
+        "reference_price": 0.3
+    },
+    "Sticker | G2 Esports (Glitter) | Shanghai 2024": {
+        "goods_id": 31975,
+        "reference_price": 0.44
+    },
+    "Sticker | The MongolZ (Glitter) | Shanghai 2024": {
+        "goods_id": 32228,
+        "reference_price": 0.21
+    },
+    "Sticker | G2 Esports (Holo) | Cologne 2016": {
+        "goods_id": 9614,
+        "reference_price": 12.49
+    },
+    "Sticker | NiKo (Glitter) | Shanghai 2024": {
+        "goods_id": 32241,
+        "reference_price": 0.99
+    },
+    "Sticker | mou | Atlanta 2017": {
+        "goods_id": 3206,
+        "reference_price": 5.36
+    },
+    "Sticker | jabbi (Gold) | Antwerp 2022": {
+        "goods_id": 22611,
+        "reference_price": 2.68
+    },
+    "Sticker | KSCERATO (Gold) | Paris 2023": {
+        "goods_id": 25408,
+        "reference_price": 1.93
+    },
+    "Sticker | FACEIT (Holo) | London 2018": {
+        "goods_id": 4228,
+        "reference_price": 3.13
+    },
+    "Sticker | jR | Boston 2018": {
+        "goods_id": 3849,
+        "reference_price": 1.8
+    },
+    "Sticker | Twistzz (Holo, Champion) | Antwerp 2022": {
+        "goods_id": 23020,
+        "reference_price": 1.55
+    },
+    "Sticker | coldzera (Foil) | MLG Columbus 2016": {
+        "goods_id": 2766,
+        "reference_price": 38.11
+    },
+    "Sticker | PENTA Sports (Foil) | Katowice 2015": {
+        "goods_id": 2756,
+        "reference_price": 37.12
+    },
+    "Sticker | freakazoid (Foil) | MLG Columbus 2016": {
+        "goods_id": 2741,
+        "reference_price": 35.29
+    },
+    "Sticker | mousesports (Foil) | MLG Columbus 2016": {
+        "goods_id": 3026,
+        "reference_price": 26.24
+    },
+    "Sticker | SK Gaming (Foil) | Boston 2018": {
+        "goods_id": 15919,
+        "reference_price": 26.91
+    },
+    "Sticker | Twistzz (Glitter) | Shanghai 2024": {
+        "goods_id": 32340,
+        "reference_price": 2.03
+    },
+    "Sticker | ScreaM (Foil) | Cologne 2015": {
+        "goods_id": 6839,
+        "reference_price": 32.46
+    },
+    "Sticker | NiKo (Foil) | Katowice 2019": {
+        "goods_id": 5575,
+        "reference_price": 15.03
+    },
+    "Sticker | Skadoodle (Foil) | Cologne 2015": {
+        "goods_id": 2912,
+        "reference_price": 42.2
+    },
+    "Sticker | ropz (Glitter) | Shanghai 2024": {
+        "goods_id": 32236,
+        "reference_price": 1.39
+    },
+    "Sticker | 3DMAX (Glitter) | Shanghai 2024": {
+        "goods_id": 32176,
+        "reference_price": 0.17
+    },
+    "Sticker | Team EnVyUs (Foil) | Katowice 2015": {
+        "goods_id": 2339,
+        "reference_price": 65.35
+    },
+    "Sticker | keshandr (Foil) | Boston 2018": {
+        "goods_id": 10241,
+        "reference_price": 33.17
+    },
+    "Sticker | BIG (Foil) | Katowice 2019": {
+        "goods_id": 5718,
+        "reference_price": 8.45
+    },
+    "Sticker | Dystopian Gaze (Lenticular)": {
+        "goods_id": 28818,
+        "reference_price": 23.13
+    },
+    "Sticker | fer | Boston 2018": {
+        "goods_id": 3821,
+        "reference_price": 3.22
+    },
+    "Sticker | FaZe Clan (Glitter) | Shanghai 2024": {
+        "goods_id": 31985,
+        "reference_price": 0.27
+    },
+    "Sticker | 910 | Shanghai 2024": {
+        "goods_id": 32278,
+        "reference_price": 0.1
+    },
+    "Sticker | fame (Glitter) | Shanghai 2024": {
+        "goods_id": 32626,
+        "reference_price": 0.04
+    },
+    "Sticker | ShahZaM (Gold) | Katowice 2019": {
+        "goods_id": 15996,
+        "reference_price": 28.23
+    },
+    "Sticker | wayLander | Cologne 2016": {
+        "goods_id": 2965,
+        "reference_price": 56.25
+    },
+    "Sticker | Titan | Katowice 2015": {
+        "goods_id": 9304,
+        "reference_price": 67.33
+    },
+    "Sticker | mixwell (Foil) | Cologne 2016": {
+        "goods_id": 2120,
+        "reference_price": 338.47
+    },
+    "Sticker | niko (Gold)  | Paris 2023": {
+        "goods_id": 25485,
+        "reference_price": 7.82
+    },
+    "Sticker | Ninjas in Pyjamas (Holo) | Katowice 2015": {
+        "goods_id": 11515,
+        "reference_price": 75.58
+    },
+    "Sticker | Flipsid3 Tactics (Holo) | Cologne 2016": {
+        "goods_id": 3564,
+        "reference_price": 26
+    },
+    "Sticker | fer (Foil) | Cologne 2016": {
+        "goods_id": 2621,
+        "reference_price": 19.76
+    },
+    "Sticker | spaze | Cologne 2016": {
+        "goods_id": 2232,
+        "reference_price": 40.65
+    },
+    "Sticker | ANGE1 (Gold) | Katowice 2019": {
+        "goods_id": 5587,
+        "reference_price": 48.98
+    },
+    "Sticker | frozen (Gold) | Copenhagen 2024": {
+        "goods_id": 29893,
+        "reference_price": 3.56
+    },
+    "Sticker | Astralis (Holo) | Cologne 2016": {
+        "goods_id": 4089,
+        "reference_price": 20.04
+    },
+    "Sticker | Team EnVyUs (Holo) | Boston 2018": {
+        "goods_id": 3418,
+        "reference_price": 13.21
+    },
+    "Sticker | Team Spirit (Holo) | Shanghai 2024": {
+        "goods_id": 32268,
+        "reference_price": 2.5
+    },
+    "Sticker | Fnatic (Glitter) | Shanghai 2024": {
+        "goods_id": 31992,
+        "reference_price": 0.22
+    },
+    "Sticker | Hobbit | Boston 2018": {
+        "goods_id": 10291,
+        "reference_price": 1.69
+    },
+    "Sticker | juanflatroo (Gold) | Antwerp 2022": {
+        "goods_id": 22624,
+        "reference_price": 1.94
+    },
+    "Sticker | cajunb | Boston 2018": {
+        "goods_id": 4909,
+        "reference_price": 6
+    },
+    "Sticker | ScreaM | Cologne 2015": {
+        "goods_id": 6829,
+        "reference_price": 12.2
+    },
+    "Sticker | boltz (Foil) | Cluj-Napoca 2015": {
+        "goods_id": 2242,
+        "reference_price": 42.2
+    },
+    "Sticker | Rogue (Foil) | London 2018": {
+        "goods_id": 3301,
+        "reference_price": 16.65
+    },
+    "Sticker | New Sheriff (Foil)": {
+        "goods_id": 7798,
+        "reference_price": 6.76
+    },
+    "Sticker | ZywOo (Holo) | Shanghai 2024": {
+        "goods_id": 32427,
+        "reference_price": 2.37
+    },
+    "Sticker | FlameZ (Glitter) | Shanghai 2024": {
+        "goods_id": 32394,
+        "reference_price": 0.04
+    },
+    "Sticker | insani (Glitter) | Shanghai 2024": {
+        "goods_id": 32628,
+        "reference_price": 0.08
+    },
+    "Sticker | JBa (Glitter) | Shanghai 2024": {
+        "goods_id": 32460,
+        "reference_price": 1.26
+    },
+    "Sticker | jks | Shanghai 2024": {
+        "goods_id": 32420,
+        "reference_price": 0.64
+    },
+    "Sticker | b1t (Glitter) | Shanghai 2024": {
+        "goods_id": 32218,
+        "reference_price": 0.02
+    },
+    "Sticker | ZywOo (Glitter) | Shanghai 2024": {
+        "goods_id": 32256,
+        "reference_price": 0.17
+    },
+    "Sticker | JDC (Gold) | Shanghai 2024": {
+        "goods_id": 32306,
+        "reference_price": 15.44
+    },
+    "Sticker | BIG (Holo) | Shanghai 2024": {
+        "goods_id": 32231,
+        "reference_price": 1.38
+    },
+    "Sticker | paiN Gaming (Glitter) | Shanghai 2024": {
+        "goods_id": 32033,
+        "reference_price": 0.05
+    },
+    "Sticker | FalleN | Shanghai 2024": {
+        "goods_id": 32336,
+        "reference_price": 0.08
+    },
+    "Sticker | Wicadia (Holo) | Copenhagen 2024": {
+        "goods_id": 29959,
+        "reference_price": 0.47
+    },
+    "Sticker | phzy (Gold) | Shanghai 2024": {
+        "goods_id": 32671,
+        "reference_price": 9.17
+    },
+    "Sticker | huNter- (Holo) | Shanghai 2024": {
+        "goods_id": 32297,
+        "reference_price": 1.1
+    },
+    "Sticker | fame (Holo) | Shanghai 2024": {
+        "goods_id": 32721,
+        "reference_price": 0.72
+    },
+    "Sticker | skullz | Shanghai 2024": {
+        "goods_id": 32255,
+        "reference_price": 0.02
+    },
+    "Sticker | FlameZ (Gold) | Copenhagen 2024": {
+        "goods_id": 29756,
+        "reference_price": 1.62
+    },
+    "Sticker | zont1x (Holo) | Shanghai 2024": {
+        "goods_id": 32636,
+        "reference_price": 0.44
+    },
+    "Sticker | chopper (Glitter) | Shanghai 2024": {
+        "goods_id": 32188,
+        "reference_price": 0.02
+    },
+    "Sticker | G2 Esports (Holo) | Shanghai 2024": {
+        "goods_id": 32347,
+        "reference_price": 2.09
+    },
+    "Sticker | m0NESY (Glitter) | Copenhagen 2024": {
+        "goods_id": 29775,
+        "reference_price": 0.47
+    },
+    "Sticker | Complexity Gaming (Holo) | Shanghai 2024": {
+        "goods_id": 32412,
+        "reference_price": 1.35
+    },
+    "Sticker | iM (Gold, Champion) | Copenhagen 2024": {
+        "goods_id": 30073,
+        "reference_price": 1.37
+    },
+    "Sticker | sh1ro (Gold) | Shanghai 2024": {
+        "goods_id": 32676,
+        "reference_price": 3.8
+    },
+    "Sticker | MOUZ (Gold) | Shanghai 2024": {
+        "goods_id": 32269,
+        "reference_price": 4.23
+    },
+    "Sticker | 910 (Glitter) | Shanghai 2024": {
+        "goods_id": 32422,
+        "reference_price": 0.74
+    },
+    "Sticker | Boombl4 (Gold) | Shanghai 2024": {
+        "goods_id": 32659,
+        "reference_price": 7.53
+    },
+    "Sticker | jL (Gold, Champion) | Copenhagen 2024": {
+        "goods_id": 30048,
+        "reference_price": 2.4
+    },
+    "Sticker | jL (Holo, Champion) | Copenhagen 2024": {
+        "goods_id": 30065,
+        "reference_price": 0.29
+    },
+    "Sticker | GamerLegion (Gold) | Shanghai 2024": {
+        "goods_id": 32326,
+        "reference_price": 4.78
+    },
+    "Sticker | vexite | Shanghai 2024": {
+        "goods_id": 32246,
+        "reference_price": 0.03
+    },
+    "Sticker | Sonic | Shanghai 2024": {
+        "goods_id": 32215,
+        "reference_price": 0.03
+    },
+    "Sticker | Boombl4 | Shanghai 2024": {
+        "goods_id": 32164,
+        "reference_price": 0.04
+    },
+    "Sticker | felps | Shanghai 2024": {
+        "goods_id": 32147,
+        "reference_price": 0.04
+    },
+    "Sticker | Perfecto | Shanghai 2024": {
+        "goods_id": 32038,
+        "reference_price": 0.06
+    },
+    "Sticker | FaZe Clan | Shanghai 2024": {
+        "goods_id": 31982,
+        "reference_price": 0.05
+    },
+    "Sticker | GamerLegion | Shanghai 2024": {
+        "goods_id": 31950,
+        "reference_price": 0.03
+    },
+    "Sticker | Grim (Gold) | Copenhagen 2024": {
+        "goods_id": 29849,
+        "reference_price": 0.95
+    },
+    "Sticker | Vitality (Holo) | Shanghai 2024": {
+        "goods_id": 32368,
+        "reference_price": 0.7
+    },
+    "Sticker | Cloud9 | Shanghai 2024": {
+        "goods_id": 32035,
+        "reference_price": 0.02
+    },
+    "Sticker | TeSeS (Glitter) | Shanghai 2024": {
+        "goods_id": 32153,
+        "reference_price": 0.04
+    },
+    "Sticker | Twistzz | Shanghai 2024": {
+        "goods_id": 32303,
+        "reference_price": 0.66
+    },
+    "Sticker | vexite (Glitter) | Shanghai 2024": {
+        "goods_id": 32378,
+        "reference_price": 0.07
+    },
+    "Sticker | Djoko | Shanghai 2024": {
+        "goods_id": 32209,
+        "reference_price": 0.03
+    },
+    "Sticker | kyxsan (Glitter) | Shanghai 2024": {
+        "goods_id": 32193,
+        "reference_price": 0.04
+    },
+    "Sticker | Aleksib (Glitter) | Shanghai 2024": {
+        "goods_id": 32148,
+        "reference_price": 0.02
+    },
+    "Sticker | frozen | Shanghai 2024": {
+        "goods_id": 31960,
+        "reference_price": 0.03
+    },
+    "Sticker | Lucky | Shanghai 2024": {
+        "goods_id": 31938,
+        "reference_price": 0.03
+    },
+    "Sticker | Ex3rcice | Shanghai 2024": {
+        "goods_id": 31931,
+        "reference_price": 0.03
+    },
+    "Sticker | NiKo | Shanghai 2024": {
+        "goods_id": 32166,
+        "reference_price": 0.16
+    },
+    "Sticker | iM (Holo, Champion) | Copenhagen 2024": {
+        "goods_id": 30068,
+        "reference_price": 0.32
+    },
+    "Sticker | GamerLegion (Glitter) | Shanghai 2024": {
+        "goods_id": 32183,
+        "reference_price": 0.08
+    },
+    "Sticker | G2 Esports | Shanghai 2024": {
+        "goods_id": 31969,
+        "reference_price": 0.02
+    },
+    "Sticker | ultimate (Glitter) | Shanghai 2024": {
+        "goods_id": 32440,
+        "reference_price": 0.29
+    },
+    "Sticker | w0nderful (Holo) | Shanghai 2024": {
+        "goods_id": 32357,
+        "reference_price": 0.29
+    },
+    "Sticker | floppy | Shanghai 2024": {
+        "goods_id": 32258,
+        "reference_price": 0.04
+    },
+    "Sticker | rigoN | Shanghai 2024": {
+        "goods_id": 32184,
+        "reference_price": 0.04
+    },
+    "Sticker | sjuush | Shanghai 2024": {
+        "goods_id": 32132,
+        "reference_price": 0.03
+    },
+    "Sticker | paiN Gaming | Shanghai 2024": {
+        "goods_id": 31999,
+        "reference_price": 0.04
+    },
+    "Sticker | sense (Glitter) | Copenhagen 2024": {
+        "goods_id": 29194,
+        "reference_price": 0.04
+    },
+    "Sticker | Team Liquid (Glitter) | Shanghai 2024": {
+        "goods_id": 32182,
+        "reference_price": 0.25
+    },
+    "Sticker | rain (Glitter) | Shanghai 2024": {
+        "goods_id": 31930,
+        "reference_price": 0.1
+    },
+    "Sticker | BIG (Glitter) | Shanghai 2024": {
+        "goods_id": 32265,
+        "reference_price": 0.07
+    },
+    "Sticker | malbsMd | Shanghai 2024": {
+        "goods_id": 31966,
+        "reference_price": 0.03
+    },
+    "Sticker | Complexity Gaming (Glitter) | Shanghai 2024": {
+        "goods_id": 32233,
+        "reference_price": 0.21
+    },
+    "Sticker | sjuush (Glitter) | Shanghai 2024": {
+        "goods_id": 32198,
+        "reference_price": 0.03
+    },
+    "Sticker | Spinx (Glitter) | Shanghai 2024": {
+        "goods_id": 32168,
+        "reference_price": 0.02
+    },
+    "Sticker | Complexity Gaming | Shanghai 2024": {
+        "goods_id": 31997,
+        "reference_price": 0.03
+    },
+    "Sticker | Team Liquid | Shanghai 2024": {
+        "goods_id": 31994,
+        "reference_price": 0.02
+    },
+    "Sticker | Dycha (Glitter) | Copenhagen 2024": {
+        "goods_id": 29703,
+        "reference_price": 0.04
+    },
+    "Sticker | Patti (Glitter) | Copenhagen 2024": {
+        "goods_id": 29333,
+        "reference_price": 0.04
+    },
+    "Sticker | MOUZ (Glitter) | Shanghai 2024": {
+        "goods_id": 32020,
+        "reference_price": 0.13
     }
 }

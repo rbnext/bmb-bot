@@ -1,7 +1,7 @@
 import 'dotenv/config'
 
 import { getMarketPage, getSearchMarketRender } from '../api/steam'
-import { CurrencyRates, Nullable, SteamMarketAssets, SteamMarketListingInfo } from '../types'
+import { CurrencyRates, Nullable, SearchMarketRender, SteamMarketAssets, SteamMarketListingInfo } from '../types'
 import { extractStickers, generateSteamMessage, sleep } from '../utils'
 import { getLatestCurrencyRates } from '../api/currencyfreaks'
 import { calculateTotalCost, getInspectLink, getItemReferencePrice, getStickerDetails } from './utils'
@@ -10,14 +10,14 @@ import { CURRENCY_MAPPING, STICKER_TOTAL_THRESHOLD } from './config'
 import { sendMessage } from '../api/telegram'
 
 const CASHED_LISTINGS = new Set<string>()
-const GOODS_CACHE: Record<string, { price: number }> = {}
+const GOODS_CACHE: Record<string, { price: number; listings: number }> = {}
 
 let currencyRates: CurrencyRates['rates'] = {}
 
 const assetsRegex = /var g_rgAssets = ({.*?});/
 const listingInfoRegex = /var g_rgListingInfo = ({.*?});/
 
-const fetchSteamMarketItem = async (config: { market_hash_name: string; proxy: string }) => {
+const fetchSteamMarketItem = async (config: { market_hash_name: string; proxy: string; itemsToLoad: number }) => {
   try {
     const html = await getMarketPage({
       proxy: config.proxy,
@@ -64,7 +64,7 @@ const fetchSteamMarketItem = async (config: { market_hash_name: string; proxy: s
 
       const stickers = extractStickers(htmlDescription)
 
-      if (convertedPrice && stickers.length !== 0 && index < 2) {
+      if (convertedPrice && stickers.length !== 0 && index < config.itemsToLoad) {
         const details = await getStickerDetails(stickers)
         const totalCost = calculateTotalCost(stickers, details)
 
@@ -117,7 +117,7 @@ async function init(): Promise<void> {
   // eslint-disable-next-line no-constant-condition
   while (true) {
     try {
-      const response = await getSearchMarketRender({
+      const response: SearchMarketRender = await getSearchMarketRender({
         query: 'Sticker',
         quality: ['tag_strange', 'tag_normal'],
         start: STEAM_SEARCH_START,
@@ -125,19 +125,28 @@ async function init(): Promise<void> {
       })
 
       for (const item of response.results) {
+        const sell_listings = item.sell_listings
         const market_hash_name = item.asset_description.market_hash_name
 
-        if (market_hash_name in GOODS_CACHE && GOODS_CACHE[market_hash_name].price !== item.sell_price) {
-          hasMarketUpdated = true
+        if (sell_listings >= 50) {
+          if (market_hash_name in GOODS_CACHE && GOODS_CACHE[market_hash_name].price !== item.sell_price) {
+            hasMarketUpdated = true
+          }
+
+          if (market_hash_name in GOODS_CACHE && GOODS_CACHE[market_hash_name].price > item.sell_price) {
+            fetchSteamMarketItem({ market_hash_name, proxy: STEAM_PROXY, itemsToLoad: 2 })
+          }
+        } else {
+          if (market_hash_name in GOODS_CACHE && GOODS_CACHE[market_hash_name].listings !== item.sell_listings) {
+            hasMarketUpdated = true
+          }
+
+          if (market_hash_name in GOODS_CACHE && GOODS_CACHE[market_hash_name].listings < item.sell_listings) {
+            fetchSteamMarketItem({ market_hash_name, proxy: STEAM_PROXY, itemsToLoad: 10 })
+          }
         }
 
-        if (market_hash_name in GOODS_CACHE && GOODS_CACHE[market_hash_name].price > item.sell_price) {
-          fetchSteamMarketItem({ market_hash_name, proxy: STEAM_PROXY })
-        }
-
-        GOODS_CACHE[market_hash_name] = {
-          price: item.sell_price,
-        }
+        GOODS_CACHE[market_hash_name] = { price: item.sell_price, listings: item.sell_listings }
       }
     } catch (error) {
       console.log(error.message)

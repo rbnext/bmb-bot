@@ -125,25 +125,14 @@ async function init(): Promise<void> {
       })
 
       for (const item of response.results) {
-        const sell_listings = item.sell_listings
         const market_hash_name = item.asset_description.market_hash_name
 
-        if (sell_listings >= 50) {
-          if (market_hash_name in GOODS_CACHE && GOODS_CACHE[market_hash_name].price !== item.sell_price) {
-            hasMarketUpdated = true
-          }
+        if (market_hash_name in GOODS_CACHE && GOODS_CACHE[market_hash_name].price !== item.sell_price) {
+          hasMarketUpdated = true
+        }
 
-          if (market_hash_name in GOODS_CACHE && GOODS_CACHE[market_hash_name].price > item.sell_price) {
-            fetchSteamMarketItem({ market_hash_name, proxy: STEAM_PROXY, itemsToLoad: 2 })
-          }
-        } else {
-          if (market_hash_name in GOODS_CACHE && GOODS_CACHE[market_hash_name].listings !== item.sell_listings) {
-            hasMarketUpdated = true
-          }
-
-          if (market_hash_name in GOODS_CACHE && GOODS_CACHE[market_hash_name].listings < item.sell_listings) {
-            fetchSteamMarketItem({ market_hash_name, proxy: STEAM_PROXY, itemsToLoad: 10 })
-          }
+        if (market_hash_name in GOODS_CACHE && GOODS_CACHE[market_hash_name].price > item.sell_price) {
+          fetchSteamMarketItem({ market_hash_name, proxy: STEAM_PROXY, itemsToLoad: 2 })
         }
 
         GOODS_CACHE[market_hash_name] = { price: item.sell_price, listings: item.sell_listings }

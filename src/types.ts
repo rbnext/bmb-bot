@@ -17,8 +17,15 @@ export type GoodsSellOrderItem = {
     paintwear: string
     info: {
       stickers: unknown[]
+      keychains: KeychainItem[]
     }
   }
+}
+
+export type KeychainItem = {
+  goods_id: number
+  name: string
+  sell_reference_price: string
 }
 
 export type GoodsSellOrder = {

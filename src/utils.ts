@@ -1,5 +1,5 @@
 import { differenceInMinutes, formatDistance, isAfter, subHours, subMinutes } from 'date-fns'
-import { MessageType, ShopBillOrderItem, Source, SteamInventoryHelperSticker } from './types'
+import { KeychainItem, MessageType, ShopBillOrderItem, Source, SteamInventoryHelperSticker } from './types'
 
 export const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms))
 
@@ -126,6 +126,7 @@ export const generateMessage = ({
   bargainPrice,
   refPriceDelta,
   positions,
+  keychain,
 }: {
   id: number
   name: string
@@ -146,6 +147,7 @@ export const generateMessage = ({
   bargainPrice?: number
   stickerPremium?: number
   positions?: number
+  keychain?: KeychainItem
 }) => {
   const message: string[] = []
 
@@ -183,6 +185,10 @@ export const generateMessage = ({
 
   if (float) {
     message.push(`<b>Float</b>: ${float}\n`)
+  }
+
+  if (keychain) {
+    message.push(`<b>Keychain</b>: ${keychain.name} ($${keychain.sell_reference_price})\n`)
   }
 
   if (stickerTotal > 0) {

@@ -86,6 +86,7 @@ export const executeBuffBargainTrade = async (
     const reference_price = Number(goodsInfo.data.goods_info.goods_ref_price)
     const bargain_price = Number((Math.min(median_price, reference_price) * 0.9).toFixed(1))
     const paintwear = lowestPricedItem.asset_info.paintwear
+    const keychain = lowestPricedItem.asset_info.info?.keychains?.[0]
 
     if (
       Number(lowestPricedItem.price) > bargain_price &&
@@ -110,6 +111,7 @@ export const executeBuffBargainTrade = async (
           createdAt: lowestPricedItem.created_at,
           updatedAt: lowestPricedItem.updated_at,
           source: options.source,
+          keychain,
         })
       ).then((message) => {
         BARGAIN_NOTIFICATIONS.set(lowestPricedItem.id, {
@@ -140,6 +142,7 @@ export const executeBuffBargainTrade = async (
     const min_steam_price = prices.length !== 0 ? Math.min(...prices) : 0
     const bargain_price = Number((min_steam_price / (1 + STEAM_PURCHASE_THRESHOLD / 100)).toFixed(1))
     const paintwear = lowestPricedItem.asset_info.paintwear
+    const keychain = lowestPricedItem.asset_info.info?.keychains?.[0]
 
     if (
       Number(lowestPricedItem.price) > bargain_price &&
@@ -165,6 +168,7 @@ export const executeBuffBargainTrade = async (
           updatedAt: lowestPricedItem.updated_at,
           steamPrice: min_steam_price,
           source: options.source,
+          keychain,
         })
       ).then((message) => {
         BARGAIN_NOTIFICATIONS.set(lowestPricedItem.id, {

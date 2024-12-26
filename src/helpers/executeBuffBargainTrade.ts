@@ -5,6 +5,7 @@ import {
   getSentBargain,
   getUserStorePopup,
   postCreateBargain,
+  postGoodsBuy,
 } from '../api/buff'
 import { MarketGoodsItem, MessageType, Source } from '../types'
 import { generateMessage, isLessThanXMinutes, median, sleep } from '../utils'
@@ -88,7 +89,28 @@ export const executeBuffBargainTrade = async (
     const paintwear = lowestPricedItem.asset_info.paintwear
     const keychain = lowestPricedItem.asset_info.info?.keychains?.[0]
 
-    if (
+    if (bargain_price >= Number(lowestPricedItem.price)) {
+      const response = await postGoodsBuy({ price: current_price, sell_order_id: lowestPricedItem.id })
+
+      if (response.code !== 'OK') {
+        console.log('Error:', JSON.stringify(response))
+
+        return
+      }
+
+      sendMessage(
+        generateMessage({
+          id: goods_id,
+          type: MessageType.Purchased,
+          price: current_price,
+          name: item.market_hash_name,
+          float: lowestPricedItem.asset_info.paintwear,
+          createdAt: lowestPricedItem.created_at,
+          updatedAt: lowestPricedItem.updated_at,
+          source: options.source,
+        })
+      )
+    } else if (
       Number(lowestPricedItem.price) > bargain_price &&
       Number(lowestPricedItem.lowest_bargain_price) < bargain_price
     ) {

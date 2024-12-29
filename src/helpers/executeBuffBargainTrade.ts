@@ -85,14 +85,9 @@ export const executeBuffBargainTrade = async (
 
     const goodsInfo = await getGoodsInfo({ goods_id })
     const reference_price = Number(goodsInfo.data.goods_info.goods_ref_price)
+    const bargain_price = Number((Math.min(median_price, reference_price) * 0.9).toFixed(1))
     const paintwear = lowestPricedItem.asset_info.paintwear
     const keychain = lowestPricedItem.asset_info.info?.keychains?.[0]
-
-    const bargain_price = (() => {
-      const next_price = Number((Math.min(median_price, reference_price) * 0.9).toFixed(1))
-
-      return current_price - next_price >= 12.5 ? Number((current_price - 12.5).toFixed(1)) : next_price
-    })()
 
     if (bargain_price >= Number(lowestPricedItem.price)) {
       const response = await postGoodsBuy({ price: current_price, sell_order_id: lowestPricedItem.id })
@@ -167,14 +162,9 @@ export const executeBuffBargainTrade = async (
 
     const prices = await getMaxPricesForXDays(item.market_hash_name)
     const min_steam_price = prices.length !== 0 ? Math.min(...prices) : 0
+    const bargain_price = Number((min_steam_price / (1 + STEAM_PURCHASE_THRESHOLD / 100)).toFixed(1))
     const paintwear = lowestPricedItem.asset_info.paintwear
     const keychain = lowestPricedItem.asset_info.info?.keychains?.[0]
-
-    const bargain_price = (() => {
-      const next_price = Number((min_steam_price / (1 + STEAM_PURCHASE_THRESHOLD / 100)).toFixed(1))
-
-      return current_price - next_price >= 12.5 ? Number((current_price - 12.5).toFixed(1)) : next_price
-    })()
 
     if (
       Number(lowestPricedItem.price) > bargain_price &&

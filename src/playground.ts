@@ -48,7 +48,7 @@ const init = async () => {
     }
   }
 
-  await sleep(30_000)
+  await sleep(20_000)
 
   init()
 }

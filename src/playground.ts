@@ -4,6 +4,10 @@ import { getDifferenceInMinutes, sleep } from './utils'
 
 const ACTIVE_BARGAINS = new Set<string>()
 
+const generateFees = (diff: number, steps = 5): number[] => {
+  return Array.from({ length: steps }, (_, i) => parseFloat(((diff / steps) * (i + 1)).toFixed(2)))
+}
+
 const init = async () => {
   const bargains = await getSentBargain({})
 
@@ -23,7 +27,11 @@ const init = async () => {
       await postCancelBargain({ bargain_id: bargain.id })
       await sleep(3_000)
 
-      for (const fee of [0.2, 0.3, 0.4, 0.55, 0.7]) {
+      const fees = generateFees((Number(bargain.original_price) - Number(bargain.price)) * 0.3, 6)
+
+      console.log('Fees:', fees)
+
+      for (const fee of fees) {
         const price = Number((Number(bargain.price) + fee).toFixed(2))
         const preview = await getCreatePreviewBargain({ sell_order_id: bargain.sell_order_id, price })
         const isFailed = preview.data?.pay_confirm?.id === 'bargain_higher_price'

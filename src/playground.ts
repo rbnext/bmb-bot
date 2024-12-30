@@ -27,7 +27,9 @@ const init = async () => {
       await postCancelBargain({ bargain_id: bargain.id })
       await sleep(3_000)
 
-      const fees = generateFees((Number(bargain.original_price) - Number(bargain.price)) * 0.3)
+      const original_price = Number(bargain.original_price)
+
+      const fees = generateFees((original_price - Number(bargain.price)) * original_price >= 50 ? 0.3 : 0.2)
 
       console.log('Fees:', fees)
 

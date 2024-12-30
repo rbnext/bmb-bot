@@ -29,7 +29,7 @@ const MARKET_HASH_NAMES = [
     isSweet: (template: number) => template > 90000 || template < 10000,
     canSendToTelegram: false,
     userAgent: new UserAgent().toString(),
-    proxy: 'http://05b8879f:4809862d7f@192.144.10.226:30013',
+    proxy: 'http://efyzXEcgYF:FyrPBI26Yk@185.5.249.200:11769',
   },
 ]
 

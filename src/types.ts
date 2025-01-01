@@ -510,6 +510,13 @@ export type SIHInspectItemInfo = {
   }
 }
 
+type CSFloatListingItemStickerItem = {
+  name: string
+  reference: {
+    price: number
+  }
+}
+
 type CSFloatListingItem = {
   created_at: string
   id: string
@@ -520,6 +527,7 @@ type CSFloatListingItem = {
     is_stattrak: boolean
     is_souvenir: boolean
     is_commodity: boolean
+    stickers: CSFloatListingItemStickerItem[]
   }
   reference: {
     base_price: number

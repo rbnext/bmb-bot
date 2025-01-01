@@ -6,8 +6,8 @@ import { getCSFloatListings } from './api/csfloat'
 const init = async (market_hash_name: string) => {
   const response = await getCSFloatListings({
     market_hash_name,
-    min_float: 0.15,
-    max_float: 0.16,
+    min_float: 0.07,
+    max_float: 0.15,
   })
 
   const item = response.data[0]
@@ -17,7 +17,7 @@ const init = async (market_hash_name: string) => {
   }
 }
 
-init('USP-S | Printstream (Field-Tested)')
+init('AK-47 | Neon Revolution (Minimal Wear)')
 
 // const ACTIVE_BARGAINS = new Set<string>()
 

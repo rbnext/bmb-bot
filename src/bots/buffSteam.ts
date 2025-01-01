@@ -67,10 +67,16 @@ const buffSteam = async () => {
 }
 
 ;(async () => {
-  const pages = Array.from({ length: 80 }, (_, i) => i + 1)
+  const pages = Array.from({ length: 50 }, (_, i) => i + 1)
 
   for (const page_num of pages) {
-    const goods = await getMarketGoods({ page_num, min_price: 1, max_price })
+    const goods = await getMarketGoods({
+      page_num,
+      min_price: 1,
+      max_price,
+      category_group: 'rifle,pistol,smg,shotgun,machinegun',
+      category: 'csgo_type_musickit,csgo_tool_patch,csgo_type_collectible',
+    })
     for (const item of goods.data.items) GOODS_CACHE[item.id] = { price: Number(item.sell_min_price) }
     if (goods.data.items.length !== 50) break
     await sleep(5_000)
@@ -89,6 +95,9 @@ const buffSteam = async () => {
     if (goods.data.items.length !== 50) break
     await sleep(5_000)
   }
+
+  console.log('Loaded items: ', Object.keys(GOODS_CACHE).length)
+  console.log('Disabled items: ', Object.keys(GOODS_BLACKLIST_CACHE).length)
 
   buffSteam()
 })()

@@ -66,29 +66,42 @@ export const executeBuffBargainTrade = async (
     }
   }
 
-  if (salesLastWeek.length >= GOODS_SALES_THRESHOLD) {
-    const orders = await getGoodsSellOrder({ goods_id, exclude_current_user: 1 })
+  const orders = await getGoodsSellOrder({ goods_id, exclude_current_user: 1 })
+  const lowestPricedItem = orders.data.items.find((el) => el.price === item.sell_min_price)
 
+  if (!lowestPricedItem) return
+  if (!lowestPricedItem.allow_bargain) return
+  if (!isLessThanXMinutes(lowestPricedItem.created_at, 1)) return
+  if (FLOAT_BLACKLIST.has(lowestPricedItem.asset_info.instanceid)) return
+  if (SELLER_BLACKLIST.includes(lowestPricedItem.user_id)) return
+
+  const userStorePopup = await getUserStorePopup({ user_id: lowestPricedItem.user_id })
+
+  if (userStorePopup.code !== 'OK') return
+  if (Number(userStorePopup.data.bookmark_count) > 2) return
+
+  const paintwear = lowestPricedItem.asset_info.paintwear
+  const keychain = lowestPricedItem.asset_info.info?.keychains?.[0]
+
+  const payload = {
+    id: goods_id,
+    float: paintwear,
+    keychain: keychain,
+    price: current_price,
+    type: MessageType.Bargain,
+    name: item.market_hash_name,
+    createdAt: lowestPricedItem.created_at,
+    updatedAt: lowestPricedItem.updated_at,
+    source: options.source,
+  }
+
+  if (salesLastWeek.length >= GOODS_SALES_THRESHOLD) {
     const sales = salesLastWeek.map(({ price }) => Number(price))
     const median_price = median(sales.filter((price) => current_price * 2 > price))
-    const lowestPricedItem = orders.data.items.find((el) => el.price === item.sell_min_price)
-
-    if (!lowestPricedItem) return
-    if (!lowestPricedItem.allow_bargain) return
-    if (!isLessThanXMinutes(lowestPricedItem.created_at, 1)) return
-    if (FLOAT_BLACKLIST.has(lowestPricedItem.asset_info.instanceid)) return
-    if (SELLER_BLACKLIST.includes(lowestPricedItem.user_id)) return
-
-    const userStorePopup = await getUserStorePopup({ user_id: lowestPricedItem.user_id })
-
-    if (userStorePopup.code !== 'OK') return
-    if (Number(userStorePopup.data.bookmark_count) > 2) return
 
     const goodsInfo = await getGoodsInfo({ goods_id })
     const reference_price = Number(goodsInfo.data.goods_info.goods_ref_price)
     const bargain_price = Number((Math.min(median_price, reference_price) * 0.9).toFixed(1))
-    const paintwear = lowestPricedItem.asset_info.paintwear
-    const keychain = lowestPricedItem.asset_info.info?.keychains?.[0]
 
     if (bargain_price >= Number(lowestPricedItem.price)) {
       const response = await postGoodsBuy({ price: current_price, sell_order_id: lowestPricedItem.id })
@@ -99,18 +112,7 @@ export const executeBuffBargainTrade = async (
         return
       }
 
-      sendMessage(
-        generateMessage({
-          id: goods_id,
-          type: MessageType.Purchased,
-          price: current_price,
-          name: item.market_hash_name,
-          float: lowestPricedItem.asset_info.paintwear,
-          createdAt: lowestPricedItem.created_at,
-          updatedAt: lowestPricedItem.updated_at,
-          source: options.source,
-        })
-      )
+      sendMessage(generateMessage({ ...payload, type: MessageType.Purchased }))
     } else if (
       Number(lowestPricedItem.price) > bargain_price &&
       Number(lowestPricedItem.lowest_bargain_price) < bargain_price
@@ -138,25 +140,16 @@ export const executeBuffBargainTrade = async (
             return
           }
 
-          sendMessage(
-            generateMessage({
-              id: goods_id,
-              type: MessageType.Purchased,
-              price: current_price,
-              csFloatPrice: cs_float_price,
-              name: item.market_hash_name,
-              float: lowestPricedItem.asset_info.paintwear,
-              createdAt: lowestPricedItem.created_at,
-              updatedAt: lowestPricedItem.updated_at,
-              source: options.source,
-            })
-          )
+          sendMessage(generateMessage({ ...payload, type: MessageType.Purchased, csFloatPrice: cs_float_price }))
 
           return
         }
       }
 
-      const response = await postCreateBargain({ price: bargain_price, sell_order_id: lowestPricedItem.id })
+      const response = await postCreateBargain({
+        price: bargain_price,
+        sell_order_id: lowestPricedItem.id,
+      })
 
       if (response.code !== 'OK') {
         console.log('Error:', JSON.stringify(response))
@@ -164,20 +157,7 @@ export const executeBuffBargainTrade = async (
         return
       }
 
-      sendMessage(
-        generateMessage({
-          id: goods_id,
-          type: MessageType.Bargain,
-          price: current_price,
-          bargainPrice: bargain_price,
-          name: item.market_hash_name,
-          float: lowestPricedItem.asset_info.paintwear,
-          createdAt: lowestPricedItem.created_at,
-          updatedAt: lowestPricedItem.updated_at,
-          source: options.source,
-          keychain,
-        })
-      ).then((message) => {
+      sendMessage(generateMessage({ ...payload, bargainPrice: bargain_price })).then((message) => {
         BARGAIN_NOTIFICATIONS.set(lowestPricedItem.id, {
           sell_order_id: lowestPricedItem.id,
           telegram_message_id: message.result.message_id,
@@ -188,31 +168,18 @@ export const executeBuffBargainTrade = async (
       })
     }
   } else {
-    const orders = await getGoodsSellOrder({ goods_id, exclude_current_user: 1 })
-    const lowestPricedItem = orders.data.items.find((el) => el.price === item.sell_min_price)
-
-    if (!lowestPricedItem) return
-    if (!lowestPricedItem.allow_bargain) return
-    if (!isLessThanXMinutes(lowestPricedItem.created_at, 1)) return
-    if (FLOAT_BLACKLIST.has(lowestPricedItem.asset_info.instanceid)) return
-    if (SELLER_BLACKLIST.includes(lowestPricedItem.user_id)) return
-
-    const userStorePopup = await getUserStorePopup({ user_id: lowestPricedItem.user_id })
-
-    if (userStorePopup.code !== 'OK') return
-    if (Number(userStorePopup.data.bookmark_count) > 2) return
-
     const prices = await getMaxPricesForXDays(item.market_hash_name)
     const min_steam_price = prices.length !== 0 ? Math.min(...prices) : 0
     const bargain_price = Number((min_steam_price / (1 + STEAM_PURCHASE_THRESHOLD / 100)).toFixed(1))
-    const paintwear = lowestPricedItem.asset_info.paintwear
-    const keychain = lowestPricedItem.asset_info.info?.keychains?.[0]
 
     if (
       Number(lowestPricedItem.price) > bargain_price &&
       Number(lowestPricedItem.lowest_bargain_price) < bargain_price
     ) {
-      const response = await postCreateBargain({ price: bargain_price, sell_order_id: lowestPricedItem.id })
+      const response = await postCreateBargain({
+        price: bargain_price,
+        sell_order_id: lowestPricedItem.id,
+      })
 
       if (response.code !== 'OK') {
         console.log('Error:', JSON.stringify(response))
@@ -220,29 +187,17 @@ export const executeBuffBargainTrade = async (
         return
       }
 
-      sendMessage(
-        generateMessage({
-          id: goods_id,
-          type: MessageType.Bargain,
-          price: current_price,
-          bargainPrice: bargain_price,
-          name: item.market_hash_name,
-          float: lowestPricedItem.asset_info.paintwear,
-          createdAt: lowestPricedItem.created_at,
-          updatedAt: lowestPricedItem.updated_at,
-          steamPrice: min_steam_price,
-          source: options.source,
-          keychain,
-        })
-      ).then((message) => {
-        BARGAIN_NOTIFICATIONS.set(lowestPricedItem.id, {
-          sell_order_id: lowestPricedItem.id,
-          telegram_message_id: message.result.message_id,
-        })
-        if (paintwear) {
-          FLOAT_BLACKLIST.add(paintwear)
+      sendMessage(generateMessage({ ...payload, bargainPrice: bargain_price, steamPrice: min_steam_price })).then(
+        (message) => {
+          BARGAIN_NOTIFICATIONS.set(lowestPricedItem.id, {
+            sell_order_id: lowestPricedItem.id,
+            telegram_message_id: message.result.message_id,
+          })
+          if (paintwear) {
+            FLOAT_BLACKLIST.add(paintwear)
+          }
         }
-      })
+      )
     }
   }
 }

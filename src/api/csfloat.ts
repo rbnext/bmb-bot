@@ -20,8 +20,8 @@ export const getCSFloatListings = async ({
 }: {
   type?: string
   limit?: number
-  min_float: number
-  max_float: number
+  min_float?: number
+  max_float?: number
   market_hash_name: string
   sort_by?: string
 }): Promise<CSFloatListing> => {

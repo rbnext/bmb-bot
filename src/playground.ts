@@ -1,13 +1,13 @@
 import 'dotenv/config'
-import { getCreatePreviewBargain, getSentBargain, postCancelBargain, postCreateBargain } from './api/buff'
-import { getDifferenceInMinutes, sleep } from './utils'
+// import { getCreatePreviewBargain, getSentBargain, postCancelBargain, postCreateBargain } from './api/buff'
+// import { getDifferenceInMinutes, sleep } from './utils'
 import { getCSFloatListings } from './api/csfloat'
 
 const init = async (market_hash_name: string) => {
   const response = await getCSFloatListings({
     market_hash_name,
-    min_float: 0.07,
-    max_float: 0.15,
+    min_float: 0.15,
+    max_float: 0.38,
   })
 
   const item = response.data[0]
@@ -17,7 +17,7 @@ const init = async (market_hash_name: string) => {
   }
 }
 
-init('AK-47 | Neon Revolution (Minimal Wear)')
+init('M4A1-S | Mecha Industries (Field-Tested)')
 
 // const ACTIVE_BARGAINS = new Set<string>()
 

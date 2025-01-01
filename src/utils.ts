@@ -127,6 +127,7 @@ export const generateMessage = ({
   refPriceDelta,
   positions,
   keychain,
+  csFloatPrice,
 }: {
   id: number
   name: string
@@ -148,6 +149,7 @@ export const generateMessage = ({
   stickerPremium?: number
   positions?: number
   keychain?: KeychainItem
+  csFloatPrice?: number
 }) => {
   const message: string[] = []
 
@@ -158,6 +160,10 @@ export const generateMessage = ({
 
   if (bargainPrice) message.push(`<b>Price</b>: <s>$${price}</s> $${bargainPrice}\n`)
   else message.push(`<b>Price</b>: $${price}\n`)
+
+  if (csFloatPrice) {
+    message.push(`<b>CS Float price</b>: $${csFloatPrice}\n`)
+  }
 
   if (steamPrice) {
     message.push(`<b>Steam price</b>: $${steamPrice}\n`)

@@ -13,6 +13,7 @@ import { sendMessage } from '../api/telegram'
 import { differenceInDays } from 'date-fns'
 import { GOODS_SALES_THRESHOLD, STEAM_PURCHASE_THRESHOLD } from '../config'
 import { getMaxPricesForXDays } from './getMaxPricesForXDays'
+import { getCSFloatListings } from '../api/csfloat'
 
 type BargainNotification = {
   sell_order_id: string
@@ -114,6 +115,47 @@ export const executeBuffBargainTrade = async (
       Number(lowestPricedItem.price) > bargain_price &&
       Number(lowestPricedItem.lowest_bargain_price) < bargain_price
     ) {
+      const isFieldTested = item.market_hash_name.includes('Field-Tested')
+      const isMinimalWear = item.market_hash_name.includes('Minimal Wear')
+
+      if ((isMinimalWear && Number(paintwear) < 0.08) || (isFieldTested && Number(paintwear) < 0.17)) {
+        const response = await getCSFloatListings({
+          market_hash_name: item.market_hash_name,
+          ...(isMinimalWear && { min_float: 0.07, max_float: 0.08 }),
+          ...(isFieldTested && { min_float: 0.15, max_float: 0.17 }),
+        })
+
+        const cs_float_price = response?.data?.[0] ? Number((response.data[0].price / 100).toFixed(2)) : 0
+
+        console.log('cs_float_price: ', cs_float_price, (cs_float_price / current_price - 1) * 100)
+
+        if ((cs_float_price / current_price - 1) * 100 >= 20) {
+          const response = await postGoodsBuy({ price: current_price, sell_order_id: lowestPricedItem.id })
+
+          if (response.code !== 'OK') {
+            console.log('Error:', JSON.stringify(response))
+
+            return
+          }
+
+          sendMessage(
+            generateMessage({
+              id: goods_id,
+              type: MessageType.Purchased,
+              price: current_price,
+              csFloatPrice: cs_float_price,
+              name: item.market_hash_name,
+              float: lowestPricedItem.asset_info.paintwear,
+              createdAt: lowestPricedItem.created_at,
+              updatedAt: lowestPricedItem.updated_at,
+              source: options.source,
+            })
+          )
+
+          return
+        }
+      }
+
       const response = await postCreateBargain({ price: bargain_price, sell_order_id: lowestPricedItem.id })
 
       if (response.code !== 'OK') {

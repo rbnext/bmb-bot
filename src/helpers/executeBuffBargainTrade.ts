@@ -127,7 +127,7 @@ export const executeBuffBargainTrade = async (
           ...(isFieldTested && { min_float: 0.15, max_float: 0.17 }),
         })
 
-        const cs_float_price = response?.data?.[0] ? Number((response.data[0].price / 100).toFixed(2)) : 0
+        const cs_float_price = response?.data?.[0] ? response.data[0].price / 100 : 0
 
         console.log('cs_float_price: ', cs_float_price, (cs_float_price / current_price - 1) * 100)
 
@@ -198,6 +198,28 @@ export const executeBuffBargainTrade = async (
           }
         }
       )
+    } else {
+      const isStatTrak = item.market_hash_name.includes('StatTrak™')
+
+      const isFactoryNew = item.market_hash_name.includes('Factory New')
+      const isMinimalWear = item.market_hash_name.includes('Minimal Wear')
+      const isFieldTested = item.market_hash_name.includes('Field-Tested')
+
+      if (isMinimalWear || isMinimalWear || isFieldTested) {
+        const response = await getCSFloatListings({
+          market_hash_name: item.market_hash_name,
+          ...(isFactoryNew && { max_float: 0.07 }),
+          ...(isMinimalWear && { min_float: 0.07, max_float: 0.15 }),
+          ...(isFieldTested && { min_float: 0.15, max_float: 0.38 }),
+          category: isStatTrak ? 2 : 1,
+        })
+
+        const cs_float_price = response?.data?.[0] ? response.data[0].price / 100 : 0
+
+        if (cs_float_price !== 0) {
+          sendMessage(generateMessage({ ...payload, type: MessageType.Review, csFloatPrice: cs_float_price }))
+        }
+      }
     }
   }
 }

@@ -162,7 +162,7 @@ export const generateMessage = ({
   else message.push(`<b>Price</b>: $${price}\n`)
 
   if (csFloatPrice) {
-    message.push(`<b>CS Float price</b>: $${csFloatPrice}\n`)
+    message.push(`<b>CS Float price</b>: $${csFloatPrice.toFixed(2)}\n`)
   }
 
   if (steamPrice) {

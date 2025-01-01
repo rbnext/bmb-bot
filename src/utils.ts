@@ -235,3 +235,18 @@ export function extractStickers(input: string): string[] {
 
   return stickers.map((name) => name.replace('Sticker: ', ''))
 }
+
+export const getItemExterior = (market_hash_name: string) => {
+  const isStatTrak = market_hash_name.includes('StatTrak™')
+
+  const isFactoryNew = market_hash_name.includes('Factory New')
+  const isMinimalWear = market_hash_name.includes('Minimal Wear')
+  const isFieldTested = market_hash_name.includes('Field-Tested')
+
+  return {
+    isStatTrak,
+    isFactoryNew,
+    isMinimalWear,
+    isFieldTested,
+  }
+}

@@ -8,7 +8,7 @@ import {
   postGoodsBuy,
 } from '../api/buff'
 import { MarketGoodsItem, MessageType, Source } from '../types'
-import { generateMessage, isLessThanXMinutes, median, sleep } from '../utils'
+import { generateMessage, getItemExterior, isLessThanXMinutes, median, sleep } from '../utils'
 import { sendMessage } from '../api/telegram'
 import { differenceInDays } from 'date-fns'
 import { GOODS_SALES_THRESHOLD, STEAM_PURCHASE_THRESHOLD } from '../config'
@@ -32,6 +32,8 @@ export const executeBuffBargainTrade = async (
 ) => {
   const goods_id = item.id
   const current_price = Number(item.sell_min_price)
+
+  const { isFactoryNew, isMinimalWear, isFieldTested, isStatTrak } = getItemExterior(item.market_hash_name)
 
   const history = await getMarketGoodsBillOrder({ goods_id })
 
@@ -117,14 +119,12 @@ export const executeBuffBargainTrade = async (
       Number(lowestPricedItem.price) > bargain_price &&
       Number(lowestPricedItem.lowest_bargain_price) < bargain_price
     ) {
-      const isFieldTested = item.market_hash_name.includes('Field-Tested')
-      const isMinimalWear = item.market_hash_name.includes('Minimal Wear')
-
       if ((isMinimalWear && Number(paintwear) < 0.08) || (isFieldTested && Number(paintwear) < 0.17)) {
         const response = await getCSFloatListings({
           market_hash_name: item.market_hash_name,
           ...(isMinimalWear && { min_float: 0.07, max_float: 0.08 }),
           ...(isFieldTested && { min_float: 0.15, max_float: 0.17 }),
+          category: isStatTrak ? 2 : 1,
         })
 
         const cs_float_price = response?.data?.[0] ? response.data[0].price / 100 : 0
@@ -199,13 +199,7 @@ export const executeBuffBargainTrade = async (
         }
       )
     } else {
-      const isStatTrak = item.market_hash_name.includes('StatTrak™')
-
-      const isFactoryNew = item.market_hash_name.includes('Factory New')
-      const isMinimalWear = item.market_hash_name.includes('Minimal Wear')
-      const isFieldTested = item.market_hash_name.includes('Field-Tested')
-
-      if (isMinimalWear || isMinimalWear || isFieldTested) {
+      if (isFactoryNew || isMinimalWear || isFieldTested) {
         const response = await getCSFloatListings({
           market_hash_name: item.market_hash_name,
           ...(isFactoryNew && { max_float: 0.07 }),

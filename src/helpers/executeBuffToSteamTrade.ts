@@ -86,6 +86,7 @@ export const executeBuffToSteamTrade = async (
             csFloatPrice: cs_float_price,
             estimatedProfit: estimated_profit,
             medianPrice: cs_float_price,
+            source: Source.BUFF_CSFLOAT,
           })
         )
       }

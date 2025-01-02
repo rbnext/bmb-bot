@@ -74,15 +74,23 @@ export const executeBuffToSteamTrade = async (
         category: isStatTrak ? 2 : 1,
       })
 
-      const cs_float_price = response?.data?.[0] ? response.data[0].price / 100 : 0
+      const cs_float_price = response?.data?.[0] ? response.data[0].reference.predicted_price / 100 : 0
+      const estimated_profit = ((cs_float_price - current_price) / current_price) * 100
 
-      if (cs_float_price !== 0) {
-        const estimated_profit = ((cs_float_price - current_price) / current_price) * 100
+      if ((current_price < 2 && estimated_profit >= 40) || (current_price >= 2 && estimated_profit >= 15)) {
+        const response = await postGoodsBuy({ price: current_price, sell_order_id: lowestPricedItem.id })
+
+        if (response.code !== 'OK') {
+          sendMessage(
+            `[${options.source}] Failed to purchase the item ${item.market_hash_name}. Reason: ${response.code}`
+          )
+
+          return
+        }
 
         sendMessage(
           generateMessage({
             ...payload,
-            type: MessageType.Review,
             csFloatPrice: cs_float_price,
             estimatedProfit: estimated_profit,
             medianPrice: cs_float_price,

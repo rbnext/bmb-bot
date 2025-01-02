@@ -54,10 +54,10 @@ const cs2Buff = async () => {
           }
         }
 
-        CASHED_LISTINGS.add(item.id)
-
         await sleep(5_000)
       }
+
+      CASHED_LISTINGS.add(item.id)
     }
 
     await sleep(60_000 * 2)

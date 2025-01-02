@@ -15,7 +15,8 @@
     "playground": "ts-node src/playground.ts",
     "loadBuffRef": "ts-node src/scripts/loadReferencePrices.ts",
     "steam": "ts-node src/steam/steam.ts",
-    "steamv2": "ts-node src/steam/steam.v2.ts"
+    "steamv2": "ts-node src/steam/steam.v2.ts",
+    "cs2Buff": "ts-node src/bots/cs2Buff.ts"
   },
   "author": "",
   "license": "ISC",

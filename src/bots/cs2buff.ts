@@ -1,77 +1,48 @@
 import 'dotenv/config'
 
-import { getGoodsSellOrder } from '../api/buff'
 import { sleep } from '../utils'
 import { sendMessage } from '../api/telegram'
-import { getCSFloatListings } from '../api/csfloat'
-import { readFileSync } from 'fs'
-import path from 'path'
-import { format } from 'date-fns'
+import { getBuyOrders } from '../api/csfloat'
 
-const CASHED_LISTINGS = new Set<string>()
+export const GOODS_CACHE: Record<string, { price: number }> = {}
 
-const pathname = path.join(__dirname, '../../goods_id.json')
-const goods_id: Record<string, number> = JSON.parse(readFileSync(pathname, 'utf8'))
+const config = [
+  {
+    referenceId: '795002736566468718',
+    market_hash_name: 'Glock-18 | Gold Toof (Minimal Wear)',
+  },
+  {
+    referenceId: '794975731133317153',
+    market_hash_name: 'Glock-18 | Gold Toof (Field-Tested)',
+  },
+]
 
-const cs2Buff = async () => {
+const csPriceChecker = async () => {
   try {
-    const response = await getCSFloatListings({
-      sort_by: 'most_recent',
-      max_float: 0.38,
-      category: 1,
-      min_price: 500,
-      max_price: 2000,
-    })
+    for (const { referenceId, market_hash_name } of config) {
+      const response = await getBuyOrders({ id: referenceId })
 
-    for (const item of response.data) {
-      if (CASHED_LISTINGS.has(item.id)) continue
+      const current_price = response[0].price
 
-      if (goods_id[item.item.market_hash_name] && item.reference.predicted_price > item.price) {
-        const orders = await getGoodsSellOrder({
-          exclude_current_user: 1,
-          goods_id: goods_id[item.item.market_hash_name],
-        })
-
-        const lowestPricedItem = orders.data.items.find((el) => el.price)
-
-        if (lowestPricedItem) {
-          const now = format(new Date(), 'HH:mm:ss')
-          const current_price = item.price / 100
-          const estimated_profit = ((Number(lowestPricedItem.price) - current_price) / current_price) * 100
-
-          console.log(now, item.item.market_hash_name, estimated_profit.toFixed(2))
-
-          if (estimated_profit >= 15) {
-            const message: string[] = []
-
-            message.push(`<a href="https://csfloat.com/item/${item.id}">CSFLOAT</a>`)
-            message.push(' | ')
-            message.push(
-              `<a href="https://buff.market/market/goods/${goods_id[item.item.market_hash_name]}">BUFF</a>\n\n`
-            )
-
-            message.push(`<b>CS price</b>: $${current_price.toFixed(2)}\n`)
-            message.push(`<b>Buff price</b>: $${lowestPricedItem.price}\n`)
-            message.push(`<b>Estimated profit</b>: ${estimated_profit.toFixed(2)}%\n`)
-
-            await sendMessage(message.join(''))
-          }
-        }
-
-        await sleep(5_000)
+      if (market_hash_name in GOODS_CACHE[market_hash_name] && current_price !== GOODS_CACHE[market_hash_name].price) {
+        const prev_price = Number((GOODS_CACHE[market_hash_name].price / 100).toFixed(2))
+        const next_price = Number((current_price / 100).toFixed(2))
+        await sendMessage(
+          `<a href="https://csfloat.com/item/${item.id}">${market_hash_name}</a> | $${prev_price} -> $${next_price}`
+        )
       }
 
-      CASHED_LISTINGS.add(item.id)
-    }
+      GOODS_CACHE[market_hash_name] = { price: current_price }
 
-    await sleep(60_000 * 2)
+      await sleep(60_000)
+    }
   } catch (error) {
     console.log('Something went wrong', error)
 
     return
   }
 
-  cs2Buff()
+  csPriceChecker()
 }
 
-cs2Buff()
+csPriceChecker()

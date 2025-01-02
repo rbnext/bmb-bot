@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-import { CSFloatListing } from '../types'
+import { CSFloatBuyOrder, CSFloatListing } from '../types'
 
 const http = axios.create({
   baseURL: 'https://csfloat.com/api',
@@ -38,6 +38,20 @@ export const getCSFloatListings = async ({
         'session=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdGVhbV9pZCI6Ijc2NTYxMTk5NjI1NTU0OTc1Iiwibm9uY2UiOjAsImltcGVyc29uYXRlZCI6ZmFsc2UsImlzcyI6ImNzdGVjaCIsImV4cCI6MTczNjAwMDI1MH0.s4KtsvDD5mUKlxgo0X6Zs5dfz5RBXQv5V9oNnnTSZRQ',
     },
   })
+
+  return data
+}
+
+export const getBuyOrders = async ({ id, limit = 10 }: { id: string; limit?: number }): Promise<CSFloatBuyOrder[]> => {
+  const { data, headers } = await http.get(`/v1/listings/${id}/buy-orders`, {
+    params: { limit },
+    headers: {
+      Cookie:
+        'session=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdGVhbV9pZCI6Ijc2NTYxMTk5NjI1NTU0OTc1Iiwibm9uY2UiOjAsImltcGVyc29uYXRlZCI6ZmFsc2UsImlzcyI6ImNzdGVjaCIsImV4cCI6MTczNjAwMDI1MH0.s4KtsvDD5mUKlxgo0X6Zs5dfz5RBXQv5V9oNnnTSZRQ',
+    },
+  })
+
+  console.log('x-ratelimit-remaining', Number(headers['x-ratelimit-remaining']))
 
   return data
 }

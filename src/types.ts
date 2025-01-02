@@ -543,6 +543,11 @@ export type CSFloatListing = {
   data: CSFloatListingItem[]
 }
 
+export type CSFloatBuyOrder = {
+  market_hash_name?: string
+  price: number
+}
+
 export type SearchMarketRenderResultItem = {
   sell_listings: number
   sell_price: number

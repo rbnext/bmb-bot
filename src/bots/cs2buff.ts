@@ -44,7 +44,11 @@ const cs2Buff = async () => {
           if (estimated_profit >= 15) {
             const message: string[] = []
 
-            message.push(`https://csfloat.com/item/${item.id}\n\n`)
+            message.push(`<a href="https://csfloat.com/item/${item.id}">CSFLOAT</a>`)
+            message.push(' | ')
+            message.push(
+              `<a href="https://buff.market/market/goods/${goods_id[item.item.market_hash_name]}">BUFF</a>\n\n`
+            )
 
             message.push(`<b>CS price</b>: $${current_price.toFixed(2)}\n`)
             message.push(`<b>Buff price</b>: $${lowestPricedItem.price}\n`)

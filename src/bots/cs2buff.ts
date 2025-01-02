@@ -28,7 +28,7 @@ const csPriceChecker = async () => {
         const prev_price = Number((GOODS_CACHE[market_hash_name].price / 100).toFixed(2))
         const next_price = Number((current_price / 100).toFixed(2))
         await sendMessage(
-          `<a href="https://csfloat.com/item/${item.id}">${market_hash_name}</a> | $${prev_price} -> $${next_price}`
+          `<a href="https://csfloat.com/item/${referenceId}">${market_hash_name}</a> | $${prev_price} -> $${next_price}`
         )
       }
 

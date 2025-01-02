@@ -2,7 +2,7 @@ import { getGoodsSellOrder, postGoodsBuy } from '../api/buff'
 import { sendMessage } from '../api/telegram'
 import { STEAM_CHECK_THRESHOLD, STEAM_PURCHASE_THRESHOLD } from '../config'
 import { MarketGoodsItem, MessageType, Source } from '../types'
-import { generateMessage, getItemExterior } from '../utils'
+import { generateMessage, getCSFloatItemPrice, getItemExterior } from '../utils'
 import { getMaxPricesForXDays } from './getMaxPricesForXDays'
 import { getCSFloatListings } from '../api/csfloat'
 
@@ -74,7 +74,7 @@ export const executeBuffToSteamTrade = async (
         category: isStatTrak ? 2 : 1,
       })
 
-      const cs_float_price = response?.data?.[0] ? response.data[0].reference.predicted_price / 100 : 0
+      const cs_float_price = getCSFloatItemPrice(response)
       const estimated_profit = ((cs_float_price - current_price) / current_price) * 100
 
       if ((current_price < 2 && estimated_profit >= 40) || (current_price >= 2 && estimated_profit >= 15)) {

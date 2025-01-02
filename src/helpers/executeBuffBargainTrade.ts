@@ -8,7 +8,7 @@ import {
   postGoodsBuy,
 } from '../api/buff'
 import { MarketGoodsItem, MessageType, Source } from '../types'
-import { generateMessage, getItemExterior, isLessThanXMinutes, median, sleep } from '../utils'
+import { generateMessage, getCSFloatItemPrice, getItemExterior, isLessThanXMinutes, median, sleep } from '../utils'
 import { sendMessage } from '../api/telegram'
 import { differenceInDays } from 'date-fns'
 import { GOODS_SALES_THRESHOLD, STEAM_PURCHASE_THRESHOLD } from '../config'
@@ -127,11 +127,10 @@ export const executeBuffBargainTrade = async (
           category: isStatTrak ? 2 : 1,
         })
 
-        const cs_float_price = response?.data?.[0] ? response.data[0].price / 100 : 0
+        const cs_float_price = getCSFloatItemPrice(response)
+        const estimated_profit = ((cs_float_price - current_price) / current_price) * 100
 
-        console.log('cs_float_price: ', cs_float_price, (cs_float_price / current_price - 1) * 100)
-
-        if ((cs_float_price / current_price - 1) * 100 >= 20) {
+        if (estimated_profit >= 20) {
           const response = await postGoodsBuy({ price: current_price, sell_order_id: lowestPricedItem.id })
 
           if (response.code !== 'OK') {

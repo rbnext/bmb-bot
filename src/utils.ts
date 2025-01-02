@@ -1,5 +1,12 @@
 import { differenceInMinutes, formatDistance, isAfter, subHours, subMinutes } from 'date-fns'
-import { KeychainItem, MessageType, ShopBillOrderItem, Source, SteamInventoryHelperSticker } from './types'
+import {
+  CSFloatListing,
+  KeychainItem,
+  MessageType,
+  ShopBillOrderItem,
+  Source,
+  SteamInventoryHelperSticker,
+} from './types'
 
 export const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms))
 
@@ -249,4 +256,12 @@ export const getItemExterior = (market_hash_name: string) => {
     isMinimalWear,
     isFieldTested,
   }
+}
+
+export const getCSFloatItemPrice = (item: CSFloatListing): number => {
+  if (!item?.data?.[0]) {
+    return 0
+  }
+
+  return Math.min(item.data[0].price, item.data[0].reference.predicted_price) / 100
 }

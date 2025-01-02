@@ -38,7 +38,7 @@ const buffSteam = async () => {
 
       if (item.id in GOODS_CACHE && GOODS_CACHE[item.id].price > current_price) {
         if (current_price >= BARGAIN_PROFIT_THRESHOLD) {
-          // executeBuffBargainTrade(item, { source: Source.BUFF_DEFAULT })
+          executeBuffBargainTrade(item, { source: Source.BUFF_DEFAULT })
         }
 
         if (current_price < BARGAIN_PROFIT_THRESHOLD) {

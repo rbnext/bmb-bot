@@ -69,7 +69,14 @@ const findSteamItemInfo = async (
 
       if (templateId && config.canSendToTelegram && config.isSweet(templateId)) {
         await sendMessage(
-          generateSteamMessage({ price: price, name: config.market_hash_name, position: start + index + 1, templateId })
+          generateSteamMessage({
+            price: price,
+            name: config.market_hash_name,
+            position: start + index + 1,
+            templateId,
+          }),
+          undefined,
+          process.env.TELEGRAM_REPORT_ID
         )
       }
 

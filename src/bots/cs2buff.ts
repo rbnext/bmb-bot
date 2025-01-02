@@ -15,6 +15,18 @@ const config = [
     referenceId: '794975731133317153',
     market_hash_name: 'Glock-18 | Gold Toof (Field-Tested)',
   },
+  {
+    referenceId: '792840104031946274',
+    market_hash_name: 'USP-S | Jawbreaker (Factory New)',
+  },
+  {
+    referenceId: '794147369271820831',
+    market_hash_name: 'Sticker | Lurker (Foil)',
+  },
+  {
+    referenceId: '794971306079685810',
+    market_hash_name: 'Sticker | Loving Eyes (Holo)',
+  },
 ]
 
 const csPriceChecker = async () => {
@@ -34,7 +46,7 @@ const csPriceChecker = async () => {
 
       GOODS_CACHE[market_hash_name] = { price: current_price }
 
-      await sleep(60_000)
+      await sleep(30_000)
     }
   } catch (error) {
     console.log('Something went wrong', error)

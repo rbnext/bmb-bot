@@ -24,7 +24,7 @@ const csPriceChecker = async () => {
 
       const current_price = response[0].price
 
-      if (market_hash_name in GOODS_CACHE[market_hash_name] && current_price !== GOODS_CACHE[market_hash_name].price) {
+      if (market_hash_name in GOODS_CACHE && current_price !== GOODS_CACHE[market_hash_name].price) {
         const prev_price = Number((GOODS_CACHE[market_hash_name].price / 100).toFixed(2))
         const next_price = Number((current_price / 100).toFixed(2))
         await sendMessage(

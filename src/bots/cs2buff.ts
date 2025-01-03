@@ -27,6 +27,14 @@ const config = [
     referenceId: '794971306079685810',
     market_hash_name: 'Sticker | Loving Eyes (Holo)',
   },
+  {
+    referenceId: '795224945847308148',
+    market_hash_name: 'Sticker | Natus Vincere | Cologne 2014',
+  },
+  {
+    referenceId: '794691860495990845',
+    market_hash_name: 'Souvenir USP-S | Road Rash (Field-Tested)',
+  },
 ]
 
 const csPriceChecker = async () => {
@@ -46,7 +54,7 @@ const csPriceChecker = async () => {
 
       GOODS_CACHE[market_hash_name] = { price: current_price }
 
-      await sleep(30_000)
+      await sleep(20_000)
     }
   } catch (error) {
     console.log('Something went wrong', error)

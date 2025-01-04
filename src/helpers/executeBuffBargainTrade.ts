@@ -33,7 +33,7 @@ export const executeBuffBargainTrade = async (
   const goods_id = item.id
   const current_price = Number(item.sell_min_price)
 
-  const { isFactoryNew, isMinimalWear, isFieldTested, isStatTrak } = getItemExterior(item.market_hash_name)
+  const { isMinimalWear, isFieldTested, isStatTrak } = getItemExterior(item.market_hash_name)
 
   const history = await getMarketGoodsBillOrder({ goods_id })
 

@@ -249,12 +249,16 @@ export const getItemExterior = (market_hash_name: string) => {
   const isFactoryNew = market_hash_name.includes('Factory New')
   const isMinimalWear = market_hash_name.includes('Minimal Wear')
   const isFieldTested = market_hash_name.includes('Field-Tested')
+  const isWellWorn = market_hash_name.includes('Well-Worn')
+  const isBattleScarred = market_hash_name.includes('Battle-Scarred')
 
   return {
     isStatTrak,
     isFactoryNew,
     isMinimalWear,
     isFieldTested,
+    isWellWorn,
+    isBattleScarred,
   }
 }
 

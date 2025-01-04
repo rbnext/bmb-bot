@@ -2,8 +2,10 @@ import 'dotenv/config'
 
 import { readFileSync, writeFileSync } from 'fs'
 import { getGoodsInfo, getMarketGoods } from '../api/buff'
+import { getBuyOrders, getCSFloatListings } from '../api/csfloat'
+
 import path from 'path'
-import { sleep } from '../utils'
+import { getItemExterior, sleep } from '../utils'
 import { SteamDBItem } from '../types'
 // ;(async () => {
 //   const pathname = path.join(__dirname, '../../buff.json')
@@ -90,29 +92,118 @@ import { SteamDBItem } from '../types'
 //     await sleep(3_000)
 //   }
 // })()
+// ;(async () => {
+//   const pages = Array.from({ length: 100 }, (_, i) => i + 1)
+//   const pathname = path.join(__dirname, '../../goods_id_v2.json')
+
+//   for (const page_num of pages) {
+//     console.log([page_num])
+
+//     const goods = await getMarketGoods({
+//       page_num,
+//       min_price: 5,
+//       max_price: 20,
+//       quality: 'strange',
+//       category_group: 'rifle,pistol,smg,shotgun,machinegun',
+//     })
+//     if (goods.data.items.length !== 50) {
+//       return
+//     }
+
+//     const items: Record<string, { goods_id: number }> = goods.data.items.reduce(
+//       (acc, cur) => ({
+//         ...acc,
+//         [cur.market_hash_name]: {
+//           goods_id: cur.id,
+//         },
+//       }),
+//       {}
+//     )
+
+//     const data: SteamDBItem = JSON.parse(readFileSync(pathname, 'utf8'))
+//     writeFileSync(pathname, JSON.stringify({ ...data, ...items }, null, 4))
+
+//     await sleep(3_000)
+//   }
+// })()
+// ;(async () => {
+//   const pathname = path.join(__dirname, '../../goods_id_v2.json')
+//   const goods_id: Record<string, { goods_id: number; price: number }> = JSON.parse(readFileSync(pathname, 'utf8'))
+
+//   for (const [market_hash_name, goods_info] of Object.entries(goods_id)) {
+//     const { isFactoryNew, isMinimalWear, isFieldTested, isWellWorn, isBattleScarred, isStatTrak } =
+//       getItemExterior(market_hash_name)
+
+//     if (goods_info.price) continue
+
+//     if (isFactoryNew || isMinimalWear) {
+//       const items = await getCSFloatListings({
+//         market_hash_name,
+//         category: isStatTrak ? 2 : 1,
+//         ...(isFactoryNew && { max_float: 0.07 }),
+//         ...(isMinimalWear && { min_float: 0.07, max_float: 0.15 }),
+//         ...(isFieldTested && { min_float: 0.15, max_float: 0.38 }),
+//         ...(isWellWorn && { min_float: 0.38, max_float: 0.45 }),
+//         ...(isBattleScarred && { min_float: 0.45 }),
+//       })
+
+//       if (!items.data[0]) continue
+
+//       const orders = await getBuyOrders({ id: items.data[0].id })
+//       if (!orders[0]?.price) continue
+
+//       const data = JSON.parse(readFileSync(pathname, 'utf8'))
+//       writeFileSync(
+//         pathname,
+//         JSON.stringify(
+//           {
+//             ...data,
+//             [market_hash_name]: {
+//               ...goods_info,
+//               price: Number((Math.min(items.data[0].price, items.data[0].reference.predicted_price) / 100).toFixed(2)),
+//               buy_price: Number((orders[0].price / 100).toFixed(2)),
+//             },
+//           },
+//           null,
+//           4
+//         )
+//       )
+
+//       await sleep(5_000)
+//     }
+//   }
+// })()
 ;(async () => {
-  const pages = Array.from({ length: 100 }, (_, i) => i + 1)
-  const pathname = path.join(__dirname, '../../goods_id.json')
+  const pathname = path.join(__dirname, '../../goods_id_v2.json')
+  const goods_id: Record<string, { goods_id: number; price: number; buy_price: number }> = JSON.parse(
+    readFileSync(pathname, 'utf8')
+  )
 
-  for (const page_num of pages) {
-    console.log([page_num])
+  console.log('market_hash_name;price;buy_price;cs_link;steam_link')
+  for (const [market_hash_name, goods_info] of Object.entries(goods_id)) {
+    const { isFactoryNew, isMinimalWear, isFieldTested, isWellWorn, isBattleScarred, isStatTrak } =
+      getItemExterior(market_hash_name)
 
-    const goods = await getMarketGoods({
-      page_num,
-      min_price: 5,
-      max_price: 25,
-      quality: 'normal',
-      category_group: 'rifle,pistol,smg,shotgun,machinegun',
-    })
-    if (goods.data.items.length !== 50) {
-      return
+    if (goods_info.price) {
+      const float_data = {
+        ...(isFactoryNew && { max_float: 0.07 }),
+        ...(isMinimalWear && { min_float: 0.07, max_float: 0.15 }),
+        ...(isFieldTested && { min_float: 0.15, max_float: 0.38 }),
+        ...(isWellWorn && { min_float: 0.38, max_float: 0.45 }),
+        ...(isBattleScarred && { min_float: 0.45 }),
+      }
+
+      const cs_link = `https://csfloat.com/search?category=${isStatTrak ? 2 : 1}&market_hash_name=${encodeURIComponent(market_hash_name)}&type=buy_now&${Object.entries(
+        float_data
+      )
+        .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
+        .join('&')}`
+
+      const steam_link = `https://steamcommunity.com/market/listings/730/${encodeURIComponent(market_hash_name)}`
+
+      console.log(
+        `${market_hash_name};${goods_info.price.toFixed(2).replace('.', ',')};${goods_info.buy_price.toFixed(2).replace('.', ',')};${cs_link};${steam_link}`
+      )
     }
-
-    const items = goods.data.items.reduce((acc, cur) => ({ ...acc, [cur.market_hash_name]: cur.id }), {})
-
-    const data: SteamDBItem = JSON.parse(readFileSync(pathname, 'utf8'))
-    writeFileSync(pathname, JSON.stringify({ ...data, ...items }, null, 4))
-
-    await sleep(3_000)
   }
 })()

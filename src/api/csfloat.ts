@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-import { CSFloatBuyOrder, CSFloatListing } from '../types'
+import { CSFloatBuyOrder, CSFloatListing, CSFloatMarketHashNameHistory } from '../types'
 
 const http = axios.create({
   baseURL: 'https://csfloat.com/api',
@@ -50,6 +50,20 @@ export const getBuyOrders = async ({ id, limit = 10 }: { id: string; limit?: num
   })
 
   console.log('x-ratelimit-remaining', Number(headers['x-ratelimit-remaining']))
+
+  return data
+}
+
+export const getMarketHashNameHistory = async ({
+  market_hash_name,
+}: {
+  market_hash_name: string
+}): Promise<CSFloatMarketHashNameHistory[]> => {
+  const { data } = await http.get(`/v1/history/${market_hash_name}/sales`, {
+    headers: {
+      Cookie: `session=${process.env.CSFLOAT_SESSION_TOKEN}`,
+    },
+  })
 
   return data
 }

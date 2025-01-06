@@ -548,6 +548,32 @@ export type CSFloatBuyOrder = {
   price: number
 }
 
+type CSFloatMarketHashNameHistorySticker = {
+  stickerId: number
+  name: number
+  wear?: number
+  reference: {
+    price: number
+    updated_at: string
+  }
+}
+
+export type CSFloatMarketHashNameHistory = {
+  id: string
+  price: number
+  reference: {
+    base_price: number
+    last_updated: string
+    predicted_price: number
+  }
+  item: {
+    float_value: number
+    market_hash_name: string
+    stickers?: CSFloatMarketHashNameHistorySticker[]
+  }
+  sold_at: string
+}
+
 export type SearchMarketRenderResultItem = {
   sell_listings: number
   sell_price: number

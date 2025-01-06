@@ -35,6 +35,10 @@ const config = [
     referenceId: '794691860495990845',
     market_hash_name: 'Souvenir USP-S | Road Rash (Field-Tested)',
   },
+  {
+    referenceId: '793618248263401922',
+    market_hash_name: 'StatTrak™ M4A1-S | Emphorosaur-S (Minimal Wear)',
+  },
 ]
 
 const csPriceChecker = async () => {

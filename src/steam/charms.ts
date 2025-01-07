@@ -74,8 +74,9 @@ const findSteamItemInfo = async (
 
     config.canSendToTelegram = true
   } catch (error) {
+    if (error.message !== 'canceled') await sleep(60_000 * 4)
+
     console.log(format(new Date(), 'HH:mm:ss'), 'STEAM_ERROR', error.message)
-    await sleep(60_000 * 4)
 
     return
   }

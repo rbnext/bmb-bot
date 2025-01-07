@@ -1,23 +1,43 @@
 import 'dotenv/config'
 // import { getCreatePreviewBargain, getSentBargain, postCancelBargain, postCreateBargain } from './api/buff'
 // import { getDifferenceInMinutes, sleep } from './utils'
-import { getCSFloatListings } from './api/csfloat'
+// import { getCSFloatListings } from './api/csfloat'
+// import { getSkinPortListings } from './api/skinport'
 
-const init = async (market_hash_name: string) => {
-  const response = await getCSFloatListings({
-    market_hash_name,
-    min_float: 0.15,
-    max_float: 0.38,
+import { io } from 'socket.io-client'
+import socketParser from 'socket.io-msgpack-parser'
+import { SkinPortListings, SkinPortListingsItem } from './types'
+
+const init = async () => {
+  const socket = io('https://skinport.com', {
+    transports: ['websocket'],
+    autoConnect: true,
+    reconnection: true,
+    reconnectionAttempts: 5,
+    reconnectionDelay: 1000,
+    parser: socketParser,
   })
 
-  const item = response.data[0]
+  socket.on('saleFeed', (data: { eventType: string; sales: SkinPortListingsItem[] }) => {
+    if (data.eventType === 'listed') {
+      for (const item of data.sales) {
+        console.log(item.marketHashName, (item.salePrice / 100).toFixed(2))
+      }
+    }
+  })
 
-  if (item) {
-    console.log(market_hash_name, Number(item.price / 100))
-  }
+  socket.on('connect', async () => {
+    console.debug('[BetterFloat] Successfully connected to Skinport websocket.')
+    socket.emit('saleFeedJoin', { appid: 730, currency: 'USD', locale: 'en' })
+  })
+
+  // Socket should automatically reconnect, but if it doesn't, log the error.
+  socket.on('disconnect', () => {
+    console.warn('[BetterFloat] Disconnected from websocket.')
+  })
 }
 
-init('M4A1-S | Mecha Industries (Field-Tested)')
+init()
 
 // const ACTIVE_BARGAINS = new Set<string>()
 

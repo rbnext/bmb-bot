@@ -543,6 +543,20 @@ export type CSFloatListing = {
   data: CSFloatListingItem[]
 }
 
+export type SkinPortListingsItem = {
+  marketHashName: string
+  wear: number
+  stattrak: boolean
+  saleId: number
+  currency: string
+  productId: number
+  salePrice: number
+}
+
+export type SkinPortListings = {
+  items: SkinPortListingsItem[]
+}
+
 export type CSFloatBuyOrder = {
   market_hash_name?: string
   price: number

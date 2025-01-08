@@ -9,7 +9,7 @@ import { readFileSync } from 'fs'
 const GOODS_CACHE: Record<string, { price: number }> = {}
 
 const pathname = path.join(__dirname, '../../csfloat.txt')
-const content: string = readFileSync(pathname, 'base64')
+const content: string = readFileSync(pathname, 'utf-8')
 const market_hash_names: string[] = content.split('\n').filter((name) => !!name.trim())
 const config = market_hash_names.map((name) => ({ market_hash_name: name.trim(), referenceId: '' }))
 
@@ -20,7 +20,6 @@ const csPriceChecker = async () => {
 
       if (!data.referenceId) {
         const items = await getCSFloatListings({ market_hash_name })
-        console.log(market_hash_name, items)
         data.referenceId = items.data[0].id
       } else {
         const response = await getBuyOrders({ id: data.referenceId })

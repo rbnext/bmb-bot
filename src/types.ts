@@ -562,6 +562,20 @@ export type CSFloatBuyOrder = {
   price: number
 }
 
+export type CSFloatItemInfoStickerItem = {
+  name: string
+  wear: number
+  stickerId: number
+}
+
+export type CSFloatItemInfo = {
+  iteminfo: {
+    floatvalue: number
+    full_item_name: string
+    stickers?: CSFloatItemInfoStickerItem[]
+  }
+}
+
 type CSFloatMarketHashNameHistorySticker = {
   stickerId: number
   name: number

@@ -151,7 +151,7 @@ export const getMarketRender = async ({
   userAgent: string
   language?: 'english'
   filter?: string
-  proxy: string | 'localhost' | null
+  proxy?: string | 'localhost' | null
 }): Promise<SteamMarketRender> => {
   const { data } = await axios.get(
     `https://steamcommunity.com/market/listings/${appid}/${encodeURIComponent(market_hash_name)}/render/`,

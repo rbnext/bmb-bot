@@ -16,6 +16,7 @@
     "loadBuffRef": "ts-node src/scripts/loadReferencePrices.ts",
     "steam": "ts-node src/steam/steam.ts",
     "steamv2": "ts-node src/steam/steam.v2.ts",
+    "steamv3": "ts-node src/steam/steam.v3.ts",
     "cs2Buff": "ts-node src/bots/cs2Buff.ts",
     "steam-charms": "ts-node src/steam/charms.ts"
   },

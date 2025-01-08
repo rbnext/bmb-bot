@@ -7,34 +7,14 @@ import 'dotenv/config'
 import { io } from 'socket.io-client'
 import socketParser from 'socket.io-msgpack-parser'
 import { SkinPortListings, SkinPortListingsItem } from './types'
+import { getCSFloatItemInfo } from './api/csfloat'
 
 const init = async () => {
-  const socket = io('https://skinport.com', {
-    transports: ['websocket'],
-    autoConnect: true,
-    reconnection: true,
-    reconnectionAttempts: 5,
-    reconnectionDelay: 1000,
-    parser: socketParser,
+  const respoinse = await getCSFloatItemInfo({
+    url: 'steam://rungame/730/76561202255233023/+csgo_econ_action_preview%20M643551258325174419A30805047803D613623017197324597',
   })
 
-  socket.on('saleFeed', (data: { eventType: string; sales: SkinPortListingsItem[] }) => {
-    if (data.eventType === 'listed') {
-      for (const item of data.sales) {
-        console.log(item.marketHashName, (item.salePrice / 100).toFixed(2))
-      }
-    }
-  })
-
-  socket.on('connect', async () => {
-    console.debug('[BetterFloat] Successfully connected to Skinport websocket.')
-    socket.emit('saleFeedJoin', { appid: 730, currency: 'USD', locale: 'en' })
-  })
-
-  // Socket should automatically reconnect, but if it doesn't, log the error.
-  socket.on('disconnect', () => {
-    console.warn('[BetterFloat] Disconnected from websocket.')
-  })
+  console.log(respoinse)
 }
 
 init()

@@ -9,7 +9,7 @@ import { readFileSync } from 'fs'
 const GOODS_CACHE: Record<string, { price: number }> = {}
 
 const pathname = path.join(__dirname, '../../csfloat.txt')
-const content: string = readFileSync(pathname, 'ascii')
+const content: string = readFileSync(pathname, 'base64')
 const market_hash_names: string[] = content.split('\n').filter((name) => !!name.trim())
 const config = market_hash_names.map((name) => ({ market_hash_name: name.trim(), referenceId: '' }))
 

@@ -47,6 +47,8 @@ const findSteamItemInfo = async (config: {
 
       const stickers = extractStickers(htmlDescription)
 
+      console.log(stickers)
+
       if (isStickerCombo(stickers) && config.canSendToTelegram) {
         const response = await getCSFloatListings({
           market_hash_name: `Sticker | ${stickers[0]}`,
@@ -55,29 +57,43 @@ const findSteamItemInfo = async (config: {
 
         console.log(format(new Date(), 'HH:mm:ss'), config.market_hash_name, stickerPrice.toFixed(2))
 
-        if (stickerPrice >= 2.5) {
-          const itemInfoResponse = await getCSFloatItemInfo({ url: inspectLink })
+        if (stickerPrice >= 2) {
+          const response = await getCSFloatListings({
+            market_hash_name: config.market_hash_name,
+          })
 
-          const message: string[] = []
+          const stickerTotal = stickerPrice * stickers.length
+          const basePrice = response.data[0].reference.base_price
 
-          message.push(
-            `<a href="${getSteamUrl(config.market_hash_name)}">${config.market_hash_name}</a> | #${index + 1}\n\n`
-          )
+          const SP = ((price - basePrice) / stickerTotal) * 100
 
-          for (const sticker of itemInfoResponse.iteminfo?.stickers ?? []) {
+          console.log(format(new Date(), 'HH:mm:ss'), 'SP', SP.toFixed(2) + '%')
+
+          if (SP < 40) {
+            const itemInfoResponse = await getCSFloatItemInfo({ url: inspectLink })
+
+            const message: string[] = []
+
             message.push(
-              `<b>${sticker.name}</b>: ${sticker.wear === 0 ? '100%' : `${(sticker.wear * 100).toFixed(2)}%`}\n`
+              `<a href="${getSteamUrl(config.market_hash_name)}">${config.market_hash_name}</a> | #${index + 1}\n\n`
             )
+
+            for (const sticker of itemInfoResponse.iteminfo?.stickers ?? []) {
+              message.push(
+                `<b>${sticker.name}</b>: ${sticker.wear === 0 ? '100%' : `${(sticker.wear * 100).toFixed(2)}%`}\n`
+              )
+            }
+            message.push(`\n`)
+            message.push(`<b>SP</b>: ${SP.toFixed(2)}%\n`)
+            message.push(`<b>Steam price</b>: $${price}\n`)
+            message.push(`<b>Reference price</b>: $${basePrice}\n`)
+            message.push(`<b>Stickers total</b>: $${stickerTotal.toFixed(2)}\n\n`)
+            message.push(`<b>Float</b>: ${itemInfoResponse.iteminfo.floatvalue}}\n\n`)
+
+            await sendMessage(message.join(''))
+
+            await sleep(3_000)
           }
-          message.push(`\n`)
-          message.push(`<b>Steam price</b>: $${price}\n`)
-          message.push(`<b>Reference price</b>: $${config.referencePrice}\n`)
-          message.push(`<b>Stickers total</b>: $${(stickerPrice * stickers.length).toFixed(2)}\n\n`)
-          message.push(`<b>Float</b>: ${itemInfoResponse.iteminfo.floatvalue}}\n\n`)
-
-          await sendMessage(message.join(''))
-
-          await sleep(3_000)
         }
       }
 

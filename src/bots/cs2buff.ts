@@ -20,6 +20,7 @@ const csPriceChecker = async () => {
 
       if (!data.referenceId) {
         const items = await getCSFloatListings({ market_hash_name })
+        console.log(market_hash_name, items.data[0])
         data.referenceId = items.data[0].id
       } else {
         const response = await getBuyOrders({ id: data.referenceId })

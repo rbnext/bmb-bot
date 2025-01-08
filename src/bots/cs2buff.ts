@@ -38,7 +38,7 @@ const csPriceChecker = async () => {
         GOODS_CACHE[data.market_hash_name] = { price: current_price }
       }
 
-      await sleep(10_000)
+      await sleep(20_000)
     }
   } catch (error) {
     console.log('Something went wrong', error)

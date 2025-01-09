@@ -11,32 +11,34 @@ export const executeBuffCharmTrade = async (
 ) => {
   const goods_id = item.id
 
-  const orders = await getGoodsSellOrder({ goods_id, exclude_current_user: 1 })
+  const orders = await getGoodsSellOrder({ goods_id, exclude_current_user: 1, sort_by: 'created.desc' })
 
   for (const data of orders.data.items) {
     const current_price = Number(data.price)
     const pattern = data.asset_info.info.keychains[0].pattern
 
-    if (pattern > 1000) {
-      const response = await postGoodsBuy({ price: current_price, sell_order_id: data.id })
+    console.log(item.market_hash_name, current_price, pattern)
 
-      if (response.code !== 'OK') {
-        console.log('Error:', JSON.stringify(response))
+    // if (pattern > 1000) {
+    //   const response = await postGoodsBuy({ price: current_price, sell_order_id: data.id })
 
-        return
-      }
+    //   if (response.code !== 'OK') {
+    //     console.log('Error:', JSON.stringify(response))
 
-      const payload = {
-        id: goods_id,
-        price: current_price,
-        type: MessageType.Purchased,
-        name: item.market_hash_name,
-        createdAt: data.created_at,
-        updatedAt: data.updated_at,
-        source: options.source,
-      }
+    //     return
+    //   }
 
-      await sendMessage(generateMessage({ ...payload }))
-    }
+    //   const payload = {
+    //     id: goods_id,
+    //     price: current_price,
+    //     type: MessageType.Purchased,
+    //     name: item.market_hash_name,
+    //     createdAt: data.created_at,
+    //     updatedAt: data.updated_at,
+    //     source: options.source,
+    //   }
+
+    //   await sendMessage(generateMessage({ ...payload }))
+    // }
   }
 }

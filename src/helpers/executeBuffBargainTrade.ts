@@ -105,7 +105,7 @@ export const executeBuffBargainTrade = async (
     const reference_price = Number(goodsInfo.data.goods_info.goods_ref_price)
     const bargain_price = Number((Math.min(median_price, reference_price) * 0.9).toFixed(1))
 
-    if (bargain_price >= Number(lowestPricedItem.price)) {
+    if (Number(keychain?.sell_reference_price || 0) + bargain_price >= Number(lowestPricedItem.price)) {
       const response = await postGoodsBuy({ price: current_price, sell_order_id: lowestPricedItem.id })
 
       if (response.code !== 'OK') {

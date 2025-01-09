@@ -84,7 +84,7 @@ const findSteamItemInfo = async (config: {
             message.push(`\n`)
             message.push(`<b>SP</b>: ${SP.toFixed(2)}%\n`)
             message.push(`<b>Steam price</b>: $${price}\n`)
-            message.push(`<b>Reference price</b>: $${basePrice}\n`)
+            message.push(`<b>Reference price</b>: $${basePrice.toFixed(2)}\n`)
             message.push(`<b>Stickers total</b>: $${stickerTotal.toFixed(2)}\n\n`)
             message.push(`<b>Float</b>: ${itemInfoResponse.iteminfo.floatvalue}\n\n`)
 

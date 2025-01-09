@@ -47,8 +47,6 @@ const findSteamItemInfo = async (config: {
 
       const stickers = extractStickers(htmlDescription)
 
-      console.log(stickers)
-
       if (isStickerCombo(stickers) && config.canSendToTelegram) {
         const response = await getCSFloatListings({
           market_hash_name: `Sticker | ${stickers[0]}`,

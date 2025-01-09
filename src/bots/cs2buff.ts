@@ -13,6 +13,8 @@ const content: string = readFileSync(pathname, 'utf-8')
 const market_hash_names: string[] = content.split('\n').filter((name) => !!name.trim())
 const config = market_hash_names.map((name) => ({ market_hash_name: name.trim(), referenceId: '' }))
 
+console.log(process.env.TELEGRAM_CSFLOAT_ORDERS_ID)
+
 const csPriceChecker = async () => {
   try {
     for (const data of config) {
@@ -31,7 +33,9 @@ const csPriceChecker = async () => {
           const prev_price = Number((GOODS_CACHE[market_hash_name].price / 100).toFixed(2))
           const next_price = Number((current_price / 100).toFixed(2))
           await sendMessage(
-            `<a href="https://csfloat.com/item/${data.referenceId}">${market_hash_name}</a> | $${prev_price} -> $${next_price}`
+            `<a href="https://csfloat.com/item/${data.referenceId}">${market_hash_name}</a> | $${prev_price} -> $${next_price}`,
+            undefined,
+            process.env.TELEGRAM_CSFLOAT_ORDERS_ID
           )
         }
 

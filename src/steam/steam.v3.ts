@@ -63,7 +63,7 @@ const findSteamItemInfo = async (config: {
           })
 
           const stickerTotal = stickerPrice * stickers.length
-          const basePrice = response.data[0].reference.base_price
+          const basePrice = response.data[0].reference.base_price / 100
 
           const SP = ((price - basePrice) / stickerTotal) * 100
 

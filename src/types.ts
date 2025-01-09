@@ -26,6 +26,7 @@ export type KeychainItem = {
   goods_id: number
   name: string
   sell_reference_price: string
+  pattern: number
 }
 
 export type GoodsSellOrder = {
@@ -448,6 +449,7 @@ export enum Source {
   BUFF_FAST = 'BUFF_FAST',
   BUFF_BUFF = 'BUFF_BUFF',
   BUFF_DEFAULT = 'BUFF_DEFAULT',
+  BUFF_CHARM = 'BUFF_CHARM',
   BUFF_STEAM = 'BUFF_STEAM',
   BUFF_BARGAIN = 'BUFF_BARGAIN',
   BUFF_KATOWICE = 'BUFF_KATOWICE',

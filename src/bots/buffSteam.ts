@@ -18,7 +18,7 @@ const max_price = Number(process.env.MAX_BARGAIN_PRICE) ?? 30
 
 const buffSteam = async () => {
   try {
-    const marketGoods = await getMarketGoods({ min_price: 1, max_price })
+    const marketGoods = await getMarketGoods({ min_price: 5, max_price })
 
     for (const item of marketGoods.data.items) {
       const now = format(new Date(), 'HH:mm:ss')
@@ -80,7 +80,7 @@ const buffSteam = async () => {
   for (const page_num of pages) {
     const goods = await getMarketGoods({
       page_num,
-      min_price: 1,
+      min_price: 5,
       max_price,
       category_group: 'rifle,pistol,smg,shotgun,machinegun',
       category: 'csgo_type_musickit,csgo_tool_patch,csgo_type_collectible',

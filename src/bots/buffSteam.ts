@@ -26,8 +26,9 @@ const buffSteam = async () => {
 
       if (item.id === 30355 && CHARM_CACHE[item.id].sell_num < item.sell_num) {
         await executeBuffCharmTrade(item, { source: Source.BUFF_CHARM })
-        CHARM_CACHE[item.id] = { sell_num: item.sell_num }
       }
+
+      if (item.id === 30355) CHARM_CACHE[item.id] = { sell_num: item.sell_num }
 
       if (GOODS_BLACKLIST_CACHE.includes(item.id)) {
         continue

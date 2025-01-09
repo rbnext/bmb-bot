@@ -24,11 +24,11 @@ const buffSteam = async () => {
       const now = format(new Date(), 'HH:mm:ss')
       const current_price = Number(item.sell_min_price)
 
-      if (item.id === 30355 && CHARM_CACHE[item.id].sell_num < item.sell_num) {
+      if ([30355].includes(item.id) && CHARM_CACHE[item.id].sell_num < item.sell_num) {
         await executeBuffCharmTrade(item, { source: Source.BUFF_CHARM })
       }
 
-      if (item.id === 30355) CHARM_CACHE[item.id] = { sell_num: item.sell_num }
+      if ([30355].includes(item.id)) CHARM_CACHE[item.id] = { sell_num: item.sell_num }
 
       if (GOODS_BLACKLIST_CACHE.includes(item.id)) {
         continue

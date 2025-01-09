@@ -19,26 +19,37 @@ export const executeBuffCharmTrade = async (
 
     console.log(item.market_hash_name, current_price, pattern)
 
-    // if (pattern > 1000) {
-    //   const response = await postGoodsBuy({ price: current_price, sell_order_id: data.id })
+    if (
+      (pattern >= 1 && pattern <= 5000 && current_price <= 15) ||
+      (pattern > 5000 && pattern <= 9000 && current_price <= 10) ||
+      (pattern >= 20000 && pattern <= 23000 && current_price <= 17) ||
+      (pattern > 23000 && pattern <= 25000 && current_price <= 10) ||
+      (pattern >= 90000 && pattern <= 94999 && current_price <= 8) ||
+      (pattern >= 95000 && pattern <= 98999 && current_price <= 12) ||
+      (pattern >= 99000 && pattern <= 99999 && current_price <= 20)
+    ) {
+      const response = await postGoodsBuy({ price: current_price, sell_order_id: data.id })
 
-    //   if (response.code !== 'OK') {
-    //     console.log('Error:', JSON.stringify(response))
+      if (response.code !== 'OK') {
+        console.log('Error:', JSON.stringify(response))
 
-    //     return
-    //   }
+        return
+      }
 
-    //   const payload = {
-    //     id: goods_id,
-    //     price: current_price,
-    //     type: MessageType.Purchased,
-    //     name: item.market_hash_name,
-    //     createdAt: data.created_at,
-    //     updatedAt: data.updated_at,
-    //     source: options.source,
-    //   }
+      const payload = {
+        id: goods_id,
+        price: current_price,
+        type: MessageType.Purchased,
+        name: item.market_hash_name,
+        createdAt: data.created_at,
+        updatedAt: data.updated_at,
+        source: options.source,
+        pattern,
+      }
 
-    //   await sendMessage(generateMessage({ ...payload }))
-    // }
+      await sendMessage(generateMessage({ ...payload }))
+
+      return
+    }
   }
 }

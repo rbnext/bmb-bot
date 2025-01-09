@@ -135,6 +135,7 @@ export const generateMessage = ({
   positions,
   keychain,
   csFloatPrice,
+  pattern,
 }: {
   id: number
   name: string
@@ -157,6 +158,7 @@ export const generateMessage = ({
   positions?: number
   keychain?: KeychainItem
   csFloatPrice?: number
+  pattern?: number
 }) => {
   const message: string[] = []
 
@@ -198,6 +200,10 @@ export const generateMessage = ({
 
   if (float) {
     message.push(`<b>Float</b>: ${float}\n`)
+  }
+
+  if (pattern) {
+    message.push(`<b>Pattern</b>: ${pattern}\n`)
   }
 
   if (keychain) {

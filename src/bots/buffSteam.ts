@@ -6,13 +6,13 @@ import { format } from 'date-fns'
 import { sendMessage } from '../api/telegram'
 import { Source } from '../types'
 import { executeBuffToSteamTrade } from '../helpers/executeBuffToSteamTrade'
-import { BARGAIN_PROFIT_THRESHOLD, BLACKLISTED_CATEGORY, BLACKLISTED_ITEMSET } from '../config'
+import { BARGAIN_PROFIT_THRESHOLD } from '../config'
 import { executeBuffBargainTrade } from '../helpers/executeBuffBargainTrade'
 import { executeBuffCharmTrade } from '../helpers/executeBuffCharmTrade'
 
 export const CHARM_CACHE: Record<number, { sell_num: number }> = {}
 export const GOODS_CACHE: Record<number, { price: number }> = {}
-export const GOODS_BLACKLIST_CACHE: number[] = []
+export const GOODS_BLACKLIST_CACHE: number[] = [30431, 30235, 30259, 30269, 30350]
 
 const max_price = Number(process.env.MAX_BARGAIN_PRICE) ?? 30
 
@@ -75,7 +75,7 @@ const buffSteam = async () => {
 }
 
 ;(async () => {
-  const pages = Array.from({ length: 50 }, (_, i) => i + 1)
+  const pages = Array.from({ length: 60 }, (_, i) => i + 1)
 
   for (const page_num of pages) {
     const goods = await getMarketGoods({
@@ -90,23 +90,12 @@ const buffSteam = async () => {
     await sleep(5_000)
   }
 
-  for (const page_num of pages) {
-    const goods = await getMarketGoods({ itemset: BLACKLISTED_ITEMSET.join(','), page_num })
-    goods.data.items.forEach((item) => GOODS_BLACKLIST_CACHE.push(item.id))
-    if (goods.data.items.length !== 50) break
-    await sleep(5_000)
-  }
-
-  for (const page_num of pages) {
-    const goods = await getMarketGoods({ category: BLACKLISTED_CATEGORY.join(','), page_num })
-    goods.data.items.forEach((item) => GOODS_BLACKLIST_CACHE.push(item.id))
-    goods.data.items.forEach((item) => (CHARM_CACHE[item.id] = { sell_num: item.sell_num }))
-    if (goods.data.items.length !== 50) break
-    await sleep(5_000)
-  }
+  const goods = await getMarketGoods({ category: 'csgo_tool_keychain' })
+  goods.data.items.forEach((item) => (CHARM_CACHE[item.id] = { sell_num: item.sell_num }))
 
   console.log('Loaded items: ', Object.keys(GOODS_CACHE).length)
   console.log('Disabled items: ', Object.keys(GOODS_BLACKLIST_CACHE).length)
+  console.log('Charm items: ', Object.keys(CHARM_CACHE).length)
 
   buffSteam()
 })()

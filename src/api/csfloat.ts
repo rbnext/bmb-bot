@@ -20,6 +20,7 @@ export const getCSFloatListings = async ({
   category,
   min_price,
   max_price,
+  stickers,
   filter,
 }: {
   type?: string
@@ -31,10 +32,23 @@ export const getCSFloatListings = async ({
   category?: number
   min_price?: number
   max_price?: number
+  stickers?: string
   filter?: string
 }): Promise<CSFloatListing> => {
   const { data } = await http.get('/v1/listings', {
-    params: { limit, category, type, min_float, max_float, market_hash_name, sort_by, min_price, max_price, filter },
+    params: {
+      limit,
+      category,
+      type,
+      min_float,
+      max_float,
+      market_hash_name,
+      sort_by,
+      min_price,
+      max_price,
+      filter,
+      stickers,
+    },
     headers: {
       Cookie: `session=${process.env.CSFLOAT_SESSION_TOKEN}`,
     },

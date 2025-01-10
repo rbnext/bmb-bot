@@ -73,8 +73,6 @@ const findSteamItemInfo = async ({ market_hash_name }: { market_hash_name: strin
       CASHED_LISTINGS.add(listingId)
     }
   } catch (error) {
-    if (error.message !== 'canceled') await sleep(60_000 * 4)
-
     console.log(format(new Date(), 'HH:mm:ss'), 'STEAM_ERROR', error.message)
 
     return
@@ -104,7 +102,7 @@ const findSteamItemInfo = async ({ market_hash_name }: { market_hash_name: strin
         }
 
         if (market_hash_name in GOODS_CACHE && GOODS_CACHE[market_hash_name].price > item.sell_price) {
-          findSteamItemInfo({ market_hash_name })
+          await findSteamItemInfo({ market_hash_name })
         }
 
         GOODS_CACHE[market_hash_name] = { price: item.sell_price }

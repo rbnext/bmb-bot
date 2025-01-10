@@ -100,7 +100,7 @@ export const getSearchMarketRender = async ({
           sort_column,
           sort_dir,
           norender,
-          'category_730_Exterior[]': ['tag_WearCategory0', 'tag_WearCategory1', 'tag_WearCategory2'],
+          'category_730_Exterior[]': ['tag_WearCategory1', 'tag_WearCategory2'],
           'category_730_Rarity[]': [
             'tag_Rarity_Mythical_Weapon',
             'tag_Rarity_Legendary_Weapon',
@@ -136,7 +136,7 @@ export const getMarketRender = async ({
   currency = 1,
   market_hash_name,
   start = 0,
-  count = 5,
+  count = 10,
   language = 'english',
   userAgent,
   filter,
@@ -148,7 +148,7 @@ export const getMarketRender = async ({
   market_hash_name: string
   start?: number
   count?: number
-  userAgent: string
+  userAgent?: string
   language?: 'english'
   filter?: string
   proxy?: string | 'localhost' | null
@@ -158,7 +158,7 @@ export const getMarketRender = async ({
     {
       params: { appid, country, currency, start, count, language, filter },
       headers: {
-        'User-Agent': userAgent,
+        'User-Agent': userAgent ?? new UserAgent().toString(),
         Host: 'steamcommunity.com',
         Accept: 'text/html,*/*;q=0.9',
         'Accept-Encoding': 'gzip,identity,*;q=0',

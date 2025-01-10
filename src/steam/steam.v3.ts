@@ -35,7 +35,7 @@ const findSteamItemInfo = async ({ market_hash_name }: { market_hash_name: strin
 
       const stickers = extractStickers(htmlDescription)
 
-      const stickerTotal = stickers.reduce((acc, name) => acc + stickerData[`Sticker | ${name}`] ?? 0, 0)
+      const stickerTotal = stickers.reduce((acc, name) => acc + (stickerData[`Sticker | ${name}`] ?? 0), 0)
 
       console.log(format(new Date(), 'HH:mm:ss'), market_hash_name, stickerTotal.toFixed(2))
 
@@ -86,7 +86,7 @@ const findSteamItemInfo = async ({ market_hash_name }: { market_hash_name: strin
 
   const STEAM_SEARCH_START = Number(process.env.STEAM_SEARCH_START)
 
-  console.log(STEAM_SEARCH_START)
+  console.log('STEAM_SEARCH_START', STEAM_SEARCH_START)
 
   do {
     try {

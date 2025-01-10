@@ -42,7 +42,7 @@ export const executeBuffBargainTrade = async (
   })
 
   if (FLOAT_BLACKLIST.size === 0) {
-    const pages = Array.from({ length: 10 }, (_, i) => i + 1)
+    const pages = Array.from({ length: 5 }, (_, i) => i + 1)
     for (const page_num of pages) {
       const bargains = await getSentBargain({ page_num })
       for (const bargain of bargains.data.items) {
@@ -74,7 +74,7 @@ export const executeBuffBargainTrade = async (
   if (!lowestPricedItem) return
   if (!lowestPricedItem.allow_bargain) return
   if (!isLessThanXMinutes(lowestPricedItem.created_at, 1)) return
-  if (FLOAT_BLACKLIST.has(lowestPricedItem.asset_info.instanceid)) return
+  if (FLOAT_BLACKLIST.has(lowestPricedItem.asset_info.paintwear)) return
   if (SELLER_BLACKLIST.includes(lowestPricedItem.user_id)) return
 
   const userStorePopup = await getUserStorePopup({ user_id: lowestPricedItem.user_id })

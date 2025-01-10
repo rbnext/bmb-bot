@@ -18,7 +18,8 @@
     "steamv2": "ts-node src/steam/steam.v2.ts",
     "steamv3": "ts-node src/steam/steam.v3.ts",
     "cs2Buff": "ts-node src/bots/cs2Buff.ts",
-    "steam-charms": "ts-node src/steam/charms.ts"
+    "steam-charms": "ts-node src/steam/charms.ts",
+    "cs-float-charms": "ts-node src/bots/cs-float-charms.ts"
   },
   "author": "",
   "license": "ISC",

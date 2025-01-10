@@ -520,6 +520,14 @@ type CSFloatListingItemStickerItem = {
   }
 }
 
+type CSFloatListingItemCharmItem = {
+  pattern: number
+  name: string
+  reference: {
+    price: number
+  }
+}
+
 type CSFloatListingItem = {
   created_at: string
   id: string
@@ -530,7 +538,8 @@ type CSFloatListingItem = {
     is_stattrak: boolean
     is_souvenir: boolean
     is_commodity: boolean
-    stickers: CSFloatListingItemStickerItem[]
+    stickers?: CSFloatListingItemStickerItem[]
+    keychains?: CSFloatListingItemCharmItem[]
   }
   reference: {
     base_price: number

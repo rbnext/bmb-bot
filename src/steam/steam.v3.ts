@@ -19,7 +19,7 @@ const stickerData: Record<string, number> = JSON.parse(readFileSync(pathname, 'u
 
 const findSteamItemInfo = async ({ market_hash_name }: { market_hash_name: string }) => {
   try {
-    const steam = await getMarketRender({ market_hash_name })
+    const steam = await getMarketRender({ market_hash_name, filter: 'Sticker' })
 
     for (const [index, listingId] of Object.keys(steam.listinginfo).entries()) {
       if (CASHED_LISTINGS.has(listingId)) continue

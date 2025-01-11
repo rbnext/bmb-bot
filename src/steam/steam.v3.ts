@@ -4,7 +4,7 @@ import { format } from 'date-fns'
 import { getMarketRender, getSearchMarketRender } from '../api/steam'
 import { sendMessage } from '../api/telegram'
 import { extractStickers, getSteamUrl, sleep } from '../utils'
-import { getInspectLink } from './utils'
+import { getInspectLink, isStickerCombo } from './utils'
 
 import { getCSFloatItemInfo, getCSFloatListings } from '../api/csfloat'
 import { SearchMarketRender } from '../types'
@@ -47,7 +47,7 @@ const findSteamItemInfo = async ({ market_hash_name }: { market_hash_name: strin
 
         console.log(format(new Date(), 'HH:mm:ss'), 'SP', SP.toFixed(2) + '%')
 
-        if (SP < 30) {
+        if (SP < (isStickerCombo(stickers) ? 18 : 8)) {
           const itemInfoResponse = await getCSFloatItemInfo({ url: inspectLink })
 
           const message: string[] = []

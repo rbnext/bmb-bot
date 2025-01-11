@@ -47,7 +47,7 @@ const findSteamItemInfo = async ({ market_hash_name }: { market_hash_name: strin
 
         console.log(format(new Date(), 'HH:mm:ss'), 'SP', SP.toFixed(2) + '%')
 
-        if (SP < 40) {
+        if (SP < 30) {
           const itemInfoResponse = await getCSFloatItemInfo({ url: inspectLink })
 
           const message: string[] = []

@@ -86,8 +86,6 @@ export const getSearchMarketRender = async ({
   retries?: number
   proxy?: string
 }) => {
-  const userAgent = new UserAgent()
-
   for (let attempt = 0; attempt < retries; attempt++) {
     try {
       const { data } = await axios.get(`https://steamcommunity.com/market/search/render/`, {
@@ -111,7 +109,7 @@ export const getSearchMarketRender = async ({
         },
         headers: {
           Host: 'steamcommunity.com',
-          'User-Agent': userAgent.toString(),
+          'User-Agent': new UserAgent().toString(),
           Referer: 'https://steamcommunity.com/market/search/',
         },
         httpsAgent: proxy ? new HttpsProxyAgent(`http://${proxy}`) : undefined,

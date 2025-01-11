@@ -17,9 +17,9 @@ const GOODS_CACHE: Record<string, { price: number; listings: number }> = {}
 const pathname = path.join(__dirname, '../../csfloat.json')
 const stickerData: Record<string, number> = JSON.parse(readFileSync(pathname, 'utf8'))
 
-const findSteamItemInfo = async ({ market_hash_name }: { market_hash_name: string }) => {
+const findSteamItemInfo = async ({ market_hash_name, proxy }: { market_hash_name: string; proxy: string }) => {
   try {
-    const steam = await getMarketRender({ market_hash_name, filter: 'Sticker' })
+    const steam = await getMarketRender({ market_hash_name, proxy, filter: 'Sticker' })
 
     for (const [index, listingId] of Object.keys(steam.listinginfo).entries()) {
       if (CASHED_LISTINGS.has(listingId)) continue
@@ -39,7 +39,7 @@ const findSteamItemInfo = async ({ market_hash_name }: { market_hash_name: strin
 
       console.log(format(new Date(), 'HH:mm:ss'), market_hash_name, stickerTotal.toFixed(2))
 
-      if (stickerTotal > 10) {
+      if (stickerTotal > 15) {
         const response = await getCSFloatListings({ market_hash_name })
 
         const basePrice = response.data[0].reference.base_price / 100
@@ -83,8 +83,10 @@ const findSteamItemInfo = async ({ market_hash_name }: { market_hash_name: strin
 ;(async () => {
   let hasMarketUpdated: boolean = false
 
+  const STEAM_PROXY = String(process.env.STEAM_PROXY).trim()
   const STEAM_SEARCH_START = Number(process.env.STEAM_SEARCH_START)
 
+  console.log('STEAM_PROXY', STEAM_PROXY)
   console.log('STEAM_SEARCH_START', STEAM_SEARCH_START)
 
   do {
@@ -93,6 +95,7 @@ const findSteamItemInfo = async ({ market_hash_name }: { market_hash_name: strin
         query: 'Sticker',
         quality: ['tag_normal'],
         start: STEAM_SEARCH_START,
+        proxy: STEAM_PROXY,
       })
 
       for (const item of response.results) {
@@ -104,7 +107,7 @@ const findSteamItemInfo = async ({ market_hash_name }: { market_hash_name: strin
 
         if (item.sell_listings < 100) {
           if (market_hash_name in GOODS_CACHE && GOODS_CACHE[market_hash_name].listings < item.sell_listings) {
-            await findSteamItemInfo({ market_hash_name })
+            await findSteamItemInfo({ market_hash_name, proxy: STEAM_PROXY })
           }
         }
 

@@ -12,7 +12,7 @@ import { readFileSync } from 'fs'
 import path from 'path'
 
 const CASHED_LISTINGS = new Set<string>()
-const GOODS_CACHE: Record<string, { price: number }> = {}
+const GOODS_CACHE: Record<string, { price: number; listings: number }> = {}
 
 const pathname = path.join(__dirname, '../../csfloat.json')
 const stickerData: Record<string, number> = JSON.parse(readFileSync(pathname, 'utf8'))
@@ -39,7 +39,7 @@ const findSteamItemInfo = async ({ market_hash_name }: { market_hash_name: strin
 
       console.log(format(new Date(), 'HH:mm:ss'), market_hash_name, stickerTotal.toFixed(2))
 
-      if (stickerTotal > 20) {
+      if (stickerTotal > 10) {
         const response = await getCSFloatListings({ market_hash_name })
 
         const basePrice = response.data[0].reference.base_price / 100
@@ -97,15 +97,26 @@ const findSteamItemInfo = async ({ market_hash_name }: { market_hash_name: strin
       for (const item of response.results) {
         const market_hash_name = item.asset_description.market_hash_name
 
-        if (market_hash_name in GOODS_CACHE && GOODS_CACHE[market_hash_name].price !== item.sell_price) {
-          hasMarketUpdated = true
+        if (item.sell_listings >= 40) {
+          if (market_hash_name in GOODS_CACHE && GOODS_CACHE[market_hash_name].price !== item.sell_price) {
+            hasMarketUpdated = true
+          }
+
+          if (market_hash_name in GOODS_CACHE && GOODS_CACHE[market_hash_name].price > item.sell_price) {
+            await findSteamItemInfo({ market_hash_name })
+          }
+        } else {
+          if (market_hash_name in GOODS_CACHE && GOODS_CACHE[market_hash_name].listings !== item.sell_listings) {
+            hasMarketUpdated = true
+          }
+
+          if (market_hash_name in GOODS_CACHE && GOODS_CACHE[market_hash_name].listings < item.sell_listings) {
+            console.log(market_hash_name, GOODS_CACHE[market_hash_name].listings, '->', item.sell_listings)
+            await findSteamItemInfo({ market_hash_name })
+          }
         }
 
-        if (market_hash_name in GOODS_CACHE && GOODS_CACHE[market_hash_name].price > item.sell_price) {
-          await findSteamItemInfo({ market_hash_name })
-        }
-
-        GOODS_CACHE[market_hash_name] = { price: item.sell_price }
+        GOODS_CACHE[market_hash_name] = { price: item.sell_price, listings: item.sell_listings }
       }
     } catch (error) {
       console.log(error.message)

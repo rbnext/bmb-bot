@@ -55,8 +55,9 @@ const findSteamItemInfo = async ({ market_hash_name }: { market_hash_name: strin
           message.push(`<a href="${getSteamUrl(market_hash_name)}">${market_hash_name}</a> | #${index + 1}\n\n`)
 
           for (const sticker of itemInfoResponse.iteminfo?.stickers ?? []) {
+            const name = `Sticker | ${sticker.name}`
             message.push(
-              `<b>Sticker | ${sticker.name}</b>: ${sticker.wear === 0 ? '100%' : `${(sticker.wear * 100).toFixed(2)}%`}\n`
+              `<b>${name}</b>: ${sticker.wear === 0 ? '100%' : `${(sticker.wear * 100).toFixed(2)}% ($${stickerData[name] ?? 0})`}\n`
             )
           }
           message.push(`\n`)

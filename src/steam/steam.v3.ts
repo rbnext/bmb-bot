@@ -98,21 +98,12 @@ const findSteamItemInfo = async ({ market_hash_name }: { market_hash_name: strin
       for (const item of response.results) {
         const market_hash_name = item.asset_description.market_hash_name
 
-        if (item.sell_listings >= 40) {
-          if (market_hash_name in GOODS_CACHE && GOODS_CACHE[market_hash_name].price !== item.sell_price) {
-            hasMarketUpdated = true
-          }
+        if (market_hash_name in GOODS_CACHE && GOODS_CACHE[market_hash_name].listings !== item.sell_listings) {
+          hasMarketUpdated = true
+        }
 
-          if (market_hash_name in GOODS_CACHE && GOODS_CACHE[market_hash_name].price > item.sell_price) {
-            await findSteamItemInfo({ market_hash_name })
-          }
-        } else {
-          if (market_hash_name in GOODS_CACHE && GOODS_CACHE[market_hash_name].listings !== item.sell_listings) {
-            hasMarketUpdated = true
-          }
-
+        if (item.sell_listings < 100) {
           if (market_hash_name in GOODS_CACHE && GOODS_CACHE[market_hash_name].listings < item.sell_listings) {
-            console.log(market_hash_name, GOODS_CACHE[market_hash_name].listings, '->', item.sell_listings)
             await findSteamItemInfo({ market_hash_name })
           }
         }

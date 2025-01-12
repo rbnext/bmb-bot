@@ -101,8 +101,6 @@ const findSteamItemInfo = async ({ market_hash_name, proxy }: { market_hash_name
       for (const item of response.results) {
         const market_hash_name = item.asset_description.market_hash_name
 
-        console.log(market_hash_name, item.sell_price / 100)
-
         if (market_hash_name in GOODS_CACHE && GOODS_CACHE[market_hash_name].listings !== item.sell_listings) {
           hasMarketUpdated = true
         }

@@ -7,7 +7,7 @@ import path from 'path'
 import { readFileSync, writeFileSync } from 'fs'
 
 const csFloatCharms = async () => {
-  const pages = Array.from({ length: 10 }, (_, i) => 3790 + i)
+  const pages = Array.from({ length: 10 }, (_, i) => 4020 + i)
 
   try {
     for (const id of pages) {

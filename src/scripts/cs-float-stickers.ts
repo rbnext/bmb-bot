@@ -10,21 +10,29 @@ import { readFileSync, writeFileSync } from 'fs'
 import { SearchMarketRender } from '../types'
 
 const csFloatCharms = async () => {
+  const pages = Array.from({ length: 10 }, (_, i) => 3700 + i)
+
   try {
-    const response = await getCSFloatListings({
-      sort_by: 'most_recent',
-    })
-    const pathname = path.join(__dirname, '../../csfloat.json')
-    const stickerData: Record<string, number> = JSON.parse(readFileSync(pathname, 'utf8'))
-    for (const data of response.data) {
-      for (const sticker of data.item?.stickers ?? []) {
-        if (sticker.reference?.price) {
-          stickerData[sticker.name] = Number((sticker.reference.price / 100).toFixed(2))
+    for (const id of pages) {
+      const response = await getCSFloatListings({
+        sort_by: 'most_recent',
+        stickers: `[{"i":${id}}]`,
+      })
+      const pathname = path.join(__dirname, '../../csfloat.json')
+      const stickerData: Record<string, number> = JSON.parse(readFileSync(pathname, 'utf8'))
+      for (const data of response.data) {
+        for (const sticker of data.item?.stickers ?? []) {
+          if (sticker.reference?.price && sticker.name.includes('Sticker')) {
+            stickerData[sticker.name] = Number((sticker.reference.price / 100).toFixed(2))
+          }
         }
       }
+      console.log(Object.keys(stickerData).length)
+      writeFileSync(pathname, JSON.stringify({ ...stickerData }, null, 4))
+
+      await sleep(5_000)
     }
-    console.log(Object.keys(stickerData).length)
-    writeFileSync(pathname, JSON.stringify({ ...stickerData }, null, 4))
+
     // const response: SearchMarketRender = await getSearchMarketRender({
     //   query: 'Sticker',
     //   quality: ['tag_normal'],

@@ -71,6 +71,8 @@ const findSteamItemInfo = async ({ market_hash_name, proxy }: { market_hash_name
 
           await sendMessage(message.join(''))
         }
+
+        await sleep(3_000)
       }
 
       CASHED_LISTINGS.add(listingId)

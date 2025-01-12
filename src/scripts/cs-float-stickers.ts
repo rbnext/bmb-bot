@@ -7,7 +7,7 @@ import path from 'path'
 import { readFileSync, writeFileSync } from 'fs'
 
 const csFloatCharms = async () => {
-  const pages = Array.from({ length: 10 }, (_, i) => 3700 + i)
+  const pages = Array.from({ length: 1 }, (_, i) => 3720 + i)
 
   try {
     for (const id of pages) {
@@ -17,13 +17,13 @@ const csFloatCharms = async () => {
       for (const data of response.data) {
         for (const sticker of data.item?.stickers ?? []) {
           if (sticker.reference?.price && sticker.name.includes('Sticker')) {
-            stickerData[sticker.name] = Number((sticker.reference.price / 100).toFixed(2))
+            const price = Number((sticker.reference.price / 100).toFixed(2))
+            if (price > 0.01) stickerData[sticker.name] = price
           }
         }
       }
       console.log(Object.keys(stickerData).length)
       writeFileSync(pathname, JSON.stringify({ ...stickerData }, null, 4))
-
       await sleep(5_000)
     }
   } catch (error) {

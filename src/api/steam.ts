@@ -165,7 +165,7 @@ export const getMarketRender = async ({
         'X-Prototype-Version': '1.7',
         'X-Requested-With': 'XMLHttpRequest',
       },
-      httpsAgent: proxy && proxy !== 'localhost' ? new HttpsProxyAgent(proxy) : undefined,
+      httpsAgent: proxy && proxy !== 'localhost' ? new HttpsProxyAgent(`http://${proxy}`) : undefined,
       signal: AbortSignal.timeout(5000),
       timeout: 5000,
     }

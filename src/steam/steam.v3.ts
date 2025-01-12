@@ -83,8 +83,6 @@ const findSteamItemInfo = async ({ market_hash_name, proxy }: { market_hash_name
 }
 
 ;(async () => {
-  let hasMarketUpdated: boolean = false
-
   const STEAM_PROXY = String(process.env.STEAM_PROXY).trim()
   const STEAM_SEARCH_START = Number(process.env.STEAM_SEARCH_START)
 
@@ -92,34 +90,35 @@ const findSteamItemInfo = async ({ market_hash_name, proxy }: { market_hash_name
   console.log('STEAM_SEARCH_START', STEAM_SEARCH_START)
 
   do {
-    try {
-      const response: SearchMarketRender = await getSearchMarketRender({
-        query: 'Sticker',
-        quality: ['tag_strange', 'tag_normal'],
-        start: STEAM_SEARCH_START,
-        proxy: STEAM_PROXY,
-      })
+    for (const start of [STEAM_SEARCH_START - 1, STEAM_SEARCH_START, STEAM_SEARCH_START + 1]) {
+      try {
+        const response: SearchMarketRender = await getSearchMarketRender({
+          query: 'Sticker',
+          quality: ['tag_strange', 'tag_normal'],
+          proxy: STEAM_PROXY,
+          start,
+        })
 
-      for (const item of response.results) {
-        const market_hash_name = item.asset_description.market_hash_name
+        for (const item of response.results) {
+          const market_hash_name = item.asset_description.market_hash_name
 
-        if (market_hash_name in GOODS_CACHE && GOODS_CACHE[market_hash_name].listings !== item.sell_listings) {
-          hasMarketUpdated = true
-        }
-
-        if (item.sell_listings < 100) {
-          if (market_hash_name in GOODS_CACHE && GOODS_CACHE[market_hash_name].listings < item.sell_listings) {
-            await findSteamItemInfo({ market_hash_name, proxy: STEAM_PROXY })
+          if (market_hash_name in GOODS_CACHE && GOODS_CACHE[market_hash_name].listings !== item.sell_listings) {
+            //
           }
-        }
 
-        GOODS_CACHE[market_hash_name] = { price: item.sell_price, listings: item.sell_listings }
+          if (item.sell_listings < 100) {
+            if (market_hash_name in GOODS_CACHE && GOODS_CACHE[market_hash_name].listings < item.sell_listings) {
+              await findSteamItemInfo({ market_hash_name, proxy: STEAM_PROXY })
+            }
+          }
+
+          GOODS_CACHE[market_hash_name] = { price: item.sell_price, listings: item.sell_listings }
+        }
+      } catch (error) {
+        console.log(error.message)
+      } finally {
+        await sleep(61_000)
       }
-    } catch (error) {
-      console.log(error.message)
-    } finally {
-      await sleep(hasMarketUpdated ? 170_000 : 20_000)
-      hasMarketUpdated = false
     }
 
     // eslint-disable-next-line no-constant-condition

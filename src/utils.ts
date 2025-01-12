@@ -1,12 +1,5 @@
 import { differenceInMinutes, formatDistance, isAfter, subHours, subMinutes } from 'date-fns'
-import {
-  CSFloatListing,
-  KeychainItem,
-  MessageType,
-  ShopBillOrderItem,
-  Source,
-  SteamInventoryHelperSticker,
-} from './types'
+import { CSFloatListing, KeychainItem, MessageType, Source, SteamInventoryHelperSticker } from './types'
 
 export const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms))
 
@@ -225,17 +218,6 @@ export const generateMessage = ({
   }
 
   return message.join('')
-}
-
-export const getBargainDiscountPrice = (price: number, userSellingHistory: ShopBillOrderItem[]) => {
-  const history = userSellingHistory.filter((item) => item.has_bargain)
-  const percents = history.map((item) => (Number(item.original_price) / Number(item.price) - 1) * 100)
-
-  return Number((price - price * ((median(percents) > 8 ? 10.5 : 5) / 100)).toFixed(2))
-}
-
-export function getRandomNumber(min: number, max: number): number {
-  return Math.floor(Math.random() * (max - min + 1)) + min
 }
 
 export function extractStickers(input: string): string[] {

@@ -2,9 +2,9 @@ import axios from 'axios'
 import { setupCache } from 'axios-cache-interceptor'
 import UserAgent from 'user-agents'
 
-import { SearchMarketRender, SteamMarketPriceHistory, SteamMarketPriceOverview, SteamMarketRender } from '../types'
+import { SteamMarketPriceHistory, SteamMarketPriceOverview, SteamMarketRender } from '../types'
 import { HttpsProxyAgent } from 'https-proxy-agent'
-import { getRandomNumber, sleep } from '../utils'
+import { sleep } from '../utils'
 
 const instance = axios.create({
   baseURL: 'https://steamcommunity.com',

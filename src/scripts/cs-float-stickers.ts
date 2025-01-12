@@ -25,7 +25,7 @@ const csFloatCharms = async () => {
         for (const sticker of data.item?.stickers ?? []) {
           if (sticker.reference?.price && sticker.name.includes('Sticker')) {
             const price = Number((sticker.reference.price / 100).toFixed(2))
-            if (price > 0.01) stickerData[sticker.name] = price
+            if (price >= 0.05) stickerData[sticker.name] = price
           }
         }
       }

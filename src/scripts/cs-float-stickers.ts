@@ -9,6 +9,13 @@ import { readFileSync, writeFileSync } from 'fs'
 const csFloatCharms = async () => {
   const pages = Array.from({ length: 10 }, (_, i) => 4020 + i)
 
+  // const pathname = path.join(__dirname, '../../csfloat.json')
+  // const stickerData: Record<string, number> = JSON.parse(readFileSync(pathname, 'utf8'))
+  // for (const sticker of Object.keys(stickerData)) {
+  //   if (stickerData[sticker] === 0.03) delete stickerData[sticker]
+  // }
+  // writeFileSync(pathname, JSON.stringify({ ...stickerData }, null, 4))
+
   try {
     for (const id of pages) {
       const response = await getCSFloatListings({ stickers: `[{"i":${id}}]` })

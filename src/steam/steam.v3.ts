@@ -78,7 +78,9 @@ const findSteamItemInfo = async ({ market_hash_name, proxy }: { market_hash_name
   } catch (error) {
     console.log(format(new Date(), 'HH:mm:ss'), 'STEAM_ERROR', error.message)
 
-    return
+    if (error.message?.includes('403')) {
+      await sleep(60_000 * 2)
+    }
   }
 }
 

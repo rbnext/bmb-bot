@@ -52,7 +52,9 @@ const findSteamItemInfo = async ({ market_hash_name, proxy }: { market_hash_name
 
           const message: string[] = []
 
-          message.push(`<a href="${getSteamUrl(market_hash_name)}">${market_hash_name}</a> | #${index + 1}\n\n`)
+          message.push(
+            `<a href="${getSteamUrl(market_hash_name, stickers)}">${market_hash_name}</a> | #${index + 1}\n\n`
+          )
 
           for (const sticker of itemInfoResponse.iteminfo?.stickers ?? []) {
             const name = `Sticker | ${sticker.name}`

@@ -276,6 +276,8 @@ export const getCSFloatItemPrice = (item: CSFloatListing): number => {
   return Math.min(item.data[0].price, item.data[0].reference.predicted_price) / 100
 }
 
-export const getSteamUrl = (market_hash_name: string) => {
-  return `https://steamcommunity.com/market/listings/730/${encodeURIComponent(market_hash_name)}`
+export const getSteamUrl = (market_hash_name: string, stickers: string[]) => {
+  const filter = stickers.map((name) => `Sticker | ${name}`).join(',')
+
+  return `https://steamcommunity.com/market/listings/730/${encodeURIComponent(market_hash_name)}?filter=${filter}`
 }

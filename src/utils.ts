@@ -202,16 +202,16 @@ export const generateMessage = ({
     message.push(`<b>Float</b>: ${float}\n`)
   }
 
+  if (stickerTotal) {
+    message.push(`<b>Sticker total</b>: ~$${stickerTotal.toFixed(2)}\n`)
+  }
+
   if (pattern) {
     message.push(`<b>Pattern</b>: ${pattern}\n`)
   }
 
   if (keychain) {
     message.push(`<b>Keychain</b>: ${keychain.name} ($${keychain.sell_reference_price})\n`)
-  }
-
-  if (stickerTotal > 0) {
-    message.push(`<b>Sticker value</b>: $${stickerTotal.toFixed(2)}\n`)
   }
 
   if (stickerPremium) {

@@ -14,6 +14,8 @@ import { differenceInDays } from 'date-fns'
 import { GOODS_SALES_THRESHOLD, STEAM_PURCHASE_THRESHOLD } from '../config'
 import { getMaxPricesForXDays } from './getMaxPricesForXDays'
 import { getCSFloatListings } from '../api/csfloat'
+import { readFileSync } from 'fs'
+import path from 'path'
 
 type BargainNotification = {
   sell_order_id: string
@@ -23,6 +25,9 @@ type BargainNotification = {
 const FLOAT_BLACKLIST = new Set<string>()
 const BARGAIN_NOTIFICATIONS = new Map<string, BargainNotification>()
 const SELLER_BLACKLIST: string[] = ['U1093134454', 'U1093468966', 'U1093218438', 'U1094529680']
+
+const pathname = path.join(__dirname, '../../csfloat.json')
+const stickerData: Record<string, number> = JSON.parse(readFileSync(pathname, 'utf8'))
 
 export const executeBuffBargainTrade = async (
   item: MarketGoodsItem,
@@ -84,6 +89,9 @@ export const executeBuffBargainTrade = async (
 
   const paintwear = lowestPricedItem.asset_info.paintwear
   const keychain = lowestPricedItem.asset_info.info?.keychains?.[0]
+  const stickerTotal = (lowestPricedItem.asset_info.info?.stickers || []).reduce((acc, sticker) => {
+    return sticker.wear === 0 ? acc + (stickerData[`Sticker | ${sticker.name}`] ?? 0) : acc
+  }, 0)
 
   const payload = {
     id: goods_id,
@@ -95,6 +103,7 @@ export const executeBuffBargainTrade = async (
     createdAt: lowestPricedItem.created_at,
     updatedAt: lowestPricedItem.updated_at,
     source: options.source,
+    stickerTotal: stickerTotal,
   }
 
   if (salesLastWeek.length >= GOODS_SALES_THRESHOLD) {

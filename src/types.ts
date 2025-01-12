@@ -16,7 +16,7 @@ export type GoodsSellOrderItem = {
     contextid: number
     paintwear: string
     info: {
-      stickers: unknown[]
+      stickers: Sticker[]
       keychains: KeychainItem[]
     }
   }

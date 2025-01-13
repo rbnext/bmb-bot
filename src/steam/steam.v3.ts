@@ -1,7 +1,7 @@
 import 'dotenv/config'
 
 import { format } from 'date-fns'
-import { getMarketRender, getSearchMarketRender } from '../api/steam'
+import { getMarketRender, getSearchMarketRender, stemMarketBuyListing } from '../api/steam'
 import { sendMessage } from '../api/telegram'
 import { extractStickers, getSteamUrl, sleep } from '../utils'
 import { getInspectLink, isStickerCombo } from './utils'
@@ -75,6 +75,23 @@ const findSteamItemInfo = async ({ market_hash_name, proxy }: { market_hash_name
           message.push(`<b>Float</b>: ${itemInfoResponse.iteminfo.floatvalue}\n\n`)
 
           await sendMessage(message.join(''))
+
+          if (price && price <= 20 && (itemInfoResponse.iteminfo.stickers || [])?.every((item) => item.wear === 0)) {
+            try {
+              const response = await stemMarketBuyListing({
+                idListing: currentListing.listingid,
+                market_hash_name: market_hash_name,
+                converted_price: currentListing.converted_price,
+                converted_fee: currentListing.converted_fee,
+              })
+
+              await sendMessage(JSON.stringify(response))
+            } catch (error) {
+              await sendMessage(`Something went wrong. Error: ${error.message}`)
+            }
+          } else {
+            await sendMessage(`Some stickers have wear < 100%`)
+          }
         }
 
         await sleep(3_000)

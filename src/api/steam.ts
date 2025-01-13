@@ -1,8 +1,9 @@
 import axios from 'axios'
 import { setupCache } from 'axios-cache-interceptor'
 import UserAgent from 'user-agents'
+import FormData from 'form-data'
 
-import { SteamMarketPriceHistory, SteamMarketPriceOverview, SteamMarketRender } from '../types'
+import { SteamMarketBuyListing, SteamMarketPriceHistory, SteamMarketPriceOverview, SteamMarketRender } from '../types'
 import { HttpsProxyAgent } from 'https-proxy-agent'
 import { sleep } from '../utils'
 
@@ -218,4 +219,46 @@ export const getMarketPage = async ({
       await sleep(1_000)
     }
   }
+}
+
+export const stemMarketBuyListing = async ({
+  idListing,
+  market_hash_name,
+  converted_price,
+  converted_fee,
+}: {
+  idListing: string
+  market_hash_name: string
+  converted_price: number
+  converted_fee: number
+}): Promise<SteamMarketBuyListing> => {
+  const formData = new FormData()
+
+  formData.append('sessionid', process.env.STEAM_LISTING_SESSIONID ?? '')
+  formData.append('currency', String(1))
+  formData.append('subtotal', String(converted_price))
+  formData.append('fee', String(converted_fee))
+  formData.append('total', String(converted_price + converted_fee))
+  formData.append('quantity', String(1))
+  formData.append('billing_state', '')
+  formData.append('save_my_address', String(0))
+
+  const { data } = await axios.post(`https://steamcommunity.com/market/buylisting/${idListing}`, formData, {
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+      'User-Agent':
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
+      Host: 'steamcommunity.com',
+      Origin: 'https://steamcommunity.com',
+      Accept: '*/*',
+      'Accept-Language': 'en-GB,en-US;q=0.9,en;q=0.8,ru;q=0.7',
+      Cookie: process.env.STEAM_LISTING_COOKIE,
+      Referer: `https://steamcommunity.com/market/listings/730/${encodeURIComponent(market_hash_name)}`,
+    },
+    httpsAgent: new HttpsProxyAgent(`http://${process.env.STEAM_LISTING_PROXY}`),
+    signal: AbortSignal.timeout(10_000),
+    timeout: 10_000,
+  })
+
+  return data
 }

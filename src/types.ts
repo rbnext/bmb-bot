@@ -390,6 +390,14 @@ export type SteamMarketPriceOverview = {
   volume: string
 }
 
+export type SteamMarketBuyListing = {
+  wallet_info: {
+    wallet_currency: number
+    wallet_balance: string
+    success: number // 1 - success
+  }
+}
+
 export type SteamMarketPriceHistoryItem = [string, number, string]
 
 export type SteamMarketPriceHistory = {

@@ -89,8 +89,6 @@ const findSteamItemInfo = async ({ market_hash_name, proxy }: { market_hash_name
             } catch (error) {
               await sendMessage(`Something went wrong. Error: ${error.message}`)
             }
-          } else {
-            await sendMessage(`Some stickers have wear < 100%`)
           }
         }
 

@@ -7,7 +7,7 @@ import path from 'path'
 import { readFileSync, writeFileSync } from 'fs'
 
 const csFloatCharms = async () => {
-  const pages = Array.from({ length: 10 }, (_, i) => 4020 + i)
+  const pages = Array.from({ length: 15 }, (_, i) => 5533 + i)
 
   // const pathname = path.join(__dirname, '../../csfloat.json')
   // const stickerData: Record<string, number> = JSON.parse(readFileSync(pathname, 'utf8'))
@@ -17,22 +17,22 @@ const csFloatCharms = async () => {
   // writeFileSync(pathname, JSON.stringify({ ...stickerData }, null, 4))
 
   try {
-    for (const id of pages) {
-      const response = await getCSFloatListings({ stickers: `[{"i":${id}}]` })
-      const pathname = path.join(__dirname, '../../csfloat.json')
-      const stickerData: Record<string, number> = JSON.parse(readFileSync(pathname, 'utf8'))
-      for (const data of response.data) {
-        for (const sticker of data.item?.stickers ?? []) {
-          if (sticker.reference?.price && sticker.name.includes('Sticker')) {
-            const price = Number((sticker.reference.price / 100).toFixed(2))
-            if (price >= 0.05) stickerData[sticker.name] = price
-          }
+    // for (const id of pages) {
+    const response = await getCSFloatListings({ stickers: `%5B%7B"c":"C1689"%7D%5D` })
+    const pathname = path.join(__dirname, '../../csfloat.json')
+    const stickerData: Record<string, number> = JSON.parse(readFileSync(pathname, 'utf8'))
+    for (const data of response.data) {
+      for (const sticker of data.item?.stickers ?? []) {
+        if (sticker.reference?.price && sticker.name.includes('Sticker')) {
+          const price = Number((sticker.reference.price / 100).toFixed(2))
+          if (price >= 0.05) stickerData[sticker.name] = price
         }
       }
-      console.log(Object.keys(stickerData).length)
-      writeFileSync(pathname, JSON.stringify({ ...stickerData }, null, 4))
-      await sleep(5_000)
     }
+    console.log(Object.keys(stickerData).length)
+    writeFileSync(pathname, JSON.stringify({ ...stickerData }, null, 4))
+    await sleep(5_000)
+    // }
   } catch (error) {
     console.log('Something went wrong', error)
   }

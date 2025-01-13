@@ -18,6 +18,8 @@ const pathname = path.join(__dirname, '../../csfloat.json')
 const stickerData: Record<string, number> = JSON.parse(readFileSync(pathname, 'utf8'))
 
 const findSteamItemInfo = async ({ market_hash_name, proxy }: { market_hash_name: string; proxy: string }) => {
+  let basePrice: number = 0
+
   try {
     const steam = await getMarketRender({ market_hash_name, proxy, filter: 'Sticker' })
 
@@ -40,9 +42,12 @@ const findSteamItemInfo = async ({ market_hash_name, proxy }: { market_hash_name
       console.log(format(new Date(), 'HH:mm:ss'), market_hash_name, stickerTotal.toFixed(2))
 
       if (stickerTotal > 15) {
-        const response = await getCSFloatListings({ market_hash_name })
+        if (basePrice === 0) {
+          await getCSFloatListings({ market_hash_name }).then((response) => {
+            basePrice = response.data[0].reference.base_price / 100
+          })
+        }
 
-        const basePrice = response.data[0].reference.base_price / 100
         const SP = ((price - basePrice) / stickerTotal) * 100
 
         console.log(format(new Date(), 'HH:mm:ss'), 'SP', SP.toFixed(2) + '%')

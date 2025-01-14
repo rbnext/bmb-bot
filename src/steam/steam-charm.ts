@@ -7,12 +7,13 @@ import { sleep } from '../utils'
 import { getInspectLink } from './utils'
 
 import { getCSFloatItemInfo } from '../api/csfloat'
+import { SteamMarketRender } from '../types'
 
 const CASHED_LISTINGS = new Set<string>()
 
 const findSteamItemInfo = async ({ market_hash_name, proxy }: { market_hash_name: string; proxy: string }) => {
   try {
-    const steam = await getMarketRender({ market_hash_name, proxy })
+    const steam: SteamMarketRender = await getMarketRender({ market_hash_name, proxy })
 
     for (const [index, listingId] of Object.keys(steam.listinginfo).entries()) {
       if (CASHED_LISTINGS.has(listingId)) continue

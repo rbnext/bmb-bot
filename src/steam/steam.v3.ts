@@ -7,7 +7,7 @@ import { extractStickers, getSteamUrl, sleep } from '../utils'
 import { getInspectLink, isStickerCombo } from './utils'
 
 import { getCSFloatItemInfo, getCSFloatListings } from '../api/csfloat'
-import { SearchMarketRender } from '../types'
+import { SearchMarketRender, SteamMarketRender } from '../types'
 import { readFileSync } from 'fs'
 import path from 'path'
 
@@ -21,7 +21,7 @@ const findSteamItemInfo = async ({ market_hash_name, proxy }: { market_hash_name
   let basePrice: number = 0
 
   try {
-    const steam = await getMarketRender({ market_hash_name, proxy, filter: 'Sticker' })
+    const steam: SteamMarketRender = await getMarketRender({ market_hash_name, proxy, filter: 'Sticker' })
 
     for (const [index, listingId] of Object.keys(steam.listinginfo).entries()) {
       if (CASHED_LISTINGS.has(listingId)) continue

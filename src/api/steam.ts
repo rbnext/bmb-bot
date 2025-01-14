@@ -138,6 +138,7 @@ export const getMarketRender = async ({
   count = 10,
   language = 'english',
   userAgent,
+  retries = 3,
   filter,
   proxy,
 }: {
@@ -148,31 +149,42 @@ export const getMarketRender = async ({
   start?: number
   count?: number
   userAgent?: string
+  retries?: number
   language?: 'english'
   filter?: string
   proxy?: string | 'localhost' | null
-}): Promise<SteamMarketRender> => {
-  const { data } = await axios.get(
-    `https://steamcommunity.com/market/listings/${appid}/${encodeURIComponent(market_hash_name)}/render/`,
-    {
-      params: { appid, country, currency, start, count, language, filter },
-      headers: {
-        'User-Agent': userAgent ?? new UserAgent().toString(),
-        Host: 'steamcommunity.com',
-        Accept: 'text/html,*/*;q=0.9',
-        'Accept-Encoding': 'gzip,identity,*;q=0',
-        'Accept-Charset': 'ISO-8859-1,utf-8,*;q=0.7',
-        Referer: `https://steamcommunity.com/market/listings/${appid}/` + encodeURIComponent(market_hash_name),
-        'X-Prototype-Version': '1.7',
-        'X-Requested-With': 'XMLHttpRequest',
-      },
-      httpsAgent: proxy && proxy !== 'localhost' ? new HttpsProxyAgent(`http://${proxy}`) : undefined,
-      signal: AbortSignal.timeout(5000),
-      timeout: 5000,
-    }
-  )
+}) => {
+  for (let attempt = 0; attempt < retries; attempt++) {
+    try {
+      const { data } = await axios.get(
+        `https://steamcommunity.com/market/listings/${appid}/${encodeURIComponent(market_hash_name)}/render/`,
+        {
+          params: { appid, country, currency, start, count, language, filter },
+          headers: {
+            'User-Agent': userAgent ?? new UserAgent().toString(),
+            Host: 'steamcommunity.com',
+            Accept: 'text/html,*/*;q=0.9',
+            'Accept-Encoding': 'gzip,identity,*;q=0',
+            'Accept-Charset': 'ISO-8859-1,utf-8,*;q=0.7',
+            Referer: `https://steamcommunity.com/market/listings/${appid}/` + encodeURIComponent(market_hash_name),
+            'X-Prototype-Version': '1.7',
+            'X-Requested-With': 'XMLHttpRequest',
+          },
+          httpsAgent: proxy && proxy !== 'localhost' ? new HttpsProxyAgent(`http://${proxy}`) : undefined,
+          signal: AbortSignal.timeout(4000),
+          timeout: 4000,
+        }
+      )
 
-  return data
+      return data
+    } catch (error) {
+      if (attempt === retries - 1) {
+        throw error
+      }
+
+      await sleep(500)
+    }
+  }
 }
 
 export const getMarketPage = async ({

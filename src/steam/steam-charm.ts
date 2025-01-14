@@ -81,7 +81,7 @@ const findSteamItemInfo = async ({ market_hash_name, proxy }: { market_hash_name
   do {
     for (const proxy of STEAM_PROXY) {
       await findSteamItemInfo({ market_hash_name: 'Charm | Die-cast AK', proxy }).then(() =>
-        sleep(40_000 / STEAM_PROXY.length)
+        sleep(60_000 / STEAM_PROXY.length)
       )
     }
 

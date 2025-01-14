@@ -1,7 +1,7 @@
 import 'dotenv/config'
 
 import { format } from 'date-fns'
-import { getMarketRender } from '../api/steam'
+import { getMarketRender, stemMarketBuyListing } from '../api/steam'
 import { sendMessage } from '../api/telegram'
 import { sleep } from '../utils'
 import { getInspectLink } from './utils'
@@ -51,7 +51,7 @@ const findSteamItemInfo = async ({ market_hash_name, proxy }: { market_hash_name
         continue
       }
 
-      console.log(format(new Date(), 'HH:mm:ss'), market_hash_name, pattern)
+      console.log(format(new Date(), 'HH:mm:ss'), market_hash_name, pattern, index + 1)
 
       if (
         (pattern >= 1 && pattern <= 5000 && price <= 15) ||
@@ -62,7 +62,25 @@ const findSteamItemInfo = async ({ market_hash_name, proxy }: { market_hash_name
         (pattern >= 95000 && pattern <= 98999 && price <= 12) ||
         (pattern >= 99000 && pattern <= 99999 && price <= 20)
       ) {
-        await sendMessage(`${market_hash_name}. Price: $${price}. Pattern: #${pattern}`)
+        try {
+          const response = await stemMarketBuyListing({
+            idListing: currentListing.listingid,
+            market_hash_name: market_hash_name,
+            converted_price: currentListing.converted_price,
+            converted_fee: currentListing.converted_fee,
+          })
+
+          if (response?.wallet_info?.success === 1) {
+            await sendMessage(`Success purchase ${market_hash_name}. Price: $${price}. Pattern: #${pattern}`)
+          } else {
+            await sendMessage(`Failed purchase ${market_hash_name}. Price: $${price}. Pattern: #${pattern}`)
+          }
+
+          console.log(response)
+        } catch (error) {
+          console.log(error)
+          await sendMessage(`Failed purchase ${market_hash_name}. Price: $${price}. Pattern: #${pattern}`)
+        }
       }
 
       CASHED_LISTINGS.add(listingId)

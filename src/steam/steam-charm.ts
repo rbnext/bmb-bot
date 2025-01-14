@@ -13,7 +13,7 @@ const CASHED_LISTINGS = new Set<string>()
 
 const findSteamItemInfo = async ({ market_hash_name, proxy }: { market_hash_name: string; proxy: string }) => {
   try {
-    const steam: SteamMarketRender = await getMarketRender({ market_hash_name, proxy })
+    const steam: SteamMarketRender = await getMarketRender({ market_hash_name, proxy, count: 100 })
 
     for (const [index, listingId] of Object.keys(steam.listinginfo).entries()) {
       if (CASHED_LISTINGS.has(listingId)) continue

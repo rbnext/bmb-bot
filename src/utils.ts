@@ -263,3 +263,7 @@ export const getSteamUrl = (market_hash_name: string, stickers: string[]) => {
 
   return `https://steamcommunity.com/market/listings/730/${encodeURIComponent(market_hash_name)}?filter=${filter}`
 }
+
+export const getRandomNumber = (min: number, max: number): number => {
+  return Math.floor(Math.random() * (max - min + 1)) + min
+}

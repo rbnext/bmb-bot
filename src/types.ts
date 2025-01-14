@@ -588,11 +588,16 @@ export type CSFloatItemInfoStickerItem = {
   stickerId: number
 }
 
+export type CSFloatItemInfoKeychainItem = {
+  pattern: number
+}
+
 export type CSFloatItemInfo = {
   iteminfo: {
     floatvalue: number
     full_item_name: string
     stickers?: CSFloatItemInfoStickerItem[]
+    keychains?: CSFloatItemInfoKeychainItem[]
   }
 }
 

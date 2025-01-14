@@ -20,6 +20,7 @@
     "steamv3": "ts-node src/steam/steam.v3.ts",
     "cs2Buff": "ts-node src/bots/cs2Buff.ts",
     "steam-charms": "ts-node src/steam/charms.ts",
+    "steam-charm": "ts-node src/steam/steam-charm.ts",
     "cs-float-charms": "ts-node src/bots/cs-float-charms.ts",
     "cs-float-stickers": "ts-node src/scripts/cs-float-stickers.ts"
   },

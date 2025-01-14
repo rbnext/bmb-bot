@@ -43,9 +43,13 @@ const findSteamItemInfo = async ({ market_hash_name, proxy }: { market_hash_name
 
       if (stickerTotal > 15) {
         if (basePrice === 0) {
-          await getCSFloatListings({ market_hash_name }).then((response) => {
-            basePrice = response.data[0].reference.base_price / 100
-          })
+          try {
+            await getCSFloatListings({ market_hash_name }).then((response) => {
+              basePrice = response.data[0].reference.base_price / 100
+            })
+          } catch (error) {
+            await sendMessage(`Failed to retrieve the price for the ${market_hash_name} item.`)
+          }
         }
 
         const SP = ((price - basePrice) / stickerTotal) * 100
@@ -74,7 +78,7 @@ const findSteamItemInfo = async ({ market_hash_name, proxy }: { market_hash_name
           message.push(`<b>Stickers total</b>: $${stickerTotal.toFixed(2)}\n\n`)
           message.push(`<b>Float</b>: ${itemInfoResponse.iteminfo.floatvalue}\n\n`)
 
-          await sendMessage(message.join(''))
+          const sentMessage = await sendMessage(message.join(''))
 
           if (price && price <= 20 && (itemInfoResponse.iteminfo.stickers || [])?.every((item) => item.wear === 0)) {
             try {
@@ -85,9 +89,16 @@ const findSteamItemInfo = async ({ market_hash_name, proxy }: { market_hash_name
                 converted_fee: currentListing.converted_fee,
               })
 
-              await sendMessage(JSON.stringify(response))
+              if (response?.wallet_info?.success === 1) {
+                await sendMessage('Success purchase', sentMessage.result.message_id)
+              } else {
+                await sendMessage('Failed purchase', sentMessage.result.message_id)
+              }
+
+              console.log(response)
             } catch (error) {
-              await sendMessage(`Something went wrong. Error: ${error.message}`)
+              console.log(error)
+              await sendMessage(`Steam failed to purchase the ${market_hash_name} item.`)
             }
           }
         }

@@ -462,6 +462,7 @@ export enum Source {
   BUFF_BARGAIN = 'BUFF_BARGAIN',
   BUFF_KATOWICE = 'BUFF_KATOWICE',
   BUFF_CSFLOAT = 'BUFF_CSFLOAT',
+  STEAM = 'STEAM',
 }
 
 export type TelegramResponse = {

@@ -158,7 +158,7 @@ const findSteamItemInfo = async ({ market_hash_name, proxy }: { market_hash_name
       } catch (error) {
         console.log(error.message)
       } finally {
-        await sleep(60_000 / STEAM_PROXY.length)
+        await sleep(120_000 / STEAM_PROXY.length)
 
         count++
       }

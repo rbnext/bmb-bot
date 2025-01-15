@@ -40,8 +40,8 @@ const findSteamItemInfo = async ({ market_hash_name, proxy }: { market_hash_name
 
       const stickerTotal = stickers.reduce((acc, name) => acc + (stickerData[`Sticker | ${name}`] ?? 0), 0)
 
-      if (!price) {
-        console.log(`${now} ${market_hash_name}. Failed to get steam price. Sticker total: $${stickerTotal.toFixed(2)}`)
+      if (!price && stickerTotal !== 0) {
+        console.log(`${now} ${market_hash_name}. Sold! ST: $${stickerTotal.toFixed(2)}`)
         CASHED_LISTINGS.add(listingId)
 
         continue
@@ -60,7 +60,7 @@ const findSteamItemInfo = async ({ market_hash_name, proxy }: { market_hash_name
 
         const SP = ((price - basePrice) / stickerTotal) * 100
 
-        console.log(`${now} ${market_hash_name}. Sticker total: $${stickerTotal.toFixed(2)}. SP: ${SP.toFixed(2)}%`)
+        console.log(`${now} ${market_hash_name}. $${stickerTotal.toFixed(2)}/${SP.toFixed(2)}%`)
 
         if (SP < (isStickerCombo(stickers) ? 18 : 8)) {
           const itemInfoResponse = await getCSFloatItemInfo({ url: inspectLink })
@@ -124,43 +124,48 @@ const findSteamItemInfo = async ({ market_hash_name, proxy }: { market_hash_name
 }
 
 ;(async () => {
-  const STEAM_PROXY = String(process.env.STEAM_PROXY).trim()
+  const STEAM_PROXY = String(process.env.STEAM_PROXY).trim().split(';')
   const STEAM_SEARCH_START = Number(process.env.STEAM_SEARCH_START)
 
   console.log('STEAM_PROXY', STEAM_PROXY)
   console.log('STEAM_SEARCH_START', STEAM_SEARCH_START)
 
+  let start = STEAM_SEARCH_START - STEAM_PROXY.length
+
   do {
-    for (const start of [STEAM_SEARCH_START - 1, STEAM_SEARCH_START, STEAM_SEARCH_START + 1]) {
+    let count = 100 - STEAM_PROXY.length + 1
+
+    for (const proxy of STEAM_PROXY) {
       try {
         const response: SearchMarketRender = await getSearchMarketRender({
           query: 'Sticker',
           quality: ['tag_strange', 'tag_normal'],
-          proxy: STEAM_PROXY,
+          proxy,
           start,
+          count,
         })
-
         for (const item of response.results) {
           const market_hash_name = item.asset_description.market_hash_name
-
-          if (market_hash_name in GOODS_CACHE && GOODS_CACHE[market_hash_name].listings !== item.sell_listings) {
-            //
+          if (
+            item.sell_listings < 100 &&
+            market_hash_name in GOODS_CACHE &&
+            GOODS_CACHE[market_hash_name].listings < item.sell_listings
+          ) {
+            await findSteamItemInfo({ market_hash_name, proxy })
           }
-
-          if (item.sell_listings < 100) {
-            if (market_hash_name in GOODS_CACHE && GOODS_CACHE[market_hash_name].listings < item.sell_listings) {
-              await findSteamItemInfo({ market_hash_name, proxy: STEAM_PROXY })
-            }
-          }
-
           GOODS_CACHE[market_hash_name] = { price: item.sell_price, listings: item.sell_listings }
         }
       } catch (error) {
         console.log(error.message)
       } finally {
-        await sleep(61_000)
+        await sleep((60_000 + 1_000) / STEAM_PROXY.length)
+
+        count++
       }
     }
+
+    if (STEAM_SEARCH_START === start) start = STEAM_SEARCH_START - STEAM_PROXY.length
+    else start++
 
     // eslint-disable-next-line no-constant-condition
   } while (true)

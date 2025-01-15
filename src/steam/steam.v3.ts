@@ -167,6 +167,8 @@ const findSteamItemInfo = async ({ market_hash_name, proxy }: { market_hash_name
     if (STEAM_SEARCH_START === start) start = STEAM_SEARCH_START - 2
     else start++
 
+    console.log(format(new Date(), 'HH:mm:ss'), Object.keys(GOODS_CACHE).length)
+
     // eslint-disable-next-line no-constant-condition
   } while (true)
 })()

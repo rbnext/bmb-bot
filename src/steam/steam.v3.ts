@@ -26,6 +26,7 @@ const findSteamItemInfo = async ({ market_hash_name, proxy }: { market_hash_name
     for (const [index, listingId] of Object.keys(steam.listinginfo).entries()) {
       if (CASHED_LISTINGS.has(listingId)) continue
 
+      const now = format(new Date(), 'HH:mm:ss')
       const currentListing = steam.listinginfo[listingId]
       const price = Number(((currentListing.converted_price + currentListing.converted_fee) / 100).toFixed(2))
 
@@ -39,7 +40,12 @@ const findSteamItemInfo = async ({ market_hash_name, proxy }: { market_hash_name
 
       const stickerTotal = stickers.reduce((acc, name) => acc + (stickerData[`Sticker | ${name}`] ?? 0), 0)
 
-      console.log(format(new Date(), 'HH:mm:ss'), market_hash_name, stickerTotal.toFixed(2))
+      if (!price) {
+        console.log(`${now} ${market_hash_name}. Failed to get steam price. Sticker total: $${stickerTotal.toFixed(2)}`)
+        CASHED_LISTINGS.add(listingId)
+
+        continue
+      }
 
       if (stickerTotal > 15) {
         if (basePrice === 0) {
@@ -54,7 +60,7 @@ const findSteamItemInfo = async ({ market_hash_name, proxy }: { market_hash_name
 
         const SP = ((price - basePrice) / stickerTotal) * 100
 
-        console.log(format(new Date(), 'HH:mm:ss'), 'SP', SP.toFixed(2) + '%')
+        console.log(`${now} ${market_hash_name}. Sticker total: $${stickerTotal.toFixed(2)}. SP: ${SP.toFixed(2)}%`)
 
         if (SP < (isStickerCombo(stickers) ? 18 : 8)) {
           const itemInfoResponse = await getCSFloatItemInfo({ url: inspectLink })

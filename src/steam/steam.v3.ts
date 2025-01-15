@@ -60,7 +60,7 @@ const findSteamItemInfo = async ({ market_hash_name, proxy }: { market_hash_name
 
         const SP = ((price - basePrice) / stickerTotal) * 100
 
-        console.log(`${now} ${market_hash_name}. $${stickerTotal.toFixed(2)}/${SP.toFixed(2)}%`)
+        console.log(`${now} ${market_hash_name}. ST: ${SP.toFixed(2)}%`)
 
         if (SP < (isStickerCombo(stickers) ? 18 : 8)) {
           const itemInfoResponse = await getCSFloatItemInfo({ url: inspectLink })
@@ -158,7 +158,7 @@ const findSteamItemInfo = async ({ market_hash_name, proxy }: { market_hash_name
       } catch (error) {
         console.log(error.message)
       } finally {
-        await sleep((60_000 + 1_000) / STEAM_PROXY.length)
+        await sleep(60_000 / STEAM_PROXY.length)
 
         count++
       }
@@ -166,8 +166,6 @@ const findSteamItemInfo = async ({ market_hash_name, proxy }: { market_hash_name
 
     if (STEAM_SEARCH_START === start) start = STEAM_SEARCH_START - 2
     else start++
-
-    console.log(format(new Date(), 'HH:mm:ss'), Object.keys(GOODS_CACHE).length)
 
     // eslint-disable-next-line no-constant-condition
   } while (true)

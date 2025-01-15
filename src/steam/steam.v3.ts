@@ -130,7 +130,7 @@ const findSteamItemInfo = async ({ market_hash_name, proxy }: { market_hash_name
   console.log('STEAM_PROXY', STEAM_PROXY)
   console.log('STEAM_SEARCH_START', STEAM_SEARCH_START)
 
-  let start = STEAM_SEARCH_START - STEAM_PROXY.length
+  let start = STEAM_SEARCH_START - 2
 
   do {
     let count = 100 - STEAM_PROXY.length + 1
@@ -164,7 +164,7 @@ const findSteamItemInfo = async ({ market_hash_name, proxy }: { market_hash_name
       }
     }
 
-    if (STEAM_SEARCH_START === start) start = STEAM_SEARCH_START - STEAM_PROXY.length
+    if (STEAM_SEARCH_START === start) start = STEAM_SEARCH_START - 2
     else start++
 
     // eslint-disable-next-line no-constant-condition

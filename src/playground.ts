@@ -12,6 +12,7 @@ import { getGoodsInfo, getMarketGoods, getMarketGoodsBillOrder } from './api/buf
 import { median, sleep } from './utils'
 import path from 'path'
 import { readFileSync, writeFileSync } from 'fs'
+import { getVercelMarketRender } from './api/versel'
 
 const skins = [
   // 'M4A1-S | Black Lotus (Factory New)',
@@ -122,34 +123,13 @@ const skins = [
 ]
 
 const init = async () => {
-  for (const market_hash_name of skins) {
-    const response = await getMarketGoods({ search: market_hash_name })
+  const response = await getVercelMarketRender({
+    market_hash_name: 'AK-47 | Redline (Field-Tested)',
+    start: 0,
+    count: 100,
+  })
 
-    const goods_id = response.data.items.find((item) => item.market_hash_name === market_hash_name)?.id
-
-    await sleep(5_000)
-
-    if (goods_id) {
-      const history = await getMarketGoodsBillOrder({ goods_id })
-      const median_price = median(history.data.items.map(({ price }) => Number(price)))
-
-      const goodsInfo = await getGoodsInfo({ goods_id })
-      const reference_price = Number(goodsInfo.data.goods_info.goods_ref_price)
-      const bargain_price = (Math.min(median_price, reference_price) * 0.9).toFixed(2).replace('.', ',')
-      const reference = reference_price.toFixed(2).replace('.', ',')
-
-      console.log(market_hash_name, bargain_price)
-
-      const pathname = path.join(__dirname, '../csfloat.txt')
-      const content: string = readFileSync(pathname, 'utf-8')
-
-      writeFileSync(pathname, `${content}\n${market_hash_name};${reference};${bargain_price}`, 'utf8')
-    } else {
-      console.log('ERROR')
-    }
-
-    await sleep(7_000)
-  }
+  console.log(response.total_count)
 }
 
 init()

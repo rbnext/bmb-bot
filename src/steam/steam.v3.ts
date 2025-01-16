@@ -60,7 +60,7 @@ const findSteamItemInfo = async ({ market_hash_name, proxy }: { market_hash_name
 
         const SP = ((price - basePrice) / stickerTotal) * 100
 
-        console.log(`${now} ${market_hash_name}. ST: ${SP.toFixed(2)}%`)
+        console.log(`|___ ST: $${stickerTotal.toFixed(2)}; SP: ${SP.toFixed(2)}%`)
 
         if (SP < (isStickerCombo(stickers) ? 18 : 8)) {
           const itemInfoResponse = await getCSFloatItemInfo({ url: inspectLink })
@@ -144,12 +144,14 @@ const findSteamItemInfo = async ({ market_hash_name, proxy }: { market_hash_name
           count,
         })
         for (const item of response.results) {
+          const now = format(new Date(), 'HH:mm:ss')
           const market_hash_name = item.asset_description.market_hash_name
-          if (
-            item.sell_listings < 100 &&
-            market_hash_name in GOODS_CACHE &&
-            GOODS_CACHE[market_hash_name].listings < item.sell_listings
-          ) {
+          if (market_hash_name in GOODS_CACHE && GOODS_CACHE[market_hash_name].price !== item.sell_price) {
+            const current_price = (item.sell_price / 100).toFixed()
+            const prev_price = (GOODS_CACHE[market_hash_name].price / 100).toFixed(2)
+            console.log(`${now} ${market_hash_name} $${prev_price} -> ${current_price}`)
+          }
+          if (market_hash_name in GOODS_CACHE && GOODS_CACHE[market_hash_name].price > item.sell_price) {
             await findSteamItemInfo({ market_hash_name, proxy })
           }
           GOODS_CACHE[market_hash_name] = { price: item.sell_price, listings: item.sell_listings }

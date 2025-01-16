@@ -2,29 +2,45 @@ import axios from 'axios'
 import { SteamMarketRender } from '../types'
 
 export const getVercelMarketRender = async ({
-  appid = 730,
-  currency = 1,
-  country = 'BY',
-  language = 'english',
   market_hash_name,
-  query,
-  start,
-  count,
+  start = 0,
+  count = 10,
+  proxy,
+  filter,
 }: {
-  appid?: number
-  currency?: number
-  country?: string
-  language?: string
   market_hash_name: string
-  query?: string
-  start: number
-  count: number
+  start?: number
+  count?: number
+  proxy: string
+  filter?: string
 }): Promise<SteamMarketRender> => {
-  const { data } = await axios.post<SteamMarketRender>('https://api-next-gateway2.vercel.app/api', {
-    url: `https://steamcommunity.com/market/listings/${appid}/${encodeURIComponent(market_hash_name)}/render?query=${query}&country=${country}&currency=${currency}&language=${language}&start=${start}&count=${count}`,
+  const params = `start=${start}&count=${count}&country=BY&language=english&currency=1&filter=${filter}`
+
+  const { data } = await axios.post<SteamMarketRender>(`https://${proxy}.vercel.app/api`, {
+    url: `https://steamcommunity.com/market/listings/730/${encodeURIComponent(market_hash_name)}/render?${params}`,
   })
 
   return data
 }
-// https://api-next-gateway1.vercel.app/api
-// https://api-next-gateway2.vercel.app/api
+
+export const getVercelSearchMarketRender = async ({
+  query,
+  start = 0,
+  count = 100,
+  quality = [],
+  proxy,
+}: {
+  query: string
+  start?: number
+  count?: number
+  quality?: string[]
+  proxy?: string
+}) => {
+  const params = `appid=730&query=${query}&start=${start}&count=${count}&search_descriptions=1&sort_column=price&sort_dir=asc&norender=1&category_730_Exterior[]=tag_WearCategory1&category_730_Exterior[]=tag_WearCategory2&category_730_Rarity[]=tag_Rarity_Mythical_Weapon&category_730_Rarity[]=tag_Rarity_Legendary_Weapon&category_730_Rarity[]=tag_Rarity_Ancient_Weapon&category_730_Weapon[]=any${quality.map((q) => `&category_730_Quality[]=${encodeURIComponent(q)}`).join('')}`
+
+  const { data } = await axios.post(`https://${proxy}.vercel.app/api`, {
+    url: `https://steamcommunity.com/market/search/render?${params}`,
+  })
+
+  return data
+}

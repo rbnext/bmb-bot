@@ -4,15 +4,7 @@ import 'dotenv/config'
 // import { getCSFloatListings } from './api/csfloat'
 // import { getSkinPortListings } from './api/skinport'
 
-import { io } from 'socket.io-client'
-import socketParser from 'socket.io-msgpack-parser'
-import { SkinPortListings, SkinPortListingsItem } from './types'
-import { getCSFloatItemInfo } from './api/csfloat'
-import { getGoodsInfo, getMarketGoods, getMarketGoodsBillOrder } from './api/buff'
-import { median, sleep } from './utils'
-import path from 'path'
-import { readFileSync, writeFileSync } from 'fs'
-import { getVercelMarketRender } from './api/versel'
+import { getVercelMarketRender, getVercelSearchMarketRender } from './api/versel'
 
 const skins = [
   // 'M4A1-S | Black Lotus (Factory New)',
@@ -123,10 +115,10 @@ const skins = [
 ]
 
 const init = async () => {
-  const response = await getVercelMarketRender({
-    market_hash_name: 'AK-47 | Redline (Field-Tested)',
-    start: 0,
-    count: 100,
+  const response = await getVercelSearchMarketRender({
+    query: 'Sticker',
+    proxy: 'api-next-gateway2',
+    start: 500,
   })
 
   console.log(response.total_count)

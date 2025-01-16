@@ -149,9 +149,9 @@ const findSteamItemInfo = async ({ market_hash_name, proxy }: { market_hash_name
           const now = format(new Date(), 'HH:mm:ss')
           const market_hash_name = item.asset_description.market_hash_name
           if (market_hash_name in GOODS_CACHE && GOODS_CACHE[market_hash_name].price !== item.sell_price) {
-            const current_price = (item.sell_price / 100).toFixed()
+            const current_price = (item.sell_price / 100).toFixed(2)
             const prev_price = (GOODS_CACHE[market_hash_name].price / 100).toFixed(2)
-            console.log(`${now} ${market_hash_name} $${prev_price} -> ${current_price}`)
+            console.log(`${now} ${market_hash_name} $${prev_price} -> $${current_price}`)
           }
           if (market_hash_name in GOODS_CACHE && GOODS_CACHE[market_hash_name].price > item.sell_price) {
             await findSteamItemInfo({ market_hash_name, proxy })

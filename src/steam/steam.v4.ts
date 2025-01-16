@@ -10,7 +10,7 @@ import { getInspectLink, isStickerCombo } from './utils'
 
 import { getCSFloatItemInfo, getCSFloatListings } from '../api/csfloat'
 import { SearchMarketRender, SteamMarketRender } from '../types'
-import { WatchEventType, readFileSync, watch, writeFileSync } from 'fs'
+import { WatchEventType, readFileSync, watch } from 'fs'
 import path from 'path'
 import { getVercelMarketRender, getVercelSearchMarketRender } from '../api/versel'
 
@@ -33,7 +33,6 @@ const findSteamItemInfo = async ({ market_hash_name, proxy }: { market_hash_name
     for (const [index, listingId] of Object.keys(steam.listinginfo).entries()) {
       if (CASHED_LISTINGS.has(listingId)) continue
 
-      const now = format(new Date(), 'HH:mm:ss')
       const currentListing = steam.listinginfo[listingId]
       const price = Number(((currentListing.converted_price + currentListing.converted_fee) / 100).toFixed(2))
 
@@ -59,20 +58,16 @@ const findSteamItemInfo = async ({ market_hash_name, proxy }: { market_hash_name
           try {
             const floatResponse = await getCSFloatListings({ market_hash_name })
 
-            const pathname = path.join(__dirname, '../../csfloat-temp.json')
-            const stickerData: Record<string, number> = JSON.parse(readFileSync(pathname, 'utf8'))
-
             for (const data of floatResponse.data) {
               for (const sticker of data.item?.stickers ?? []) {
                 if (sticker.reference?.price && sticker.name.includes('Sticker')) {
                   const price = Number((sticker.reference.price / 100).toFixed(2))
-                  if (price >= 0.05) stickerData[sticker.name] = price
+                  if (price >= 0.5) stickerData[sticker.name] = price
                 }
               }
             }
 
             basePrice = floatResponse.data[0].reference.base_price / 100
-            writeFileSync(pathname, JSON.stringify({ ...stickerData }, null, 4))
           } catch (error) {
             await sendMessage(`Failed to retrieve the price for the ${market_hash_name} item.`)
           }

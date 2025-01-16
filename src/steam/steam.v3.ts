@@ -60,7 +60,9 @@ const findSteamItemInfo = async ({ market_hash_name, proxy }: { market_hash_name
 
         const SP = ((price - basePrice) / stickerTotal) * 100
 
-        console.log(`|___ ST: $${stickerTotal.toFixed(2)}; SP: ${SP.toFixed(2)}%`)
+        console.log(
+          `|___ ST: $${stickerTotal.toFixed(2)}; SP: ${SP.toFixed(2)}%; Combo: ${String(isStickerCombo(stickers))}`
+        )
 
         if (SP < (isStickerCombo(stickers) ? 18 : 8)) {
           const itemInfoResponse = await getCSFloatItemInfo({ url: inspectLink })

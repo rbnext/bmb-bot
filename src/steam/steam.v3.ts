@@ -1,4 +1,4 @@
-import 'dotenv/config'
+import dotenv from 'dotenv'
 
 import { format } from 'date-fns'
 import { getMarketRender, getSearchMarketRender, stemMarketBuyListing } from '../api/steam'
@@ -8,8 +8,14 @@ import { getInspectLink, isStickerCombo } from './utils'
 
 import { getCSFloatItemInfo, getCSFloatListings } from '../api/csfloat'
 import { SearchMarketRender, SteamMarketRender } from '../types'
-import { readFileSync } from 'fs'
+import { WatchEventType, readFileSync, watch } from 'fs'
 import path from 'path'
+
+dotenv.config()
+
+watch('.env', (eventType: WatchEventType) => {
+  if (eventType === 'change') dotenv.config()
+})
 
 const CASHED_LISTINGS = new Set<string>()
 const GOODS_CACHE: Record<string, { price: number; listings: number }> = {}

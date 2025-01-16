@@ -1,5 +1,7 @@
 import dotenv from 'dotenv'
 
+dotenv.config()
+
 import { getMarketGoods } from '../api/buff'
 import { isLessThanThreshold, sleep } from '../utils'
 import { format } from 'date-fns'
@@ -14,8 +16,6 @@ import { WatchEventType, watch } from 'fs'
 export const CHARM_CACHE: Record<number, { sell_num: number }> = {}
 export const GOODS_CACHE: Record<number, { price: number }> = {}
 export const GOODS_BLACKLIST_CACHE: number[] = [30431, 30235, 30259, 30269, 30350]
-
-dotenv.config()
 
 watch('.env', (eventType: WatchEventType) => {
   if (eventType === 'change') dotenv.config()
@@ -93,6 +93,7 @@ const buffSteam = async () => {
       category_group: 'rifle,pistol,smg,shotgun,machinegun',
       category: 'csgo_type_musickit,csgo_tool_patch,csgo_type_collectible',
     })
+    console.log(goods)
     for (const item of goods.data.items) GOODS_CACHE[item.id] = { price: Number(item.sell_min_price) }
     if (goods.data.items.length !== 50) break
     await sleep(5_000)

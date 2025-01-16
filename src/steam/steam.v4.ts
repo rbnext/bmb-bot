@@ -1,5 +1,7 @@
 import dotenv from 'dotenv'
 
+dotenv.config()
+
 import { format } from 'date-fns'
 import { stemMarketBuyListing } from '../api/steam'
 import { sendMessage } from '../api/telegram'
@@ -11,8 +13,6 @@ import { SearchMarketRender, SteamMarketRender } from '../types'
 import { WatchEventType, readFileSync, watch } from 'fs'
 import path from 'path'
 import { getVercelMarketRender, getVercelSearchMarketRender } from '../api/versel'
-
-dotenv.config()
 
 watch('.env', (eventType: WatchEventType) => {
   if (eventType === 'change') dotenv.config()

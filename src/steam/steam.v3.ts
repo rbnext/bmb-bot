@@ -12,6 +12,7 @@ import { getCSFloatItemInfo, getCSFloatListings } from '../api/csfloat'
 import { SearchMarketRender, SteamMarketRender } from '../types'
 import { WatchEventType, readFileSync, watch } from 'fs'
 import path from 'path'
+import { MARKET_BLACK_LIST } from './config'
 
 watch('.env', (eventType: WatchEventType) => {
   if (eventType === 'change') dotenv.config()
@@ -56,9 +57,18 @@ const findSteamItemInfo = async ({ market_hash_name, proxy }: { market_hash_name
       if (stickerTotal > 15) {
         if (basePrice === 0) {
           try {
-            await getCSFloatListings({ market_hash_name }).then((response) => {
-              basePrice = response.data[0].reference.base_price / 100
-            })
+            const floatResponse = await getCSFloatListings({ market_hash_name })
+
+            for (const data of floatResponse.data) {
+              for (const sticker of data.item?.stickers ?? []) {
+                if (sticker.reference?.price && sticker.name.includes('Sticker')) {
+                  const price = Number((sticker.reference.price / 100).toFixed(2))
+                  if (price >= 0.5) stickerData[sticker.name] = price
+                }
+              }
+            }
+
+            basePrice = floatResponse.data[0].reference.base_price / 100
           } catch (error) {
             await sendMessage(`Failed to retrieve the price for the ${market_hash_name} item.`)
           }
@@ -154,12 +164,12 @@ const findSteamItemInfo = async ({ market_hash_name, proxy }: { market_hash_name
         for (const item of response.results) {
           const now = format(new Date(), 'HH:mm:ss')
           const market_hash_name = item.asset_description.market_hash_name
-          if (market_hash_name in GOODS_CACHE && GOODS_CACHE[market_hash_name].price !== item.sell_price) {
-            const current_price = (item.sell_price / 100).toFixed(2)
-            const prev_price = (GOODS_CACHE[market_hash_name].price / 100).toFixed(2)
-            console.log(`${now} ${market_hash_name} $${prev_price} -> $${current_price}`)
+          if (MARKET_BLACK_LIST.includes(market_hash_name)) continue
+
+          if (market_hash_name in GOODS_CACHE && GOODS_CACHE[market_hash_name].listings !== item.sell_listings) {
+            console.log(`${now} ${market_hash_name} ${GOODS_CACHE[market_hash_name].listings} -> ${item.sell_listings}`)
           }
-          if (market_hash_name in GOODS_CACHE && GOODS_CACHE[market_hash_name].price > item.sell_price) {
+          if (market_hash_name in GOODS_CACHE && GOODS_CACHE[market_hash_name].listings < item.sell_listings) {
             await findSteamItemInfo({ market_hash_name, proxy })
           }
           GOODS_CACHE[market_hash_name] = { price: item.sell_price, listings: item.sell_listings }

@@ -93,7 +93,6 @@ const buffSteam = async () => {
       category_group: 'rifle,pistol,smg,shotgun,machinegun',
       category: 'csgo_type_musickit,csgo_tool_patch,csgo_type_collectible',
     })
-    console.log(goods)
     for (const item of goods.data.items) GOODS_CACHE[item.id] = { price: Number(item.sell_min_price) }
     if (goods.data.items.length !== 50) break
     await sleep(5_000)

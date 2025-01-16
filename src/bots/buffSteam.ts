@@ -14,11 +14,12 @@ export const CHARM_CACHE: Record<number, { sell_num: number }> = {}
 export const GOODS_CACHE: Record<number, { price: number }> = {}
 export const GOODS_BLACKLIST_CACHE: number[] = [30431, 30235, 30259, 30269, 30350]
 
-const max_price = Number(process.env.MAX_BARGAIN_PRICE) ?? 30
-
 const buffSteam = async () => {
   try {
-    const marketGoods = await getMarketGoods({ min_price: 5, max_price })
+    const marketGoods = await getMarketGoods({
+      min_price: Number(process.env.MIN_BARGAIN_PRICE),
+      max_price: Number(process.env.MAX_BARGAIN_PRICE),
+    })
 
     for (const item of marketGoods.data.items) {
       const now = format(new Date(), 'HH:mm:ss')
@@ -80,8 +81,8 @@ const buffSteam = async () => {
   for (const page_num of pages) {
     const goods = await getMarketGoods({
       page_num,
-      min_price: 5,
-      max_price,
+      min_price: Number(process.env.MIN_BARGAIN_PRICE),
+      max_price: Number(process.env.MAX_BARGAIN_PRICE),
       category_group: 'rifle,pistol,smg,shotgun,machinegun',
       category: 'csgo_type_musickit,csgo_tool_patch,csgo_type_collectible',
     })

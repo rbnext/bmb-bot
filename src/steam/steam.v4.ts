@@ -48,7 +48,7 @@ const findSteamItemInfo = async ({ market_hash_name, proxy }: { market_hash_name
       const stickerTotal = stickers.reduce((acc, name) => acc + (stickerData[`Sticker | ${name}`] ?? 0), 0)
 
       if (!price && stickerTotal !== 0) {
-        console.log(`${now} ${market_hash_name}. Sold! ST: $${stickerTotal.toFixed(2)}`)
+        console.log(`|___ Sold! ST: $${stickerTotal.toFixed(2)}; Combo: ${String(isStickerCombo(stickers))}`)
         CASHED_LISTINGS.add(listingId)
 
         continue
@@ -168,12 +168,10 @@ const findSteamItemInfo = async ({ market_hash_name, proxy }: { market_hash_name
         for (const item of response.results) {
           const now = format(new Date(), 'HH:mm:ss')
           const market_hash_name = item.asset_description.market_hash_name
-          if (market_hash_name in GOODS_CACHE && GOODS_CACHE[market_hash_name].price !== item.sell_price) {
-            const current_price = (item.sell_price / 100).toFixed(2)
-            const prev_price = (GOODS_CACHE[market_hash_name].price / 100).toFixed(2)
-            console.log(`${now} ${market_hash_name} $${prev_price} -> $${current_price}`)
+          if (market_hash_name in GOODS_CACHE && GOODS_CACHE[market_hash_name].listings !== item.sell_listings) {
+            console.log(`${now} ${market_hash_name} ${GOODS_CACHE[market_hash_name].listings} -> ${item.sell_listings}`)
           }
-          if (market_hash_name in GOODS_CACHE && GOODS_CACHE[market_hash_name].price > item.sell_price) {
+          if (market_hash_name in GOODS_CACHE && GOODS_CACHE[market_hash_name].listings < item.sell_listings) {
             await findSteamItemInfo({ market_hash_name, proxy })
           }
           GOODS_CACHE[market_hash_name] = { price: item.sell_price, listings: item.sell_listings }

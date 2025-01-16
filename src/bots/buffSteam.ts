@@ -1,4 +1,4 @@
-import 'dotenv/config'
+import dotenv from 'dotenv'
 
 import { getMarketGoods } from '../api/buff'
 import { isLessThanThreshold, sleep } from '../utils'
@@ -9,10 +9,17 @@ import { executeBuffToSteamTrade } from '../helpers/executeBuffToSteamTrade'
 import { BARGAIN_PROFIT_THRESHOLD } from '../config'
 import { executeBuffBargainTrade } from '../helpers/executeBuffBargainTrade'
 import { executeBuffCharmTrade } from '../helpers/executeBuffCharmTrade'
+import { WatchEventType, watch } from 'fs'
 
 export const CHARM_CACHE: Record<number, { sell_num: number }> = {}
 export const GOODS_CACHE: Record<number, { price: number }> = {}
 export const GOODS_BLACKLIST_CACHE: number[] = [30431, 30235, 30259, 30269, 30350]
+
+dotenv.config()
+
+watch('.env', (eventType: WatchEventType) => {
+  if (eventType === 'change') dotenv.config()
+})
 
 const buffSteam = async () => {
   try {

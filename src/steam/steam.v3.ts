@@ -166,6 +166,9 @@ const findSteamItemInfo = async ({ market_hash_name, proxy }: { market_hash_name
         }
       } catch (error) {
         console.log(error.message)
+
+        if (error.message?.includes('403')) await sleep(60_000 * 2)
+        if (error.message?.includes('canceled')) await sleep(60_000)
       } finally {
         await sleep(60_000 / STEAM_PROXY.length)
 

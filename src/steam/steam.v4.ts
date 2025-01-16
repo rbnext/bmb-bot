@@ -168,6 +168,8 @@ const findSteamItemInfo = async ({ market_hash_name, proxy }: { market_hash_name
         for (const item of response.results) {
           const now = format(new Date(), 'HH:mm:ss')
           const market_hash_name = item.asset_description.market_hash_name
+          if (['AK-47 | Redline (Field-Tested)', 'AK-47 | Slate (Field-Tested)'].includes(market_hash_name)) continue
+
           if (market_hash_name in GOODS_CACHE && GOODS_CACHE[market_hash_name].listings !== item.sell_listings) {
             console.log(`${now} ${market_hash_name} ${GOODS_CACHE[market_hash_name].listings} -> ${item.sell_listings}`)
           }

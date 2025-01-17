@@ -7,7 +7,7 @@ import { sendMessage } from '../api/telegram'
 import { getSteamUrl, sleep } from '../utils'
 import { getInspectLink } from './utils'
 
-import { getCSFloatItemInfo } from '../api/csfloat'
+import { getCSFloatItemInfo, getCSFloatListings } from '../api/csfloat'
 import { SearchMarketRender, SteamMarketRender } from '../types'
 import { getVercelMarketRender, getVercelSearchMarketRender } from '../api/versel'
 import { MARKET_BLACK_LIST } from './config'
@@ -20,7 +20,7 @@ const findSteamItemInfo = async ({ market_hash_name, proxy }: { market_hash_name
     const steam: SteamMarketRender = await getVercelMarketRender({ market_hash_name, proxy })
 
     for (const [index, listingId] of Object.keys(steam.listinginfo).entries()) {
-      if (index === 1 || CASHED_LISTINGS.has(listingId)) continue
+      if (index >= 1 || CASHED_LISTINGS.has(listingId)) continue
 
       const currentListing = steam.listinginfo[listingId]
       const price = Number(((currentListing.converted_price + currentListing.converted_fee) / 100).toFixed(2))
@@ -32,15 +32,20 @@ const findSteamItemInfo = async ({ market_hash_name, proxy }: { market_hash_name
       console.log(`|___ Float: ${floatValue}`)
 
       if (price && floatValue < 0.02) {
+        const response = await getCSFloatListings({ market_hash_name })
+        const basePrice = response.data[0].reference.base_price / 100
+
         const message: string[] = []
         message.push(`<a href="${getSteamUrl(market_hash_name, [])}">${market_hash_name}</a> | #${index + 1}\n\n`)
-        message.push(`\n`)
         message.push(`<b>Steam price</b>: $${price}\n`)
+        message.push(`<b>Reference price</b>: $${basePrice.toFixed(2)}\n`)
         message.push(`<b>Float</b>: ${itemInfoResponse.iteminfo.floatvalue}\n\n`)
         await sendMessage(message.join(''))
       }
 
       CASHED_LISTINGS.add(listingId)
+
+      await sleep(2_000)
     }
   } catch (error) {
     console.log(format(new Date(), 'HH:mm:ss'), 'STEAM_ERROR', error.message)

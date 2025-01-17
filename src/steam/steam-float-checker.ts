@@ -84,7 +84,7 @@ const findSteamItemInfo = async ({ market_hash_name, proxy }: { market_hash_name
           if (market_hash_name in GOODS_CACHE && GOODS_CACHE[market_hash_name].listings !== item.sell_listings) {
             console.log(`${now} ${market_hash_name} ${GOODS_CACHE[market_hash_name].listings} -> ${item.sell_listings}`)
           }
-          if (market_hash_name in GOODS_CACHE && GOODS_CACHE[market_hash_name].listings > item.sell_listings) {
+          if (market_hash_name in GOODS_CACHE && GOODS_CACHE[market_hash_name].listings < item.sell_listings) {
             await findSteamItemInfo({ market_hash_name, proxy })
           }
           GOODS_CACHE[market_hash_name] = { price: item.sell_price, listings: item.sell_listings }

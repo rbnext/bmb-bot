@@ -32,8 +32,8 @@ const findSteamItemInfo = async ({ market_hash_name, proxy }: { market_hash_name
       console.log(`|___ Float: ${floatValue}`)
 
       if (price && floatValue < 0.02) {
-        const response = await getCSFloatListings({ market_hash_name })
-        const basePrice = response.data[0].reference.base_price / 100
+        const response = await getCSFloatListings({ market_hash_name, max_float: 0.02 })
+        const basePrice = response.data[0].price / 100
 
         const message: string[] = []
         message.push(`<a href="${getSteamUrl(market_hash_name, [])}">${market_hash_name}</a> | #${index + 1}\n\n`)

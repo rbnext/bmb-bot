@@ -38,7 +38,7 @@ const buffSteam = async () => {
 
       if ([30355].includes(item.id)) CHARM_CACHE[item.id] = { sell_num: item.sell_num }
 
-      if (GOODS_BLACKLIST_CACHE.includes(item.id)) {
+      if (GOODS_BLACKLIST_CACHE.includes(item.id) || item.is_charm) {
         continue
       }
 

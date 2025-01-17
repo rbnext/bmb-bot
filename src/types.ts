@@ -322,6 +322,7 @@ export type MarketGoodsItem = {
   id: number
   market_hash_name: string
   sell_min_price: string
+  is_charm: boolean
   sell_reference_price: string
   goods_info: {
     steam_price: string

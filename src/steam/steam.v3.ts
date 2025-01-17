@@ -48,13 +48,13 @@ const findSteamItemInfo = async ({ market_hash_name, proxy }: { market_hash_name
       const stickerTotal = stickers.reduce((acc, name) => acc + (stickerData[`Sticker | ${name}`] ?? 0), 0)
 
       if (!price && stickerTotal !== 0) {
-        console.log(`${now} ${market_hash_name}. Sold! ST: $${stickerTotal.toFixed(2)}`)
+        console.log(`|___ Sold! ST: $${stickerTotal.toFixed(2)}; Combo: ${String(isStickerCombo(stickers))}`)
         CASHED_LISTINGS.add(listingId)
 
         continue
       }
 
-      if (stickerTotal > 15) {
+      if (stickerTotal > 10) {
         if (basePrice === 0) {
           try {
             const floatResponse = await getCSFloatListings({ market_hash_name })
@@ -80,7 +80,7 @@ const findSteamItemInfo = async ({ market_hash_name, proxy }: { market_hash_name
           `|___ ST: $${stickerTotal.toFixed(2)}; SP: ${SP.toFixed(2)}%; Combo: ${String(isStickerCombo(stickers))}`
         )
 
-        if (SP < (isStickerCombo(stickers) ? 18 : 8)) {
+        if (SP < (isStickerCombo(stickers) ? 25 : 10)) {
           const itemInfoResponse = await getCSFloatItemInfo({ url: inspectLink })
 
           const message: string[] = []
@@ -102,29 +102,29 @@ const findSteamItemInfo = async ({ market_hash_name, proxy }: { market_hash_name
           message.push(`<b>Stickers total</b>: $${stickerTotal.toFixed(2)}\n\n`)
           message.push(`<b>Float</b>: ${itemInfoResponse.iteminfo.floatvalue}\n\n`)
 
-          const sentMessage = await sendMessage(message.join(''))
+          await sendMessage(message.join(''))
 
-          if (price && price <= 20 && (itemInfoResponse.iteminfo.stickers || [])?.every((item) => item.wear === 0)) {
-            try {
-              const response = await stemMarketBuyListing({
-                idListing: currentListing.listingid,
-                market_hash_name: market_hash_name,
-                converted_price: currentListing.converted_price,
-                converted_fee: currentListing.converted_fee,
-              })
+          // if (price && price <= 20 && (itemInfoResponse.iteminfo.stickers || [])?.every((item) => item.wear === 0)) {
+          //   try {
+          //     const response = await stemMarketBuyListing({
+          //       idListing: currentListing.listingid,
+          //       market_hash_name: market_hash_name,
+          //       converted_price: currentListing.converted_price,
+          //       converted_fee: currentListing.converted_fee,
+          //     })
 
-              if (response?.wallet_info?.success === 1) {
-                await sendMessage('Success purchase', sentMessage.result.message_id)
-              } else {
-                await sendMessage('Failed purchase', sentMessage.result.message_id)
-              }
+          //     if (response?.wallet_info?.success === 1) {
+          //       await sendMessage('Success purchase', sentMessage.result.message_id)
+          //     } else {
+          //       await sendMessage('Failed purchase', sentMessage.result.message_id)
+          //     }
 
-              console.log(response)
-            } catch (error) {
-              console.log(error)
-              await sendMessage(`Steam failed to purchase the ${market_hash_name} item.`)
-            }
-          }
+          //     console.log(response)
+          //   } catch (error) {
+          //     console.log(error)
+          //     await sendMessage(`Steam failed to purchase the ${market_hash_name} item.`)
+          //   }
+          // }
         }
 
         await sleep(3_000)

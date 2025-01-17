@@ -18,6 +18,7 @@
     "steam": "ts-node src/steam/steam.ts",
     "steamv4": "ts-node src/steam/steam.v4.ts",
     "steamv3": "ts-node src/steam/steam.v3.ts",
+    "steam-float-checker": "ts-node src/steam/steam-float-checker.ts",
     "cs2Buff": "ts-node src/bots/cs2Buff.ts",
     "steam-charms": "ts-node src/steam/charms.ts",
     "steam-charm": "ts-node src/steam/steam-charm.ts",

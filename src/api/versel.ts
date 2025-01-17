@@ -14,7 +14,7 @@ export const getVercelMarketRender = async ({
   proxy: string
   filter?: string
 }): Promise<SteamMarketRender> => {
-  const params = `start=${start}&count=${count}&country=BY&language=english&currency=1&filter=${filter}`
+  const params = `start=${start}&count=${count}&country=BY&language=english&currency=1&filter=${filter ?? ''}`
 
   const { data } = await axios.post<SteamMarketRender>(`https://${proxy}.vercel.app/api`, {
     url: `https://steamcommunity.com/market/listings/730/${encodeURIComponent(market_hash_name)}/render?${params}`,
@@ -40,7 +40,7 @@ export const getVercelSearchMarketRender = async ({
 }) => {
   const exteriorQuery = `${exterior.map((q) => `category_730_Exterior[]=${encodeURIComponent(q)}`).join('&')}`
 
-  const params = `appid=730&query=${query}&start=${start}&count=${count}&search_descriptions=1&sort_column=price&sort_dir=asc&norender=1&${exteriorQuery}&category_730_Rarity[]=tag_Rarity_Mythical_Weapon&category_730_Rarity[]=tag_Rarity_Legendary_Weapon&category_730_Rarity[]=tag_Rarity_Ancient_Weapon&category_730_Weapon[]=any${quality.map((q) => `&category_730_Quality[]=${encodeURIComponent(q)}`).join('')}`
+  const params = `appid=730&query=${query ?? ''}&start=${start}&count=${count}&search_descriptions=1&sort_column=price&sort_dir=asc&norender=1&${exteriorQuery}&category_730_Rarity[]=tag_Rarity_Mythical_Weapon&category_730_Rarity[]=tag_Rarity_Legendary_Weapon&category_730_Rarity[]=tag_Rarity_Ancient_Weapon&category_730_Weapon[]=any${quality.map((q) => `&category_730_Quality[]=${encodeURIComponent(q)}`).join('')}`
 
   const { data } = await axios.post(`https://${proxy}.vercel.app/api`, {
     url: `https://steamcommunity.com/market/search/render?${params}`,

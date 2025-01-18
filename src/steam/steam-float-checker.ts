@@ -11,6 +11,8 @@ import { getCSFloatItemInfo, getCSFloatListings } from '../api/csfloat'
 import { SearchMarketRender, SteamMarketRender } from '../types'
 import { getVercelMarketRender, getVercelSearchMarketRender } from '../api/versel'
 import { MARKET_BLACK_LIST } from './config'
+import path from 'path'
+import { readFileSync, writeFileSync } from 'fs'
 
 const CASHED_LISTINGS = new Set<string>()
 const GOODS_CACHE: Record<string, { price: number; listings: number }> = {}
@@ -32,6 +34,20 @@ const findSteamItemInfo = async ({ market_hash_name, proxy }: { market_hash_name
       if (!price) return
 
       console.log(`|___ Float: ${floatValue}`)
+
+      const pathname = path.join(__dirname, '../../steam-temp.json')
+      const steam: Record<string, number[]> = JSON.parse(readFileSync(pathname, 'utf8'))
+      writeFileSync(
+        pathname,
+        JSON.stringify(
+          {
+            ...steam,
+            [market_hash_name]: [price, ...(steam[market_hash_name] ?? [])],
+          },
+          null,
+          4
+        )
+      )
 
       if (
         (market_hash_name.includes('Factory New') && floatValue < 0.02) ||
@@ -93,6 +109,8 @@ const findSteamItemInfo = async ({ market_hash_name, proxy }: { market_hash_name
           const now = format(new Date(), 'HH:mm:ss')
           const market_hash_name = item.asset_description.market_hash_name
           if (MARKET_BLACK_LIST.includes(market_hash_name)) continue
+
+          console.log((item.sell_price / 100).toFixed(2))
 
           if (market_hash_name in GOODS_CACHE && GOODS_CACHE[market_hash_name].price !== item.sell_price) {
             const current_price = (item.sell_price / 100).toFixed(2)

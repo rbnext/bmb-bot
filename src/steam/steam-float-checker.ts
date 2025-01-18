@@ -29,16 +29,29 @@ const findSteamItemInfo = async ({ market_hash_name, proxy }: { market_hash_name
       const itemInfoResponse = await getCSFloatItemInfo({ url: inspectLink })
       const floatValue = Number(itemInfoResponse.iteminfo.floatvalue)
 
+      if (!price) return
+
       console.log(`|___ Float: ${floatValue}`)
 
-      if (price && floatValue < 0.02) {
-        const response = await getCSFloatListings({ market_hash_name, max_float: 0.02 })
-        const basePrice = response.data[0].price / 100
+      if (
+        (market_hash_name.includes('Factory New') && floatValue < 0.02) ||
+        (market_hash_name.includes('Minimal Wear') && floatValue < 0.08) ||
+        (market_hash_name.includes('Field-Tested') && floatValue < 0.18)
+      ) {
+        const response = await getCSFloatListings({
+          market_hash_name,
+          ...(market_hash_name.includes('Factory New') && { max_float: 0.02 }),
+          ...(market_hash_name.includes('Minimal Wear') && { max_float: 0.08 }),
+          ...(market_hash_name.includes('Field-Tested') && { max_float: 0.18 }),
+        })
+        const lowestPrice = response.data[0].price / 100
+        const basePrice = response.data[0].reference.base_price / 100
 
         const message: string[] = []
         message.push(`<a href="${getSteamUrl(market_hash_name, [])}">${market_hash_name}</a> | #${index + 1}\n\n`)
         message.push(`<b>Steam price</b>: $${price}\n`)
-        message.push(`<b>Reference price</b>: $${basePrice.toFixed(2)}\n`)
+        message.push(`<b>Base price</b>: $${basePrice.toFixed(2)}\n`)
+        message.push(`<b>Lowest price(by float)</b>: $${lowestPrice.toFixed(2)}\n`)
         message.push(`<b>Float</b>: ${itemInfoResponse.iteminfo.floatvalue}\n\n`)
         await sendMessage(message.join(''))
       }
@@ -70,16 +83,19 @@ const findSteamItemInfo = async ({ market_hash_name, proxy }: { market_hash_name
     for (const proxy of STEAM_PROXY) {
       try {
         const response: SearchMarketRender = await getVercelSearchMarketRender({
-          quality: ['tag_strange', 'tag_normal'],
-          exterior: ['tag_WearCategory0'],
+          quality: ['tag_normal'],
+          exterior: ['tag_WearCategory0', 'tag_WearCategory1', 'tag_WearCategory2'],
           proxy,
           start,
           count,
         })
+        console.log(response.searchdata.total_count)
         for (const item of response.results) {
           const now = format(new Date(), 'HH:mm:ss')
           const market_hash_name = item.asset_description.market_hash_name
           if (MARKET_BLACK_LIST.includes(market_hash_name)) continue
+
+          console.log(market_hash_name, item.sell_price / 100)
 
           if (market_hash_name in GOODS_CACHE && GOODS_CACHE[market_hash_name].listings !== item.sell_listings) {
             console.log(`${now} ${market_hash_name} ${GOODS_CACHE[market_hash_name].listings} -> ${item.sell_listings}`)

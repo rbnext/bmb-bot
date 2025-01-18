@@ -36,13 +36,13 @@ const findSteamItemInfo = async ({ market_hash_name, proxy }: { market_hash_name
       console.log(`|___ Float: ${floatValue}`)
 
       const pathname = path.join(__dirname, '../../steam-temp.json')
-      const steam: Record<string, number[]> = JSON.parse(readFileSync(pathname, 'utf8'))
+      const steamData: Record<string, number[]> = JSON.parse(readFileSync(pathname, 'utf8'))
       writeFileSync(
         pathname,
         JSON.stringify(
           {
-            ...steam,
-            [market_hash_name]: [price, ...(steam[market_hash_name] ?? [])],
+            ...steamData,
+            [market_hash_name]: [price, ...(steamData[market_hash_name] ?? [])],
           },
           null,
           4

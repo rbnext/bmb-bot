@@ -95,8 +95,6 @@ const findSteamItemInfo = async ({ market_hash_name, proxy }: { market_hash_name
           const market_hash_name = item.asset_description.market_hash_name
           if (MARKET_BLACK_LIST.includes(market_hash_name)) continue
 
-          console.log(market_hash_name, item.sell_price / 100)
-
           if (market_hash_name in GOODS_CACHE && GOODS_CACHE[market_hash_name].listings !== item.sell_listings) {
             console.log(`${now} ${market_hash_name} ${GOODS_CACHE[market_hash_name].listings} -> ${item.sell_listings}`)
           }

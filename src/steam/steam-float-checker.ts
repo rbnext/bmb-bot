@@ -89,7 +89,6 @@ const findSteamItemInfo = async ({ market_hash_name, proxy }: { market_hash_name
           start,
           count,
         })
-        console.log(response.searchdata.total_count)
         for (const item of response.results) {
           const now = format(new Date(), 'HH:mm:ss')
           const market_hash_name = item.asset_description.market_hash_name

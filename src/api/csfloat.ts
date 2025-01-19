@@ -21,6 +21,7 @@ export const getCSFloatListings = async ({
   min_price,
   max_price,
   stickers,
+  keychains,
   filter,
 }: {
   type?: string
@@ -33,6 +34,7 @@ export const getCSFloatListings = async ({
   min_price?: number
   max_price?: number
   stickers?: string
+  keychains?: string
   filter?: string
 }): Promise<CSFloatListing> => {
   const { data } = await http.get('/v1/listings', {
@@ -46,6 +48,7 @@ export const getCSFloatListings = async ({
       sort_by,
       min_price,
       max_price,
+      keychains,
       filter,
       stickers,
     },

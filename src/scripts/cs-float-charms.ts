@@ -20,7 +20,10 @@ const getPredictedPrice = (pattern: number, base: number) => {
 }
 
 const csFloatCharms = async () => {
-  const response = await getCSFloatListings({ keychains: '[{"i":18}]' })
+  const response = await getCSFloatListings({
+    keychains: '[{"i":18}]',
+    sort_by: 'most_recent',
+  })
 
   for (const data of response.data) {
     if (CASHED_LISTINGS.has(data.id)) continue

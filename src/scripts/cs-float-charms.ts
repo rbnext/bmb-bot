@@ -33,7 +33,7 @@ const csFloatCharms = async () => {
     if (keychain) {
       const now = format(new Date(), 'HH:mm:ss')
       const keychainPrice = getPredictedPrice(keychain.pattern, keychain.reference.price / 100)
-      const profit = currentPrice - predictedPrice - keychainPrice - 0.33
+      const profit = predictedPrice + keychainPrice - 0.33 - currentPrice
 
       console.log(now, data.item.market_hash_name, profit.toFixed(2))
 

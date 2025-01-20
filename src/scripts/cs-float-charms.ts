@@ -23,7 +23,11 @@ const getPredictedPrice = (pattern: number, base: number) => {
 
 const csFloatCharms = async () => {
   for (const referenceId of [18, 11, 13, 9, 7, 16]) {
-    const response = await getCSFloatListings({ keychains: `[{"i":${referenceId}}]`, sort_by: 'most_recent' })
+    const response = await getCSFloatListings({
+      keychains: `[{"i":${referenceId}}]`,
+      sort_by: 'most_recent',
+      max_price: 10000,
+    })
 
     for (const data of response.data) {
       if (CASHED_LISTINGS.has(data.id)) continue
@@ -59,7 +63,7 @@ const csFloatCharms = async () => {
           message.push(`<b>Price</b>: $${currentPrice}\n`)
           message.push(`<b>Predicted price</b>: $${predictedPrice.toFixed(2)}\n`)
           message.push(`<b>Profit</b>: ~$${profit.toFixed(2)}\n\n`)
-          await sendMessage(message.join(''))
+          await sendMessage(message.join(''), undefined, process.env.TELEGRAM_REPORT_ID)
         }
       }
 

@@ -108,7 +108,7 @@ const findSteamItemInfo = async ({ market_hash_name, proxy }: { market_hash_name
         for (const item of response.results) {
           const now = format(new Date(), 'HH:mm:ss')
           const market_hash_name = item.asset_description.market_hash_name
-          if (MARKET_BLACK_LIST.includes(market_hash_name)) continue
+          if (MARKET_BLACK_LIST.includes(market_hash_name) || item.sell_listings < 30) continue
 
           if (market_hash_name in GOODS_CACHE && GOODS_CACHE[market_hash_name].price !== item.sell_price) {
             const current_price = (item.sell_price / 100).toFixed(2)

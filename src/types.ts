@@ -536,6 +536,7 @@ type CSFloatListingItemCharmItem = {
   reference: {
     price: number
   }
+  stickerId: number
 }
 
 type CSFloatListingItem = {

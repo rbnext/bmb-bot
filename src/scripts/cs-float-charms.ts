@@ -8,7 +8,9 @@ import { format } from 'date-fns'
 const CASHED_LISTINGS = new Set<string>()
 
 const getPredictedPrice = (pattern: number, base: number) => {
-  if (pattern >= 1 && pattern <= 5000) return 15
+  if (pattern >= 1 && pattern <= 1000) return 40
+  if (pattern > 1000 && pattern <= 3000) return 20
+  if (pattern > 3000 && pattern <= 5000) return 15
   if (pattern > 5000 && pattern <= 9000) return 10
   if (pattern >= 20000 && pattern <= 23000) return 17
   if (pattern > 23000 && pattern <= 25000) return 10
@@ -20,48 +22,53 @@ const getPredictedPrice = (pattern: number, base: number) => {
 }
 
 const csFloatCharms = async () => {
-  const response = await getCSFloatListings({
-    keychains: '[{"i":18}]',
-    sort_by: 'most_recent',
-  })
+  for (const referenceId of [18, 11, 13, 9, 7, 16]) {
+    const response = await getCSFloatListings({ keychains: `[{"i":${referenceId}}]`, sort_by: 'most_recent' })
 
-  for (const data of response.data) {
-    if (CASHED_LISTINGS.has(data.id)) continue
+    for (const data of response.data) {
+      if (CASHED_LISTINGS.has(data.id)) continue
 
-    const keychains = data.item.keychains ?? []
-    const currentPrice = Number((data.price / 100).toFixed(2))
-    const predictedPrice = Number((data.reference.predicted_price / 100).toFixed(2))
-    const keychain = keychains.find((k) => k.name === 'Charm | Die-cast AK')
+      const keychains = data.item.keychains ?? []
+      const currentPrice = Number((data.price / 100).toFixed(2))
+      const predictedPrice = Number((data.reference.predicted_price / 100).toFixed(2))
 
-    if (keychain) {
-      const now = format(new Date(), 'HH:mm:ss')
-      const keychainPrice = getPredictedPrice(keychain.pattern, keychain.reference.price / 100)
-      const profit = predictedPrice + keychainPrice - 0.33 - currentPrice
+      if (keychains[0]) {
+        const now = format(new Date(), 'HH:mm:ss')
 
-      console.log(now, data.item.market_hash_name, profit.toFixed(2))
+        const keychainPrice = (() => {
+          if (referenceId === 18) {
+            return getPredictedPrice(keychains[0].pattern, keychains[0].reference.price / 100)
+          }
 
-      if (profit > 0) {
-        const message: string[] = []
+          return keychains[0].reference.price / 100
+        })()
 
-        message.push(`<a href="https://csfloat.com/item/${data.id}">${data.item.market_hash_name}</a>\n\n`)
+        const profit = predictedPrice + keychainPrice - 0.33 - currentPrice
 
-        for (const keychain of keychains) {
-          message.push(`<b>${keychain.name}</b>: ${keychain.pattern}\n`)
+        console.log(now, data.item.market_hash_name, profit.toFixed(2))
+
+        if (profit > 0) {
+          const message: string[] = []
+          message.push(`<a href="https://csfloat.com/item/${data.id}">${data.item.market_hash_name}</a>\n\n`)
+
+          for (const keychain of keychains) {
+            message.push(`<b>${keychain.name}</b>: ${keychain.pattern}\n`)
+          }
+
+          message.push(`\n`)
+          message.push(`<b>Price</b>: $${currentPrice}\n`)
+          message.push(`<b>Predicted price</b>: $${predictedPrice.toFixed(2)}\n`)
+          message.push(`<b>Profit</b>: ~$${profit.toFixed(2)}\n\n`)
+          await sendMessage(message.join(''))
         }
-
-        message.push(`\n`)
-        message.push(`<b>Price</b>: $${currentPrice}\n`)
-        message.push(`<b>Predicted price</b>: $${predictedPrice.toFixed(2)}\n`)
-        message.push(`<b>Profit</b>: ~$${profit.toFixed(2)}\n\n`)
-
-        await sendMessage(message.join(''))
       }
+
+      CASHED_LISTINGS.add(data.id)
     }
 
-    CASHED_LISTINGS.add(data.id)
+    await sleep(30_000)
   }
 
-  await sleep(30_000)
   csFloatCharms()
 }
 

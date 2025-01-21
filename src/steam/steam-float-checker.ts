@@ -5,15 +5,13 @@ dotenv.config()
 import { format } from 'date-fns'
 import { sendMessage } from '../api/telegram'
 import { getSteamUrl, sleep } from '../utils'
-import { getInspectLink, mapSteamMarketRenderResponse } from './utils'
+import { mapSteamMarketRenderResponse } from './utils'
 
 import { getCSFloatItemInfo, getCSFloatListings } from '../api/csfloat'
-import { SearchMarketRender, SteamMarketRender } from '../types'
-import { getVercelMarketRender, getVercelSearchMarketRender } from '../api/versel'
-import { MARKET_BLACK_LIST } from './config'
+import { SteamMarketRender } from '../types'
+import { getVercelMarketRender } from '../api/versel'
 
 const CASHED_LISTINGS = new Set<string>()
-const GOODS_CACHE: Record<string, { price: number; listings: number }> = {}
 
 const configList = [
   {
@@ -32,12 +30,6 @@ const configList = [
 ]
 
 const init = async () => {
-  const STEAM_PROXY = String(process.env.STEAM_PROXY).trim()
-  const STEAM_SEARCH_START = Number(process.env.STEAM_SEARCH_START)
-
-  console.log('STEAM_PROXY', STEAM_PROXY)
-  console.log('STEAM_SEARCH_START', STEAM_SEARCH_START)
-
   try {
     do {
       for (const [index, config] of configList.entries()) {
@@ -46,14 +38,17 @@ const init = async () => {
         const response: SteamMarketRender = await getVercelMarketRender({
           count: 3,
           market_hash_name,
-          proxy: `${STEAM_PROXY}${index + 1}`,
+          proxy: `${process.env.STEAM_PROXY}${index + 1}`,
         })
 
         const steamMarketResponse = mapSteamMarketRenderResponse(response)
 
         for (const item of steamMarketResponse) {
+          const now = format(new Date(), 'HH:mm:ss')
           const itemInfoResponse = await getCSFloatItemInfo({ url: item.inspectUrl })
           const floatValue = Number(itemInfoResponse.iteminfo.floatvalue)
+
+          console.log(now, market_hash_name, floatValue, item.position)
 
           if (config.isSweet(floatValue)) {
             const response = await getCSFloatListings({

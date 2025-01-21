@@ -593,6 +593,7 @@ export type CSFloatItemInfoStickerItem = {
 
 export type CSFloatItemInfoKeychainItem = {
   pattern: number
+  name: string
 }
 
 export type CSFloatItemInfo = {
@@ -714,3 +715,13 @@ export type SteamMarketAssets = {
 }
 
 export type Nullable<T> = T | null
+
+export type MapSteamMarketRenderResponse = {
+  price: number | null
+  stickers: string[]
+  keychains: string[]
+  inspectUrl: string
+  position: number
+  listingId: string
+  isStickerCombos: boolean
+}

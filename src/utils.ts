@@ -220,17 +220,6 @@ export const generateMessage = ({
   return message.join('')
 }
 
-export function extractStickers(input: string): string[] {
-  let match
-
-  const stickers: string[] = []
-  const titleRegex = /title="([^"]+)"/g
-
-  while ((match = titleRegex.exec(input)) !== null) stickers.push(match[1])
-
-  return stickers.map((name) => name.replace('Sticker: ', ''))
-}
-
 export const getItemExterior = (market_hash_name: string) => {
   const isStatTrak = market_hash_name.includes('StatTrak™')
 
@@ -266,4 +255,8 @@ export const getSteamUrl = (market_hash_name: string, stickers: string[]) => {
 
 export const getRandomNumber = (min: number, max: number): number => {
   return Math.floor(Math.random() * (max - min + 1)) + min
+}
+
+export const getInspectLink = (link: string, assetId: string, listingId: string): string => {
+  return link.replace('%assetid%', assetId).replace('%listingid%', listingId)
 }

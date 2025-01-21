@@ -1,22 +1,17 @@
-import dotenv from 'dotenv'
-
-dotenv.config()
+import 'dotenv/config'
 
 import { format } from 'date-fns'
-import { getMarketRender, getSearchMarketRender, stemMarketBuyListing } from '../api/steam'
+import { getMarketRender, getSearchMarketRender } from '../api/steam'
 import { sendMessage } from '../api/telegram'
-import { extractStickers, getSteamUrl, sleep } from '../utils'
-import { getInspectLink, isStickerCombo } from './utils'
+import { mapSteamMarketRenderResponse } from './utils'
+import { isStickerCombo } from './utils'
 
 import { getCSFloatItemInfo, getCSFloatListings } from '../api/csfloat'
 import { SearchMarketRender, SteamMarketRender } from '../types'
-import { WatchEventType, readFileSync, watch } from 'fs'
+import { readFileSync } from 'fs'
 import path from 'path'
 import { MARKET_BLACK_LIST } from './config'
-
-watch('.env', (eventType: WatchEventType) => {
-  if (eventType === 'change') dotenv.config()
-})
+import { getSteamUrl, sleep } from '../utils'
 
 const CASHED_LISTINGS = new Set<string>()
 const GOODS_CACHE: Record<string, { price: number; listings: number }> = {}
@@ -28,108 +23,74 @@ const findSteamItemInfo = async ({ market_hash_name, proxy }: { market_hash_name
   let basePrice: number = 0
 
   try {
-    const steam: SteamMarketRender = await getMarketRender({ market_hash_name, proxy, filter: 'Sticker' })
+    const response: SteamMarketRender = await getMarketRender({
+      proxy,
+      market_hash_name,
+      filter: 'Sticker',
+    })
 
-    for (const [index, listingId] of Object.keys(steam.listinginfo).entries()) {
-      if (index >= 1 || CASHED_LISTINGS.has(listingId)) continue
+    const steamMarketResponse = mapSteamMarketRenderResponse(response)
 
-      const currentListing = steam.listinginfo[listingId]
-      const price = Number(((currentListing.converted_price + currentListing.converted_fee) / 100).toFixed(2))
+    for (const item of steamMarketResponse) {
+      if (!item.price || item.position > 1 || CASHED_LISTINGS.has(item.listingId)) continue
 
-      const assetInfo = steam.assets[730][currentListing.asset.contextid][currentListing.asset.id]
-      const htmlDescription = assetInfo.descriptions.find((el) => el.value.includes('sticker_info'))?.value || ''
+      const stickerTotal = item.stickers.reduce((acc, name) => acc + (stickerData[`Sticker | ${name}`] ?? 0), 0)
 
-      const link = currentListing.asset.market_actions[0].link
-      const inspectLink = getInspectLink(link, currentListing.asset.id, listingId)
+      if (stickerTotal < 10) continue
 
-      const stickers = extractStickers(htmlDescription)
+      try {
+        const floatResponse = await getCSFloatListings({ market_hash_name })
 
-      const stickerTotal = stickers.reduce((acc, name) => acc + (stickerData[`Sticker | ${name}`] ?? 0), 0)
-
-      if (!price && stickerTotal !== 0) {
-        console.log(`|___ Sold! ST: $${stickerTotal.toFixed(2)}; Combo: ${String(isStickerCombo(stickers))}`)
-        CASHED_LISTINGS.add(listingId)
-
-        continue
-      }
-
-      if (stickerTotal > 10) {
-        if (basePrice === 0) {
-          try {
-            const floatResponse = await getCSFloatListings({ market_hash_name })
-
-            for (const data of floatResponse.data) {
-              for (const sticker of data.item?.stickers ?? []) {
-                if (sticker.reference?.price && sticker.name.includes('Sticker')) {
-                  const price = Number((sticker.reference.price / 100).toFixed(2))
-                  if (price >= 0.5) stickerData[sticker.name] = price
-                }
-              }
+        for (const data of floatResponse.data) {
+          for (const sticker of data.item?.stickers ?? []) {
+            if (sticker.reference?.price && sticker.name.includes('Sticker')) {
+              const price = Number((sticker.reference.price / 100).toFixed(2))
+              if (price >= 0.5) stickerData[sticker.name] = price
             }
-
-            basePrice = floatResponse.data[0].reference.base_price / 100
-          } catch (error) {
-            await sendMessage(`Failed to retrieve the price for the ${market_hash_name} item.`)
           }
         }
 
-        const SP = ((price - basePrice) / stickerTotal) * 100
+        basePrice = floatResponse.data[0].reference.base_price / 100
+      } catch (error) {
+        await sendMessage(`Failed to retrieve the price for the ${market_hash_name} item.`)
+      }
 
-        console.log(
-          `|___ ST: $${stickerTotal.toFixed(2)}; SP: ${SP.toFixed(2)}%; Combo: ${String(isStickerCombo(stickers))}`
+      const SP = ((item.price - basePrice) / stickerTotal) * 100
+
+      console.log(
+        `|___ ST: $${stickerTotal.toFixed(2)}; SP: ${SP.toFixed(2)}%; Combo: ${String(isStickerCombo(item.stickers))}`
+      )
+
+      if (SP < (item.isStickerCombos ? 25 : 10)) {
+        const itemInfoResponse = await getCSFloatItemInfo({ url: item.inspectUrl })
+
+        const message: string[] = []
+
+        message.push(
+          `<a href="${getSteamUrl(market_hash_name, item.stickers)}">${market_hash_name}</a> | #${item.position}\n\n`
         )
 
-        if (SP < (isStickerCombo(stickers) ? 25 : 10)) {
-          const itemInfoResponse = await getCSFloatItemInfo({ url: inspectLink })
-
-          const message: string[] = []
-
+        for (const sticker of itemInfoResponse.iteminfo?.stickers ?? []) {
+          const name = `Sticker | ${sticker.name}`
           message.push(
-            `<a href="${getSteamUrl(market_hash_name, stickers)}">${market_hash_name}</a> | #${index + 1}\n\n`
+            `<b>${name}</b>: ${sticker.wear === 0 ? '100%' : `${(sticker.wear * 100).toFixed(2)}% ($${stickerData[name] ?? 0})`}\n`
           )
-
-          for (const sticker of itemInfoResponse.iteminfo?.stickers ?? []) {
-            const name = `Sticker | ${sticker.name}`
-            message.push(
-              `<b>${name}</b>: ${sticker.wear === 0 ? '100%' : `${(sticker.wear * 100).toFixed(2)}% ($${stickerData[name] ?? 0})`}\n`
-            )
-          }
-          message.push(`\n`)
-          message.push(`<b>SP</b>: ${SP.toFixed(2)}%\n`)
-          message.push(`<b>Steam price</b>: $${price}\n`)
-          message.push(`<b>Reference price</b>: $${basePrice.toFixed(2)}\n`)
-          message.push(`<b>Stickers total</b>: $${stickerTotal.toFixed(2)}\n\n`)
-          message.push(`<b>Float</b>: ${itemInfoResponse.iteminfo.floatvalue}\n\n`)
-
-          await sendMessage(message.join(''))
-
-          // if (price && price <= 20 && (itemInfoResponse.iteminfo.stickers || [])?.every((item) => item.wear === 0)) {
-          //   try {
-          //     const response = await stemMarketBuyListing({
-          //       idListing: currentListing.listingid,
-          //       market_hash_name: market_hash_name,
-          //       converted_price: currentListing.converted_price,
-          //       converted_fee: currentListing.converted_fee,
-          //     })
-
-          //     if (response?.wallet_info?.success === 1) {
-          //       await sendMessage('Success purchase', sentMessage.result.message_id)
-          //     } else {
-          //       await sendMessage('Failed purchase', sentMessage.result.message_id)
-          //     }
-
-          //     console.log(response)
-          //   } catch (error) {
-          //     console.log(error)
-          //     await sendMessage(`Steam failed to purchase the ${market_hash_name} item.`)
-          //   }
-          // }
         }
+        if (itemInfoResponse.iteminfo?.stickers?.length !== 0) message.push(`\n`)
+        for (const keychain of itemInfoResponse.iteminfo?.keychains ?? []) {
+          message.push(`<b>Charm | ${keychain.name}</b>: ${keychain.pattern}\n`)
+        }
+        if (itemInfoResponse.iteminfo?.keychains?.length !== 0) message.push(`\n`)
+        message.push(`<b>SP</b>: ${SP.toFixed(2)}%\n`)
+        message.push(`<b>Steam price</b>: $${item.price}\n`)
+        message.push(`<b>Reference price</b>: $${basePrice.toFixed(2)}\n`)
+        message.push(`<b>Stickers total</b>: $${stickerTotal.toFixed(2)}\n\n`)
+        message.push(`<b>Float</b>: ${itemInfoResponse.iteminfo.floatvalue}\n\n`)
 
-        await sleep(3_000)
+        await sendMessage(message.join(''))
       }
 
-      CASHED_LISTINGS.add(listingId)
+      CASHED_LISTINGS.add(item.listingId)
     }
   } catch (error) {
     console.log(format(new Date(), 'HH:mm:ss'), 'STEAM_ERROR', error.message)

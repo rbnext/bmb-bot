@@ -44,6 +44,8 @@ const init = async () => {
         const steamMarketResponse = mapSteamMarketRenderResponse(response)
 
         for (const item of steamMarketResponse) {
+          if (!item.price || CASHED_LISTINGS.has(item.listingId)) continue
+
           const now = format(new Date(), 'HH:mm:ss')
           const itemInfoResponse = await getCSFloatItemInfo({ url: item.inspectUrl })
           const floatValue = Number(itemInfoResponse.iteminfo.floatvalue)
@@ -82,7 +84,7 @@ const init = async () => {
       // eslint-disable-next-line no-constant-condition
     } while (true)
   } catch (error) {
-    console.log(format(new Date(), 'HH:mm:ss'), 'STEAM_ERROR', error.message)
+    console.log(format(new Date(), 'HH:mm:ss'), 'ERROR', error.message)
 
     if (error.message?.includes('403')) await sleep(60_000 * 2)
     if (error.message?.includes('401')) await sleep(60_000 * 2)

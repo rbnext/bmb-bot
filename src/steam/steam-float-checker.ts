@@ -27,6 +27,10 @@ const configList = [
     market_hash_name: 'USP-S | Jawbreaker (Factory New)',
     isSweet: (float: number) => float < 0.02,
   },
+  {
+    market_hash_name: 'Glock-18 | Gold Toof (Minimal Wear)',
+    isSweet: (float: number) => float < 0.09,
+  },
 ]
 
 const init = async () => {
@@ -56,7 +60,7 @@ const init = async () => {
             const response = await getCSFloatListings({
               market_hash_name,
               ...(market_hash_name.includes('Factory New') && { max_float: 0.02 }),
-              ...(market_hash_name.includes('Minimal Wear') && { max_float: 0.08 }),
+              ...(market_hash_name.includes('Minimal Wear') && { max_float: 0.09 }),
               ...(market_hash_name.includes('Field-Tested') && { max_float: 0.18 }),
             })
             const lowestPrice = response.data[0].price / 100

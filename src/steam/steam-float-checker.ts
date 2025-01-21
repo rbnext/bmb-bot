@@ -78,7 +78,7 @@ const init = async () => {
           await sleep(2_000)
         }
 
-        await sleep(60_000 / configList.length)
+        await sleep(40_000 / configList.length)
       }
 
       // eslint-disable-next-line no-constant-condition

@@ -160,13 +160,13 @@ export type Katowice14 = {
 }
 
 export type Sticker = {
-  category: 'sticker'
+  category: 'sticker' | 'patch'
   goods_id: number
   img_url: string
   name: string
   sell_reference_price: string
   sticker_name: string
-  wear: number
+  wear?: number
 }
 
 export type MarketItemDetail = {

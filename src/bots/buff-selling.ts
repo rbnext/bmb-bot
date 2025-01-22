@@ -66,7 +66,7 @@ const buffSelling = async () => {
       } else if (buyOrderHistoryItem && Number((next_price - current_price).toFixed(2)) > 0.01) {
         payload.price = Number((next_price - 0.01).toFixed(2))
       } else if (!buyOrderHistoryItem && Number((next_price - current_price).toFixed(2)) > 0.01) {
-        const msg = `${buffLink} save $${next_price - current_price} by adjusting the price`
+        const msg = `${buffLink} +$${(next_price - current_price).toFixed(2)}`
 
         if (!msgCache.has(msg)) {
           message.push(msg)
@@ -99,7 +99,7 @@ const buffSelling = async () => {
   }
 
   if (message.length !== 0) {
-    await sendMessage('<b>SELLING REPORT</b>\n\n' + message.join('\n'))
+    await sendMessage('<b>SELLING REPORT</b>\n\n' + message.map((msg, index) => `${index + 1}. ${msg}`).join('\n'))
   }
 
   await sleep(60_000 * 10)

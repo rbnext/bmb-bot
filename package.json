@@ -12,6 +12,7 @@
     "steamCharmsChecker": "ts-node src/bots/steamCharmsChecker.ts",
     "buffSteam": "ts-node src/bots/buffSteam.ts",
     "sellBuff": "ts-node src/bots/sellBuff.ts",
+    "buff-selling": "ts-node src/bots/buff-selling.ts",
     "playground": "ts-node src/playground.ts",
     "loadBuffRef": "ts-node src/scripts/loadReferencePrices.ts",
     "steam-buy-listing": "ts-node src/scripts/steam-buy-listing.ts",

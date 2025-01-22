@@ -271,6 +271,7 @@ export type BuyOrderHistoryItem = {
     }
   }
   price: string
+  goods_id: number
 }
 
 export type BuyOrderHistory = {
@@ -282,7 +283,7 @@ export type BuyOrderHistory = {
 export type SellOrderItem = {
   desc: string
   income: number
-  price: string
+  price: number
   sell_order_id: string
 }
 

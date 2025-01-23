@@ -4,5 +4,3 @@ export const MARKET_BLACK_LIST = [
   'AK-47 | Ice Coaled (Field-Tested)',
   'Desert Eagle | Heat Treated (Factory New)',
 ]
-
-export const MARKET_WHITE_LIST = []

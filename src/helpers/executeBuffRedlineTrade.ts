@@ -15,7 +15,7 @@ export const executeBuffRedlineTrade = async (
 
   for (const data of orders.data.items) {
     const current_price = Number(data.price)
-    const float = Number(data.asset_info.paintwear) ?? 1
+    const float = Number(data.asset_info.paintwear) || 1
 
     console.log(item.market_hash_name, current_price, float)
 

@@ -96,7 +96,7 @@ const buffSelling = async () => {
       const prev_price = Number(response.data.items[current_index - 1].price)
 
       // TODO add check for good float
-      if (buyOrderHistoryItem && totalCosmeticValue <= 1) {
+      if (buyOrderHistoryItem && totalCosmeticValue <= 0.7) {
         const estimatedProfit = getEstimatedProfit(prev_price - 0.01, buyOrderHistoryItem.price)
         console.log(market_hash_name, estimatedProfit)
         if (estimatedProfit >= 5) payload.price = Number((prev_price - 0.01).toFixed(2))

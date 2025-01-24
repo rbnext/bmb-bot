@@ -125,7 +125,7 @@ const buffSelling = async () => {
 }
 
 ;(async () => {
-  for (const page_num of Array.from({ length: 1 }, (_, i) => i + 1)) {
+  for (const page_num of Array.from({ length: 15 }, (_, i) => i + 1)) {
     const response = await getBuyOrderHistory({ page_num })
     for (const item of response.data.items) {
       const goods_infos = response.data.goods_infos[item.goods_id]
@@ -135,8 +135,6 @@ const buffSelling = async () => {
     }
     await sleep(5_000)
   }
-
-  console.log(buyOrderHistoryList)
 
   for (const page_num of Array.from({ length: 4 }, (_, i) => i)) {
     const response = await getCSFloatTrades({ page: page_num })

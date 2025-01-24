@@ -1,43 +1,41 @@
 import 'dotenv/config'
-// import { getCreatePreviewBargain, getSentBargain, postCancelBargain, postCreateBargain } from './api/buff'
-// import { getDifferenceInMinutes, sleep } from './utils'
-// import { getCSFloatListings } from './api/csfloat'
-// import { getSkinPortListings } from './api/skinport'
 
-import { getVercelMarketRender, getVercelSearchMarketRender } from './api/versel'
+import { getGoodsInfo, getMarketGoods, getMarketGoodsBillOrder } from './api/buff'
+import { median, sleep } from './utils'
+import path from 'path'
+import { readFileSync, writeFileSync } from 'fs'
 
 const skins = [
-  // 'M4A1-S | Black Lotus (Factory New)',
-  // 'M4A1-S | Black Lotus (Field-Tested)',
-  // 'M4A1-S | Black Lotus (Minimal Wear)',
-  // 'Glock-18 | Water Elemental (Minimal Wear)',
-  // 'USP-S | Jawbreaker (Factory New)',
-  // 'Desert Eagle | Printstream (Field-Tested)',
-  // 'USP-S | Printstream (Field-Tested)',
-  // 'Desert Eagle | Code Red (Field-Tested)',
-  // 'Glock-18 | Gold Toof (Field-Tested)',
-  // 'Desert Eagle | Conspiracy (Minimal Wear)',
-  // 'AWP | Neo-Noir (Field-Tested)',
-  // 'AWP | Chromatic Aberration (Field-Tested)',
-  // 'SSG 08 | Acid Fade (Factory New)',
-  // 'M4A1-S | Decimator (Minimal Wear)',
-  // 'P250 | Asiimov (Field-Tested)',
-  // "M4A1-S | Chantico's Fire (Well-Worn)",
-  // 'M4A1-S | Cyrex (Field-Tested)',
-  // 'USP-S | Neo-Noir (Minimal Wear)',
+  'M4A1-S | Black Lotus (Factory New)',
+  'M4A1-S | Black Lotus (Field-Tested)',
+  'M4A1-S | Black Lotus (Minimal Wear)',
+  'Glock-18 | Water Elemental (Minimal Wear)',
+  'USP-S | Jawbreaker (Factory New)',
+  'Desert Eagle | Printstream (Field-Tested)',
+  'USP-S | Printstream (Field-Tested)',
+  'Desert Eagle | Code Red (Field-Tested)',
+  'Glock-18 | Gold Toof (Field-Tested)',
+  'Desert Eagle | Conspiracy (Minimal Wear)',
+  'AWP | Neo-Noir (Field-Tested)',
+  'AWP | Chromatic Aberration (Field-Tested)',
+  'SSG 08 | Acid Fade (Factory New)',
+  'M4A1-S | Decimator (Minimal Wear)',
+  'P250 | Asiimov (Field-Tested)',
+  "M4A1-S | Chantico's Fire (Well-Worn)",
+  'M4A1-S | Cyrex (Field-Tested)',
+  'USP-S | Neo-Noir (Minimal Wear)',
 
-  // 'Zeus x27 | Olympus (Field-Tested)',
-  // 'StatTrak™ Zeus x27 | Olympus (Field-Tested)',
-  // 'USP-S | Blueprint (Field-Tested)',
-  // 'M4A1-S | Hyper Beast (Field-Tested)',
-  // 'AK-47 | Redline (Field-Tested)',
-  // 'AK-47 | Frontside Misty (Field-Tested)',
-  // 'Zeus x27 | Olympus (Factory New)',
-  // 'USP-S | Jawbreaker (Minimal Wear)',
-  // 'StatTrak™ AK-47 | Slate (Field-Tested)',
-
-  // 'Michael Syfers | FBI Sniper', ???
-  // 'AK-47 | Point Disarray (Field-Tested)',
+  'Zeus x27 | Olympus (Field-Tested)',
+  'StatTrak™ Zeus x27 | Olympus (Field-Tested)',
+  'USP-S | Blueprint (Field-Tested)',
+  'M4A1-S | Hyper Beast (Field-Tested)',
+  'AK-47 | Redline (Field-Tested)',
+  'AK-47 | Frontside Misty (Field-Tested)',
+  'Zeus x27 | Olympus (Factory New)',
+  'USP-S | Jawbreaker (Minimal Wear)',
+  'StatTrak™ AK-47 | Slate (Field-Tested)',
+  'Michael Syfers | FBI Sniper',
+  'AK-47 | Point Disarray (Field-Tested)',
   'Chem-Haz Specialist | SWAT',
   'AWP | Neo-Noir (Factory New)',
   'StatTrak™ AWP | Atheris (Field-Tested)',
@@ -115,68 +113,34 @@ const skins = [
 ]
 
 const init = async () => {
-  const response = await getVercelSearchMarketRender({
-    query: 'Sticker',
-    proxy: 'api-next-gateway2',
-    start: 500,
-  })
+  for (const market_hash_name of skins) {
+    const response = await getMarketGoods({ search: market_hash_name })
 
-  console.log(response.total_count)
+    const goods_id = response.data.items.find((item) => item.market_hash_name === market_hash_name)?.id
+
+    await sleep(5_000)
+
+    if (goods_id) {
+      const history = await getMarketGoodsBillOrder({ goods_id })
+      const median_price = median(history.data.items.map(({ price }) => Number(price)))
+
+      const goodsInfo = await getGoodsInfo({ goods_id })
+      const reference_price = Number(goodsInfo.data.goods_info.goods_ref_price)
+      const bargain_price = (Math.min(median_price, reference_price) * 0.9).toFixed(2).replace('.', ',')
+      const reference = reference_price.toFixed(2).replace('.', ',')
+
+      console.log(market_hash_name, bargain_price)
+
+      const pathname = path.join(__dirname, '../csfloat.txt')
+      const content: string = readFileSync(pathname, 'utf-8')
+
+      writeFileSync(pathname, `${content}\n${market_hash_name};${reference};${bargain_price}`, 'utf8')
+    } else {
+      console.log('ERROR')
+    }
+
+    await sleep(7_000)
+  }
 }
 
 init()
-
-// const ACTIVE_BARGAINS = new Set<string>()
-
-// const generateFees = (diff: number, steps = 5): number[] => {
-//   return Array.from({ length: steps }, (_, i) => parseFloat(((diff / steps) * (i + 1)).toFixed(2)))
-// }
-
-// const init = async () => {
-//   const bargains = await getSentBargain({})
-
-//   for (const bargain of bargains.data.items) {
-//     const diffCreateCancelInMinutes = getDifferenceInMinutes(bargain.can_cancel_time, bargain.created_at)
-
-//     if (
-//       diffCreateCancelInMinutes < 5 &&
-//       bargain.can_cancel_timeout < -1 &&
-//       !ACTIVE_BARGAINS.has(bargain.sell_order_id)
-//     ) {
-//       ACTIVE_BARGAINS.add(bargain.sell_order_id)
-
-//       console.log('bargain.created_at', bargain.created_at)
-//       console.log('bargain.can_cancel_time', bargain.can_cancel_time)
-
-//       await postCancelBargain({ bargain_id: bargain.id })
-//       await sleep(3_000)
-
-//       const original_price = Number(bargain.original_price)
-
-//       const fees = generateFees((original_price - Number(bargain.price)) * original_price >= 50 ? 0.3 : 0.2)
-
-//       console.log('Fees:', fees)
-
-//       for (const fee of fees) {
-//         const price = Number((Number(bargain.price) + fee).toFixed(2))
-//         const preview = await getCreatePreviewBargain({ sell_order_id: bargain.sell_order_id, price })
-//         const isFailed = preview.data?.pay_confirm?.id === 'bargain_higher_price'
-
-//         console.log(bargain.goods_id, fee, isFailed ? 'failed' : 'success')
-
-//         if (!isFailed) {
-//           await postCreateBargain({ sell_order_id: bargain.sell_order_id, price })
-//           break
-//         }
-
-//         await sleep(3_000)
-//       }
-//     }
-//   }
-
-//   await sleep(10_000)
-
-//   init()
-// }
-
-// init()

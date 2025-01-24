@@ -260,7 +260,14 @@ export type SentBargain = {
   }
 }
 
+export type ButOrderItem = {
+  marketHashName: string
+  price: number
+  float?: string
+}
+
 export type BuyOrderHistoryItem = {
+  state: 'SUCCESS'
   asset_info: {
     paintwear: string
     assetid: string
@@ -274,9 +281,29 @@ export type BuyOrderHistoryItem = {
   goods_id: number
 }
 
+export type CSFloatTradesResponse = {
+  trades: CSFloatBuyOrderHistoryItem[]
+  count: number
+}
+
+export type CSFloatBuyOrderHistoryItem = {
+  contract: {
+    price: number
+    item: {
+      float_value: number
+      market_hash_name: string
+    }
+  }
+}
+
 export type BuyOrderHistory = {
   data: {
     items: BuyOrderHistoryItem[]
+    goods_infos: {
+      [key: number]: {
+        market_hash_name: string
+      }
+    }
   }
 }
 

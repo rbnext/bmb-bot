@@ -1,6 +1,12 @@
 import axios from 'axios'
 
-import { CSFloatBuyOrder, CSFloatItemInfo, CSFloatListing, CSFloatMarketHashNameHistory } from '../types'
+import {
+  CSFloatBuyOrder,
+  CSFloatItemInfo,
+  CSFloatListing,
+  CSFloatMarketHashNameHistory,
+  CSFloatTradesResponse,
+} from '../types'
 
 const http = axios.create({
   baseURL: 'https://csfloat.com/api',
@@ -98,6 +104,27 @@ export const getCSFloatItemInfo = async ({ url }: { url: string }): Promise<CSFl
       Cookie: `session=${process.env.CSFLOAT_SESSION_TOKEN}`,
       'User-Agent':
         'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
+    },
+  })
+
+  return data
+}
+
+export const getCSFloatTrades = async ({
+  role = 'buyer',
+  state = 'verified',
+  limit = 30,
+  page = 0,
+}: {
+  role?: 'buyer'
+  state?: 'verified'
+  limit?: number
+  page?: number
+}): Promise<CSFloatTradesResponse> => {
+  const { data } = await axios.get('https://csfloat.com/api/v1/me/trades', {
+    params: { role, state, limit, page },
+    headers: {
+      Authorization: process.env.CSFLOAT_AUTH_KEY,
     },
   })
 

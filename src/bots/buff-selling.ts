@@ -9,15 +9,32 @@ import {
 } from '../api/buff'
 import { sleep } from '../utils'
 import { CURRENT_USER_ID } from '../config'
-import { BuyOrderHistoryItem, SellOrderItem } from '../types'
+import { ButOrderItem, BuyOrderHistoryItem, CSFloatBuyOrderHistoryItem, SellOrderItem } from '../types'
 import { sendMessage } from '../api/telegram'
+import { getCSFloatTrades } from '../api/csfloat'
 
 const msgCache = new Set<string>()
-const buyOrderHistoryList: BuyOrderHistoryItem[] = []
+const buyOrderHistoryList: ButOrderItem[] = []
 
 const getEstimatedProfit = (next_price: number | string, prev_price: number | string) => {
   return Number(((Number(next_price) / Number(prev_price) - 1) * 100).toFixed(2))
 }
+
+const mapBuffBuyHistory = (data: BuyOrderHistoryItem, marketHashName: string): ButOrderItem => ({
+  marketHashName,
+  price: Number(data.price),
+  ...(data.asset_info.paintwear && {
+    float: String(data.asset_info.paintwear),
+  }),
+})
+
+const mapCSFloatBuyHistory = (data: CSFloatBuyOrderHistoryItem): ButOrderItem => ({
+  marketHashName: data.contract.item.market_hash_name,
+  price: Number((data.contract.price / 100).toFixed(2)),
+  ...(data.contract.item.float_value && {
+    float: String(data.contract.item.float_value),
+  }),
+})
 
 const buffSelling = async () => {
   const message: string[] = []
@@ -55,7 +72,7 @@ const buffSelling = async () => {
     }, 0)
 
     const buyOrderHistoryItem = buyOrderHistoryList.find((item) => {
-      return paintwear && item.asset_info.paintwear === paintwear && item.goods_id === goods_id
+      return paintwear && item.float === paintwear && item.marketHashName === market_hash_name
     })
 
     if (current_index === 0) {
@@ -108,11 +125,22 @@ const buffSelling = async () => {
 }
 
 ;(async () => {
-  const pages = Array.from({ length: 15 }, (_, i) => i + 1)
+  for (const page_num of Array.from({ length: 1 }, (_, i) => i + 1)) {
+    const response = await getBuyOrderHistory({ page_num })
+    for (const item of response.data.items) {
+      const goods_infos = response.data.goods_infos[item.goods_id]
+      if (item.state === 'SUCCESS') {
+        buyOrderHistoryList.push(mapBuffBuyHistory(item, goods_infos.market_hash_name))
+      }
+    }
+    await sleep(5_000)
+  }
 
-  for (const page_num of pages) {
-    const history = await getBuyOrderHistory({ page_num })
-    for (const item of history.data.items) buyOrderHistoryList.push(item)
+  console.log(buyOrderHistoryList)
+
+  for (const page_num of Array.from({ length: 4 }, (_, i) => i)) {
+    const response = await getCSFloatTrades({ page: page_num })
+    for (const item of response.trades) buyOrderHistoryList.push(mapCSFloatBuyHistory(item))
     await sleep(5_000)
   }
 

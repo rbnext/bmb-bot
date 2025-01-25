@@ -22,7 +22,7 @@ export const executeBuffToSteamTrade = async (
     return
   }
 
-  const { isFactoryNew, isFieldTested, isMinimalWear, isStatTrak } = getItemExterior(item.market_hash_name)
+  const { isFactoryNew, isFieldTested, isMinimalWear } = getItemExterior(item.market_hash_name)
 
   const prices = await getMaxPricesForXDays(item.market_hash_name)
   const orders = await getGoodsSellOrder({ goods_id, exclude_current_user: 1 })
@@ -65,40 +65,34 @@ export const executeBuffToSteamTrade = async (
     }
 
     sendMessage(generateMessage({ ...payload, estimatedProfit: estimated_profit, medianPrice: min_steam_price }))
-  } else {
-    if (isFactoryNew || isMinimalWear || isFieldTested) {
-      const response = await getCSFloatListings({
-        market_hash_name: item.market_hash_name,
-        ...(isFactoryNew && { max_float: 0.07 }),
-        ...(isMinimalWear && { min_float: 0.07, max_float: 0.15 }),
-        ...(isFieldTested && { min_float: 0.15, max_float: 0.38 }),
-        category: isStatTrak ? 2 : 1,
-      })
+  } else if (isFactoryNew || isMinimalWear || isFieldTested) {
+    const response = await getCSFloatListings({ market_hash_name: item.market_hash_name })
 
-      const cs_float_price = getCSFloatItemPrice(response)
-      const estimated_profit = ((cs_float_price - (current_price - k_total)) / (current_price - k_total)) * 100
+    const cs_float_price = getCSFloatItemPrice(response)
+    const estimated_profit = ((cs_float_price - (current_price - k_total)) / (current_price - k_total)) * 100
 
-      if ((current_price < 2 && estimated_profit >= 40) || (current_price >= 2 && estimated_profit >= 15)) {
-        const response = await postGoodsBuy({ price: current_price, sell_order_id: lowestPricedItem.id })
+    console.log(item.market_hash_name, estimated_profit.toFixed(2))
 
-        if (response.code !== 'OK') {
-          sendMessage(
-            `[${options.source}] Failed to purchase the item ${item.market_hash_name}. Reason: ${response.code}`
-          )
+    if ((current_price < 2 && estimated_profit >= 40) || (current_price >= 2 && estimated_profit >= 20)) {
+      const response = await postGoodsBuy({ price: current_price, sell_order_id: lowestPricedItem.id })
 
-          return
-        }
-
+      if (response.code !== 'OK') {
         sendMessage(
-          generateMessage({
-            ...payload,
-            csFloatPrice: cs_float_price,
-            estimatedProfit: estimated_profit,
-            medianPrice: cs_float_price,
-            source: Source.BUFF_CSFLOAT,
-          })
+          `[${options.source}] Failed to purchase the item ${item.market_hash_name}. Reason: ${response.code}`
         )
+
+        return
       }
+
+      sendMessage(
+        generateMessage({
+          ...payload,
+          csFloatPrice: cs_float_price,
+          estimatedProfit: estimated_profit,
+          medianPrice: cs_float_price,
+          source: Source.BUFF_CSFLOAT,
+        })
+      )
     }
   }
 }

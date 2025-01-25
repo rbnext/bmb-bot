@@ -5,6 +5,8 @@ import {
   getGoodsSellOrder,
   getItemsOnSale,
   getMarketBatchFee,
+  getSentBargain,
+  postCancelBargain,
   postSellOrderChange,
 } from '../api/buff'
 import { sleep } from '../utils'
@@ -12,6 +14,7 @@ import { CURRENT_USER_ID } from '../config'
 import { ButOrderItem, BuyOrderHistoryItem, CSFloatBuyOrderHistoryItem, SellOrderItem } from '../types'
 import { sendMessage } from '../api/telegram'
 import { getCSFloatTrades } from '../api/csfloat'
+import { format } from 'date-fns'
 
 const msgCache = new Set<string>()
 const buyOrderHistoryList: ButOrderItem[] = []
@@ -119,7 +122,20 @@ const buffSelling = async () => {
     await sendMessage('<b>SELLING REPORT</b>\n\n' + message.map((msg, index) => `${index + 1}. ${msg}`).join('\n'))
   }
 
-  await sleep(60_000 * 10)
+  await sleep(60_000 * 20)
+
+  const sentBargains = await getSentBargain({})
+
+  for (const item of sentBargains.data.items) {
+    if (item.can_cancel_timeout < -1) {
+      await sleep(5_000)
+      const now = format(new Date(), 'HH:mm:ss')
+      const response = await postCancelBargain({ bargain_id: item.id })
+      console.log(`${now}: bargain cancel timeout ${item.can_cancel_timeout}`)
+      if (response.code !== 'OK') console.log(`${now}: failed to cancel bargain ${item.id}.`)
+      else console.log(`${now}: bargain has been canceled ${item.id}.`)
+    }
+  }
 
   buffSelling()
 }

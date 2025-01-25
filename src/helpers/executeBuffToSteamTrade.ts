@@ -25,6 +25,10 @@ export const executeBuffToSteamTrade = async (
   const keychain = lowestPricedItem.asset_info.info?.keychains?.[0]
   const k_total = keychain ? Number(keychain.sell_reference_price) - 0.33 : 0
 
+  const stickerTotal = (lowestPricedItem.asset_info.info?.stickers || []).reduce((acc, sticker) => {
+    return sticker.wear === 0 ? acc + Number(sticker.sell_reference_price) : acc
+  }, 0)
+
   const payload = {
     id: goods_id,
     keychain: keychain,
@@ -35,6 +39,7 @@ export const executeBuffToSteamTrade = async (
     updatedAt: lowestPricedItem.updated_at,
     float: lowestPricedItem.asset_info.paintwear,
     source: options.source,
+    stickerTotal: stickerTotal,
   }
 
   if (isFactoryNew || isMinimalWear || isFieldTested) {

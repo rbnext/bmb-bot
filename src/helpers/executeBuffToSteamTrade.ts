@@ -76,7 +76,7 @@ export const executeBuffToSteamTrade = async (
       })
 
       const cs_float_price = getCSFloatItemPrice(response)
-      const estimated_profit = ((cs_float_price - current_price) / current_price) * 100
+      const estimated_profit = ((cs_float_price - (current_price - k_total)) / (current_price - k_total)) * 100
 
       if ((current_price < 2 && estimated_profit >= 40) || (current_price >= 2 && estimated_profit >= 15)) {
         const response = await postGoodsBuy({ price: current_price, sell_order_id: lowestPricedItem.id })

@@ -25,23 +25,24 @@ export const executeBuffToSteamTrade = async (
   const { isFactoryNew, isFieldTested, isMinimalWear, isStatTrak } = getItemExterior(item.market_hash_name)
 
   const prices = await getMaxPricesForXDays(item.market_hash_name)
-
-  const min_steam_price = prices.length !== 0 ? Math.min(...prices) : 0
-  const estimated_profit = ((min_steam_price - current_price) / current_price) * 100
-
   const orders = await getGoodsSellOrder({ goods_id, exclude_current_user: 1 })
   const lowestPricedItem = orders.data.items.find((el) => el.price === item.sell_min_price)
 
-  if (!lowestPricedItem) {
-    sendMessage(
-      `[${options.source}] Someone already bought the ${item.market_hash_name} item for $${current_price} with profit ${estimated_profit.toFixed(2)}%`
-    )
+  if (!lowestPricedItem) return
 
-    return
+  const keychain = lowestPricedItem.asset_info.info?.keychains?.[0]
+  const k_total = keychain ? Number(keychain.sell_reference_price) - 0.33 : 0
+
+  if (k_total !== 0) {
+    console.log(keychain.name, keychain.sell_reference_price)
   }
+
+  const min_steam_price = prices.length !== 0 ? Math.min(...prices) : 0
+  const estimated_profit = ((min_steam_price - (current_price - k_total)) / (current_price - k_total)) * 100
 
   const payload = {
     id: goods_id,
+    keychain: keychain,
     price: current_price,
     name: item.market_hash_name,
     type: MessageType.Purchased,

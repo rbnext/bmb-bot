@@ -102,7 +102,7 @@ const buffSelling = async () => {
       if (buyOrderHistoryItem && totalCosmeticValue <= 0.7) {
         const estimatedProfit = getEstimatedProfit(prev_price - 0.01, buyOrderHistoryItem.price)
         console.log(market_hash_name, estimatedProfit)
-        if (estimatedProfit >= 5) payload.price = Number((prev_price - 0.01).toFixed(2))
+        if (estimatedProfit >= 8) payload.price = Number((prev_price - 0.01).toFixed(2))
       } else if (Number((current_price - prev_price).toFixed(2)) === 0.01 || prev_price === current_price) {
         payload.price = Number((prev_price - 0.01).toFixed(2))
       }

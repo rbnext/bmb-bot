@@ -16,7 +16,7 @@ const CASHED_LISTINGS = new Set<string>()
 const configList = [
   {
     market_hash_name: 'AK-47 | Redline (Field-Tested)',
-    isSweet: (float: number) => float < 0.19,
+    isSweet: (float: number) => float < 0.21,
   },
 
   {
@@ -61,7 +61,7 @@ const init = async () => {
               market_hash_name,
               ...(market_hash_name.includes('Factory New') && { max_float: 0.02 }),
               ...(market_hash_name.includes('Minimal Wear') && { max_float: 0.09 }),
-              ...(market_hash_name.includes('Field-Tested') && { max_float: 0.19 }),
+              ...(market_hash_name.includes('Field-Tested') && { max_float: 0.21 }),
             })
             const lowestPrice = response.data[0].price / 100
             const basePrice = response.data[0].reference.base_price / 100

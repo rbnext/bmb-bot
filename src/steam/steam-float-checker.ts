@@ -18,7 +18,6 @@ const configList = [
     market_hash_name: 'AK-47 | Redline (Field-Tested)',
     isSweet: (float: number) => float < 0.21,
   },
-
   {
     market_hash_name: 'M4A1-S | Black Lotus (Factory New)',
     isSweet: (float: number) => float < 0.02,

@@ -56,6 +56,8 @@ const buffSelling = async () => {
 
     const current_index = response.data.items.findIndex(({ user_id }) => user_id === CURRENT_USER_ID)
 
+    if (current_index === -1) await sleep(10_000)
+
     if (current_index === -1 || !response.data.items[current_index + 1]) {
       continue
     }

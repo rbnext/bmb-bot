@@ -76,7 +76,7 @@ const csFloatCharms = async () => {
         CASHED_LISTINGS.add(data.id)
       }
 
-      await sleep(30_000 / sessions.length)
+      await sleep(25_000 / sessions.length)
     }
 
     // eslint-disable-next-line no-constant-condition

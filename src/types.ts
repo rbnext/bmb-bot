@@ -286,6 +286,19 @@ export type CSFloatTradesResponse = {
   count: number
 }
 
+export type CSFloatPlacedOrder = {
+  id: string
+  created_at: string
+  market_hash_name: string
+  qty: number
+  price: number
+}
+
+export type CSFloatPlacedOrders = {
+  orders: CSFloatPlacedOrder[]
+  count: number
+}
+
 export type CSFloatBuyOrderHistoryItem = {
   contract: {
     price: number
@@ -606,6 +619,16 @@ export type SkinPortListingsItem = {
 
 export type SkinPortListings = {
   items: SkinPortListingsItem[]
+}
+
+export type CSFloatSimpleOrdersItem = {
+  market_hash_name?: string
+  qty: number
+  price: number
+}
+
+export type CSFloatSimpleOrders = {
+  data: CSFloatSimpleOrdersItem[]
 }
 
 export type CSFloatBuyOrder = {

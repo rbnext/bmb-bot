@@ -5,6 +5,8 @@ import {
   CSFloatItemInfo,
   CSFloatListing,
   CSFloatMarketHashNameHistory,
+  CSFloatPlacedOrders,
+  CSFloatSimpleOrders,
   CSFloatTradesResponse,
 } from '../types'
 
@@ -79,6 +81,29 @@ export const getBuyOrders = async ({ id, limit = 10 }: { id: string; limit?: num
   return data
 }
 
+export const getCSFloatSimpleOrders = async ({
+  limit = 10,
+  market_hash_name,
+}: {
+  limit?: number
+  market_hash_name: string
+}): Promise<CSFloatSimpleOrders> => {
+  const { data } = await http.post(
+    '/v1/buy-orders/similar-orders',
+    { market_hash_name },
+    {
+      params: {
+        limit,
+      },
+      headers: {
+        Cookie: `session=${process.env.CSFLOAT_SESSION_TOKEN}`,
+      },
+    }
+  )
+
+  return data
+}
+
 export const getMarketHashNameHistory = async ({
   market_hash_name,
 }: {
@@ -123,6 +148,61 @@ export const getCSFloatTrades = async ({
 }): Promise<CSFloatTradesResponse> => {
   const { data } = await axios.get('https://csfloat.com/api/v1/me/trades', {
     params: { role, state, limit, page },
+    headers: {
+      Authorization: process.env.CSFLOAT_AUTH_KEY,
+    },
+  })
+
+  return data
+}
+
+export const getPlacedOrders = async ({
+  page = 0,
+  limit = 10,
+  order = 'desc',
+}: {
+  page?: number
+  limit?: number
+  order?: 'desc'
+}): Promise<CSFloatPlacedOrders> => {
+  const { data } = await axios.get('https://csfloat.com/api/v1/me/buy-orders', {
+    params: { order, limit, page },
+    headers: {
+      Authorization: process.env.CSFLOAT_AUTH_KEY,
+    },
+  })
+
+  return data
+}
+
+export const postBuyOrder = async ({
+  market_hash_name,
+  max_price,
+  quantity = 1,
+}: {
+  market_hash_name: string
+  max_price: number
+  quantity?: number
+}): Promise<CSFloatPlacedOrders> => {
+  const { data } = await axios.post(
+    'https://csfloat.com/api/v1/buy-orders',
+    {
+      max_price,
+      market_hash_name,
+      quantity,
+    },
+    {
+      headers: {
+        Authorization: process.env.CSFLOAT_AUTH_KEY,
+      },
+    }
+  )
+
+  return data
+}
+
+export const removeBuyOrder = async ({ id }: { id: string }) => {
+  const { data } = await axios.delete(`https://csfloat.com/api/v1/buy-orders/${id}`, {
     headers: {
       Authorization: process.env.CSFLOAT_AUTH_KEY,
     },

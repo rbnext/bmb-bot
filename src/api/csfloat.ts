@@ -67,8 +67,6 @@ export const getCSFloatListings = async ({
     },
   })
 
-  console.log(headers['x-ratelimit-remaining'])
-
   return data
 }
 

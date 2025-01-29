@@ -29,7 +29,6 @@ const getPredictedPrice = (pattern: number, base: number) => {
 const csFloatCharms = async () => {
   do {
     for (const session of sessions) {
-      console.log(session)
       const response = await getCSFloatListings({
         sort_by: 'most_recent',
         min_price: 1000,

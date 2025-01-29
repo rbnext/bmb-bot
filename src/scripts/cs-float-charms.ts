@@ -4,8 +4,13 @@ import { sleep } from '../utils'
 import { getCSFloatListings } from '../api/csfloat'
 import { sendMessage } from '../api/telegram'
 import { format } from 'date-fns'
+import { readFileSync } from 'fs'
+import path from 'path'
 
 const CASHED_LISTINGS = new Set<string>()
+
+const pathname = path.join(__dirname, '../../sessions.json')
+const sessions: string[] = JSON.parse(readFileSync(pathname, 'utf8'))
 
 const getPredictedPrice = (pattern: number, base: number) => {
   if (pattern >= 1 && pattern <= 1000) return 40
@@ -22,58 +27,60 @@ const getPredictedPrice = (pattern: number, base: number) => {
 }
 
 const csFloatCharms = async () => {
-  for (const referenceId of [18, 11, 13, 9, 7, 16]) {
-    const response = await getCSFloatListings({
-      keychains: `[{"i":${referenceId}}]`,
-      sort_by: 'most_recent',
-      max_price: 10000,
-    })
+  do {
+    for (const session of sessions) {
+      console.log(session)
+      const response = await getCSFloatListings({
+        sort_by: 'most_recent',
+        min_price: 1000,
+        max_price: 10000,
+        session,
+      })
 
-    for (const data of response.data) {
-      if (CASHED_LISTINGS.has(data.id)) continue
+      for (const data of response.data) {
+        if (CASHED_LISTINGS.has(data.id)) continue
 
-      const keychains = data.item.keychains ?? []
-      const currentPrice = Number((data.price / 100).toFixed(2))
-      const predictedPrice = Number((data.reference.predicted_price / 100).toFixed(2))
+        const keychain = data.item.keychains?.[0]
+        const currentPrice = Number((data.price / 100).toFixed(2))
+        const predictedPrice = Number((data.reference.predicted_price / 100).toFixed(2))
 
-      if (keychains[0]) {
-        const now = format(new Date(), 'HH:mm:ss')
+        if (keychain) {
+          const now = format(new Date(), 'HH:mm:ss')
 
-        const keychainPrice = (() => {
-          if (referenceId === 18) {
-            return getPredictedPrice(keychains[0].pattern, keychains[0].reference.price / 100)
-          }
+          const keychainPrice = (() => {
+            if (keychain.stickerId === 18) {
+              return getPredictedPrice(keychain.pattern, keychain.reference.price / 100)
+            }
 
-          return keychains[0].reference.price / 100
-        })()
+            return keychain.reference.price / 100
+          })()
 
-        const profit = predictedPrice + keychainPrice - 0.33 - currentPrice
+          const profit = predictedPrice + keychainPrice - 0.33 - currentPrice
 
-        console.log(now, data.item.market_hash_name, profit.toFixed(2))
+          console.log(now, keychain.name, keychain.pattern)
 
-        if (profit > 0) {
-          const message: string[] = []
-          message.push(`<a href="https://csfloat.com/item/${data.id}">${data.item.market_hash_name}</a>\n\n`)
+          if (profit > 0) {
+            const message: string[] = []
+            message.push(`<a href="https://csfloat.com/item/${data.id}">${data.item.market_hash_name}</a>\n\n`)
 
-          for (const keychain of keychains) {
             message.push(`<b>${keychain.name}</b>: ${keychain.pattern}\n`)
-          }
 
-          message.push(`\n`)
-          message.push(`<b>Price</b>: $${currentPrice}\n`)
-          message.push(`<b>Predicted price</b>: $${predictedPrice.toFixed(2)}\n`)
-          message.push(`<b>Profit</b>: ~$${profit.toFixed(2)}\n\n`)
-          await sendMessage(message.join(''), undefined, process.env.TELEGRAM_REPORT_ID)
+            message.push(`\n`)
+            message.push(`<b>Price</b>: $${currentPrice}\n`)
+            message.push(`<b>Predicted price</b>: $${predictedPrice.toFixed(2)}\n`)
+            message.push(`<b>Profit</b>: ~$${profit.toFixed(2)}\n\n`)
+            await sendMessage(message.join(''), undefined, process.env.TELEGRAM_REPORT_ID)
+          }
         }
+
+        CASHED_LISTINGS.add(data.id)
       }
 
-      CASHED_LISTINGS.add(data.id)
+      await sleep(30_000 / sessions.length)
     }
 
-    await sleep(30_000)
-  }
-
-  csFloatCharms()
+    // eslint-disable-next-line no-constant-condition
+  } while (true)
 }
 
 csFloatCharms()

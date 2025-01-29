@@ -31,6 +31,7 @@ export const getCSFloatListings = async ({
   stickers,
   keychains,
   filter,
+  session,
 }: {
   type?: string
   limit?: number
@@ -44,8 +45,9 @@ export const getCSFloatListings = async ({
   stickers?: string
   keychains?: string
   filter?: string
+  session?: string
 }): Promise<CSFloatListing> => {
-  const { data } = await http.get('/v1/listings', {
+  const { data, headers } = await http.get('/v1/listings', {
     params: {
       limit,
       category,
@@ -61,9 +63,11 @@ export const getCSFloatListings = async ({
       stickers,
     },
     headers: {
-      Cookie: `session=${process.env.CSFLOAT_SESSION_TOKEN}`,
+      Cookie: `session=${session ?? process.env.CSFLOAT_SESSION_TOKEN}`,
     },
   })
+
+  console.log(headers['x-ratelimit-remaining'])
 
   return data
 }

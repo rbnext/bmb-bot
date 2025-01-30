@@ -88,7 +88,7 @@ const buffSelling = async () => {
       } else if (buyOrderHistoryItem && Number((next_price - current_price).toFixed(2)) > 0.01) {
         payload.price = Number((next_price - 0.01).toFixed(2))
       } else if (!buyOrderHistoryItem && Number((next_price - current_price).toFixed(2)) > 0.01) {
-        const msg = `${buffLink} +$${(next_price - current_price).toFixed(2)}`
+        const msg = `${buffLink} ${1} ➝ ${1} $${(next_price - current_price).toFixed(2)}`
 
         if (!msgCache.has(msg)) {
           message.push(msg)
@@ -103,8 +103,18 @@ const buffSelling = async () => {
       // TODO add check for good float
       if (buyOrderHistoryItem && totalCosmeticValue <= 0.7) {
         const estimatedProfit = getEstimatedProfit(prev_price - 0.01, buyOrderHistoryItem.price)
+
+        //
         console.log(market_hash_name, estimatedProfit)
         if (estimatedProfit >= 8) payload.price = Number((prev_price - 0.01).toFixed(2))
+        else {
+          const msg = `${buffLink} ${current_index + 1} ➝ ${current_index} $${(current_price - prev_price).toFixed(2)}`
+
+          if (!msgCache.has(msg)) {
+            message.push(msg)
+            msgCache.add(msg)
+          }
+        }
       } else if (Number((current_price - prev_price).toFixed(2)) === 0.01 || prev_price === current_price) {
         payload.price = Number((prev_price - 0.01).toFixed(2))
       }

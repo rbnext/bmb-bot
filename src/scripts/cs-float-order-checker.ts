@@ -53,7 +53,7 @@ const csFloatBuyOrders = async () => {
 
       const orders = await getBuyOrders({ id: response.data[0].id })
 
-      if (orders[0].market_hash_name !== market_hash_name) {
+      if (orders[0].market_hash_name !== market_hash_name || orders[0].price - orders[1].price >= 50) {
         await sleep(30_000)
         checkedMarketOrders.add(market_hash_name)
 

@@ -53,6 +53,7 @@
     "i": "^0.3.7",
     "interceptors": "^1.0.2",
     "jsdom": "^25.0.1",
+    "mongoose": "^8.9.6",
     "node-schedule": "^2.1.1",
     "nodemon": "^3.1.0",
     "npm": "^10.9.2",

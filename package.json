@@ -18,6 +18,7 @@
     "load-buff-liquid": "ts-node src/scripts/load-buff-liquid.ts",
     "cs-float-orders": "ts-node src/scripts/cs-float-orders.ts",
     "cs-float-orders-overview": "ts-node src/scripts/cs-float-orders-overview.ts",
+    "cs-float-order-checker": "ts-node src/scripts/cs-float-order-checker.ts",
     "steam-buy-listing": "ts-node src/scripts/steam-buy-listing.ts",
     "steam": "ts-node src/steam/steam.ts",
     "steamv4": "ts-node src/steam/steam.v4.ts",

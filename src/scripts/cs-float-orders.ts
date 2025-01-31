@@ -52,7 +52,7 @@ const csFloatBuyOrders = async () => {
     const sales = salesLastWeek.map(({ price }) => Number(price))
     const buffMedianPrice = median(sales.filter((price) => lowestCSFloatOrderPrice * 2 > price))
 
-    const bargainPrice = Number((Math.min(buffMedianPrice, buffReferencePrice) * 0.92).toFixed(1))
+    const bargainPrice = Number((Math.min(buffMedianPrice, buffReferencePrice) * 0.94).toFixed(1))
 
     console.log(market_hash_name, lowestCSFloatOrderPrice, bargainPrice)
 

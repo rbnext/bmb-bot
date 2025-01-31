@@ -11,7 +11,7 @@ const pathname = path.join(__dirname, '../../buff.json')
 const data: Record<string, number> = JSON.parse(readFileSync(pathname, 'utf8'))
 
 const csFloatBuyOrdersOverview = async () => {
-  const response = await getPlacedOrders({ page: 0, limit: 100 })
+  const response = await getPlacedOrders({ page: 1, limit: 100 })
 
   await sleep(5_000)
 
@@ -54,7 +54,7 @@ const csFloatBuyOrdersOverview = async () => {
       const sales = salesLastWeek.map(({ price }) => Number(price))
       const buffMedianPrice = median(sales.filter((price) => lowestCSFloatOrderPrice * 2 > price))
 
-      const bargainPrice = Number((Math.min(buffMedianPrice, buffReferencePrice) * 0.91).toFixed(1))
+      const bargainPrice = Number((Math.min(buffMedianPrice, buffReferencePrice) * 0.93).toFixed(1))
       const max_price = Math.round((lowestCSFloatOrderPrice + 0.01) * 100)
 
       if (bargainPrice > lowestCSFloatOrderPrice) {

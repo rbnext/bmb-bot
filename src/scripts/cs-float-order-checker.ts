@@ -41,8 +41,9 @@ const csFloatBuyOrders = async () => {
       }
 
       const response = await getCSFloatListings({ market_hash_name })
+      const lowestItemPrice = getCSFloatItemPrice(response)
 
-      if (response.data.length <= 30) {
+      if (response.data.length <= 30 || lowestItemPrice <= 10) {
         await sleep(60_000)
         checkedMarketOrders.add(market_hash_name)
 
@@ -58,7 +59,6 @@ const csFloatBuyOrders = async () => {
         continue
       }
 
-      const lowestItemPrice = getCSFloatItemPrice(response)
       const lowestOrderPrice = Number((orders[0].price / 100).toFixed(2))
 
       const estimatedProfit = Number((((lowestItemPrice - lowestOrderPrice) / lowestOrderPrice) * 100).toFixed(2))
@@ -71,7 +71,7 @@ const csFloatBuyOrders = async () => {
         await postBuyOrder({ market_hash_name, max_price })
 
         await sendMessage(
-          `[CSFLOAT ORDER] <a href="https://csfloat.com/item/${response.data[0].id}">${market_hash_name}</a> Estimated profit: ${estimatedProfit}%`
+          `[CSFLOAT ORDER] <a href="https://csfloat.com/item/${response.data[0].id}">${market_hash_name}</a> Estimated profit: ${estimatedProfit}%. Order: ${(max_price / 100).toFixed(2)}`
         )
       }
 

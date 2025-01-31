@@ -23,6 +23,8 @@ const csFloatBuyOrders = async () => {
 
   await sleep(5_000)
 
+  console.log('orders placed: ', checkedMarketOrders.size)
+
   do {
     const response = await getCSFloatListings({
       sort_by: 'most_recent',
@@ -68,13 +70,9 @@ const csFloatBuyOrders = async () => {
       if (estimatedProfit >= 10) {
         await postBuyOrder({ market_hash_name, max_price })
 
-        console.log(market_hash_name, max_price, estimatedProfit)
-
         await sendMessage(
           `[CSFLOAT ORDER] <a href="https://csfloat.com/item/${response.data[0].id}">${market_hash_name}</a> Estimated profit: ${estimatedProfit}%`
         )
-      } else {
-        console.log(market_hash_name, estimatedProfit)
       }
 
       checkedMarketOrders.add(market_hash_name)

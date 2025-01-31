@@ -71,14 +71,12 @@ export const getCSFloatListings = async ({
 }
 
 export const getBuyOrders = async ({ id, limit = 10 }: { id: string; limit?: number }): Promise<CSFloatBuyOrder[]> => {
-  const { data, headers } = await http.get(`/v1/listings/${id}/buy-orders`, {
+  const { data } = await http.get(`/v1/listings/${id}/buy-orders`, {
     params: { limit },
     headers: {
       Cookie: `session=${process.env.CSFLOAT_SESSION_TOKEN}`,
     },
   })
-
-  console.log('x-ratelimit-remaining', Number(headers['x-ratelimit-remaining']))
 
   return data
 }

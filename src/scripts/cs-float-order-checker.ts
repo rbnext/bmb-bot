@@ -4,6 +4,7 @@ import { getCSFloatItemPrice, sleep } from '../utils'
 import { getBuyOrders, getCSFloatListings, getPlacedOrders, postBuyOrder } from '../api/csfloat'
 import { sendMessage } from '../api/telegram'
 import { CSFloatPlacedOrder } from '../types'
+import { format } from 'date-fns'
 
 const checkedMarketOrders = new Set<string>()
 const activeMarketOrders = new Map<string, CSFloatPlacedOrder>()
@@ -44,7 +45,7 @@ const csFloatBuyOrders = async () => {
       const lowestItemPrice = getCSFloatItemPrice(response)
 
       if (response.data.length <= 30 || lowestItemPrice <= 10) {
-        await sleep(60_000)
+        await sleep(30_000)
         checkedMarketOrders.add(market_hash_name)
 
         continue
@@ -53,7 +54,7 @@ const csFloatBuyOrders = async () => {
       const orders = await getBuyOrders({ id: response.data[0].id })
 
       if (orders[0].market_hash_name !== market_hash_name) {
-        await sleep(60_000)
+        await sleep(30_000)
         checkedMarketOrders.add(market_hash_name)
 
         continue
@@ -65,22 +66,22 @@ const csFloatBuyOrders = async () => {
 
       const max_price = Math.round((lowestOrderPrice + 0.01) * 100)
 
-      console.log(market_hash_name, estimatedProfit, max_price)
+      console.log(format(new Date(), 'HH:mm:ss'), market_hash_name, `${estimatedProfit}%`)
 
       if (estimatedProfit >= 10) {
         await postBuyOrder({ market_hash_name, max_price })
 
         await sendMessage(
-          `[CSFLOAT ORDER] <a href="https://csfloat.com/item/${response.data[0].id}">${market_hash_name}</a> Estimated profit: ${estimatedProfit}%. Order: ${(max_price / 100).toFixed(2)}`
+          `<b>[CSFLOAT ORDER]</b> <a href="https://csfloat.com/item/${response.data[0].id}">${market_hash_name}</a> Estimated profit: ${estimatedProfit}%. Order: ${(max_price / 100).toFixed(2)}`
         )
       }
 
       checkedMarketOrders.add(market_hash_name)
 
-      await sleep(60_000)
+      await sleep(40_000)
     }
 
-    await sleep(60_000 * 5)
+    await sleep(60_000)
 
     // eslint-disable-next-line no-constant-condition
   } while (true)

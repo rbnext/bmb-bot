@@ -80,6 +80,8 @@ const csFloatBuyOrders = async () => {
       await sleep(60_000)
     }
 
+    await sleep(60_000 * 5)
+
     // eslint-disable-next-line no-constant-condition
   } while (true)
 }

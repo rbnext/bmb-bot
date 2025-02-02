@@ -1,6 +1,7 @@
 import 'dotenv/config'
 
 import {
+  getBuyOrders,
   getCSFloatListings,
   getCSFloatSimpleOrders,
   getMarketHashNameHistory,
@@ -45,8 +46,8 @@ const floatFeedChecker = async () => {
     for (const item of response.data) {
       const now = format(new Date(), 'HH:mm:ss')
       const market_hash_name = item.item.market_hash_name
+      const activeMarketOrder = activeMarketOrders.get(market_hash_name)
 
-      if (activeMarketOrders.has(market_hash_name)) continue
       if (blacklistedMarketOrders.has(market_hash_name)) continue
       if (blacklistedMarketListings.has(market_hash_name)) continue
 
@@ -64,6 +65,15 @@ const floatFeedChecker = async () => {
       if (sales48h.length < 10 || medianPrice < 9) await sleep(10_000)
       if (sales48h.length < 10 || medianPrice < 9) blacklistedMarketOrders.add(market_hash_name)
       if (sales48h.length < 10 || medianPrice < 9) continue
+
+      if (activeMarketOrder) {
+        const listingReferenceId = marketHistoryResponse.sort((a, b) => a.price - b.price)[0].id
+        const resentOrders = await getBuyOrders({ id: listingReferenceId })
+        if (resentOrders[0].market_hash_name === market_hash_name && resentOrders[0].price > activeMarketOrder.price) {
+          await removeBuyOrder({ id: activeMarketOrder.id })
+          activeMarketOrders.delete(market_hash_name)
+        }
+      }
 
       const simpleOrders = await getCSFloatSimpleOrders({ market_hash_name })
 

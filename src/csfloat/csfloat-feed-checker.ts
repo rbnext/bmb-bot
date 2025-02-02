@@ -69,11 +69,12 @@ const floatFeedChecker = async () => {
       if (activeMarketOrder) {
         const listingReferenceId = marketHistoryResponse.sort((a, b) => a.price - b.price)[0].id
         const resentOrders = await getBuyOrders({ id: listingReferenceId })
-        if (resentOrders[0].market_hash_name === market_hash_name && resentOrders[0].price > activeMarketOrder.price) {
+        const simpleOrders = resentOrders.filter((i) => !!i.market_hash_name)
+        if (simpleOrders[0].market_hash_name === market_hash_name && simpleOrders[0].price > activeMarketOrder.price) {
           await removeBuyOrder({ id: activeMarketOrder.id })
           activeMarketOrders.delete(market_hash_name)
           console.log('activeMarketOrder', activeMarketOrder.price)
-          console.log('resentOrders', resentOrders[0].price)
+          console.log('simpleOrders', simpleOrders[0].price)
         }
 
         await sleep(10_000)

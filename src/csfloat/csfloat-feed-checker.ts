@@ -1,0 +1,99 @@
+import 'dotenv/config'
+
+import {
+  getCSFloatListings,
+  getCSFloatSimpleOrders,
+  getMarketHashNameHistory,
+  getPlacedOrders,
+  postBuyOrder,
+  removeBuyOrder,
+} from '../api/csfloat'
+import { differenceInHours, format } from 'date-fns'
+import { toZonedTime } from 'date-fns-tz'
+import { median, sleep } from '../utils'
+import { CSFloatPlacedOrder } from '../types'
+import { sendMessage } from '../api/telegram'
+
+const blacklistedMarketOrders = new Set<string>()
+const blacklistedMarketListings = new Set<string>()
+const activeMarketOrders = new Map<string, CSFloatPlacedOrder>()
+
+const syncMarketOrders = async () => {
+  activeMarketOrders.clear()
+
+  for (const page of [0, 1]) {
+    const response = await getPlacedOrders({ page, limit: 100 })
+    response.orders.forEach((order) => {
+      activeMarketOrders.set(order.market_hash_name, order)
+    })
+    if (response.count !== 100) break
+    await sleep(5_000)
+  }
+}
+
+const floatFeedChecker = async () => {
+  await syncMarketOrders()
+
+  do {
+    const response = await getCSFloatListings({
+      sort_by: 'most_recent',
+      min_price: 900,
+      max_price: 6000,
+      max_float: 0.45,
+    })
+
+    for (const item of response.data) {
+      const now = format(new Date(), 'HH:mm:ss')
+      const market_hash_name = item.item.market_hash_name
+
+      if (activeMarketOrders.has(market_hash_name)) continue
+      if (blacklistedMarketOrders.has(market_hash_name)) continue
+      if (blacklistedMarketListings.has(market_hash_name)) continue
+
+      const baseItemPrice = item.reference.base_price / 100
+
+      if (baseItemPrice < 10) blacklistedMarketOrders.add(market_hash_name)
+      if (baseItemPrice < 10) continue
+
+      const marketHistoryResponse = await getMarketHashNameHistory({ market_hash_name })
+      const medianPrice = median(marketHistoryResponse.map((item) => item.price / 100))
+      const sales48h = marketHistoryResponse.filter((item) => {
+        return differenceInHours(new Date(), toZonedTime(item.sold_at, 'Europe/Warsaw')) < 24 * 2
+      })
+
+      if (sales48h.length < 10 || medianPrice < 9) await sleep(10_000)
+      if (sales48h.length < 10 || medianPrice < 9) blacklistedMarketOrders.add(market_hash_name)
+      if (sales48h.length < 10 || medianPrice < 9) continue
+
+      const simpleOrders = await getCSFloatSimpleOrders({ market_hash_name })
+
+      await sleep(5_000)
+
+      const lowestOrderPrice = Number((simpleOrders.data[0].price / 100).toFixed(2))
+      const estimatedProfit = Number((((baseItemPrice - lowestOrderPrice) / lowestOrderPrice) * 100).toFixed(2))
+      const maxOrderPrice = Math.round((lowestOrderPrice + 0.01) * 100)
+
+      console.log(now, market_hash_name, estimatedProfit + '%')
+
+      if (estimatedProfit >= 9) {
+        await postBuyOrder({ market_hash_name, max_price: maxOrderPrice }).then(() => sleep(10_000))
+        const firstCreatedOrders = await getPlacedOrders({ order: 'asc' })
+        await removeBuyOrder({ id: firstCreatedOrders.orders[0].id })
+        await sendMessage(
+          `<b>[CSFLOAT ORDER]</b> <a href="https://csfloat.com/search?market_hash_name=${market_hash_name}&sort_by=lowest_price&type=buy_now">${market_hash_name}</a> Estimated profit: ${estimatedProfit}%. Order: ${(maxOrderPrice / 100).toFixed(2)}`
+        )
+        await syncMarketOrders()
+      }
+
+      blacklistedMarketListings.add(item.id)
+
+      await sleep(30_000)
+    }
+
+    await sleep(60_000 * 3)
+
+    // eslint-disable-next-line no-constant-condition
+  } while (true)
+}
+
+floatFeedChecker()

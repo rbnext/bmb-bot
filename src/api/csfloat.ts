@@ -163,7 +163,7 @@ export const getPlacedOrders = async ({
 }: {
   page?: number
   limit?: number
-  order?: 'desc'
+  order?: 'desc' | 'asc'
 }): Promise<CSFloatPlacedOrders> => {
   const { data } = await axios.get('https://csfloat.com/api/v1/me/buy-orders', {
     params: { order, limit, page },

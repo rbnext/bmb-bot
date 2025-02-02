@@ -53,8 +53,8 @@ const floatFeedChecker = async () => {
 
       const baseItemPrice = item.reference.base_price / 100
 
-      if (baseItemPrice < 10) blacklistedMarketOrders.add(market_hash_name)
-      if (baseItemPrice < 10) continue
+      if (baseItemPrice < 9) blacklistedMarketOrders.add(market_hash_name)
+      if (baseItemPrice < 9) continue
 
       const marketHistoryResponse = await getMarketHashNameHistory({ market_hash_name })
       const medianPrice = median(marketHistoryResponse.map((item) => item.price / 100))

@@ -72,7 +72,13 @@ const floatFeedChecker = async () => {
         if (resentOrders[0].market_hash_name === market_hash_name && resentOrders[0].price > activeMarketOrder.price) {
           await removeBuyOrder({ id: activeMarketOrder.id })
           activeMarketOrders.delete(market_hash_name)
+          console.log('activeMarketOrder', activeMarketOrder.price)
+          console.log('resentOrders', resentOrders[0].price)
         }
+
+        await sleep(10_000)
+
+        continue
       }
 
       const simpleOrders = await getCSFloatSimpleOrders({ market_hash_name })

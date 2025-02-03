@@ -119,7 +119,7 @@ export const getMarketHashNameHistory = async ({
     httpsAgent: new HttpsProxyAgent(`http://`),
   })
 
-  console.log(headers['x-ratelimit-reset'])
+  console.log(headers['x-ratelimit-remaining'])
 
   return data
 }

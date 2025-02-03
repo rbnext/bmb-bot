@@ -120,8 +120,6 @@ const floatFeedChecker = async () => {
 
       if (estimatedProfit >= 7) {
         await postBuyOrder({ market_hash_name, max_price: maxOrderPrice }).then(() => sleep(10_000))
-        const firstCreatedOrders = await getPlacedOrders({ order: 'asc' })
-        await removeBuyOrder({ id: firstCreatedOrders.orders[0].id })
         await sendMessage(
           `<b>[CSFLOAT ORDER]</b> <a href="https://csfloat.com/search?market_hash_name=${market_hash_name}&sort_by=lowest_price&type=buy_now">${market_hash_name}</a> Estimated profit: ${estimatedProfit}%. Order: ${(maxOrderPrice / 100).toFixed(2)}`
         )

@@ -83,7 +83,7 @@ const floatFeedChecker = async () => {
 
     if (sales48h.length < 10 || medianPrice < 9) {
       const floatBlackList: string[] = JSON.parse(readFileSync(pathname, 'utf8'))
-      writeFileSync(pathname, JSON.stringify({ ...floatBlackList, market_hash_name }, null, 4))
+      writeFileSync(pathname, JSON.stringify([...floatBlackList, market_hash_name], null, 4))
     }
 
     if (sales48h.length < 10 || medianPrice < 9) await sleep(10_000)

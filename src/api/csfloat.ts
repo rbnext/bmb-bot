@@ -9,6 +9,7 @@ import {
   CSFloatSimpleOrders,
   CSFloatTradesResponse,
 } from '../types'
+import { HttpsProxyAgent } from 'https-proxy-agent'
 
 const http = axios.create({
   baseURL: 'https://csfloat.com/api',
@@ -113,6 +114,7 @@ export const getMarketHashNameHistory = async ({
     headers: {
       Cookie: `session=${process.env.CSFLOAT_SESSION_TOKEN}`,
     },
+    httpAgent: new HttpsProxyAgent(`http://`),
   })
 
   console.log(headers['x-ratelimit-reset'])

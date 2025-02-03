@@ -57,8 +57,8 @@ const floatFeedChecker = async () => {
     const response = await getCSFloatListings({
       sort_by: 'most_recent',
       min_price: 900,
-      max_price: 6000,
-      max_float: 0.45,
+      max_price: 9000,
+      max_float: 0.5,
     })
 
     for (const item of response.data) {
@@ -118,7 +118,7 @@ const floatFeedChecker = async () => {
 
       console.log(now, market_hash_name, estimatedProfit + '%')
 
-      if (estimatedProfit >= 9) {
+      if (estimatedProfit >= 7) {
         await postBuyOrder({ market_hash_name, max_price: maxOrderPrice }).then(() => sleep(10_000))
         const firstCreatedOrders = await getPlacedOrders({ order: 'asc' })
         await removeBuyOrder({ id: firstCreatedOrders.orders[0].id })

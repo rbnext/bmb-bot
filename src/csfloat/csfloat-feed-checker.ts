@@ -12,12 +12,13 @@ import {
 import { differenceInHours, format } from 'date-fns'
 import { toZonedTime } from 'date-fns-tz'
 import { median, sleep } from '../utils'
-import { CSFloatPlacedOrder } from '../types'
+import { CSFloatMarketHashNameHistory, CSFloatPlacedOrder } from '../types'
 import { sendMessage } from '../api/telegram'
 
 const blacklistedMarketOrders = new Set<string>()
 const blacklistedMarketListings = new Set<string>()
 const activeMarketOrders = new Map<string, CSFloatPlacedOrder>()
+const marketHistoryCache = new Map<string, CSFloatMarketHashNameHistory[]>()
 
 const syncMarketOrders = async () => {
   activeMarketOrders.clear()
@@ -30,6 +31,20 @@ const syncMarketOrders = async () => {
     if (response.count !== 100) break
     await sleep(5_000)
   }
+}
+
+const getMarketHistory = async ({
+  market_hash_name,
+}: {
+  market_hash_name: string
+}): Promise<CSFloatMarketHashNameHistory[]> => {
+  const data = marketHistoryCache.get(market_hash_name)
+  if (data) return data
+
+  const response = await getMarketHashNameHistory({ market_hash_name })
+  marketHistoryCache.set(market_hash_name, response)
+
+  return response
 }
 
 const floatFeedChecker = async () => {
@@ -56,7 +71,7 @@ const floatFeedChecker = async () => {
       if (baseItemPrice < 9) blacklistedMarketOrders.add(market_hash_name)
       if (baseItemPrice < 9) continue
 
-      const marketHistoryResponse = await getMarketHashNameHistory({ market_hash_name })
+      const marketHistoryResponse = await getMarketHistory({ market_hash_name })
       const medianPrice = median(marketHistoryResponse.map((item) => item.price / 100))
       const sales48h = marketHistoryResponse.filter((item) => {
         return differenceInHours(new Date(), toZonedTime(item.sold_at, 'Europe/Warsaw')) < 24 * 2

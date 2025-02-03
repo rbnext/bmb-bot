@@ -109,11 +109,13 @@ export const getMarketHashNameHistory = async ({
 }: {
   market_hash_name: string
 }): Promise<CSFloatMarketHashNameHistory[]> => {
-  const { data } = await http.get(`/v1/history/${market_hash_name}/sales`, {
+  const { data, headers } = await http.get(`/v1/history/${market_hash_name}/sales`, {
     headers: {
       Cookie: `session=${process.env.CSFLOAT_SESSION_TOKEN}`,
     },
   })
+
+  console.log(headers['x-ratelimit-reset'])
 
   return data
 }

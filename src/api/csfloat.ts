@@ -117,6 +117,8 @@ export const getMarketHashNameHistory = async ({
       Cookie: `session=${process.env.CSFLOAT_SESSION_TOKEN}`,
     },
     httpsAgent: new HttpsProxyAgent(`http://`),
+    signal: AbortSignal.timeout(5000),
+    timeout: 5000,
   })
 
   console.log(headers['x-ratelimit-remaining'])

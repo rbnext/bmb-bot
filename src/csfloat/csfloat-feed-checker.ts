@@ -64,7 +64,7 @@ const floatFeedChecker = async () => {
       const activeMarketOrder = activeMarketOrders.get(market_hash_name)
 
       if (blacklistedMarketOrders.has(market_hash_name)) continue
-      if (blacklistedMarketListings.has(market_hash_name)) continue
+      if (blacklistedMarketListings.has(item.id)) continue
 
       const baseItemPrice = item.reference.base_price / 100
 

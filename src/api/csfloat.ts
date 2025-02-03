@@ -111,12 +111,12 @@ export const getMarketHashNameHistory = async ({
 }: {
   market_hash_name: string
 }): Promise<CSFloatMarketHashNameHistory[]> => {
-  const { data, headers } = await axios.get(`/v1/history/${market_hash_name}/sales`, {
+  const { data, headers } = await http.get(`/v1/history/${market_hash_name}/sales`, {
     headers: {
       'User-Agent': new UserAgent().toString(),
       Cookie: `session=${process.env.CSFLOAT_SESSION_TOKEN}`,
     },
-    httpAgent: new HttpsProxyAgent(`http://FVxtJLoODw:qZVy4wsQgJ@194.63.143.7:22096`),
+    httpsAgent: new HttpsProxyAgent(`http://`),
   })
 
   console.log(headers['x-ratelimit-reset'])

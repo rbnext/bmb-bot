@@ -14,11 +14,14 @@ import { toZonedTime } from 'date-fns-tz'
 import { median, sleep } from '../utils'
 import { CSFloatMarketHashNameHistory, CSFloatPlacedOrder } from '../types'
 import { sendMessage } from '../api/telegram'
+import path from 'path'
+import { readFileSync, writeFileSync } from 'fs'
 
 const blacklistedMarketOrders = new Set<string>()
 const blacklistedMarketListings = new Set<string>()
 const activeMarketOrders = new Map<string, CSFloatPlacedOrder>()
 const marketHistoryCache = new Map<string, CSFloatMarketHashNameHistory[]>()
+const pathname = path.join(__dirname, '../../float.json')
 
 const syncMarketOrders = async () => {
   activeMarketOrders.clear()
@@ -61,7 +64,9 @@ const floatFeedChecker = async () => {
     const now = format(new Date(), 'HH:mm:ss')
     const market_hash_name = item.item.market_hash_name
     const activeMarketOrder = activeMarketOrders.get(market_hash_name)
+    const floatBlackList: string[] = JSON.parse(readFileSync(pathname, 'utf8'))
 
+    if (floatBlackList.includes(market_hash_name)) continue
     if (blacklistedMarketOrders.has(market_hash_name)) continue
     if (blacklistedMarketListings.has(item.id)) continue
 
@@ -75,6 +80,11 @@ const floatFeedChecker = async () => {
     const sales48h = marketHistoryResponse.filter((item) => {
       return differenceInHours(new Date(), toZonedTime(item.sold_at, 'Europe/Warsaw')) < 24 * 2
     })
+
+    if (sales48h.length < 10 || medianPrice < 9) {
+      const floatBlackList: string[] = JSON.parse(readFileSync(pathname, 'utf8'))
+      writeFileSync(pathname, JSON.stringify({ ...floatBlackList, market_hash_name }, null, 4))
+    }
 
     if (sales48h.length < 10 || medianPrice < 9) await sleep(10_000)
     if (sales48h.length < 10 || medianPrice < 9) blacklistedMarketOrders.add(market_hash_name)

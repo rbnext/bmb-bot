@@ -142,7 +142,7 @@ const floatFeedChecker = async () => {
     }
   }
 
-  await sleep(200_000)
+  await sleep(60_000)
 
   floatFeedChecker()
 }

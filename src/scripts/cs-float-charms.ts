@@ -31,6 +31,7 @@ const csFloatCharms = async () => {
     sort_by: 'most_recent',
     min_price: 900,
     max_price: 7000,
+    max_float: 0.5,
   })
 
   for (const data of response.data) {

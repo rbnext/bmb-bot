@@ -23,6 +23,8 @@ const activeMarketOrders = new Map<string, CSFloatPlacedOrder>()
 const marketHistoryCache = new Map<string, CSFloatMarketHashNameHistory[]>()
 const pathname = path.join(__dirname, '../../float.json')
 
+const blackList = ['USP-S | Jawbreaker (Minimal Wear)']
+
 const syncMarketOrders = async () => {
   activeMarketOrders.clear()
 
@@ -70,6 +72,7 @@ const floatFeedChecker = async () => {
       if (floatBlackList.includes(market_hash_name)) continue
       if (blacklistedMarketOrders.has(market_hash_name)) continue
       if (blacklistedMarketListings.has(item.id)) continue
+      if (blackList.includes(market_hash_name)) continue
 
       const itemQuantity = item.reference.quantity
       const baseItemPrice = item.reference.base_price / 100

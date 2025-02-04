@@ -54,13 +54,13 @@ const csFloatCharms = async () => {
 
       const profit = predictedPrice + keychainPrice - 0.33 - currentPrice
 
-      console.log(now, keychain.name, keychain.pattern)
+      console.log(now, keychain.name, keychain.reference.price)
 
       if (profit > 1) {
         const message: string[] = []
         message.push(`<a href="https://csfloat.com/item/${data.id}">${data.item.market_hash_name}</a>\n\n`)
 
-        message.push(`<b>${keychain.name}</b>: ${keychain.pattern}\n`)
+        message.push(`<b>${keychain.name}</b>: ${keychain.pattern} (~$${keychainPrice.toFixed(2)})\n`)
 
         message.push(`\n`)
         message.push(`<b>Price</b>: $${currentPrice}\n`)

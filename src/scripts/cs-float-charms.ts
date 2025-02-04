@@ -27,56 +27,53 @@ const getPredictedPrice = (pattern: number, base: number) => {
 }
 
 const csFloatCharms = async () => {
-  do {
-    const response = await getCSFloatListings({
-      sort_by: 'most_recent',
-      min_price: 900,
-      max_price: 7000,
-    })
+  const response = await getCSFloatListings({
+    sort_by: 'most_recent',
+    min_price: 900,
+    max_price: 7000,
+  })
 
-    for (const data of response.data) {
-      if (CASHED_LISTINGS.has(data.id)) continue
+  for (const data of response.data) {
+    if (CASHED_LISTINGS.has(data.id)) continue
 
-      const keychain = data.item.keychains?.[0]
-      const currentPrice = Number((data.price / 100).toFixed(2))
-      const predictedPrice = Number((data.reference.predicted_price / 100).toFixed(2))
+    const keychain = data.item.keychains?.[0]
+    const currentPrice = Number((data.price / 100).toFixed(2))
+    const predictedPrice = Number((data.reference.predicted_price / 100).toFixed(2))
 
-      if (keychain) {
-        const now = format(new Date(), 'HH:mm:ss')
+    if (keychain) {
+      const now = format(new Date(), 'HH:mm:ss')
 
-        const keychainPrice = (() => {
-          if (keychain.stickerId === 18) {
-            return getPredictedPrice(keychain.pattern, keychain.reference.price / 100)
-          }
-
-          return keychain.reference.price / 100
-        })()
-
-        const profit = predictedPrice + keychainPrice - 0.33 - currentPrice
-
-        console.log(now, keychain.name, keychain.pattern)
-
-        if (profit > 1) {
-          const message: string[] = []
-          message.push(`<a href="https://csfloat.com/item/${data.id}">${data.item.market_hash_name}</a>\n\n`)
-
-          message.push(`<b>${keychain.name}</b>: ${keychain.pattern}\n`)
-
-          message.push(`\n`)
-          message.push(`<b>Price</b>: $${currentPrice}\n`)
-          message.push(`<b>Predicted price</b>: $${predictedPrice.toFixed(2)}\n`)
-          message.push(`<b>Profit</b>: ~$${profit.toFixed(2)}\n\n`)
-          await sendMessage(message.join(''), undefined, process.env.TELEGRAM_REPORT_ID)
+      const keychainPrice = (() => {
+        if (keychain.stickerId === 18) {
+          return getPredictedPrice(keychain.pattern, keychain.reference.price / 100)
         }
+
+        return keychain.reference.price / 100
+      })()
+
+      const profit = predictedPrice + keychainPrice - 0.33 - currentPrice
+
+      console.log(now, keychain.name, keychain.pattern)
+
+      if (profit > 1) {
+        const message: string[] = []
+        message.push(`<a href="https://csfloat.com/item/${data.id}">${data.item.market_hash_name}</a>\n\n`)
+
+        message.push(`<b>${keychain.name}</b>: ${keychain.pattern}\n`)
+
+        message.push(`\n`)
+        message.push(`<b>Price</b>: $${currentPrice}\n`)
+        message.push(`<b>Predicted price</b>: $${predictedPrice.toFixed(2)}\n`)
+        message.push(`<b>Profit</b>: ~$${profit.toFixed(2)}\n\n`)
+        await sendMessage(message.join(''), undefined, process.env.TELEGRAM_REPORT_ID)
       }
-
-      CASHED_LISTINGS.add(data.id)
-
-      await sleep(30_000)
     }
 
-    // eslint-disable-next-line no-constant-condition
-  } while (true)
+    CASHED_LISTINGS.add(data.id)
+  }
+
+  await sleep(30_000)
+  csFloatCharms()
 }
 
 csFloatCharms()

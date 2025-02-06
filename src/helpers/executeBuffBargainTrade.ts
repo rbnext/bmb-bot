@@ -128,13 +128,12 @@ export const executeBuffBargainTrade = async (
           market_hash_name: item.market_hash_name,
           ...(isMinimalWear && { min_float: 0.07, max_float: 0.08 }),
           ...(isFieldTested && { min_float: 0.15, max_float: 0.17 }),
-          category: isStatTrak ? 2 : 1,
         })
 
         const cs_float_price = getCSFloatItemPrice(response)
         const estimated_profit = ((cs_float_price - current_price) / current_price) * 100
 
-        if (estimated_profit >= 20) {
+        if (estimated_profit >= 15) {
           const response = await postGoodsBuy({ price: current_price, sell_order_id: lowestPricedItem.id })
 
           if (response.code !== 'OK') {
@@ -175,7 +174,17 @@ export const executeBuffBargainTrade = async (
     const min_steam_price = prices.length !== 0 ? Math.min(...prices) : 0
     const bargain_price = Number((min_steam_price / (1 + STEAM_PURCHASE_THRESHOLD / 100)).toFixed(1))
 
-    if (
+    if (Number(keychain?.sell_reference_price || 0) + bargain_price >= Number(lowestPricedItem.price)) {
+      const response = await postGoodsBuy({ price: current_price, sell_order_id: lowestPricedItem.id })
+
+      if (response.code !== 'OK') {
+        console.log('Error:', JSON.stringify(response))
+
+        return
+      }
+
+      sendMessage(generateMessage({ ...payload, type: MessageType.Purchased }))
+    } else if (
       Number(lowestPricedItem.price) > bargain_price &&
       Number(lowestPricedItem.lowest_bargain_price) < bargain_price
     ) {

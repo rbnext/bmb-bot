@@ -23,7 +23,11 @@ const activeMarketOrders = new Map<string, CSFloatPlacedOrder>()
 const marketHistoryCache = new Map<string, CSFloatMarketHashNameHistory[]>()
 const pathname = path.join(__dirname, '../../float.json')
 
-const blackList = ['USP-S | Jawbreaker (Minimal Wear)', 'AK-47 | The Outsiders (Field-Tested)']
+const blackList = [
+  'USP-S | Jawbreaker (Minimal Wear)',
+  'AK-47 | The Outsiders (Field-Tested)',
+  'AK-47 | The Outsiders (Minimal Wear)',
+]
 
 const syncMarketOrders = async () => {
   activeMarketOrders.clear()

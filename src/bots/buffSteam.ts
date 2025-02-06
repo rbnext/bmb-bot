@@ -10,10 +10,8 @@ import { Source } from '../types'
 import { executeBuffToSteamTrade } from '../helpers/executeBuffToSteamTrade'
 import { BARGAIN_PROFIT_THRESHOLD } from '../config'
 import { executeBuffBargainTrade } from '../helpers/executeBuffBargainTrade'
-import { executeBuffCharmTrade } from '../helpers/executeBuffCharmTrade'
-import { executeBuffRedlineTrade } from '../helpers/executeBuffRedlineTrade'
 
-export const GOODS_CACHE: Record<number, { price: number; sell_num: number }> = {}
+export const GOODS_CACHE: Record<number, { price: number }> = {}
 export const GOODS_BLACKLIST_CACHE: number[] = [30431, 30235, 30259, 30269, 30350]
 
 const buffSteam = async () => {
@@ -26,26 +24,13 @@ const buffSteam = async () => {
     for (const item of marketGoods.data.items) {
       const now = format(new Date(), 'HH:mm:ss')
       const current_price = Number(item.sell_min_price)
-      const sell_num = Number(item.sell_num)
-
-      if ([22].includes(item.id) && GOODS_CACHE[item.id].sell_num < item.sell_num) {
-        await executeBuffRedlineTrade(item, { source: Source.BUFF_REDLINE })
-      }
-
-      if ([30355].includes(item.id) && GOODS_CACHE[item.id].sell_num < item.sell_num) {
-        await executeBuffCharmTrade(item, { source: Source.BUFF_CHARM })
-      }
 
       if (GOODS_BLACKLIST_CACHE.includes(item.id) || item.is_charm) {
-        GOODS_CACHE[item.id].price = current_price
-        GOODS_CACHE[item.id].sell_num = sell_num
-
         continue
       }
 
       if (item.id in GOODS_CACHE && isLessThanThreshold(GOODS_CACHE[item.id].price, current_price, 0.1)) {
         GOODS_CACHE[item.id].price = current_price
-        GOODS_CACHE[item.id].sell_num = sell_num
 
         continue
       }
@@ -64,7 +49,7 @@ const buffSteam = async () => {
         }
       }
 
-      GOODS_CACHE[item.id] = { price: current_price, sell_num }
+      GOODS_CACHE[item.id] = { price: current_price }
     }
 
     await sleep(2_500)
@@ -95,16 +80,13 @@ const buffSteam = async () => {
       category_group: 'rifle,pistol,smg,shotgun,machinegun',
       category: 'csgo_type_musickit,csgo_tool_patch,csgo_type_collectible',
     })
-    for (const item of goods.data.items)
-      GOODS_CACHE[item.id] = { sell_num: Number(item.sell_num), price: Number(item.sell_min_price) }
+    for (const item of goods.data.items) GOODS_CACHE[item.id] = { price: Number(item.sell_min_price) }
     if (goods.data.items.length !== 50) break
     await sleep(5_000)
   }
 
   const goods = await getMarketGoods({ category: 'csgo_tool_keychain' })
-  goods.data.items.forEach((item) => {
-    GOODS_CACHE[item.id] = { sell_num: Number(item.sell_num), price: Number(item.sell_min_price) }
-  })
+  goods.data.items.forEach((item) => (GOODS_CACHE[item.id] = { price: Number(item.sell_min_price) }))
 
   console.log('Loaded items: ', Object.keys(GOODS_CACHE).length)
   console.log('Disabled items: ', Object.keys(GOODS_BLACKLIST_CACHE).length)

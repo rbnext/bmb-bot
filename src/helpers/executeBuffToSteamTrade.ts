@@ -50,7 +50,7 @@ export const executeBuffToSteamTrade = async (
 
     console.log(item.market_hash_name, estimated_profit.toFixed(2))
 
-    if ((current_price < 2 && estimated_profit >= 40) || (current_price >= 2 && estimated_profit >= 16)) {
+    if ((current_price < 2 && estimated_profit >= 40) || (current_price >= 2 && estimated_profit >= 15)) {
       const response = await postGoodsBuy({ price: current_price, sell_order_id: lowestPricedItem.id })
 
       if (response.code !== 'OK') {

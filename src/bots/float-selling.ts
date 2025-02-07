@@ -27,7 +27,7 @@ const floatSelling = async () => {
     console.log(market_hash_name, position)
 
     messages.push(
-      `<a href="https://csfloat.com/search?market_hash_name=${market_hash_name}">${market_hash_name}</a> (${position + 1})`
+      `<a href="https://csfloat.com/search?market_hash_name=${market_hash_name}">${market_hash_name}</a> (${position === -1 ? 'N/A' : position + 1})`
     )
 
     await sleep(10_000)

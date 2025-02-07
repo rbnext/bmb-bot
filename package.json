@@ -13,6 +13,7 @@
     "buffSteam": "ts-node src/bots/buffSteam.ts",
     "sellBuff": "ts-node src/bots/sellBuff.ts",
     "buff-selling": "ts-node src/bots/buff-selling.ts",
+    "float-selling": "ts-node src/bots/float-selling.ts",
     "playground": "ts-node src/playground.ts",
     "loadBuffRef": "ts-node src/scripts/loadReferencePrices.ts",
     "load-buff-liquid": "ts-node src/scripts/load-buff-liquid.ts",

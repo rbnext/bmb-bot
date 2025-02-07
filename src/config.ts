@@ -8,6 +8,7 @@ export const STEAM_CHECK_THRESHOLD = 50
 export const BUFF_PURCHASE_THRESHOLD = 10
 
 export const CURRENT_USER_ID = 'U1092757843'
+export const FL_CURRENT_USER_ID = '76561199605339009'
 
 export const BLACKLISTED_ITEMSET = [
   'stkr_craft_02',

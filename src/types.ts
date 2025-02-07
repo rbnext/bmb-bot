@@ -594,6 +594,9 @@ type CSFloatListingItem = {
     stickers?: CSFloatListingItemStickerItem[]
     keychains?: CSFloatListingItemCharmItem[]
   }
+  seller: {
+    steam_id: string
+  }
   reference: {
     base_price: number
     last_updated: string
@@ -629,6 +632,21 @@ export type CSFloatSimpleOrdersItem = {
 
 export type CSFloatSimpleOrders = {
   data: CSFloatSimpleOrdersItem[]
+}
+
+export type CSFloatMySellingListItem = {
+  id: string
+  created_at: string
+  price: number
+  watchers: number
+  item: {
+    float_value: number
+    market_hash_name: string
+  }
+}
+
+export type CSFloatMySellingList = {
+  data: CSFloatMySellingListItem[]
 }
 
 export type CSFloatBuyOrder = {
@@ -669,6 +687,7 @@ type CSFloatMarketHashNameHistorySticker = {
 export type CSFloatMarketHashNameHistory = {
   id: string
   price: number
+  created_at: number
   reference: {
     base_price: number
     last_updated: string

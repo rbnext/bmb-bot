@@ -5,12 +5,14 @@ import {
   CSFloatItemInfo,
   CSFloatListing,
   CSFloatMarketHashNameHistory,
+  CSFloatMySellingList,
   CSFloatPlacedOrders,
   CSFloatSimpleOrders,
   CSFloatTradesResponse,
 } from '../types'
 import { HttpsProxyAgent } from 'https-proxy-agent'
 import UserAgent from 'user-agents'
+import { FL_CURRENT_USER_ID } from '../config'
 
 const http = axios.create({
   baseURL: 'https://csfloat.com/api',
@@ -116,7 +118,7 @@ export const getMarketHashNameHistory = async ({
       'User-Agent': new UserAgent().toString(),
       Cookie: `session=${process.env.CSFLOAT_SESSION_TOKEN}`,
     },
-    httpsAgent: new HttpsProxyAgent(`http://`),
+    // httpsAgent: new HttpsProxyAgent(`http://`),
     signal: AbortSignal.timeout(5000),
     timeout: 5000,
   })
@@ -211,6 +213,25 @@ export const postBuyOrder = async ({
 
 export const removeBuyOrder = async ({ id }: { id: string }) => {
   const { data } = await axios.delete(`https://csfloat.com/api/v1/buy-orders/${id}`, {
+    headers: {
+      Authorization: process.env.CSFLOAT_AUTH_KEY,
+    },
+  })
+
+  return data
+}
+
+export const getMySellingList = async ({
+  userId = FL_CURRENT_USER_ID,
+  limit = 100,
+}: {
+  userId?: string
+  limit?: number
+}): Promise<CSFloatMySellingList> => {
+  const { data } = await axios.get(`https://csfloat.com/api/v1/users/${userId}/stall`, {
+    params: {
+      limit,
+    },
     headers: {
       Authorization: process.env.CSFLOAT_AUTH_KEY,
     },

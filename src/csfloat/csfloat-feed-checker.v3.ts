@@ -39,7 +39,12 @@ const floatFeedChecker = async () => {
 
       await sleep(10_000)
 
-      if (currentMarketOrder) await removeBuyOrder({ id: currentMarketOrder.id })
+      if (currentMarketOrder) {
+        const lowestPrice = Math.round(lowestOrderPrice * 100)
+        console.log(`${market_hash_name}. Current/Lowest price: $${currentMarketOrder.price}/${lowestPrice}`)
+        if (currentMarketOrder.price < lowestPrice) await removeBuyOrder({ id: currentMarketOrder.id })
+        else if (currentMarketOrder.price === lowestPrice) continue
+      }
 
       if (estimatedBaseProfit >= 7 && estimatedPriceProfit >= 7) {
         const maxOrderPrice = Math.round((lowestOrderPrice + 0.01) * 100)

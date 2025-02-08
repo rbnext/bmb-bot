@@ -137,6 +137,8 @@ const floatFeedChecker = async () => {
 
   console.log(format(new Date(), 'HH:mm:ss'), 'Checking orders')
 
+  await syncMarketOrders()
+
   for (const [market_hash_name, order] of activeMarketOrders) {
     const historyCache = marketHistoryCache.get(market_hash_name)
     const baseItemPrice = baseItemPriceCache.get(market_hash_name)

@@ -74,7 +74,7 @@ const floatFeedChecker = async () => {
       const itemQuantity = item.reference.quantity
       const baseItemPrice = item.reference.base_price / 100
 
-      if (activeMarketOrders.get(market_hash_name)) {
+      if (activeMarketOrders.has(market_hash_name)) {
         baseItemPriceCache.set(market_hash_name, baseItemPrice)
       }
 
@@ -140,11 +140,11 @@ const floatFeedChecker = async () => {
   await syncMarketOrders()
 
   for (const [market_hash_name, order] of activeMarketOrders) {
-    const historyCache = marketHistoryCache.get(market_hash_name)
     const baseItemPrice = baseItemPriceCache.get(market_hash_name)
 
-    if (historyCache && baseItemPrice) {
-      const listingReferenceId = historyCache.sort((a, b) => a.price - b.price)[0].id
+    if (baseItemPrice) {
+      const marketHistoryResponse = await getMarketHistory({ market_hash_name })
+      const listingReferenceId = marketHistoryResponse.sort((a, b) => a.price - b.price)[0].id
       const resentOrders = await getBuyOrders({ id: listingReferenceId })
       const simpleOrders = resentOrders.filter((i) => !!i.market_hash_name)
 

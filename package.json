@@ -21,6 +21,8 @@
     "cs-float-orders-overview": "ts-node src/scripts/cs-float-orders-overview.ts",
     "cs-float-order-checker": "ts-node src/scripts/cs-float-order-checker.ts",
     "csfloat-feed-checker": "ts-node src/csfloat/csfloat-feed-checker.ts",
+    "csfloat-feed-checker.v2": "ts-node src/csfloat/csfloat-feed-checker.v2.ts",
+    "csfloat-feed-checker.v3": "ts-node src/csfloat/csfloat-feed-checker.v3.ts",
     "cs-float-order-sync": "ts-node src/scripts/cs-float-order-sync.ts",
     "steam-buy-listing": "ts-node src/scripts/steam-buy-listing.ts",
     "steam": "ts-node src/steam/steam.ts",

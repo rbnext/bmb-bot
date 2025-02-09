@@ -70,6 +70,7 @@ const floatFeedChecker = async () => {
       await sleep(45_000)
     }
   } catch (error) {
+    console.log(error)
     console.log('Something went wrong:', error.message)
 
     if (error.message.includes('429')) {

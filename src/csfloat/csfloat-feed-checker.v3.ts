@@ -27,9 +27,9 @@ const floatFeedChecker = async () => {
       const response = await getCSFloatListings({ market_hash_name })
       const currentMarketOrder = activeMarketOrders.get(market_hash_name)
 
+      const listingPrice = response.data[0].price
       const listingReferenceId = response.data[0].id
-      const listingPrice = Number((response.data[0].price / 100).toFixed(2))
-      const listingBasePrice = Number((response.data[0].reference.base_price / 100).toFixed(2))
+      const listingBasePrice = response.data[0].reference.base_price
 
       const orders = await getBuyOrders({ id: listingReferenceId })
 
@@ -40,11 +40,9 @@ const floatFeedChecker = async () => {
         continue
       }
 
-      const lowestOrderPrice = Number((simpleOrders[0].price / 100).toFixed(2))
-      const estimatedBaseProfit = Number((((listingBasePrice - lowestOrderPrice) / lowestOrderPrice) * 100).toFixed(2))
-      const estimatedPriceProfit = Number((((listingPrice - lowestOrderPrice) / lowestOrderPrice) * 100).toFixed(2))
-
-      console.log(market_hash_name, estimatedBaseProfit, estimatedPriceProfit)
+      const lowestOrderPrice = simpleOrders[0].price
+      const estimatedBaseProfit = Number(((listingBasePrice - lowestOrderPrice) / lowestOrderPrice) * 100)
+      const estimatedPriceProfit = Number(((listingPrice - lowestOrderPrice) / lowestOrderPrice) * 100)
 
       await sleep(10_000)
 
@@ -53,23 +51,28 @@ const floatFeedChecker = async () => {
       }
 
       if (currentMarketOrder) {
-        const lowestPrice = Math.round(lowestOrderPrice * 100)
-        console.log(`${market_hash_name}. Current/Lowest price: $${currentMarketOrder.price}/${lowestPrice}`)
-        if (currentMarketOrder.price < lowestPrice) await removeBuyOrder({ id: currentMarketOrder.id })
-        else if (currentMarketOrder.price === lowestPrice) continue
+        if (currentMarketOrder.price < simpleOrders[0].price) {
+          await removeBuyOrder({ id: currentMarketOrder.id })
+        } else if (simpleOrders[0].price - simpleOrders[1].price > 1) {
+          await removeBuyOrder({ id: currentMarketOrder.id })
+          await postBuyOrder({ market_hash_name, max_price: Math.round(simpleOrders[1].price + 1) })
+          console.log(market_hash_name, lowestOrderPrice, '->', Math.round(simpleOrders[1].price + 1))
+          continue
+        } else if (currentMarketOrder.price === lowestOrderPrice) {
+          continue
+        }
       }
 
       if (estimatedBaseProfit >= 7 && estimatedPriceProfit >= 7) {
-        const maxOrderPrice = Math.round((lowestOrderPrice + 0.01) * 100)
-        await postBuyOrder({ market_hash_name, max_price: maxOrderPrice }).then(() => sleep(5_000))
+        await postBuyOrder({ market_hash_name, max_price: Math.round(lowestOrderPrice + 1) }).then(() => sleep(5_000))
         const floatLink = `https://csfloat.com/search?market_hash_name=${market_hash_name}&sort_by=lowest_price&type=buy_now`
 
         const messages: string[] = []
 
         messages.push('<b>[FLOAT ORDER]</b> ')
         messages.push(`<a href="${floatLink}">${market_hash_name}</a> `)
-        if (currentMarketOrder) messages.push(`$${currentMarketOrder.price / 100} -> $${maxOrderPrice / 100}`)
-        else messages.push(`Profit ~${estimatedBaseProfit}% Order price: ${maxOrderPrice / 100}`)
+        if (currentMarketOrder) messages.push(`$${currentMarketOrder.price / 100} -> $${(lowestOrderPrice + 1) / 100}`)
+        else messages.push(`Profit ~${estimatedBaseProfit}% Order price: ${(lowestOrderPrice + 1) / 100}`)
 
         await sendMessage(messages.join(''))
       }

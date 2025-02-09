@@ -15,10 +15,6 @@ const CASHED_LISTINGS = new Set<string>()
 
 const configList = [
   {
-    market_hash_name: 'AK-47 | Redline (Field-Tested)',
-    isSweet: (float: number) => float < 0.21,
-  },
-  {
     market_hash_name: 'M4A1-S | Black Lotus (Factory New)',
     isSweet: (float: number) => float < 0.02,
   },
@@ -39,7 +35,6 @@ const init = async () => {
         const market_hash_name = config.market_hash_name
 
         const response: SteamMarketRender = await getVercelMarketRender({
-          count: 3,
           market_hash_name,
           proxy: `${process.env.STEAM_PROXY}${index + 1}`,
         })

@@ -33,9 +33,14 @@ const floatFeedChecker = async () => {
 
       const orders = await getBuyOrders({ id: listingReferenceId })
 
-      console.log(orders)
+      const simpleOrders = orders.filter((i) => !!i.market_hash_name)
 
-      const lowestOrderPrice = Number((orders.filter((i) => !!i.market_hash_name)[0].price / 100).toFixed(2))
+      if (simpleOrders.length === 0) {
+        await sleep(45_000)
+        continue
+      }
+
+      const lowestOrderPrice = Number((simpleOrders[0].price / 100).toFixed(2))
       const estimatedBaseProfit = Number((((listingBasePrice - lowestOrderPrice) / lowestOrderPrice) * 100).toFixed(2))
       const estimatedPriceProfit = Number((((listingPrice - lowestOrderPrice) / lowestOrderPrice) * 100).toFixed(2))
 

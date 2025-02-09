@@ -18,6 +18,8 @@ const floatFeedChecker = async () => {
   response.orders.forEach((order) => activeMarketOrders.set(order.market_hash_name, order))
   const mostPopularItems: Record<string, number> = JSON.parse(readFileSync(pathname, 'utf8'))
 
+  console.log('Blacklist size: ', BLACK_LIST.length)
+
   try {
     for (const market_hash_name of Object.keys(mostPopularItems)) {
       if (BLACK_LIST.includes(market_hash_name)) continue
@@ -38,6 +40,10 @@ const floatFeedChecker = async () => {
       console.log(market_hash_name, estimatedBaseProfit, estimatedPriceProfit)
 
       await sleep(10_000)
+
+      if (estimatedBaseProfit <= 1 && !BLACK_LIST.includes(market_hash_name)) {
+        BLACK_LIST.push(market_hash_name)
+      }
 
       if (currentMarketOrder) {
         const lowestPrice = Math.round(lowestOrderPrice * 100)

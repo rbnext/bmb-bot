@@ -65,6 +65,8 @@ const floatFeedChecker = async () => {
 
       if (estimatedBaseProfit >= 7 && estimatedPriceProfit >= 7) {
         await postBuyOrder({ market_hash_name, max_price: Math.round(lowestOrderPrice + 1) }).then(() => sleep(5_000))
+        console.log(market_hash_name, lowestOrderPrice, '->', Math.round(lowestOrderPrice + 1))
+
         const floatLink = `https://csfloat.com/search?market_hash_name=${market_hash_name}&sort_by=lowest_price&type=buy_now`
 
         const messages: string[] = []

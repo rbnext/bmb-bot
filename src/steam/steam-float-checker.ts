@@ -15,16 +15,16 @@ const CASHED_LISTINGS = new Set<string>()
 
 const configList = [
   {
-    market_hash_name: 'M4A1-S | Black Lotus (Factory New)',
-    isSweet: (float: number) => float < 0.02,
-  },
-  {
     market_hash_name: 'USP-S | Jawbreaker (Factory New)',
     isSweet: (float: number) => float < 0.02,
   },
   {
     market_hash_name: 'Glock-18 | Gold Toof (Minimal Wear)',
     isSweet: (float: number) => float < 0.09,
+  },
+  {
+    market_hash_name: 'Glock-18 | Gold Toof (Field-Tested)',
+    isSweet: (float: number) => float < 0.18,
   },
 ]
 
@@ -48,14 +48,14 @@ const init = async () => {
           const itemInfoResponse = await getCSFloatItemInfo({ url: item.inspectUrl })
           const floatValue = Number(itemInfoResponse.iteminfo.floatvalue)
 
-          console.log(now, market_hash_name, floatValue, item.position)
+          console.log(now, market_hash_name, floatValue, item.price)
 
           if (config.isSweet(floatValue)) {
             const response = await getCSFloatListings({
               market_hash_name,
               ...(market_hash_name.includes('Factory New') && { max_float: 0.02 }),
               ...(market_hash_name.includes('Minimal Wear') && { max_float: 0.09 }),
-              ...(market_hash_name.includes('Field-Tested') && { max_float: 0.21 }),
+              ...(market_hash_name.includes('Field-Tested') && { max_float: 0.18 }),
             })
             const lowestPrice = response.data[0].price / 100
             const basePrice = response.data[0].reference.base_price / 100

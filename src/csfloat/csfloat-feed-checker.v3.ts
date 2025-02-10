@@ -87,7 +87,7 @@ const floatFeedChecker = async () => {
     console.log(error)
     console.log('Something went wrong:', error.message)
 
-    if (error.message.includes('429')) {
+    if (error.message.includes('429') || error.message.includes('403')) {
       await sendMessage(error?.message ?? 'Something went wrong.')
 
       return

@@ -687,7 +687,7 @@ type CSFloatMarketHashNameHistorySticker = {
 export type CSFloatMarketHashNameHistory = {
   id: string
   price: number
-  created_at: number
+  created_at: string
   reference: {
     base_price: number
     last_updated: string

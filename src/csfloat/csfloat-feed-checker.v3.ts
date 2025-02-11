@@ -48,7 +48,7 @@ const floatFeedChecker = async () => {
       const lowestOrderPrice = simpleOrders[0].price
       const estimatedMedianProfit = Number(((listingMedianPrice - lowestOrderPrice) / lowestOrderPrice) * 100)
 
-      await sleep(10_000)
+      await sleep(20_000)
 
       if (currentMarketOrder) {
         if (currentMarketOrder.price < simpleOrders[0].price) {

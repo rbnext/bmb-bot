@@ -1,7 +1,7 @@
 import 'dotenv/config'
 
 import { getBuyOrders, getCSFloatListings, getPlacedOrders, postBuyOrder, removeBuyOrder } from '../api/csfloat'
-import { sleep } from '../utils'
+import { median, sleep } from '../utils'
 import { sendMessage } from '../api/telegram'
 import path from 'path'
 import { readFileSync } from 'fs'
@@ -32,9 +32,9 @@ const floatFeedChecker = async () => {
       const response = await getCSFloatListings({ market_hash_name })
       const currentMarketOrder = activeMarketOrders.get(market_hash_name)
 
-      const listingPrice = response.data[0].price
+      const top5Items = response.data.slice(0, 5)
+      const listingMedianPrice = median(top5Items.map((i) => i.price))
       const listingReferenceId = response.data[0].id
-      const listingBasePrice = response.data[0].reference.base_price
 
       const orders = await getBuyOrders({ id: listingReferenceId })
 
@@ -46,14 +46,9 @@ const floatFeedChecker = async () => {
       }
 
       const lowestOrderPrice = simpleOrders[0].price
-      const estimatedBaseProfit = Number(((listingBasePrice - lowestOrderPrice) / lowestOrderPrice) * 100)
-      const estimatedPriceProfit = Number(((listingPrice - lowestOrderPrice) / lowestOrderPrice) * 100)
+      const estimatedMedianProfit = Number(((listingMedianPrice - lowestOrderPrice) / lowestOrderPrice) * 100)
 
       await sleep(10_000)
-
-      if (estimatedBaseProfit <= 1 && !BLACK_LIST.includes(market_hash_name)) {
-        BLACK_LIST.push(market_hash_name)
-      }
 
       if (currentMarketOrder) {
         if (currentMarketOrder.price < simpleOrders[0].price) {
@@ -64,12 +59,14 @@ const floatFeedChecker = async () => {
           console.log(market_hash_name, lowestOrderPrice, '->', Math.round(simpleOrders[1].price + 1))
           continue
         } else if (currentMarketOrder.price === lowestOrderPrice) {
-          if (estimatedBaseProfit >= 7) continue
+          if (estimatedMedianProfit >= 7) continue
           else await removeBuyOrder({ id: currentMarketOrder.id })
         }
       }
 
-      if (estimatedBaseProfit >= 7 && estimatedPriceProfit >= 7) {
+      console.log(market_hash_name, listingMedianPrice, estimatedMedianProfit)
+
+      if (estimatedMedianProfit >= 7) {
         await postBuyOrder({ market_hash_name, max_price: Math.round(lowestOrderPrice + 1) }).then(() => sleep(5_000))
         const floatLink = `https://csfloat.com/search?market_hash_name=${market_hash_name}&sort_by=lowest_price&type=buy_now`
 
@@ -78,7 +75,7 @@ const floatFeedChecker = async () => {
         messages.push('<b>[FLOAT ORDER]</b> ')
         messages.push(`<a href="${floatLink}">${market_hash_name}</a> `)
         if (currentMarketOrder) messages.push(`$${currentMarketOrder.price / 100} -> $${(lowestOrderPrice + 1) / 100}`)
-        else messages.push(`Profit ~${estimatedBaseProfit}% Order price: ${(lowestOrderPrice + 1) / 100}`)
+        else messages.push(`Profit ~${estimatedMedianProfit}% Median price: ${(lowestOrderPrice + 1) / 100}`)
 
         await sendMessage(messages.join(''))
       }

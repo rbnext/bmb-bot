@@ -10,7 +10,6 @@ import {
   CSFloatSimpleOrders,
   CSFloatTradesResponse,
 } from '../types'
-import { HttpsProxyAgent } from 'https-proxy-agent'
 import UserAgent from 'user-agents'
 import { FL_CURRENT_USER_ID } from '../config'
 
@@ -53,7 +52,7 @@ export const getCSFloatListings = async ({
   def_index?: number
   session?: string
 }): Promise<CSFloatListing> => {
-  const { data, headers } = await http.get('/v1/listings', {
+  const { data } = await http.get('/v1/listings', {
     params: {
       limit,
       def_index,

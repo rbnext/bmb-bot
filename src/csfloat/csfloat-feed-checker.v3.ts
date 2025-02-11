@@ -15,6 +15,7 @@ const BLACK_LIST = [
   'FAMAS | Commemoration (Factory New)',
   'M4A4 | The Coalition (Field-Tested)',
   'M4A4 | Desolate Space (Factory New)',
+  'FAMAS | Mecha Industries (Factory New)',
 ]
 
 const floatFeedChecker = async () => {

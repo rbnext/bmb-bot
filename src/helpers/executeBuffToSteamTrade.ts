@@ -4,7 +4,7 @@ import { STEAM_CHECK_THRESHOLD, STEAM_PURCHASE_THRESHOLD } from '../config'
 import { MarketGoodsItem, MessageType, Source } from '../types'
 import { generateMessage, getCSFloatItemPrice, getItemExterior } from '../utils'
 import { getMaxPricesForXDays } from './getMaxPricesForXDays'
-import { getCSFloatListings } from '../api/csfloat'
+// import { getCSFloatListings } from '../api/csfloat'
 
 export const executeBuffToSteamTrade = async (
   item: MarketGoodsItem,
@@ -18,7 +18,7 @@ export const executeBuffToSteamTrade = async (
 
   const orders = await getGoodsSellOrder({ goods_id, exclude_current_user: 1 })
   const lowestPricedItem = orders.data.items.find((el) => el.price === item.sell_min_price)
-  const { isFactoryNew, isFieldTested, isMinimalWear } = getItemExterior(item.market_hash_name)
+  // const { isFactoryNew, isFieldTested, isMinimalWear } = getItemExterior(item.market_hash_name)
 
   if (!lowestPricedItem) return
 
@@ -42,36 +42,38 @@ export const executeBuffToSteamTrade = async (
     stickerTotal: stickerTotal,
   }
 
-  if (isFactoryNew || isMinimalWear || isFieldTested) {
-    const response = await getCSFloatListings({ market_hash_name: item.market_hash_name })
+  // if (isFactoryNew || isMinimalWear || isFieldTested) {
+  //   const response = await getCSFloatListings({ market_hash_name: item.market_hash_name })
 
-    const cs_float_price = getCSFloatItemPrice(response)
-    const estimated_profit = ((cs_float_price - (current_price - k_total)) / (current_price - k_total)) * 100
+  //   const cs_float_price = getCSFloatItemPrice(response)
+  //   const estimated_profit = ((cs_float_price - (current_price - k_total)) / (current_price - k_total)) * 100
 
-    console.log(item.market_hash_name, estimated_profit.toFixed(2))
+  //   console.log(item.market_hash_name, estimated_profit.toFixed(2))
 
-    if ((current_price < 2 && estimated_profit >= 40) || (current_price >= 2 && estimated_profit >= 15)) {
-      const response = await postGoodsBuy({ price: current_price, sell_order_id: lowestPricedItem.id })
+  //   if ((current_price < 2 && estimated_profit >= 40) || (current_price >= 2 && estimated_profit >= 15)) {
+  //     const response = await postGoodsBuy({ price: current_price, sell_order_id: lowestPricedItem.id })
 
-      if (response.code !== 'OK') {
-        sendMessage(
-          `[${options.source}] Failed to purchase the item ${item.market_hash_name}. Reason: ${response.code}`
-        )
+  //     if (response.code !== 'OK') {
+  //       sendMessage(
+  //         `[${options.source}] Failed to purchase the item ${item.market_hash_name}. Reason: ${response.code}`
+  //       )
 
-        return
-      }
+  //       return
+  //     }
 
-      sendMessage(
-        generateMessage({
-          ...payload,
-          csFloatPrice: cs_float_price,
-          estimatedProfit: estimated_profit,
-          medianPrice: cs_float_price,
-          source: Source.BUFF_CSFLOAT,
-        })
-      )
-    }
-  } else if (STEAM_CHECK_THRESHOLD < ((steam_price - current_price) / current_price) * 100) {
+  //     sendMessage(
+  //       generateMessage({
+  //         ...payload,
+  //         csFloatPrice: cs_float_price,
+  //         estimatedProfit: estimated_profit,
+  //         medianPrice: cs_float_price,
+  //         source: Source.BUFF_CSFLOAT,
+  //       })
+  //     )
+  //   }
+  // } else
+
+  if (STEAM_CHECK_THRESHOLD < ((steam_price - current_price) / current_price) * 100) {
     const prices = await getMaxPricesForXDays(item.market_hash_name)
 
     const min_steam_price = prices.length !== 0 ? Math.min(...prices) : 0

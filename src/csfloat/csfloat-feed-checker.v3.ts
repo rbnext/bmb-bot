@@ -64,7 +64,8 @@ const floatFeedChecker = async () => {
           console.log(market_hash_name, lowestOrderPrice, '->', Math.round(simpleOrders[1].price + 1))
           continue
         } else if (currentMarketOrder.price === lowestOrderPrice) {
-          continue
+          if (estimatedBaseProfit >= 7) continue
+          else await removeBuyOrder({ id: currentMarketOrder.id })
         }
       }
 

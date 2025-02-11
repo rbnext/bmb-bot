@@ -75,7 +75,7 @@ const floatFeedChecker = async () => {
         messages.push('<b>[FLOAT ORDER]</b> ')
         messages.push(`<a href="${floatLink}">${market_hash_name}</a> `)
         if (currentMarketOrder) messages.push(`$${currentMarketOrder.price / 100} -> $${(lowestOrderPrice + 1) / 100}`)
-        else messages.push(`Profit ~${estimatedMedianProfit}% Median price: ${(lowestOrderPrice + 1) / 100}`)
+        else messages.push(`Profit ~${estimatedMedianProfit}% Order price: ${(lowestOrderPrice + 1) / 100}`)
 
         await sendMessage(messages.join(''))
       }

@@ -14,6 +14,7 @@ const BLACK_LIST = [
   'AK-47 | The Outsiders (Field-Tested)',
   'FAMAS | Commemoration (Factory New)',
   'M4A4 | The Coalition (Field-Tested)',
+  'M4A4 | Desolate Space (Factory New)',
 ]
 
 const floatFeedChecker = async () => {

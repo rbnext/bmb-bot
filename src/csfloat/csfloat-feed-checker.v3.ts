@@ -6,6 +6,7 @@ import { sendMessage } from '../api/telegram'
 import path from 'path'
 import { readFileSync } from 'fs'
 import { CSFloatPlacedOrder } from '../types'
+import { send } from 'process'
 
 const activeMarketOrders = new Map<string, CSFloatPlacedOrder>()
 const pathname = path.join(__dirname, '../../top-float-items.json')
@@ -47,6 +48,20 @@ const floatFeedChecker = async () => {
         continue
       }
 
+      const top3Orders = simpleOrders.slice(0, 3)
+      const min = Math.min(...top3Orders.map((i) => i.price))
+      const max = Math.max(...top3Orders.map((i) => i.price))
+
+      if (max - min >= 10) {
+        const messages: string[] = []
+        const floatLink = `https://csfloat.com/search?market_hash_name=${market_hash_name}&sort_by=lowest_price&type=buy_now`
+        messages.push(`⚠️ RISK ALERT <a href="${floatLink}">${market_hash_name}</a> `)
+        await sendMessage(messages.join(''))
+
+        await sleep(40_000)
+        continue
+      }
+
       const lowestOrderPrice = simpleOrders[0].price
       const estimatedMedianProfit = Number(((listingMedianPrice - lowestOrderPrice) / lowestOrderPrice) * 100)
 
@@ -82,15 +97,6 @@ const floatFeedChecker = async () => {
           const medianPrice = (listingMedianPrice / 100).toFixed(2)
 
           messages.push(`Profit ~${medianProfit}% / Order: ${(lowestOrderPrice + 1) / 100} / Median: $${medianPrice}`)
-        }
-
-        const orders = await getBuyOrders({ id: listingReferenceId })
-        const simpleOrders = orders.filter((i) => !!i.market_hash_name).slice(0, 3)
-
-        messages.push('\n\n<b>Buy Orders:</b>\n')
-
-        for (const [index, order] of simpleOrders.entries()) {
-          messages.push(`${index + 1}. $${(order.price / 100).toFixed(2)} - ${order.qty}\n`)
         }
 
         await sendMessage(messages.join(''))

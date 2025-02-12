@@ -52,7 +52,7 @@ const floatFeedChecker = async () => {
       const min = Math.min(...top3Orders.map((i) => i.price))
       const max = Math.max(...top3Orders.map((i) => i.price))
 
-      if (max - min >= 20) {
+      if (max - min >= 25) {
         const messages: string[] = []
         const floatLink = `https://csfloat.com/search?market_hash_name=${market_hash_name}&sort_by=lowest_price&type=buy_now`
         messages.push(`⚠️ RISK ALERT <a href="${floatLink}">${market_hash_name}</a> `)

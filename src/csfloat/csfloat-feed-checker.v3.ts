@@ -59,6 +59,10 @@ const floatFeedChecker = async () => {
         await sendMessage(messages.join(''))
 
         await sleep(40_000)
+
+        if (currentMarketOrder) {
+          await removeBuyOrder({ id: currentMarketOrder.id })
+        }
         continue
       }
 

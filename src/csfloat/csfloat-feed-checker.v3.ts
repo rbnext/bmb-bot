@@ -16,6 +16,7 @@ const BLACK_LIST = [
   'M4A4 | The Coalition (Field-Tested)',
   'M4A4 | Desolate Space (Factory New)',
   'FAMAS | Mecha Industries (Factory New)',
+  'M4A4 | 龍王 (Dragon King) (Minimal Wear)',
 ]
 
 const floatFeedChecker = async () => {
@@ -81,6 +82,15 @@ const floatFeedChecker = async () => {
           const medianPrice = (listingMedianPrice / 100).toFixed(2)
 
           messages.push(`Profit ~${medianProfit}% / Order: ${(lowestOrderPrice + 1) / 100} / Median: $${medianPrice}`)
+        }
+
+        const orders = await getBuyOrders({ id: listingReferenceId })
+        const simpleOrders = orders.filter((i) => !!i.market_hash_name).slice(0, 3)
+
+        messages.push('\n\n<b>Buy Orders:</b>\n')
+
+        for (const [index, order] of simpleOrders.entries()) {
+          messages.push(`${index + 1}. $${(order.price / 100).toFixed(2)} - ${order.qty}\n`)
         }
 
         await sendMessage(messages.join(''))

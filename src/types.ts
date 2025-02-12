@@ -652,6 +652,7 @@ export type CSFloatMySellingList = {
 export type CSFloatBuyOrder = {
   market_hash_name?: string
   price: number
+  qty: number
 }
 
 export type CSFloatItemInfoStickerItem = {

@@ -32,6 +32,7 @@ const floatFeedChecker = async () => {
   try {
     for (const market_hash_name of Object.keys(mostPopularItems)) {
       if (BLACK_LIST.includes(market_hash_name)) continue
+      if (market_hash_name.includes('M4A4')) continue
 
       const response = await getCSFloatListings({ market_hash_name })
       const currentMarketOrder = activeMarketOrders.get(market_hash_name)

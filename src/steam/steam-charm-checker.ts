@@ -82,8 +82,6 @@ const init = async () => {
           }
 
           CASHED_LISTINGS.add(item.listingId)
-
-          await sleep(2_000)
         }
 
         await sleep(40_000 / configList.length)

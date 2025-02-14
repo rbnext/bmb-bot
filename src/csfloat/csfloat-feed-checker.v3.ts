@@ -6,17 +6,18 @@ import { sendMessage } from '../api/telegram'
 import path from 'path'
 import { readFileSync } from 'fs'
 import { CSFloatPlacedOrder } from '../types'
-import { send } from 'process'
 
 const activeMarketOrders = new Map<string, CSFloatPlacedOrder>()
 const pathname = path.join(__dirname, '../../top-float-items.json')
 
 const BLACK_LIST = [
   'AK-47 | The Outsiders (Field-Tested)',
+  'AK-47 | The Outsiders (Minimal Wear)',
   'FAMAS | Commemoration (Factory New)',
+  'FAMAS | Commemoration (Minimal Wear)',
+  'FAMAS | Mecha Industries (Factory New)',
   'M4A4 | The Coalition (Field-Tested)',
   'M4A4 | Desolate Space (Factory New)',
-  'FAMAS | Mecha Industries (Factory New)',
   'M4A4 | 龍王 (Dragon King) (Minimal Wear)',
 ]
 

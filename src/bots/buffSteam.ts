@@ -29,7 +29,10 @@ const buffSteam = async () => {
         continue
       }
 
-      if (item.id in GOODS_CACHE && isLessThanThreshold(GOODS_CACHE[item.id].price, current_price, 0.1)) {
+      if (
+        item.id in GOODS_CACHE &&
+        isLessThanThreshold(GOODS_CACHE[item.id].price, current_price, current_price >= 1 ? 0.1 : 0.05)
+      ) {
         GOODS_CACHE[item.id].price = current_price
 
         continue

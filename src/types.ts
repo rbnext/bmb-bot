@@ -795,4 +795,5 @@ export type MapSteamMarketRenderResponse = {
   position: number
   listingId: string
   isStickerCombos: boolean
+  pattern: null | number
 }

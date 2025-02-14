@@ -31,6 +31,7 @@ export const mapSteamMarketRenderResponse = (data: SteamMarketRender) => {
     const assetInfo = data.assets[730][listing.asset.contextid][listing.asset.id]
     const stickerInfo = assetInfo.descriptions.find((el) => el.value.includes('sticker_info'))?.value || ''
     const keychainInfo = assetInfo.descriptions.find((el) => el.value.includes('keychain_info'))?.value || ''
+    const charmTemplate = assetInfo.descriptions.find((el) => el.value.includes('Charm Template'))?.value || ''
 
     const stickers = extractSteamItemInfo(stickerInfo)
     const keychains = extractSteamItemInfo(keychainInfo)
@@ -38,6 +39,8 @@ export const mapSteamMarketRenderResponse = (data: SteamMarketRender) => {
 
     const link = listing.asset.market_actions[0].link
     const inspectUrl = getInspectLink(link, listing.asset.id, listingId)
+
+    const pattern = charmTemplate ? Number(charmTemplate.match(/\d+/g)) : null
 
     return [
       ...acc,
@@ -49,6 +52,7 @@ export const mapSteamMarketRenderResponse = (data: SteamMarketRender) => {
         position: index + 1,
         isStickerCombos,
         listingId,
+        pattern,
       },
     ]
   }, [])

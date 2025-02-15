@@ -70,7 +70,7 @@ const init = async () => {
           if (!item.price || !item.pattern || CASHED_LISTINGS.has(item.listingId)) continue
 
           const now = format(new Date(), 'HH:mm:ss')
-          console.log(now, market_hash_name, item.pattern, item.price)
+          console.log(now, market_hash_name, item.pattern, item.price, config.start + item.position)
 
           if (config.isSweet(item.pattern, item.price)) {
             const message: string[] = []

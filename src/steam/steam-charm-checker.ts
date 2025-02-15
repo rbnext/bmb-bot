@@ -12,46 +12,43 @@ import { getVercelMarketRender } from '../api/versel'
 
 const CASHED_LISTINGS = new Set<string>()
 
-const isDieCastAKSweet = (pattern: number, price: number) => {
-  if (
-    (pattern >= 1 && pattern <= 5000 && price <= 15) ||
-    (pattern > 5000 && pattern <= 9000 && price <= 10) ||
-    (pattern >= 20000 && pattern <= 23000 && price <= 17) ||
-    (pattern > 23000 && pattern <= 25000 && price <= 10) ||
-    (pattern >= 90000 && pattern <= 94999 && price <= 8) ||
-    (pattern >= 95000 && pattern <= 98999 && price <= 12) ||
-    (pattern >= 99000 && pattern <= 99999 && price <= 20)
-  ) {
-    return true
-  }
-
-  return false
-}
-
 const configList = [
   {
     market_hash_name: 'Charm | Die-cast AK',
-    isSweet: isDieCastAKSweet,
-    start: 200,
-  },
-  {
-    market_hash_name: 'Charm | Die-cast AK',
-    isSweet: isDieCastAKSweet,
-    start: 300,
-  },
-  {
-    market_hash_name: 'Charm | Die-cast AK',
-    isSweet: isDieCastAKSweet,
-    start: 400,
-  },
-  {
-    market_hash_name: 'Charm | POP Art',
-    isSweet: (pattern: number) => {
-      if (pattern >= 98000 && pattern <= 2000) {
+    isSweet: (pattern: number, price: number) => {
+      if (
+        (pattern >= 1 && pattern <= 5000 && price <= 15) ||
+        (pattern > 5000 && pattern <= 9000 && price <= 10) ||
+        (pattern >= 20000 && pattern <= 23000 && price <= 17) ||
+        (pattern > 23000 && pattern <= 25000 && price <= 10) ||
+        (pattern >= 90000 && pattern <= 94999 && price <= 8) ||
+        (pattern >= 95000 && pattern <= 98999 && price <= 12) ||
+        (pattern >= 99000 && pattern <= 99999 && price <= 20)
+      ) {
         return true
       }
 
       return false
+    },
+    start: 0,
+  },
+  {
+    market_hash_name: "Charm | That's Bananas",
+    isSweet: (pattern: number, price: number) => {
+      if ((pattern >= 95000 || pattern <= 5000) && price <= 2.5) {
+        return true
+      }
+
+      return false
+    },
+    start: 0,
+  },
+  {
+    market_hash_name: 'Charm | POP Art',
+    isSweet: (pattern: number) => {
+      if (pattern >= 98000 || pattern <= 2000) {
+        return true
+      }
     },
     start: 0,
   },

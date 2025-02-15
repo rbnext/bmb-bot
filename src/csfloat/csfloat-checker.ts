@@ -38,6 +38,8 @@ const init = async () => {
       charmPrice === 0 ||
       basePrice < MIN_PRICE ||
       basePrice > MAX_PRICE ||
+      currentPrice < MIN_PRICE ||
+      currentPrice > MAX_PRICE ||
       quantity <= 100 ||
       totalTrades >= 10
     ) {
@@ -46,7 +48,7 @@ const init = async () => {
 
     const profit = predictedPrice + charmPrice - 0.33 - currentPrice
 
-    console.log(now, data.item.market_hash_name, profit)
+    console.log(now, `${charm.name}: #${charm.pattern} (~$${charmPrice / 100})`)
 
     if (profit > 1) {
       const message: string[] = []

@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { MapSteamMarketRenderResponse } from '../types'
+import { CSFloatListing, MapSteamMarketRenderResponse } from '../types'
 
 export const getVercelMarketRender = async ({
   market_hash_name,
@@ -44,6 +44,29 @@ export const getVercelSearchMarketRender = async ({
 
   const { data } = await axios.post(`https://${proxy}.vercel.app/api`, {
     url: `https://steamcommunity.com/market/search/render?${params}`,
+  })
+
+  return data
+}
+
+export const getVercelCSFloatListings = async ({
+  proxy,
+  session,
+  min_price,
+  max_price,
+  max_float,
+}: {
+  proxy: string
+  session: string
+  min_price: number
+  max_price: number
+  max_float: number
+}): Promise<CSFloatListing> => {
+  const { data } = await axios.post(`https://${proxy}.vercel.app/api/csfloat`, {
+    session,
+    min_price,
+    max_price,
+    max_float,
   })
 
   return data

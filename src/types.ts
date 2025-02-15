@@ -596,6 +596,9 @@ type CSFloatListingItem = {
   }
   seller: {
     steam_id: string
+    statistics: {
+      total_trades: number
+    }
   }
   reference: {
     base_price: number
@@ -796,4 +799,16 @@ export type MapSteamMarketRenderResponse = {
   listingId: string
   isStickerCombos: boolean
   pattern: null | number
+}
+
+type ConfigFloatSessionsItem = {
+  session: string
+  steamName: string
+  proxy: string
+}
+
+export type Config = {
+  float: {
+    sessions: ConfigFloatSessionsItem[]
+  }
 }

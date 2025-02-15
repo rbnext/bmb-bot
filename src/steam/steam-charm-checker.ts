@@ -63,11 +63,11 @@ const configList = [
 ]
 
 const init = async () => {
-  try {
-    do {
-      for (const [index, config] of configList.entries()) {
-        const market_hash_name = config.market_hash_name
+  do {
+    for (const [index, config] of configList.entries()) {
+      const market_hash_name = config.market_hash_name
 
+      try {
         const steamMarketResponse: MapSteamMarketRenderResponse[] = await getVercelMarketRender({
           market_hash_name,
           proxy: `${process.env.STEAM_PROXY}${index + 1}`,
@@ -93,21 +93,14 @@ const init = async () => {
 
           CASHED_LISTINGS.add(item.listingId)
         }
-
+      } catch (error) {
+        console.log(format(new Date(), 'HH:mm:ss'), 'ERROR', error.message)
+      } finally {
         await sleep(40_000 / configList.length)
       }
-
-      // eslint-disable-next-line no-constant-condition
-    } while (true)
-  } catch (error) {
-    console.log(format(new Date(), 'HH:mm:ss'), 'ERROR', error.message)
-
-    if (error.message?.includes('403')) await sleep(60_000 * 2)
-    if (error.message?.includes('401')) await sleep(60_000 * 2)
-    if (error.message?.includes('canceled')) await sleep(60_000)
-  }
-
-  init()
+    }
+    // eslint-disable-next-line no-constant-condition
+  } while (true)
 }
 
 init()

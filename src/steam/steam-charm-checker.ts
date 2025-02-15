@@ -5,9 +5,8 @@ dotenv.config()
 import { format } from 'date-fns'
 import { sendMessage } from '../api/telegram'
 import { getSteamUrl, sleep } from '../utils'
-import { mapSteamMarketRenderResponse } from './utils'
 
-import { SteamMarketRender } from '../types'
+import { MapSteamMarketRenderResponse } from '../types'
 import { getVercelMarketRender } from '../api/versel'
 
 const CASHED_LISTINGS = new Set<string>()
@@ -69,25 +68,23 @@ const init = async () => {
       for (const [index, config] of configList.entries()) {
         const market_hash_name = config.market_hash_name
 
-        const response: SteamMarketRender = await getVercelMarketRender({
+        const steamMarketResponse: MapSteamMarketRenderResponse[] = await getVercelMarketRender({
           market_hash_name,
           proxy: `${process.env.STEAM_PROXY}${index + 1}`,
           start: config.start,
           count: 100,
         })
 
-        const steamMarketResponse = mapSteamMarketRenderResponse(response)
-
-        for (const item of steamMarketResponse) {
+        for (const [index, item] of steamMarketResponse.entries()) {
           if (!item.pattern || CASHED_LISTINGS.has(item.listingId)) continue
 
           const now = format(new Date(), 'HH:mm:ss')
-          console.log(now, market_hash_name, item.pattern, item.price, config.start + item.position)
+          console.log(now, market_hash_name, item.pattern, item.price, config.start + index + 1)
 
           if (config.isSweet(item.pattern)) {
             const message: string[] = []
             message.push(
-              `<a href="${getSteamUrl(market_hash_name, [])}">${market_hash_name}</a> | #${config.start + item.position}\n\n`
+              `<a href="${getSteamUrl(market_hash_name, [])}">${market_hash_name}</a> | #${config.start + index + 1}\n\n`
             )
             message.push(`<b>Steam price</b>: $${item.price ? item.price : 'Sold!'}\n`)
             message.push(`<b>Charm template</b>: #${item.pattern}\n`)

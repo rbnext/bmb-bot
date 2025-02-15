@@ -166,8 +166,8 @@ const buffSelling = async () => {
     await sleep(5_000)
   }
 
-  for (const page_num of Array.from({ length: 4 }, (_, i) => i)) {
-    const response = await getCSFloatTrades({ page: page_num })
+  for (const page_num of Array.from({ length: 2 }, (_, i) => i)) {
+    const response = await getCSFloatTrades({ page: page_num, limit: 100 })
     for (const item of response.trades) buyOrderHistoryList.push(mapCSFloatBuyHistory(item))
     await sleep(5_000)
   }

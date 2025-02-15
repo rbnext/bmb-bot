@@ -47,7 +47,7 @@ const configList = [
   {
     market_hash_name: 'Charm | POP Art',
     isSweet: (pattern: number) => {
-      if (pattern >= 99000 && pattern <= 1000) {
+      if (pattern >= 98000 && pattern <= 2000) {
         return true
       }
 

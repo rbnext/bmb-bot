@@ -32,22 +32,22 @@ const configList = [
   {
     market_hash_name: 'Charm | Die-cast AK',
     isSweet: isDieCastAKSweet,
-    start: 0,
-  },
-  {
-    market_hash_name: 'Charm | Die-cast AK',
-    isSweet: isDieCastAKSweet,
-    start: 100,
-  },
-  {
-    market_hash_name: 'Charm | Die-cast AK',
-    isSweet: isDieCastAKSweet,
     start: 200,
   },
   {
     market_hash_name: 'Charm | Die-cast AK',
     isSweet: isDieCastAKSweet,
     start: 300,
+  },
+  {
+    market_hash_name: 'Charm | Die-cast AK',
+    isSweet: isDieCastAKSweet,
+    start: 400,
+  },
+  {
+    market_hash_name: 'Charm | Die-cast AK',
+    isSweet: isDieCastAKSweet,
+    start: 500,
   },
 ]
 

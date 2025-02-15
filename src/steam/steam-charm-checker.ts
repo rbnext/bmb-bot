@@ -45,9 +45,15 @@ const configList = [
     start: 400,
   },
   {
-    market_hash_name: 'Charm | Die-cast AK',
-    isSweet: isDieCastAKSweet,
-    start: 500,
+    market_hash_name: 'Charm | POP Art',
+    isSweet: (pattern: number) => {
+      if (pattern >= 99000 && pattern <= 1000) {
+        return true
+      }
+
+      return false
+    },
+    start: 0,
   },
 ]
 

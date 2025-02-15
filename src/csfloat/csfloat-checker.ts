@@ -46,18 +46,16 @@ const init = async () => {
       continue
     }
 
-    const profit = predictedPrice + charmPrice - 0.33 - currentPrice
+    const profit = predictedPrice + charmPrice - 33 - currentPrice
+    const floatLink = `https://csfloat.com/search?market_hash_name=${market_hash_name}&sort_by=lowest_price&type=buy_now`
 
     console.log(now, `${charm.name}: #${charm.pattern} (~$${charmPrice / 100})`)
 
-    if (profit > 1) {
+    if (profit > 100) {
       const message: string[] = []
-
-      const floatLink = `https://csfloat.com/search?market_hash_name=${market_hash_name}&sort_by=lowest_price&type=buy_now`
-
       message.push(`<a href="${floatLink}">${market_hash_name}</a>\n\n`)
-      message.push(`<b>${charm.name}</b>: ${charm.pattern} (~$${charmPrice / 100})\n\n`)
-      message.push(`<b>Price</b>: $${currentPrice}\n`)
+      message.push(`<b>${charm.name}</b>: #${charm.pattern} (~$${charmPrice / 100})\n\n`)
+      message.push(`<b>Price</b>: $${currentPrice / 100}\n`)
       message.push(`<b>Estimated profit</b>: ~$${profit.toFixed(2)}\n\n`)
       await sendMessage(message.join(''), undefined, process.env.TELEGRAM_REPORT_ID)
     }

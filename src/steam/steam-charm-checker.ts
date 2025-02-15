@@ -75,6 +75,10 @@ const init = async () => {
           count: 100,
         })
 
+        if (steamMarketResponse.length === 0) {
+          throw new Error('No items found')
+        }
+
         for (const [index, item] of steamMarketResponse.entries()) {
           if (!item.pattern || CASHED_LISTINGS.has(item.listingId)) continue
 

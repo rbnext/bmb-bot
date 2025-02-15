@@ -581,7 +581,7 @@ type CSFloatListingItemCharmItem = {
   stickerId: number
 }
 
-type CSFloatListingItem = {
+export type CSFloatListingItem = {
   created_at: string
   id: string
   price: number

@@ -4,10 +4,12 @@ import {
   CSFloatBuyOrder,
   CSFloatItemInfo,
   CSFloatListing,
+  CSFloatListingItem,
   CSFloatMarketHashNameHistory,
   CSFloatMySellingList,
   CSFloatPlacedOrders,
   CSFloatSimpleOrders,
+  CSFloatSimpleOrdersItem,
   CSFloatTradesResponse,
 } from '../types'
 import UserAgent from 'user-agents'
@@ -110,22 +112,12 @@ export const getCSFloatSimpleOrders = async ({
   return data
 }
 
-export const getMarketHashNameHistory = async ({
-  market_hash_name,
-}: {
-  market_hash_name: string
-}): Promise<CSFloatMarketHashNameHistory[]> => {
-  const { data, headers } = await http.get(`/v1/history/${market_hash_name}/sales`, {
+export const getCSFloatSimpleListings = async ({ id }: { id: string }): Promise<CSFloatListingItem[]> => {
+  const { data } = await http.get(`/v1/listings/${id}/similar`, {
     headers: {
-      'User-Agent': new UserAgent().toString(),
       Cookie: `session=${process.env.CSFLOAT_SESSION_TOKEN}`,
     },
-    // httpsAgent: new HttpsProxyAgent(`http://`),
-    signal: AbortSignal.timeout(5000),
-    timeout: 5000,
   })
-
-  console.log(headers['x-ratelimit-remaining'])
 
   return data
 }

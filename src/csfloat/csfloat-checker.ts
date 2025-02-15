@@ -3,7 +3,7 @@ import 'dotenv/config'
 import { sleep } from '../utils'
 import { sendMessage } from '../api/telegram'
 import { format } from 'date-fns'
-import { getCSFloatListings } from '../api/csfloat'
+import { getCSFloatListings, getCSFloatSimpleListings } from '../api/csfloat'
 
 const CASHED_LISTINGS = new Set<string>()
 
@@ -52,10 +52,14 @@ const init = async () => {
     console.log(now, `${charm.name}: #${charm.pattern} (~$${charmPrice / 100})`)
 
     if (profit > 100) {
+      const response = await getCSFloatSimpleListings({ id: data.id })
+      const sortedLowestListing = response.sort((a, b) => a.price - b.price)[0]
+
       const message: string[] = []
       message.push(`<a href="${floatLink}">${market_hash_name}</a>\n\n`)
       message.push(`<b>${charm.name}</b>: #${charm.pattern} (~$${charmPrice / 100})\n\n`)
       message.push(`<b>Price</b>: $${currentPrice / 100}\n`)
+      message.push(`<b>Lowest price</b>: $${sortedLowestListing.price / 100}\n`)
       message.push(`<b>Estimated profit</b>: ~$${profit.toFixed(2)}\n\n`)
       await sendMessage(message.join(''), undefined, process.env.TELEGRAM_REPORT_ID)
     }

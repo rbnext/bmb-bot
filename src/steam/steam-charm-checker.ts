@@ -35,7 +35,7 @@ const configList = [
   {
     market_hash_name: "Charm | That's Bananas",
     isSweet: (pattern: number) => {
-      if (pattern >= 96000 || pattern <= 4000) {
+      if (pattern >= 98000 || pattern <= 2000) {
         return true
       }
 

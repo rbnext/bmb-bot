@@ -1,10 +1,8 @@
 import 'dotenv/config'
 
 import { sleep } from '../utils'
-import { getVercelCSFloatListings } from '../api/versel'
 import { sendMessage } from '../api/telegram'
 import { format } from 'date-fns'
-import { config } from '../../config'
 import { getCSFloatListings } from '../api/csfloat'
 
 const CASHED_LISTINGS = new Set<string>()

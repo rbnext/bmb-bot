@@ -73,7 +73,7 @@ const init = async () => {
           market_hash_name,
           proxy: `${process.env.STEAM_PROXY}${index + 1}`,
           start: config.start,
-          count: 10,
+          count: 100,
         })
 
         const steamMarketResponse = mapSteamMarketRenderResponse(response)

@@ -233,3 +233,18 @@ export const getMySellingList = async ({
 
   return data
 }
+
+export const getMarketHashNameHistory = async ({
+  market_hash_name,
+}: {
+  market_hash_name: string
+}): Promise<CSFloatMarketHashNameHistory[]> => {
+  const { data } = await http.get(`/v1/history/${market_hash_name}/sales`, {
+    headers: {
+      'User-Agent': new UserAgent().toString(),
+      Cookie: `session=${process.env.CSFLOAT_SESSION_TOKEN}`,
+    },
+  })
+
+  return data
+}

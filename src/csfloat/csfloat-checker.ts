@@ -4,7 +4,7 @@ import schedule from 'node-schedule'
 import { median } from '../utils'
 import { sendMessage } from '../api/telegram'
 import { format } from 'date-fns'
-import { getCSFloatListings, getCSFloatSimpleListings } from '../api/csfloat'
+import { getCSFloatListings, getCSFloatSimpleListings, getMarketHashNameHistory } from '../api/csfloat'
 
 const CASHED_LISTINGS = new Set<string>()
 
@@ -92,9 +92,25 @@ const handler = async () => {
 
         await sendMessage(message.join(''), undefined, process.env.TELEGRAM_REPORT_ID)
       } else if (isSweetFloat(floatValue)) {
+        const response = await getMarketHashNameHistory({ market_hash_name })
+
+        const filteredItems = response.filter((item) => isSweetFloat(item.item.float_value))
+
         message.push(`<b>Price</b>: $${currentPrice / 100}\n`)
         message.push(`<b>Lowest price</b>: $${minListingPrice / 100}\n`)
         message.push(`<b>Median price</b>: $${listingMedianPrice / 100}\n\n`)
+
+        if (filteredItems.length !== 0) {
+          const floatMedianPrice = median(filteredItems.map((i) => i.price))
+          const estimatedProfitPercent = (floatMedianPrice / currentPrice - 1) * 100
+
+          if (estimatedProfitPercent > 0) {
+            message.push(
+              `<b>Estimated profit</b>: ${estimatedProfitPercent.toFixed(2)}% (if sold for $${(estimatedToBeSold / 100).toFixed(2)})\n\n`
+            )
+          }
+        }
+
         message.push(`<b>Float</b>: ${floatValue}`)
         await sendMessage(message.join(''), undefined, process.env.TELEGRAM_REPORT_ID)
       }

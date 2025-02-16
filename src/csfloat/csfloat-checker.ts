@@ -36,34 +36,62 @@ const handler = async () => {
     const stickers = data.item.stickers || []
     const stickerTotal = stickers.reduce((acc, { reference, wear }) => (wear ? acc : acc + reference.price), 0)
 
-    if (isSouvenir || !charm || currentPrice > basePrice * 1.5 || quantity <= 100 || totalTrades >= 100) {
+    if (isSouvenir || currentPrice > basePrice * 1.2 || quantity <= 100 || totalTrades >= 100) {
       continue
     }
 
-    const simpleListings = await getCSFloatSimpleListings({ id: data.id })
+    if (charmPrice > 50 || stickerTotal >= 3000) {
+      const simpleListings = await getCSFloatSimpleListings({ id: data.id })
 
-    const filteredListings = simpleListings.filter((i) => i.type === 'buy_now')
-    const listingMedianPrice = median(filteredListings.map((i) => i.price))
-    const listingLowestPrice = filteredListings.sort((a, b) => a.price - b.price)[0].price
-    const listingFinalLowestPrice = currentPrice - charmPrice + 33
+      const filteredListings = simpleListings.filter((i) => i.type === 'buy_now')
 
-    const estimatedProfit = ((listingMedianPrice - listingFinalLowestPrice) / listingFinalLowestPrice) * 100
+      const listingMedianPrice = median(filteredListings.map((i) => i.price))
+      const listingLowestPrice = filteredListings.sort((a, b) => a.price - b.price)[0].price
 
-    const floatLink = `https://csfloat.com/search?market_hash_name=${market_hash_name}&sort_by=lowest_price&type=buy_now`
+      const maxListingPrice = Math.max(...filteredListings.map((i) => i.price))
+      const minListingPrice = Math.min(...filteredListings.map((i) => i.price))
 
-    console.log(format(new Date(), 'HH:mm:ss'), market_hash_name, estimatedProfit.toFixed(2) + '%', stickerTotal)
+      if ((maxListingPrice / minListingPrice - 1) * 100 > 10) {
+        CASHED_LISTINGS.add(data.id)
 
-    if (estimatedProfit >= 5) {
-      const message: string[] = []
-      message.push(`<a href="${floatLink}">${market_hash_name}</a>\n\n`)
-      message.push(`<b>${charm.name}</b> ($${charmPrice / 100}) #${charm.pattern}\n\n`)
-      message.push(`<b>Price</b>: $${currentPrice / 100}\n`)
-      message.push(`<b>Lowest price</b>: $${listingLowestPrice / 100}\n`)
-      message.push(`<b>Median price</b>: $${listingMedianPrice / 100}\n`)
-      message.push(`<b>Estimated profit</b>: ${estimatedProfit.toFixed(2)}%\n\n`)
-      message.push(`<b>Float</b>: ${floatValue}`)
+        continue
+      }
 
-      await sendMessage(message.join(''), undefined, process.env.TELEGRAM_REPORT_ID)
+      const estimatedToBeSold = listingMedianPrice + stickerTotal * 0.05 + charmPrice - 33
+      const estimatedProfitPercent = (estimatedToBeSold / currentPrice - 1) * 100
+
+      const floatLink = `https://csfloat.com/search?market_hash_name=${market_hash_name}&sort_by=lowest_price&type=buy_now`
+
+      console.log(format(new Date(), 'HH:mm:ss'), {
+        market_hash_name,
+        listingMedianPrice,
+        currentPrice,
+        stickerTotal,
+        charmPrice,
+      })
+
+      if (estimatedProfitPercent >= 5) {
+        const message: string[] = []
+        message.push(`<a href="${floatLink}">${market_hash_name}</a>\n\n`)
+        if (charm) {
+          message.push(`<b>${charm.name}</b> ($${charmPrice / 100}) #${charm.pattern}\n\n`)
+        }
+        stickers.forEach((sticker) => {
+          if (!sticker.wear) {
+            message.push(`<b>${sticker.name}</b> ($${sticker.reference.price / 100})\n`)
+          }
+        })
+        if (stickers.length !== 0) message.push(`\n`)
+        message.push(`<b>Price</b>: $${currentPrice / 100}\n`)
+        message.push(`<b>Lowest price</b>: $${listingLowestPrice / 100}\n`)
+        message.push(`<b>Median price</b>: $${listingMedianPrice / 100}\n`)
+        message.push(
+          `<b>Estimated profit</b>: ${estimatedProfitPercent.toFixed(2)}% (if sold for $${(estimatedToBeSold / 100).toFixed(2)})\n\n`
+        )
+        message.push(`<b>Float</b>: ${floatValue}`)
+
+        await sendMessage(message.join(''), undefined, process.env.TELEGRAM_REPORT_ID)
+      }
     }
 
     CASHED_LISTINGS.add(data.id)

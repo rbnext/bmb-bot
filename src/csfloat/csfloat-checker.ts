@@ -1,6 +1,6 @@
 import 'dotenv/config'
 
-import { sleep } from '../utils'
+import { median, sleep } from '../utils'
 import { sendMessage } from '../api/telegram'
 import { format } from 'date-fns'
 import { getCSFloatListings, getCSFloatSimpleListings } from '../api/csfloat'
@@ -26,7 +26,6 @@ const init = async () => {
     const currentPrice = data.price
     const quantity = data.reference.quantity
     const basePrice = data.reference.base_price
-    const predictedPrice = data.reference.predicted_price
     const totalTrades = data.seller.statistics.total_trades || 0
     const market_hash_name = data.item.market_hash_name
 
@@ -46,21 +45,29 @@ const init = async () => {
       continue
     }
 
-    const profit = predictedPrice + charmPrice - 33 - currentPrice
+    const simpleListings = await getCSFloatSimpleListings({ id: data.id })
+
+    const listingMedianPrice = median(simpleListings.map((i) => i.price))
+    const listingLowestPrice = simpleListings.sort((a, b) => a.price - b.price)[0].price
+    const listingFinalLowestPrice = listingLowestPrice - charmPrice + 33
+
+    const estimatedProfit = ((listingMedianPrice - listingFinalLowestPrice) / listingFinalLowestPrice) * 100
+
     const floatLink = `https://csfloat.com/search?market_hash_name=${market_hash_name}&sort_by=lowest_price&type=buy_now`
 
-    console.log(now, `${charm.name}: #${charm.pattern} (~$${charmPrice / 100})`)
+    console.log(now, market_hash_name, estimatedProfit.toFixed(2) + '%')
 
-    if (profit > 100) {
-      const response = await getCSFloatSimpleListings({ id: data.id })
-      const sortedLowestListing = response.sort((a, b) => a.price - b.price)[0]
-
+    if (estimatedProfit >= 5) {
       const message: string[] = []
       message.push(`<a href="${floatLink}">${market_hash_name}</a>\n\n`)
-      message.push(`<b>${charm.name}</b>: #${charm.pattern} (~$${charmPrice / 100})\n\n`)
+
+      message.push(`<b>Charm:</b>\n`)
+      message.push(`<b>${charm.name}</b> ($${charmPrice / 100}) #${charm.pattern}\n\n`)
+
       message.push(`<b>Price</b>: $${currentPrice / 100}\n`)
-      message.push(`<b>Lowest price</b>: $${sortedLowestListing.price / 100}\n`)
-      message.push(`<b>Estimated profit</b>: ~$${profit / 100}\n\n`)
+      message.push(`<b>Lowest price</b>: $${listingLowestPrice / 100}\n`)
+      message.push(`<b>Estimated profit</b>: ~$${(estimatedProfit / 100).toFixed(2)}`)
+
       await sendMessage(message.join(''), undefined, process.env.TELEGRAM_REPORT_ID)
     }
 

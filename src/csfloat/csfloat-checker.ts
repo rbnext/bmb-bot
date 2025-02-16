@@ -45,12 +45,8 @@ const handler = async () => {
     }
 
     const simpleListings = await getCSFloatSimpleListings({ id: data.id })
-
     const filteredListings = simpleListings.filter((i) => i.type === 'buy_now')
-
     const listingMedianPrice = median(filteredListings.map((i) => i.price))
-    const listingLowestPrice = filteredListings.sort((a, b) => a.price - b.price)[0].price
-
     const maxListingPrice = Math.max(...filteredListings.map((i) => i.price))
     const minListingPrice = Math.min(...filteredListings.map((i) => i.price))
 
@@ -72,16 +68,16 @@ const handler = async () => {
         const message: string[] = []
         message.push(`<a href="${floatLink}">${market_hash_name}</a>\n\n`)
         if (charm) {
-          message.push(`<b>${charm.name}</b> ($${charmPrice / 100}) #${charm.pattern}\n\n`)
+          message.push(`<b>${charm.name}</b> ($${charmPrice / 100}) #${charm.pattern}\n`)
         }
-        stickers.forEach((sticker) => {
-          if (!sticker.wear && sticker.reference?.price) {
-            message.push(`<b>${sticker.name}</b> ($${sticker.reference.price / 100})\n`)
-          }
-        })
-        if (stickers.length !== 0) message.push(`\n`)
+        for (const sticker of stickers) {
+          message.push(
+            `<b>${sticker.name}</b> ($${sticker.reference?.price || 0 / 100}) ${sticker?.wear ? 'N/A' : '100%'}\n`
+          )
+        }
+        message.push(`\n`)
         message.push(`<b>Price</b>: $${currentPrice / 100}\n`)
-        message.push(`<b>Lowest price</b>: $${listingLowestPrice / 100}\n`)
+        message.push(`<b>Lowest price</b>: $${minListingPrice / 100}\n`)
         message.push(`<b>Median price</b>: $${listingMedianPrice / 100}\n`)
         message.push(
           `<b>Estimated profit</b>: ${estimatedProfitPercent.toFixed(2)}% (if sold for $${(estimatedToBeSold / 100).toFixed(2)})\n\n`

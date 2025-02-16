@@ -1,6 +1,7 @@
 import 'dotenv/config'
 
-import { median, sleep } from '../utils'
+import schedule from 'node-schedule'
+import { median } from '../utils'
 import { sendMessage } from '../api/telegram'
 import { format } from 'date-fns'
 import { getCSFloatListings, getCSFloatSimpleListings } from '../api/csfloat'
@@ -10,7 +11,7 @@ const CASHED_LISTINGS = new Set<string>()
 const MIN_PRICE = 500
 const MAX_PRICE = 10000
 
-const init = async () => {
+const handler = async () => {
   const response = await getCSFloatListings({
     sort_by: 'most_recent',
     min_price: MIN_PRICE,
@@ -19,8 +20,6 @@ const init = async () => {
   })
 
   for (const data of response.data) {
-    const now = format(new Date(), 'HH:mm:ss')
-
     if (CASHED_LISTINGS.has(data.id)) continue
 
     const currentPrice = data.price
@@ -56,7 +55,7 @@ const init = async () => {
 
     const floatLink = `https://csfloat.com/search?market_hash_name=${market_hash_name}&sort_by=lowest_price&type=buy_now`
 
-    console.log(now, market_hash_name, estimatedProfit.toFixed(2) + '%')
+    console.log(format(new Date(), 'HH:mm:ss'), market_hash_name, estimatedProfit.toFixed(2) + '%')
 
     if (estimatedProfit >= 5) {
       const message: string[] = []
@@ -74,10 +73,6 @@ const init = async () => {
 
     CASHED_LISTINGS.add(data.id)
   }
-
-  await sleep(25_000)
-
-  init()
 }
 
-init()
+schedule.scheduleJob(`${process.env.SPEC} * * * * *`, handler)

@@ -27,6 +27,7 @@ const handler = async () => {
     const floatValue = data.item.float_value
     const basePrice = data.reference.base_price
     const totalTrades = data.seller.statistics.total_trades || 0
+    const isSouvenir = data.item.is_souvenir
     const market_hash_name = data.item.market_hash_name
 
     const charm = data.item.keychains?.[0]
@@ -35,7 +36,7 @@ const handler = async () => {
     const stickers = data.item.stickers || []
     const stickerTotal = stickers.reduce((acc, { reference, wear }) => (wear ? acc : acc + reference.price), 0)
 
-    if (!charm || currentPrice > basePrice * 1.5 || quantity <= 100 || totalTrades >= 100) {
+    if (isSouvenir || !charm || currentPrice > basePrice * 1.5 || quantity <= 100 || totalTrades >= 100) {
       continue
     }
 

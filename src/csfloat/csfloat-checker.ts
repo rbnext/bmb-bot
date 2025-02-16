@@ -24,12 +24,16 @@ const handler = async () => {
 
     const currentPrice = data.price
     const quantity = data.reference.quantity
+    const floatValue = data.item.float_value
     const basePrice = data.reference.base_price
     const totalTrades = data.seller.statistics.total_trades || 0
     const market_hash_name = data.item.market_hash_name
 
     const charm = data.item.keychains?.[0]
     const charmPrice = charm?.reference?.price || 0
+
+    const stickers = data.item.stickers || []
+    const stickerTotal = stickers.reduce((acc, { reference, wear }) => (wear ? acc : acc + reference.price), 0)
 
     if (!charm || currentPrice > basePrice * 1.5 || quantity <= 100 || totalTrades >= 100) {
       continue
@@ -46,18 +50,17 @@ const handler = async () => {
 
     const floatLink = `https://csfloat.com/search?market_hash_name=${market_hash_name}&sort_by=lowest_price&type=buy_now`
 
-    console.log(format(new Date(), 'HH:mm:ss'), market_hash_name, estimatedProfit.toFixed(2) + '%')
+    console.log(format(new Date(), 'HH:mm:ss'), market_hash_name, estimatedProfit.toFixed(2) + '%', stickerTotal)
 
     if (estimatedProfit >= 5) {
       const message: string[] = []
       message.push(`<a href="${floatLink}">${market_hash_name}</a>\n\n`)
-
       message.push(`<b>${charm.name}</b> ($${charmPrice / 100}) #${charm.pattern}\n\n`)
-
       message.push(`<b>Price</b>: $${currentPrice / 100}\n`)
       message.push(`<b>Lowest price</b>: $${listingLowestPrice / 100}\n`)
       message.push(`<b>Median price</b>: $${listingMedianPrice / 100}\n`)
-      message.push(`<b>Estimated profit</b>: ${estimatedProfit.toFixed(2)}%`)
+      message.push(`<b>Estimated profit</b>: ${estimatedProfit.toFixed(2)}%\n\n`)
+      message.push(`<b>Float</b>: ${floatValue}`)
 
       await sendMessage(message.join(''), undefined, process.env.TELEGRAM_REPORT_ID)
     }

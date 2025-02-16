@@ -570,6 +570,7 @@ type CSFloatListingItemStickerItem = {
   reference: {
     price: number
   }
+  wear?: number
 }
 
 type CSFloatListingItemCharmItem = {

@@ -66,7 +66,7 @@ const init = async () => {
 
       message.push(`<b>Price</b>: $${currentPrice / 100}\n`)
       message.push(`<b>Lowest price</b>: $${listingLowestPrice / 100}\n`)
-      message.push(`<b>Estimated profit</b>: ~$${estimatedProfit.toFixed(2)}`)
+      message.push(`<b>Estimated profit</b>: ${estimatedProfit.toFixed(2)}%`)
 
       await sendMessage(message.join(''), undefined, process.env.TELEGRAM_REPORT_ID)
     }

@@ -62,7 +62,6 @@ const init = async () => {
       const message: string[] = []
       message.push(`<a href="${floatLink}">${market_hash_name}</a>\n\n`)
 
-      message.push(`<b>Charm:</b>\n`)
       message.push(`<b>${charm.name}</b> ($${charmPrice / 100}) #${charm.pattern}\n\n`)
 
       message.push(`<b>Price</b>: $${currentPrice / 100}\n`)

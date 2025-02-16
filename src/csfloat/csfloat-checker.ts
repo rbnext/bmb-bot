@@ -34,9 +34,11 @@ const handler = async () => {
     const charmPrice = charm?.reference?.price || 0
 
     const stickers = data.item.stickers || []
-    const stickerTotal = stickers.reduce((acc, { reference, wear }) => (wear ? acc : acc + (reference?.price || 0)), 0)
+    const hasCombo = stickers.length === 4 && stickers.every(({ stickerId }) => stickerId === stickers[0].stickerId)
+    const stickerTotal = stickers.reduce((acc, { reference }) => acc + (reference?.price || 0), 0)
+    const hasBadWear = stickers.some((sticker) => !!sticker.wear)
 
-    if (isSouvenir || currentPrice > basePrice * 1.2 || quantity <= 100 || totalTrades >= 100) {
+    if (isSouvenir || currentPrice > basePrice * 1.2 || quantity <= 100 || totalTrades >= 100 || hasBadWear) {
       continue
     }
 
@@ -51,7 +53,7 @@ const handler = async () => {
     const minListingPrice = Math.min(...filteredListings.map((i) => i.price))
 
     if ((maxListingPrice / minListingPrice - 1) * 100 < 10) {
-      const estimatedToBeSold = listingMedianPrice + stickerTotal * 0.05 + charmPrice - 33
+      const estimatedToBeSold = listingMedianPrice + stickerTotal * (hasCombo ? 0.1 : 0.05) + charmPrice - 33
       const estimatedProfitPercent = (estimatedToBeSold / currentPrice - 1) * 100
 
       const floatLink = `https://csfloat.com/search?market_hash_name=${market_hash_name}&sort_by=lowest_price&type=buy_now`

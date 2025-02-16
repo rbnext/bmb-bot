@@ -571,6 +571,7 @@ type CSFloatListingItemStickerItem = {
     price: number
   }
   wear?: number
+  stickerId: number
 }
 
 type CSFloatListingItemCharmItem = {

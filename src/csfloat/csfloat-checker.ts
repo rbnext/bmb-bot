@@ -34,29 +34,27 @@ const handler = async () => {
     const charmPrice = charm?.reference?.price || 0
 
     const stickers = data.item.stickers || []
-    const stickerTotal = stickers.reduce((acc, { reference, wear }) => (wear ? acc : acc + reference.price), 0)
+    const stickerTotal = stickers.reduce((acc, { reference, wear }) => (wear ? acc : acc + (reference?.price || 0)), 0)
 
     if (isSouvenir || currentPrice > basePrice * 1.2 || quantity <= 100 || totalTrades >= 100) {
       continue
     }
 
-    if (charmPrice > 50 || stickerTotal >= 3000) {
-      const simpleListings = await getCSFloatSimpleListings({ id: data.id })
+    if (!(charmPrice > 50 || stickerTotal >= 3000)) {
+      continue
+    }
 
-      const filteredListings = simpleListings.filter((i) => i.type === 'buy_now')
+    const simpleListings = await getCSFloatSimpleListings({ id: data.id })
 
-      const listingMedianPrice = median(filteredListings.map((i) => i.price))
-      const listingLowestPrice = filteredListings.sort((a, b) => a.price - b.price)[0].price
+    const filteredListings = simpleListings.filter((i) => i.type === 'buy_now')
 
-      const maxListingPrice = Math.max(...filteredListings.map((i) => i.price))
-      const minListingPrice = Math.min(...filteredListings.map((i) => i.price))
+    const listingMedianPrice = median(filteredListings.map((i) => i.price))
+    const listingLowestPrice = filteredListings.sort((a, b) => a.price - b.price)[0].price
 
-      if ((maxListingPrice / minListingPrice - 1) * 100 > 10) {
-        CASHED_LISTINGS.add(data.id)
+    const maxListingPrice = Math.max(...filteredListings.map((i) => i.price))
+    const minListingPrice = Math.min(...filteredListings.map((i) => i.price))
 
-        continue
-      }
-
+    if ((maxListingPrice / minListingPrice - 1) * 100 < 10) {
       const estimatedToBeSold = listingMedianPrice + stickerTotal * 0.05 + charmPrice - 33
       const estimatedProfitPercent = (estimatedToBeSold / currentPrice - 1) * 100
 
@@ -77,7 +75,7 @@ const handler = async () => {
           message.push(`<b>${charm.name}</b> ($${charmPrice / 100}) #${charm.pattern}\n\n`)
         }
         stickers.forEach((sticker) => {
-          if (!sticker.wear) {
+          if (!sticker.wear && sticker.reference?.price) {
             message.push(`<b>${sticker.name}</b> ($${sticker.reference.price / 100})\n`)
           }
         })

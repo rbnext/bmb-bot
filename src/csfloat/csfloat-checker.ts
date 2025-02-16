@@ -75,7 +75,7 @@ const handler = async () => {
         }
         for (const sticker of stickers) {
           message.push(
-            `<b>${sticker.name}</b> ($${sticker.reference?.price || 0 / 100}) ${sticker?.wear ? 'N/A' : '100%'}\n`
+            `<b>${sticker.name}</b> ($${(sticker.reference?.price || 0) / 100}) ${sticker?.wear ? 'N/A' : '100%'}\n`
           )
         }
         message.push(`\n`)

@@ -60,7 +60,7 @@ const init = async () => {
       message.push(`<b>${charm.name}</b>: #${charm.pattern} (~$${charmPrice / 100})\n\n`)
       message.push(`<b>Price</b>: $${currentPrice / 100}\n`)
       message.push(`<b>Lowest price</b>: $${sortedLowestListing.price / 100}\n`)
-      message.push(`<b>Estimated profit</b>: ~$${profit.toFixed(2)}\n\n`)
+      message.push(`<b>Estimated profit</b>: ~$${profit / 100}\n\n`)
       await sendMessage(message.join(''), undefined, process.env.TELEGRAM_REPORT_ID)
     }
 

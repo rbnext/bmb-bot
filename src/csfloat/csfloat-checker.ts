@@ -47,8 +47,9 @@ const init = async () => {
 
     const simpleListings = await getCSFloatSimpleListings({ id: data.id })
 
-    const listingMedianPrice = median(simpleListings.map((i) => i.price))
-    const listingLowestPrice = simpleListings.sort((a, b) => a.price - b.price)[0].price
+    const filteredListings = simpleListings.filter((i) => i.type === 'buy_now')
+    const listingMedianPrice = median(filteredListings.map((i) => i.price))
+    const listingLowestPrice = filteredListings.sort((a, b) => a.price - b.price)[0].price
     const listingFinalLowestPrice = listingLowestPrice - charmPrice + 33
 
     const estimatedProfit = ((listingMedianPrice - listingFinalLowestPrice) / listingFinalLowestPrice) * 100

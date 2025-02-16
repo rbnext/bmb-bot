@@ -11,6 +11,10 @@ const CASHED_LISTINGS = new Set<string>()
 const MIN_PRICE = 500
 const MAX_PRICE = 10000
 
+const isSweetFloat = (floatValue: number) => {
+  return floatValue < 0.01 || (floatValue >= 0.07 && floatValue < 0.08)
+}
+
 const handler = async () => {
   const response = await getCSFloatListings({
     sort_by: 'most_recent',
@@ -42,7 +46,7 @@ const handler = async () => {
       continue
     }
 
-    if (!(charmPrice > 50 || stickerTotal >= 3000 || floatValue < 0.01)) {
+    if (!(charmPrice > 50 || stickerTotal >= 3000 || isSweetFloat(floatValue))) {
       continue
     }
 
@@ -52,43 +56,45 @@ const handler = async () => {
     const maxListingPrice = Math.max(...filteredListings.map((i) => i.price))
     const minListingPrice = Math.min(...filteredListings.map((i) => i.price))
 
+    console.log(format(new Date(), 'HH:mm:ss'), {
+      market_hash_name,
+      listingMedianPrice,
+      currentPrice,
+      stickerTotal,
+      charmPrice,
+      floatValue,
+    })
+
     if ((maxListingPrice / minListingPrice - 1) * 100 < 10) {
       const estimatedToBeSold = listingMedianPrice + stickerTotal * (hasCombo ? 0.1 : 0.05) + charmPrice - 33
       const estimatedProfitPercent = (estimatedToBeSold / currentPrice - 1) * 100
 
       const floatLink = `https://csfloat.com/search?market_hash_name=${market_hash_name}&sort_by=lowest_price&type=buy_now`
 
-      console.log(format(new Date(), 'HH:mm:ss'), {
-        market_hash_name,
-        listingMedianPrice,
-        currentPrice,
-        stickerTotal,
-        charmPrice,
-        estimatedProfitPercent,
-        floatValue,
-      })
-
       const message: string[] = []
       message.push(`<a href="${floatLink}">${market_hash_name}</a>\n\n`)
-      if (charm) message.push(`<b>${charm.name}</b> ($${charmPrice / 100}) #${charm.pattern}\n`)
-      for (const sticker of stickers) {
-        message.push(
-          `<b>${sticker.name}</b> ($${(sticker.reference?.price || 0) / 100}) ${sticker?.wear ? 'N/A' : '100%'}\n`
-        )
-      }
-      message.push(`\n`)
-      message.push(`<b>Price</b>: $${currentPrice / 100}\n`)
-      message.push(`<b>Lowest price</b>: $${minListingPrice / 100}\n`)
-      message.push(`<b>Median price</b>: $${listingMedianPrice / 100}\n`)
 
       if (estimatedProfitPercent >= 5) {
+        if (charm) message.push(`<b>${charm.name}</b> ($${charmPrice / 100}) #${charm.pattern}\n`)
+        for (const sticker of stickers) {
+          message.push(
+            `<b>${sticker.name}</b> ($${(sticker.reference?.price || 0) / 100}) ${sticker?.wear ? 'N/A' : '100%'}\n`
+          )
+        }
+        message.push(`\n`)
+        message.push(`<b>Price</b>: $${currentPrice / 100}\n`)
+        message.push(`<b>Lowest price</b>: $${minListingPrice / 100}\n`)
+        message.push(`<b>Median price</b>: $${listingMedianPrice / 100}\n`)
         message.push(
           `<b>Estimated profit</b>: ${estimatedProfitPercent.toFixed(2)}% (if sold for $${(estimatedToBeSold / 100).toFixed(2)})\n\n`
         )
         message.push(`<b>Float</b>: ${floatValue}`)
 
         await sendMessage(message.join(''), undefined, process.env.TELEGRAM_REPORT_ID)
-      } else if (floatValue < 0.01) {
+      } else if (isSweetFloat(floatValue)) {
+        message.push(`<b>Price</b>: $${currentPrice / 100}\n`)
+        message.push(`<b>Lowest price</b>: $${minListingPrice / 100}\n`)
+        message.push(`<b>Median price</b>: $${listingMedianPrice / 100}\n\n`)
         message.push(`<b>Float</b>: ${floatValue}`)
         await sendMessage(message.join(''), undefined, process.env.TELEGRAM_REPORT_ID)
       }

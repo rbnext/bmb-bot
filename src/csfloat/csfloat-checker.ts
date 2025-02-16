@@ -24,13 +24,14 @@ const handler = async () => {
 
     const currentPrice = data.price
     const quantity = data.reference.quantity
+    const basePrice = data.reference.base_price
     const totalTrades = data.seller.statistics.total_trades || 0
     const market_hash_name = data.item.market_hash_name
 
     const charm = data.item.keychains?.[0]
     const charmPrice = charm?.reference?.price || 0
 
-    if (!charm || currentPrice > MAX_PRICE || quantity <= 100 || totalTrades >= 100) {
+    if (!charm || currentPrice > basePrice * 1.5 || quantity <= 100 || totalTrades >= 100) {
       continue
     }
 

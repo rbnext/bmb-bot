@@ -12,7 +12,7 @@ const MIN_PRICE = 500
 const MAX_PRICE = 10000
 
 const isSweetFloat = (floatValue: number) => {
-  return floatValue < 0.01 || (floatValue >= 0.07 && floatValue < 0.08)
+  return floatValue < 0.01 || (floatValue >= 0.07 && floatValue < 0.08) || (floatValue >= 0.15 && floatValue < 0.17)
 }
 
 const handler = async () => {
@@ -75,7 +75,9 @@ const handler = async () => {
       message.push(`<a href="${floatLink}">${market_hash_name}</a>\n\n`)
 
       if (estimatedProfitPercent >= 5) {
-        if (charm) message.push(`<b>${charm.name}</b> ($${charmPrice / 100}) #${charm.pattern}\n`)
+        if (charm) {
+          message.push(`<b>${charm.name}</b> ($${charmPrice / 100}) #${charm.pattern}\n`)
+        }
         for (const sticker of stickers) {
           message.push(
             `<b>${sticker.name}</b> ($${(sticker.reference?.price || 0) / 100}) ${sticker?.wear ? 'N/A' : '100%'}\n`
@@ -96,23 +98,22 @@ const handler = async () => {
 
         const filteredItems = response.filter((item) => isSweetFloat(item.item.float_value))
 
-        message.push(`<b>Price</b>: $${currentPrice / 100}\n`)
-        message.push(`<b>Lowest price</b>: $${minListingPrice / 100}\n`)
-        message.push(`<b>Median price</b>: $${listingMedianPrice / 100}\n\n`)
-
         if (filteredItems.length !== 0) {
           const floatMedianPrice = median(filteredItems.map((i) => i.price))
           const estimatedProfitPercent = (floatMedianPrice / currentPrice - 1) * 100
 
           if (estimatedProfitPercent > 0) {
+            message.push(`<b>Price</b>: $${currentPrice / 100}\n`)
+            message.push(`<b>Lowest price</b>: $${minListingPrice / 100}\n`)
+            message.push(`<b>Median price</b>: $${listingMedianPrice / 100}\n\n`)
             message.push(
               `<b>Estimated profit</b>: ${estimatedProfitPercent.toFixed(2)}% (if sold for $${(estimatedToBeSold / 100).toFixed(2)})\n\n`
             )
+
+            message.push(`<b>Float</b>: ${floatValue}`)
+            await sendMessage(message.join(''), undefined, process.env.TELEGRAM_REPORT_ID)
           }
         }
-
-        message.push(`<b>Float</b>: ${floatValue}`)
-        await sendMessage(message.join(''), undefined, process.env.TELEGRAM_REPORT_ID)
       }
     }
 

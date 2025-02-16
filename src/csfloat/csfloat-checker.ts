@@ -30,7 +30,7 @@ const handler = async () => {
     const charm = data.item.keychains?.[0]
     const charmPrice = charm?.reference?.price || 0
 
-    if (!charm || currentPrice > MAX_PRICE || quantity <= 100 || totalTrades >= 10) {
+    if (!charm || currentPrice > MAX_PRICE || quantity <= 100 || totalTrades >= 50) {
       continue
     }
 

@@ -62,6 +62,7 @@ const handler = async () => {
         currentPrice,
         stickerTotal,
         charmPrice,
+        estimatedProfitPercent,
       })
 
       if (estimatedProfitPercent >= 5) {

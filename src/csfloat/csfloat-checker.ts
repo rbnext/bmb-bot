@@ -13,8 +13,8 @@ const MIN_PRICE = 500
 const MAX_PRICE = 10000
 
 const hasStickerCombo = (stickers: CSFloatListingItemStickerItem[]) => {
-  const stickersGroupedById = stickers.reduce((acc, { stickerId }) => {
-    acc[stickerId] = (acc[stickerId] || 0) + 1
+  const stickersGroupedById = stickers.reduce<Record<string, number>>((acc, { name }) => {
+    acc[name] = (acc[name] || 0) + 1
     return acc
   }, {})
   return Object.values(stickersGroupedById).some((count) => count === 4 || count === 5)

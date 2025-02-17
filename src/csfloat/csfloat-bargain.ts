@@ -40,7 +40,7 @@ const handler = async () => {
 
     const overpayment = Number((((currentPrice - predictedPrice) / predictedPrice) * 100).toFixed(2))
 
-    if (!isLessThanXMinutes(createdAt)) {
+    if (!isLessThanXMinutes(createdAt, 2)) {
       continue
     }
 

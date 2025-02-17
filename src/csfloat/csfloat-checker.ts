@@ -12,7 +12,7 @@ const MIN_PRICE = 500
 const MAX_PRICE = 10000
 
 const isSweetFloat = (floatValue: number) => {
-  return floatValue < 0.01 || (floatValue >= 0.07 && floatValue < 0.08) || (floatValue >= 0.15 && floatValue < 0.17)
+  return floatValue < 0.01 || (floatValue >= 0.07 && floatValue < 0.08) || (floatValue >= 0.15 && floatValue < 0.16)
 }
 
 const handler = async () => {

@@ -30,6 +30,7 @@ const handler = async () => {
     const quantity = data.reference.quantity
     const floatValue = data.item.float_value
     const basePrice = data.reference.base_price
+    const predictedPrice = data.reference.predicted_price
     const totalTrades = data.seller.statistics.total_trades || 0
     const isSouvenir = data.item.is_souvenir
     const market_hash_name = data.item.market_hash_name
@@ -41,6 +42,10 @@ const handler = async () => {
     const hasCombo = stickers.length === 4 && stickers.every(({ stickerId }) => stickerId === stickers[0].stickerId)
     const stickerTotal = stickers.reduce((acc, { reference }) => acc + (reference?.price || 0), 0)
     const hasBadWear = stickers.some((sticker) => !!sticker.wear)
+
+    const overpayment = Number((((currentPrice - predictedPrice) / predictedPrice) * 100).toFixed(2))
+
+    console.log(market_hash_name, overpayment + '%')
 
     if (isSouvenir || currentPrice > basePrice * 1.3 || quantity <= 100 || totalTrades >= 100 || hasBadWear) {
       continue

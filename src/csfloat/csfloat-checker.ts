@@ -29,7 +29,6 @@ const handler = async () => {
     const currentPrice = data.price
     const quantity = data.reference.quantity
     const floatValue = data.item.float_value
-    const basePrice = data.reference.base_price
     const predictedPrice = data.reference.predicted_price
     const totalTrades = data.seller.statistics.total_trades || 0
     const isSouvenir = data.item.is_souvenir

@@ -101,7 +101,8 @@ const handler = async () => {
           ...(market_hash_name.includes('Field-Tested') && { max_float: 0.16 }),
         })
 
-        const lowestPriceByFloat = response.data[0].price / 100
+        const filteredResponse = response.data.filter((i) => i.item.float_value !== floatValue)
+        const lowestPriceByFloat = filteredResponse[0].price / 100
 
         message.push(`<b>Price</b>: $${currentPrice / 100}\n`)
         message.push(`<b>Lowest price</b>: $${minListingPrice / 100}\n`)

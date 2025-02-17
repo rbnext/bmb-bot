@@ -56,7 +56,14 @@ const handler = async () => {
       const estimatedProfitPercent = (estimatedToBeSold / currentPrice - 1) * 100
 
       const now = format(new Date(), 'HH:mm:ss')
-      console.log(now, market_hash_name, currentPrice / 100, stickerTotal / 100, hasCombo, estimatedProfitPercent)
+      console.log(
+        now,
+        market_hash_name,
+        currentPrice / 100,
+        stickerTotal / 100,
+        hasCombo,
+        estimatedProfitPercent.toFixed(2)
+      )
 
       if (estimatedProfitPercent >= 5) {
         const message: string[] = []

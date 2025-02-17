@@ -104,6 +104,7 @@ const handler = async () => {
 
           if (estimatedProfitPercent > 0) {
             message.push(`<b>Price</b>: $${currentPrice / 100}\n`)
+            message.push(`<b>Lowest price</b>: $${minListingPrice / 100}\n`)
             message.push(`<b>Median price (by float)</b>: $${floatMedianPrice / 100}\n\n`)
             message.push(`<b>Float</b>: ${floatValue}`)
             await sendMessage(message.join(''), undefined, process.env.TELEGRAM_REPORT_ID)

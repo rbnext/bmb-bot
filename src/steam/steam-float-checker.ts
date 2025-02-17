@@ -42,7 +42,7 @@ const init = async () => {
           proxy: `${process.env.STEAM_PROXY}${index + 1}`,
         })
 
-        for (const item of steamMarketResponse) {
+        for (const [index, item] of steamMarketResponse.entries()) {
           if (!item.price || CASHED_LISTINGS.has(item.listingId)) continue
 
           const now = format(new Date(), 'HH:mm:ss')
@@ -63,9 +63,7 @@ const init = async () => {
             const basePrice = response.data[0].reference.base_price / 100
 
             const message: string[] = []
-            message.push(
-              `<a href="${getSteamUrl(market_hash_name, [])}">${market_hash_name}</a> | #${item.position}\n\n`
-            )
+            message.push(`<a href="${getSteamUrl(market_hash_name, [])}">${market_hash_name}</a> | #${index + 1}\n\n`)
             message.push(`<b>Steam price</b>: $${item.price}\n`)
             message.push(`<b>Base price</b>: $${basePrice.toFixed(2)}\n`)
             message.push(`<b>Lowest price(by float)</b>: $${lowestPrice.toFixed(2)}\n`)

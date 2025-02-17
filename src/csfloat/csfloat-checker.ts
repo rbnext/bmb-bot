@@ -76,7 +76,7 @@ const handler = async () => {
 
       if (estimatedProfitPercent >= 5) {
         if (charm) {
-          message.push(`<b>${charm.name}</b> ($${charmPrice / 100}) #${charm.pattern}\n`)
+          message.push(`<b>${charm.name}</b> ($${charmPrice / 100}) #${charm.pattern}\n\n`)
         }
         for (const sticker of stickers) {
           message.push(
@@ -104,12 +104,7 @@ const handler = async () => {
 
           if (estimatedProfitPercent > 0) {
             message.push(`<b>Price</b>: $${currentPrice / 100}\n`)
-            message.push(`<b>Lowest price</b>: $${minListingPrice / 100}\n`)
-            message.push(`<b>Median price</b>: $${listingMedianPrice / 100}\n\n`)
-            message.push(
-              `<b>Estimated profit</b>: ${estimatedProfitPercent.toFixed(2)}% (if sold for $${(estimatedToBeSold / 100).toFixed(2)})\n\n`
-            )
-
+            message.push(`<b>Median price (by float)</b>: $${floatMedianPrice / 100}\n\n`)
             message.push(`<b>Float</b>: ${floatValue}`)
             await sendMessage(message.join(''), undefined, process.env.TELEGRAM_REPORT_ID)
           }

@@ -23,8 +23,8 @@ const configList = [
     isSweet: (float: number) => float < 0.09,
   },
   {
-    market_hash_name: 'Glock-18 | Gold Toof (Field-Tested)',
-    isSweet: (float: number) => float < 0.18,
+    market_hash_name: 'USP-S | Jawbreaker (Factory New)',
+    isSweet: (float: number) => float < 0.02,
   },
   {
     market_hash_name: 'Glock-18 | Vogue (Minimal Wear)',

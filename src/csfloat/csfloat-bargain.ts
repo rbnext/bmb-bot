@@ -1,9 +1,9 @@
 import 'dotenv/config'
 
 import schedule from 'node-schedule'
-import { sleep } from '../utils'
+import { isLessThanXHours, sleep } from '../utils'
 import { sendMessage } from '../api/telegram'
-import { format, formatDistance } from 'date-fns'
+import { format, formatDistance, isAfter, subHours, subMinutes } from 'date-fns'
 import { getBuyOrders, getCSFloatListings, postCreateBargain } from '../api/csfloat'
 
 const CASHED_LISTINGS = new Set<string>()
@@ -35,6 +35,10 @@ const handler = async () => {
     const createdAt = data.created_at
 
     const overpayment = Number((((currentPrice - predictedPrice) / predictedPrice) * 100).toFixed(2))
+
+    if (!isAfter(new Date(createdAt), subMinutes(new Date(), 1))) {
+      continue
+    }
 
     if (isSouvenir || overpayment > 10 || quantity < 50 || totalTrades >= 50 || maxOfferDiscount <= 200) {
       continue

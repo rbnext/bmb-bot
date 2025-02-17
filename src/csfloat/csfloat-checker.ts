@@ -94,19 +94,20 @@ const handler = async () => {
 
         await sendMessage(message.join(''), undefined, process.env.TELEGRAM_REPORT_ID)
       } else if (isSweetFloat(floatValue)) {
-        const response = await getMarketHashNameHistory({ market_hash_name })
+        const response = await getCSFloatListings({
+          market_hash_name,
+          ...(market_hash_name.includes('Factory New') && { max_float: 0.02 }),
+          ...(market_hash_name.includes('Minimal Wear') && { max_float: 0.08 }),
+          ...(market_hash_name.includes('Field-Tested') && { max_float: 0.18 }),
+        })
 
-        const filteredItems = response.filter((item) => isSweetFloat(item.item.float_value))
+        const lowestPriceByFloat = response.data[0].price / 100
 
-        if (filteredItems.length !== 0) {
-          const floatMedianPrice = median(filteredItems.map((i) => i.price))
-
-          message.push(`<b>Price</b>: $${currentPrice / 100}\n`)
-          message.push(`<b>Lowest price</b>: $${minListingPrice / 100}\n`)
-          message.push(`<b>Median price (by float)</b>: $${floatMedianPrice / 100}\n\n`)
-          message.push(`<b>Float</b>: ${floatValue}`)
-          await sendMessage(message.join(''), undefined, process.env.TELEGRAM_REPORT_ID)
-        }
+        message.push(`<b>Price</b>: $${currentPrice / 100}\n`)
+        message.push(`<b>Lowest price</b>: $${minListingPrice / 100}\n`)
+        message.push(`<b>Lowest price(by float)</b>: $${lowestPriceByFloat}\n\n`)
+        message.push(`<b>Float</b>: ${floatValue}`)
+        await sendMessage(message.join(''), undefined, process.env.TELEGRAM_REPORT_ID)
       }
     }
 

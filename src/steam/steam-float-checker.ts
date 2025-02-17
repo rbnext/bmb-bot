@@ -5,10 +5,9 @@ dotenv.config()
 import { format } from 'date-fns'
 import { sendMessage } from '../api/telegram'
 import { getSteamUrl, sleep } from '../utils'
-import { mapSteamMarketRenderResponse } from './utils'
 
 import { getCSFloatItemInfo, getCSFloatListings } from '../api/csfloat'
-import { SteamMarketRender } from '../types'
+import { MapSteamMarketRenderResponse } from '../types'
 import { getVercelMarketRender } from '../api/versel'
 
 const CASHED_LISTINGS = new Set<string>()
@@ -38,12 +37,10 @@ const init = async () => {
       for (const [index, config] of configList.entries()) {
         const market_hash_name = config.market_hash_name
 
-        const response: SteamMarketRender = await getVercelMarketRender({
+        const steamMarketResponse: MapSteamMarketRenderResponse[] = await getVercelMarketRender({
           market_hash_name,
           proxy: `${process.env.STEAM_PROXY}${index + 1}`,
         })
-
-        const steamMarketResponse = mapSteamMarketRenderResponse(response)
 
         for (const item of steamMarketResponse) {
           if (!item.price || CASHED_LISTINGS.has(item.listingId)) continue

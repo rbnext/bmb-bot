@@ -51,12 +51,12 @@ const handler = async () => {
     const maxListingPrice = Math.max(...filteredListings.map((i) => i.price))
     const minListingPrice = Math.min(...filteredListings.map((i) => i.price))
 
-    const now = format(new Date(), 'HH:mm:ss')
-    console.log(now, market_hash_name, currentPrice / 100, stickerTotal, hasCombo)
-
     if ((maxListingPrice / minListingPrice - 1) * 100 < 10) {
       const estimatedToBeSold = listingMedianPrice + stickerTotal * (hasCombo ? 0.07 : 0.04)
       const estimatedProfitPercent = (estimatedToBeSold / currentPrice - 1) * 100
+
+      const now = format(new Date(), 'HH:mm:ss')
+      console.log(now, market_hash_name, currentPrice / 100, stickerTotal / 100, hasCombo, estimatedProfitPercent)
 
       if (estimatedProfitPercent >= 5) {
         const message: string[] = []

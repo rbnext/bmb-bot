@@ -42,7 +42,7 @@ const handler = async () => {
     const stickerTotal = stickers.reduce((acc, { reference }) => acc + (reference?.price || 0), 0)
     const hasBadWear = stickers.some((sticker) => !!sticker.wear)
 
-    if (isSouvenir || currentPrice > basePrice * 1.2 || quantity <= 100 || totalTrades >= 100 || hasBadWear) {
+    if (isSouvenir || currentPrice > basePrice * 1.3 || quantity <= 100 || totalTrades >= 100 || hasBadWear) {
       continue
     }
 

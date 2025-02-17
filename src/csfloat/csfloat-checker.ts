@@ -5,11 +5,20 @@ import { median } from '../utils'
 import { sendMessage } from '../api/telegram'
 import { format } from 'date-fns'
 import { getCSFloatListings, getCSFloatSimpleListings } from '../api/csfloat'
+import { CSFloatListingItemStickerItem } from '../types'
 
 const CASHED_LISTINGS = new Set<string>()
 
 const MIN_PRICE = 500
 const MAX_PRICE = 10000
+
+const hasStickerCombo = (stickers: CSFloatListingItemStickerItem[]) => {
+  const stickersGroupedById = stickers.reduce((acc, { stickerId }) => {
+    acc[stickerId] = (acc[stickerId] || 0) + 1
+    return acc
+  }, {})
+  return Object.values(stickersGroupedById).some((count) => count === 4 || count === 5)
+}
 
 const handler = async () => {
   const response = await getCSFloatListings({
@@ -31,9 +40,9 @@ const handler = async () => {
     const market_hash_name = data.item.market_hash_name
 
     const stickers = data.item.stickers || []
-    const hasCombo = stickers.length === 4 && stickers.every(({ stickerId }) => stickerId === stickers[0].stickerId)
     const stickerTotal = stickers.reduce((acc, { reference }) => acc + (reference?.price || 0), 0)
     const hasBadWear = stickers.some((sticker) => !!sticker.wear)
+    const hasCombo = hasStickerCombo(stickers)
 
     const overpayment = Number((((currentPrice - predictedPrice) / predictedPrice) * 100).toFixed(2))
 

@@ -565,7 +565,7 @@ export type SIHInspectItemInfo = {
   }
 }
 
-type CSFloatListingItemStickerItem = {
+export type CSFloatListingItemStickerItem = {
   name: string
   reference: {
     price: number

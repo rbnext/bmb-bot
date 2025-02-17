@@ -10,7 +10,7 @@ const CASHED_LISTINGS = new Set<string>()
 const options = { addSuffix: true, includeSeconds: true }
 
 const MIN_PRICE = 2500
-const MAX_PRICE = 5000
+const MAX_PRICE = 9000
 
 export const isLessThanXMinutes = (date: string, minutes = 1) => {
   return isAfter(new Date(date), subMinutes(new Date(), minutes))

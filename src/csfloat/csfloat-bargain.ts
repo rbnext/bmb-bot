@@ -1,7 +1,7 @@
 import 'dotenv/config'
 
 import schedule from 'node-schedule'
-import { isLessThanXHours, sleep } from '../utils'
+import { sleep } from '../utils'
 import { sendMessage } from '../api/telegram'
 import { format, formatDistance, isAfter, subHours, subMinutes } from 'date-fns'
 import { getBuyOrders, getCSFloatListings, postCreateBargain } from '../api/csfloat'
@@ -11,6 +11,10 @@ const options = { addSuffix: true, includeSeconds: true }
 
 const MIN_PRICE = 2500
 const MAX_PRICE = 5000
+
+export const isLessThanXMinutes = (date: string, minutes = 1) => {
+  return isAfter(new Date(date), subMinutes(new Date(), minutes))
+}
 
 const handler = async () => {
   const response = await getCSFloatListings({
@@ -36,7 +40,7 @@ const handler = async () => {
 
     const overpayment = Number((((currentPrice - predictedPrice) / predictedPrice) * 100).toFixed(2))
 
-    if (!isAfter(new Date(createdAt), subMinutes(new Date(), 1))) {
+    if (!isLessThanXMinutes(createdAt, 1)) {
       continue
     }
 

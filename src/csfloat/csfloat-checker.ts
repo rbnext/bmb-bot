@@ -45,9 +45,7 @@ const handler = async () => {
 
     const overpayment = Number((((currentPrice - predictedPrice) / predictedPrice) * 100).toFixed(2))
 
-    console.log(market_hash_name, overpayment + '%')
-
-    if (isSouvenir || currentPrice > basePrice * 1.3 || quantity <= 100 || totalTrades >= 100 || hasBadWear) {
+    if (isSouvenir || overpayment > 20 || quantity <= 100 || totalTrades >= 100 || hasBadWear) {
       continue
     }
 

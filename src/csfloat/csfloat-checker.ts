@@ -115,4 +115,10 @@ const handler = async () => {
   }
 }
 
-schedule.scheduleJob(`${process.env.SPEC} * * * * *`, handler)
+try {
+  schedule.scheduleJob(`${process.env.SPEC} * * * * *`, handler)
+} catch (error) {
+  console.error(error)
+
+  await sendMessage(`${process.env.SPEC} - ${error.message}`)
+}

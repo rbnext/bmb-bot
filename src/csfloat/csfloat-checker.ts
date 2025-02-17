@@ -4,7 +4,7 @@ import schedule from 'node-schedule'
 import { median } from '../utils'
 import { sendMessage } from '../api/telegram'
 import { format } from 'date-fns'
-import { getCSFloatListings, getCSFloatSimpleListings, getMarketHashNameHistory } from '../api/csfloat'
+import { getCSFloatListings, getCSFloatSimpleListings } from '../api/csfloat'
 
 const CASHED_LISTINGS = new Set<string>()
 
@@ -12,7 +12,7 @@ const MIN_PRICE = 500
 const MAX_PRICE = 10000
 
 const isSweetFloat = (floatValue: number) => {
-  return floatValue < 0.01 || (floatValue >= 0.07 && floatValue < 0.08) || (floatValue >= 0.15 && floatValue < 0.16)
+  return floatValue < 0.02 || (floatValue >= 0.07 && floatValue < 0.08) || (floatValue >= 0.15 && floatValue < 0.16)
 }
 
 const handler = async () => {
@@ -46,7 +46,7 @@ const handler = async () => {
       continue
     }
 
-    if (!(charmPrice > 50 || stickerTotal >= 3000 || isSweetFloat(floatValue))) {
+    if (!(charmPrice > 50 || stickerTotal >= 3000 || (currentPrice >= 2000 && isSweetFloat(floatValue)))) {
       continue
     }
 
@@ -98,7 +98,7 @@ const handler = async () => {
           market_hash_name,
           ...(market_hash_name.includes('Factory New') && { max_float: 0.02 }),
           ...(market_hash_name.includes('Minimal Wear') && { max_float: 0.08 }),
-          ...(market_hash_name.includes('Field-Tested') && { max_float: 0.18 }),
+          ...(market_hash_name.includes('Field-Tested') && { max_float: 0.16 }),
         })
 
         const lowestPriceByFloat = response.data[0].price / 100

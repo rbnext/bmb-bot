@@ -11,9 +11,9 @@ const CASHED_LISTINGS = new Set<string>()
 const MIN_PRICE = 500
 const MAX_PRICE = 10000
 
-const isSweetFloat = (floatValue: number) => {
-  return floatValue < 0.02 || (floatValue >= 0.07 && floatValue < 0.08) || (floatValue >= 0.15 && floatValue < 0.16)
-}
+// const isSweetFloat = (floatValue: number) => {
+//   return floatValue < 0.02 || (floatValue >= 0.07 && floatValue < 0.08) || (floatValue >= 0.15 && floatValue < 0.16)
+// }
 
 const handler = async () => {
   const response = await getCSFloatListings({
@@ -48,13 +48,7 @@ const handler = async () => {
       continue
     }
 
-    if (
-      !(
-        charmPrice > 50 ||
-        stickerTotal >= (hasCombo ? 2000 : 3000) ||
-        (currentPrice >= 2000 && isSweetFloat(floatValue))
-      )
-    ) {
+    if (!(charmPrice > 50 || stickerTotal >= (hasCombo ? 1500 : 3000))) {
       continue
     }
 
@@ -79,10 +73,9 @@ const handler = async () => {
 
       const floatLink = `https://csfloat.com/search?market_hash_name=${market_hash_name}&sort_by=lowest_price&type=buy_now`
 
-      const message: string[] = []
-      message.push(`<a href="${floatLink}">${market_hash_name}</a>\n\n`)
-
       if (estimatedProfitPercent >= 5) {
+        const message: string[] = []
+        message.push(`<a href="${floatLink}">${market_hash_name}</a>\n\n`)
         if (charm) {
           message.push(`<b>${charm.name}</b> ($${charmPrice / 100}) #${charm.pattern}\n\n`)
         }
@@ -100,22 +93,6 @@ const handler = async () => {
         )
         message.push(`<b>Float</b>: ${floatValue}`)
 
-        await sendMessage(message.join(''), undefined, process.env.TELEGRAM_REPORT_ID)
-      } else if (isSweetFloat(floatValue)) {
-        const response = await getCSFloatListings({
-          market_hash_name,
-          ...(market_hash_name.includes('Factory New') && { max_float: 0.02 }),
-          ...(market_hash_name.includes('Minimal Wear') && { max_float: 0.08 }),
-          ...(market_hash_name.includes('Field-Tested') && { max_float: 0.16 }),
-        })
-
-        const filteredResponse = response.data.filter((i) => i.item.float_value !== floatValue)
-        const lowestPriceByFloat = filteredResponse[0].price / 100
-
-        message.push(`<b>Price</b>: $${currentPrice / 100}\n`)
-        message.push(`<b>Lowest price</b>: $${minListingPrice / 100}\n`)
-        message.push(`<b>Lowest price(by float)</b>: $${lowestPriceByFloat}\n\n`)
-        message.push(`<b>Float</b>: ${floatValue}`)
         await sendMessage(message.join(''), undefined, process.env.TELEGRAM_REPORT_ID)
       }
     }

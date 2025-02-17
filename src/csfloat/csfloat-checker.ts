@@ -46,7 +46,13 @@ const handler = async () => {
       continue
     }
 
-    if (!(charmPrice > 50 || stickerTotal >= 3000 || (currentPrice >= 2000 && isSweetFloat(floatValue)))) {
+    if (
+      !(
+        charmPrice > 50 ||
+        stickerTotal >= (hasCombo ? 2000 : 3000) ||
+        (currentPrice >= 2000 && isSweetFloat(floatValue))
+      )
+    ) {
       continue
     }
 

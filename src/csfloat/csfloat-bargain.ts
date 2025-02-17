@@ -66,7 +66,7 @@ const handler = async () => {
       message.push(`<a href="https://csfloat.com/item/${data.id}">${market_hash_name}</a>\n\n`)
 
       message.push(`<b>Price</b>: <s>$${currentPrice / 100}</s> $${bargainPrice / 100}\n`)
-      message.push(`<b>Lowest buy order</b>: <s>$${simpleOrders[0].price / 100}\n`)
+      message.push(`<b>Lowest buy order</b>: $${simpleOrders[0].price / 100}\n`)
 
       message.push(`<b>Created at</b>: ${formatDistance(new Date(createdAt), new Date(), options)}\n`)
       message.push(`<b>Float</b>: ${floatValue}`)

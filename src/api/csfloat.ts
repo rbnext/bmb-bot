@@ -241,10 +241,35 @@ export const getMarketHashNameHistory = async ({
 }): Promise<CSFloatMarketHashNameHistory[]> => {
   const { data } = await http.get(`/v1/history/${market_hash_name}/sales`, {
     headers: {
-      'User-Agent': new UserAgent().toString(),
       Cookie: `session=${process.env.CSFLOAT_SESSION_TOKEN}`,
     },
   })
+
+  return data
+}
+
+export const postCreateBargain = async ({
+  price,
+  contract_id,
+  cancel_previous_offer = false,
+}: {
+  contract_id: string
+  price: number
+  cancel_previous_offer?: boolean
+}): Promise<{ state: 'active'; type: 'buyer_offer' }> => {
+  const { data } = await http.post(
+    `/v1/offers`,
+    {
+      price,
+      contract_id,
+      cancel_previous_offer,
+    },
+    {
+      headers: {
+        Authorization: process.env.CSFLOAT_AUTH_KEY,
+      },
+    }
+  )
 
   return data
 }

@@ -587,6 +587,8 @@ export type CSFloatListingItem = {
   created_at: string
   id: string
   price: number
+  max_offer_discount?: number
+  min_offer_price?: number
   item: {
     market_hash_name: string
     float_value: number

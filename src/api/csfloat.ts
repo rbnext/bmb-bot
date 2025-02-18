@@ -54,7 +54,7 @@ export const getCSFloatListings = async ({
   def_index?: number
   session?: string
 }): Promise<CSFloatListing> => {
-  const { data } = await http.get('/v1/listings', {
+  const { data, headers } = await http.get('/v1/listings', {
     params: {
       limit,
       def_index,
@@ -74,6 +74,8 @@ export const getCSFloatListings = async ({
       Cookie: `session=${session ?? process.env.CSFLOAT_SESSION_TOKEN}`,
     },
   })
+
+  console.log(headers['x-ratelimit-remaining'])
 
   return data
 }

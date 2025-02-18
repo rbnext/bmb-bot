@@ -82,6 +82,10 @@ export const configList2 = [
     proxyId: 6,
   },
   {
+    market_hash_name: 'Glock-18 | Water Elemental (Field-Tested)',
+    proxyId: 7,
+  },
+  {
     market_hash_name: 'StatTrak™ AWP | Atheris (Field-Tested)',
     proxyId: 1,
   },
@@ -104,5 +108,9 @@ export const configList2 = [
   {
     market_hash_name: 'M4A4 | The Emperor (Field-Tested)',
     proxyId: 6,
+  },
+  {
+    market_hash_name: 'M4A1-S | Guardian (Field-Tested)',
+    proxyId: 7,
   },
 ]

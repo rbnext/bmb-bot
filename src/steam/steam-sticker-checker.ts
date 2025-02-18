@@ -17,9 +17,10 @@ const CASHED_LISTINGS = new Set<string>()
 const configMapper = {
   1: configList1,
   2: configList2,
-}
+} as const
 
-const configList: typeof configList1 = configMapper[Number(process.env.LIST_ID)]
+const listId = Number(process.env.LIST_ID)
+const configList = configMapper[listId as keyof typeof configMapper] || []
 
 const pathname = path.join(__dirname, '../../csfloat.json')
 const stickerData: Record<string, number> = JSON.parse(readFileSync(pathname, 'utf8'))

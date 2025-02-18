@@ -35,6 +35,10 @@ const configList = [
     proxyId: 5,
   },
   {
+    market_hash_name: 'Desert Eagle | Conspiracy (Minimal Wear)',
+    proxyId: 6,
+  },
+  {
     market_hash_name: 'M4A1-S | Nitro (Factory New)',
     proxyId: 1,
   },
@@ -51,9 +55,20 @@ const configList = [
     proxyId: 4,
   },
   {
-    market_hash_name: 'StatTrak™ M4A1-S | Emphorosaur-S (Field-Tested)',
+    market_hash_name: 'Glock-18 | Water Elemental (Minimal Wear)',
     proxyId: 5,
   },
+  {
+    market_hash_name: 'AWP | Chromatic Aberration (Field-Tested)',
+    proxyId: 6,
+  },
+]
+
+const TODO = [
+  { market_hash_name: 'M4A1-S | Decimator (Minimal Wear)' },
+  { market_hash_name: 'USP-S | Blueprint (Field-Tested)' },
+  { market_hash_name: 'AK-47 | Frontside Misty (Field-Tested)' },
+  { market_hash_name: 'AK-47 | Point Disarray (Field-Tested)' },
 ]
 
 const pathname = path.join(__dirname, '../../csfloat.json')
@@ -146,7 +161,7 @@ const init = async () => {
         if (error.message?.includes('401')) await sleep(60_000 * 2)
         if (error.message?.includes('canceled')) await sleep(60_000)
       } finally {
-        await sleep(30_000 / (configList.length / 2))
+        await sleep(28_000 / (configList.length / 2))
       }
     }
     // eslint-disable-next-line no-constant-condition

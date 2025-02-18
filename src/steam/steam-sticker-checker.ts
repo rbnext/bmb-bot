@@ -114,40 +114,40 @@ const init = async () => {
               } catch (error) {
                 await sendMessage(`Failed to retrieve the price for the ${market_hash_name} item.`)
               }
+            }
 
-              const SP = ((item.price - basePrice) / stickerTotal) * 100
+            const SP = ((item.price - basePrice) / stickerTotal) * 100
 
-              console.log(
-                `|___ ST: $${stickerTotal.toFixed(2)}; SP: ${SP.toFixed(2)}%; Combo: ${String(isStickerCombo(item.stickers))}`
+            console.log(
+              `|___ ST: $${stickerTotal.toFixed(2)}; SP: ${SP.toFixed(2)}%; Combo: ${String(isStickerCombo(item.stickers))}`
+            )
+
+            if (SP < (isStickerCombo(item.stickers) ? 25 : 10)) {
+              const itemInfoResponse = await getCSFloatItemInfo({ url: item.inspectUrl })
+
+              const message: string[] = []
+
+              message.push(
+                `<a href="${getSteamUrl(market_hash_name, item.stickers)}">${market_hash_name}</a> | #${index + 1}\n\n`
               )
 
-              if (SP < (isStickerCombo(item.stickers) ? 25 : 10)) {
-                const itemInfoResponse = await getCSFloatItemInfo({ url: item.inspectUrl })
-
-                const message: string[] = []
-
+              for (const sticker of itemInfoResponse.iteminfo?.stickers ?? []) {
+                const name = `Sticker | ${sticker.name}`
                 message.push(
-                  `<a href="${getSteamUrl(market_hash_name, item.stickers)}">${market_hash_name}</a> | #${index + 1}\n\n`
+                  `<b>${name}</b>: ${sticker.wear === 0 ? '100%' : `${(sticker.wear * 100).toFixed(2)}% ($${stickerData[name] ?? 0})`}\n`
                 )
-
-                for (const sticker of itemInfoResponse.iteminfo?.stickers ?? []) {
-                  const name = `Sticker | ${sticker.name}`
-                  message.push(
-                    `<b>${name}</b>: ${sticker.wear === 0 ? '100%' : `${(sticker.wear * 100).toFixed(2)}% ($${stickerData[name] ?? 0})`}\n`
-                  )
-                }
-                message.push(`\n`)
-                message.push(`<b>SP</b>: ${SP.toFixed(2)}%\n`)
-                message.push(`<b>Steam price</b>: $${item.price}\n`)
-                message.push(`<b>Reference price</b>: $${basePrice.toFixed(2)}\n`)
-                message.push(`<b>Stickers total</b>: $${stickerTotal.toFixed(2)}\n\n`)
-                message.push(`<b>Float</b>: ${itemInfoResponse.iteminfo.floatvalue}\n\n`)
-
-                await sendMessage(message.join(''))
               }
+              message.push(`\n`)
+              message.push(`<b>SP</b>: ${SP.toFixed(2)}%\n`)
+              message.push(`<b>Steam price</b>: $${item.price}\n`)
+              message.push(`<b>Reference price</b>: $${basePrice.toFixed(2)}\n`)
+              message.push(`<b>Stickers total</b>: $${stickerTotal.toFixed(2)}\n\n`)
+              message.push(`<b>Float</b>: ${itemInfoResponse.iteminfo.floatvalue}\n\n`)
 
-              await sleep(3_000)
+              await sendMessage(message.join(''))
             }
+
+            await sleep(2_000)
           }
 
           CASHED_LISTINGS.add(item.listingId)

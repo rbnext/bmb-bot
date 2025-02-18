@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { CSFloatListing, MapSteamMarketRenderResponse } from '../types'
+import { MapSteamMarketRenderResponse } from '../types'
 
 export const getVercelMarketRender = async ({
   market_hash_name,
@@ -16,7 +16,7 @@ export const getVercelMarketRender = async ({
 }): Promise<MapSteamMarketRenderResponse[]> => {
   const params = `start=${start}&count=${count}&country=BY&language=english&currency=1&filter=${filter ?? ''}`
 
-  const { data } = await axios.post(`https://${proxy}.vercel.app/api`, {
+  const { data } = await axios.post(`https://${proxy}.vercel.app/api/steam/render`, {
     url: `https://steamcommunity.com/market/listings/730/${encodeURIComponent(market_hash_name)}/render?${params}`,
   })
 
@@ -42,31 +42,8 @@ export const getVercelSearchMarketRender = async ({
 
   const params = `appid=730&query=${query ?? ''}&start=${start}&count=${count}&search_descriptions=1&sort_column=price&sort_dir=asc&norender=1&${exteriorQuery}&category_730_Rarity[]=tag_Rarity_Mythical_Weapon&category_730_Rarity[]=tag_Rarity_Legendary_Weapon&category_730_Rarity[]=tag_Rarity_Ancient_Weapon&category_730_Weapon[]=any${quality.map((q) => `&category_730_Quality[]=${encodeURIComponent(q)}`).join('')}`
 
-  const { data } = await axios.post(`https://${proxy}.vercel.app/api`, {
+  const { data } = await axios.post(`https://${proxy}.vercel.app/api/steam/search`, {
     url: `https://steamcommunity.com/market/search/render?${params}`,
-  })
-
-  return data
-}
-
-export const getVercelCSFloatListings = async ({
-  proxy,
-  session,
-  min_price,
-  max_price,
-  max_float,
-}: {
-  proxy: string
-  session: string
-  min_price: number
-  max_price: number
-  max_float: number
-}): Promise<CSFloatListing> => {
-  const { data } = await axios.post(`https://${proxy}.vercel.app/api/csfloat`, {
-    session,
-    min_price,
-    max_price,
-    max_float,
   })
 
   return data

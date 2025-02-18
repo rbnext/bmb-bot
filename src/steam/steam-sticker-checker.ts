@@ -19,7 +19,7 @@ const configMapper = {
   2: configList2,
 }
 
-const configList = configMapper[Number(process.env.LIST_ID)]
+const configList: typeof configList1 = configMapper[Number(process.env.LIST_ID)]
 
 const pathname = path.join(__dirname, '../../csfloat.json')
 const stickerData: Record<string, number> = JSON.parse(readFileSync(pathname, 'utf8'))

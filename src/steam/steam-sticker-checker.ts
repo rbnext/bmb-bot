@@ -47,11 +47,11 @@ const configList = [
     proxyId: 2,
   },
   {
-    market_hash_name: 'StatTrak™ M4A1-S | Night Terror (Minimal Wear)',
+    market_hash_name: 'M4A1-S | Decimator (Minimal Wear)',
     proxyId: 3,
   },
   {
-    market_hash_name: 'StatTrak™ M4A1-S | Night Terror (Field-Tested)',
+    market_hash_name: 'USP-S | Blueprint (Field-Tested)',
     proxyId: 4,
   },
   {
@@ -65,8 +65,6 @@ const configList = [
 ]
 
 const TODO = [
-  { market_hash_name: 'M4A1-S | Decimator (Minimal Wear)' },
-  { market_hash_name: 'USP-S | Blueprint (Field-Tested)' },
   { market_hash_name: 'AK-47 | Frontside Misty (Field-Tested)' },
   { market_hash_name: 'AK-47 | Point Disarray (Field-Tested)' },
 ]

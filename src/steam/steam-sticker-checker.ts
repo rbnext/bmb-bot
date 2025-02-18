@@ -10,64 +10,16 @@ import { readFileSync } from 'fs'
 import path from 'path'
 import { getVercelMarketRender } from '../api/versel'
 import { getSteamUrl, sleep } from '../utils'
+import { configList1, configList2 } from './config'
 
 const CASHED_LISTINGS = new Set<string>()
 
-const configList = [
-  {
-    market_hash_name: 'M4A1-S | Basilisk (Minimal Wear)',
-    proxyId: 1,
-  },
-  {
-    market_hash_name: 'M4A1-S | Basilisk (Field-Tested)',
-    proxyId: 2,
-  },
-  {
-    market_hash_name: 'M4A1-S | Blood Tiger (Minimal Wear)',
-    proxyId: 3,
-  },
-  {
-    market_hash_name: 'M4A1-S | Leaded Glass (Field-Tested)',
-    proxyId: 4,
-  },
-  {
-    market_hash_name: 'M4A1-S | Nightmare (Field-Tested)',
-    proxyId: 5,
-  },
-  {
-    market_hash_name: 'Desert Eagle | Conspiracy (Minimal Wear)',
-    proxyId: 6,
-  },
-  {
-    market_hash_name: 'M4A1-S | Nitro (Factory New)',
-    proxyId: 1,
-  },
-  {
-    market_hash_name: 'USP-S | Guardian (Field-Tested)',
-    proxyId: 2,
-  },
-  {
-    market_hash_name: 'M4A1-S | Decimator (Minimal Wear)',
-    proxyId: 3,
-  },
-  {
-    market_hash_name: 'USP-S | Blueprint (Field-Tested)',
-    proxyId: 4,
-  },
-  {
-    market_hash_name: 'Glock-18 | Water Elemental (Minimal Wear)',
-    proxyId: 5,
-  },
-  {
-    market_hash_name: 'AWP | Chromatic Aberration (Field-Tested)',
-    proxyId: 6,
-  },
-]
+const configMapper = {
+  1: configList1,
+  2: configList2,
+}
 
-const TODO = [
-  { market_hash_name: 'AK-47 | Frontside Misty (Field-Tested)' },
-  { market_hash_name: 'AK-47 | Point Disarray (Field-Tested)' },
-]
+const configList = configMapper[Number(process.env.LIST_ID)]
 
 const pathname = path.join(__dirname, '../../csfloat.json')
 const stickerData: Record<string, number> = JSON.parse(readFileSync(pathname, 'utf8'))

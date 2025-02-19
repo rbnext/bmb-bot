@@ -48,7 +48,15 @@ const handler = async () => {
       continue
     }
 
-    if (isSouvenir || overpayment > 10 || quantity < 50 || totalTrades >= 50 || maxOfferDiscount <= 250 || hasBadWear) {
+    if (
+      isSouvenir ||
+      overpayment > 10 ||
+      quantity < 50 ||
+      totalTrades >= 50 ||
+      maxOfferDiscount <= 250 ||
+      hasBadWear ||
+      market_hash_name.includes('M4A4 ')
+    ) {
       continue
     }
 

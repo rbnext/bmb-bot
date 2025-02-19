@@ -40,6 +40,7 @@ const handler = async () => {
 
     const stickers = data.item.stickers || []
     const stickerTotal = stickers.reduce((acc, { reference }) => acc + (reference?.price || 0), 0)
+    const hasBadWear = stickers.some((sticker) => !!sticker.wear)
 
     const overpayment = Number((((currentPrice - predictedPrice) / predictedPrice) * 100).toFixed(2))
 
@@ -47,7 +48,7 @@ const handler = async () => {
       continue
     }
 
-    if (isSouvenir || overpayment > 10 || quantity < 50 || totalTrades >= 50 || maxOfferDiscount <= 250) {
+    if (isSouvenir || overpayment > 10 || quantity < 50 || totalTrades >= 50 || maxOfferDiscount <= 250 || hasBadWear) {
       continue
     }
 
@@ -86,9 +87,13 @@ schedule.scheduleJob(`${process.env.SPEC} * * * * *`, async () => {
     if (axios.isAxiosError(error)) {
       console.log(error.response?.data)
 
-      sendMessage(`CSFloat bargain error: ${error.response?.data?.message ?? error.message}`)
+      sendMessage(`CSFloat bargain error: ${error.response?.data?.message}`).then(() => {
+        process.exit(1)
+      })
+    } else {
+      sendMessage(`CSFloat bargain error: ${error.message}`).then(() => {
+        process.exit(1)
+      })
     }
-
-    process.exit(1)
   })
 })

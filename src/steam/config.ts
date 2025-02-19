@@ -157,3 +157,54 @@ export const configList3 = [
     proxyId: 5,
   },
 ]
+
+export const configList4 = [
+  {
+    market_hash_name: 'AK-47 | Red Laminate (Well-Worn)',
+    proxyId: 1,
+  },
+  {
+    market_hash_name: "M4A1-S | Chantico's Fire (Minimal Wear)",
+    proxyId: 2,
+  },
+  {
+    market_hash_name: 'AK-47 | Wasteland Rebel (Field-Tested)',
+    proxyId: 3,
+  },
+  {
+    market_hash_name: 'USP-S | Orion (Minimal Wear)',
+    proxyId: 4,
+  },
+  {
+    market_hash_name: 'M4A1-S | Golden Coil (Minimal Wear)',
+    proxyId: 5,
+  },
+  {
+    market_hash_name: 'StatTrak™ AWP | Chrome Cannon (Factory New)',
+    proxyId: 6,
+  },
+  {
+    market_hash_name: 'AK-47 | Bloodsport (Field-Tested)',
+    proxyId: 1,
+  },
+  {
+    market_hash_name: 'StatTrak™ M4A1-S | Guardian (Field-Tested)',
+    proxyId: 2,
+  },
+  {
+    market_hash_name: 'AK-47 | Fuel Injector (Well-Worn)',
+    proxyId: 3,
+  },
+  {
+    market_hash_name: 'AK-47 | Frontside Misty (Factory New)',
+    proxyId: 4,
+  },
+  {
+    market_hash_name: 'AK-47 | The Empress (Factory New)',
+    proxyId: 5,
+  },
+  {
+    market_hash_name: 'StatTrak™ AK-47 | Point Disarray (Field-Tested)',
+    proxyId: 6,
+  },
+]

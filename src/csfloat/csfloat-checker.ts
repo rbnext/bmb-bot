@@ -23,8 +23,8 @@ const hasStickerCombo = (stickers: CSFloatListingItemStickerItem[]) => {
 const handler = async () => {
   const response = await getCSFloatListings({
     sort_by: 'most_recent',
-    min_price: MIN_PRICE,
-    max_price: MAX_PRICE,
+    // min_price: MIN_PRICE,
+    // max_price: MAX_PRICE,
     max_float: 0.5,
   })
 
@@ -42,58 +42,63 @@ const handler = async () => {
     const stickers = data.item.stickers || []
     const stickerTotal = stickers.reduce((acc, { reference }) => acc + (reference?.price || 0), 0)
     const hasBadWear = stickers.some((sticker) => !!sticker.wear)
-    const hasCombo = hasStickerCombo(stickers)
+    // const hasCombo = hasStickerCombo(stickers)
 
+    const SP = ((currentPrice - predictedPrice) / stickerTotal) * 100
     const overpayment = Number((((currentPrice - predictedPrice) / predictedPrice) * 100).toFixed(2))
 
     if (isSouvenir || overpayment > 10 || quantity < 15 || totalTrades >= 100 || hasBadWear) {
       continue
     }
 
-    if (!(stickerTotal >= (hasCombo ? 1000 : 3000))) {
+    console.log(format(new Date(), 'HH:mm:ss'), market_hash_name, SP)
+
+    if (!(stickerTotal >= 1000 && SP < 2)) {
       continue
     }
 
-    const simpleListings = await getCSFloatSimpleListings({ id: data.id })
-    const filteredListings = simpleListings.filter((i) => i.type === 'buy_now')
-    const listingMedianPrice = median(filteredListings.map((i) => i.price))
-    const maxListingPrice = Math.max(...filteredListings.map((i) => i.price))
-    const minListingPrice = Math.min(...filteredListings.map((i) => i.price))
+    // const simpleListings = await getCSFloatSimpleListings({ id: data.id })
+    // const filteredListings = simpleListings.filter((i) => i.type === 'buy_now')
+    // const listingMedianPrice = median(filteredListings.map((i) => i.price))
+    // const maxListingPrice = Math.max(...filteredListings.map((i) => i.price))
+    // const minListingPrice = Math.min(...filteredListings.map((i) => i.price))
 
-    if ((maxListingPrice / minListingPrice - 1) * 100 < 10) {
-      const estimatedToBeSold = listingMedianPrice + stickerTotal * (hasCombo ? 0.07 : 0.04)
-      const estimatedProfitPercent = (estimatedToBeSold / currentPrice - 1) * 100
+    // if ((maxListingPrice / minListingPrice - 1) * 100 < 10) {
+    // const estimatedToBeSold = listingMedianPrice + stickerTotal * (hasCombo ? 0.07 : 0.04)
+    // const estimatedProfitPercent = (estimatedToBeSold / currentPrice - 1) * 100
 
-      const now = format(new Date(), 'HH:mm:ss')
-      console.log(
-        now,
-        market_hash_name,
-        currentPrice / 100,
-        stickerTotal / 100,
-        hasCombo,
-        estimatedProfitPercent.toFixed(2)
+    // const now = format(new Date(), 'HH:mm:ss')
+    // console.log(
+    //   now,
+    //   market_hash_name,
+    //   currentPrice / 100,
+    //   stickerTotal / 100,
+    //   hasCombo
+    //   // estimatedProfitPercent.toFixed(2)
+    // )
+
+    // if (estimatedProfitPercent >= 5) {
+    const message: string[] = []
+    message.push(`<a href="https://csfloat.com/item/${data.id}">${market_hash_name}</a>\n\n`)
+    for (const sticker of stickers) {
+      message.push(
+        `<b>${sticker.name}</b> ($${(sticker.reference?.price || 0) / 100}) ${sticker?.wear ? 'N/A' : '100%'}\n`
       )
-
-      if (estimatedProfitPercent >= 5) {
-        const message: string[] = []
-        message.push(`<a href="https://csfloat.com/item/${data.id}">${market_hash_name}</a>\n\n`)
-        for (const sticker of stickers) {
-          message.push(
-            `<b>${sticker.name}</b> ($${(sticker.reference?.price || 0) / 100}) ${sticker?.wear ? 'N/A' : '100%'}\n`
-          )
-        }
-        message.push(`\n`)
-        message.push(`<b>Price</b>: $${currentPrice / 100}\n`)
-        message.push(`<b>Lowest price</b>: $${minListingPrice / 100}\n`)
-        message.push(`<b>Median price</b>: $${listingMedianPrice / 100}\n`)
-        message.push(
-          `<b>Estimated profit</b>: ${estimatedProfitPercent.toFixed(2)}% (if sold for $${(estimatedToBeSold / 100).toFixed(2)})\n\n`
-        )
-        message.push(`<b>Float</b>: ${floatValue}`)
-
-        await sendMessage(message.join(''), undefined, process.env.TELEGRAM_REPORT_ID)
-      }
     }
+    message.push(`\n`)
+    message.push(`<b>SP</b>: ${SP.toFixed(2)}%\n`)
+    message.push(`<b>Price</b>: $${currentPrice / 100}\n`)
+
+    // message.push(`<b>Lowest price</b>: $${minListingPrice / 100}\n`)
+    // message.push(`<b>Median price</b>: $${listingMedianPrice / 100}\n`)
+    // message.push(
+    //   `<b>Estimated profit</b>: ${estimatedProfitPercent.toFixed(2)}% (if sold for $${(estimatedToBeSold / 100).toFixed(2)})\n\n`
+    // )
+    message.push(`<b>Float</b>: ${floatValue}`)
+
+    await sendMessage(message.join(''), undefined, process.env.TELEGRAM_REPORT_ID)
+    // }
+    // }
 
     CASHED_LISTINGS.add(data.id)
   }

@@ -51,11 +51,11 @@ const handler = async () => {
       continue
     }
 
-    console.log(format(new Date(), 'HH:mm:ss'), market_hash_name, SP)
-
     if (!(stickerTotal >= 1000 && SP < 2)) {
       continue
     }
+
+    console.log(format(new Date(), 'HH:mm:ss'), market_hash_name, SP)
 
     // const simpleListings = await getCSFloatSimpleListings({ id: data.id })
     // const filteredListings = simpleListings.filter((i) => i.type === 'buy_now')

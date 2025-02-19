@@ -1,10 +1,8 @@
-import dotenv from 'dotenv'
-
-dotenv.config()
+import 'dotenv/config'
 
 import { format } from 'date-fns'
 import { sendMessage } from '../api/telegram'
-import { getSteamUrl, sleep } from '../utils'
+import { sleep } from '../utils'
 
 import { MapSteamMarketRenderResponse } from '../types'
 import { getVercelMarketRender } from '../api/versel'
@@ -27,68 +25,30 @@ const isSweetDieCastAK = (pattern: number) => {
   return false
 }
 
-const configList = [
-  {
-    market_hash_name: 'Charm | Die-cast AK',
-    isSweet: isSweetDieCastAK,
-    start: 0,
-  },
-  {
-    market_hash_name: "Charm | That's Bananas",
-    isSweet: (pattern: number) => {
-      if (pattern >= 98000 || pattern <= 2000) {
-        return true
-      }
-
-      return false
-    },
-    start: 0,
-  },
-  {
-    market_hash_name: 'Charm | Die-cast AK',
-    isSweet: isSweetDieCastAK,
-    start: 0,
-  },
-  {
-    market_hash_name: 'Charm | POP Art',
-    isSweet: (pattern: number) => {
-      if (pattern >= 98000 || pattern <= 2000) {
-        return true
-      }
-
-      return false
-    },
-    start: 0,
-  },
-]
+const proxyList = Array.from({ length: 10 }, (_, i) => i + 1)
 
 const init = async () => {
   do {
-    for (const [index, config] of configList.entries()) {
-      const market_hash_name = config.market_hash_name
+    for (const proxyId of proxyList) {
+      const market_hash_name = 'Charm | Die-cast AK'
 
       try {
         const steamMarketResponse: MapSteamMarketRenderResponse[] = await getVercelMarketRender({
           market_hash_name,
-          proxy: `${process.env.STEAM_PROXY}${index + 1}`,
-          start: config.start,
-          count: 100,
+          proxy: `${process.env.STEAM_PROXY}-${proxyId}`,
+          count: 50,
         })
-
-        if (steamMarketResponse.length === 0) {
-          throw new Error('No items found')
-        }
 
         for (const [index, item] of steamMarketResponse.entries()) {
           if (!item.pattern || CASHED_LISTINGS.has(item.listingId)) continue
 
           const now = format(new Date(), 'HH:mm:ss')
-          console.log(now, market_hash_name, item.pattern, item.price, config.start + index + 1)
+          console.log(now, market_hash_name, item.pattern, item.price)
 
-          if (config.isSweet(item.pattern)) {
+          if (isSweetDieCastAK(item.pattern)) {
             const message: string[] = []
             message.push(
-              `<a href="${getSteamUrl(market_hash_name, [])}">${market_hash_name}</a> | #${config.start + index + 1}\n\n`
+              `<a href="https://steamcommunity.com/market/listings/730/${encodeURIComponent(market_hash_name)}?filter=Charm Template: ${item.pattern}">${market_hash_name}</a> | #${index + 1}\n\n`
             )
             message.push(`<b>Steam price</b>: $${item.price ? item.price : 'Sold!'}\n`)
             message.push(`<b>Charm template</b>: #${item.pattern}\n`)
@@ -100,7 +60,7 @@ const init = async () => {
       } catch (error) {
         console.log(format(new Date(), 'HH:mm:ss'), 'ERROR', error.message)
       } finally {
-        await sleep(40_000 / configList.length)
+        await sleep(2_500)
       }
     }
     // eslint-disable-next-line no-constant-condition

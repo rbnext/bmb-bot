@@ -23,13 +23,12 @@ const configMapper = {
 
 const listId = Number(process.env.LIST_ID)
 const configList = configMapper[listId as keyof typeof configMapper] || []
+const marketPrices = new Map<string, number>()
 
 const pathname = path.join(__dirname, '../../csfloat.json')
 const stickerData: Record<string, number> = JSON.parse(readFileSync(pathname, 'utf8'))
 
 const init = async () => {
-  let basePrice: number = 0
-
   do {
     for (const config of configList) {
       const market_hash_name = config.market_hash_name
@@ -52,7 +51,7 @@ const init = async () => {
           console.log(now, market_hash_name, item.price, stickerTotal.toFixed(2))
 
           if (stickerTotal > 15) {
-            if (basePrice === 0) {
+            if (!marketPrices.has(market_hash_name)) {
               try {
                 const floatResponse = await getCSFloatListings({ market_hash_name })
 
@@ -65,12 +64,13 @@ const init = async () => {
                   }
                 }
 
-                basePrice = floatResponse.data[0].reference.base_price / 100
+                marketPrices.set(market_hash_name, floatResponse.data[0].reference.base_price / 100)
               } catch (error) {
                 await sendMessage(`Failed to retrieve the price for the ${market_hash_name} item.`)
               }
             }
 
+            const basePrice = marketPrices.get(market_hash_name) ?? 0
             const SP = ((item.price - basePrice) / stickerTotal) * 100
 
             console.log(

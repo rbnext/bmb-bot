@@ -51,7 +51,7 @@ const handler = async () => {
       continue
     }
 
-    if (!(stickerTotal >= 1000 && SP < 2)) {
+    if (!(stickerTotal >= 2000 && SP < 2)) {
       continue
     }
 

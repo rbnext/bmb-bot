@@ -3,12 +3,11 @@ import 'dotenv/config'
 import schedule from 'node-schedule'
 import { sleep } from '../utils'
 import { sendMessage } from '../api/telegram'
-import { format, formatDistance, isAfter, subMinutes } from 'date-fns'
+import { format, isAfter, subMinutes } from 'date-fns'
 import { getBuyOrders, getCSFloatListings, postCreateBargain } from '../api/csfloat'
 import axios from 'axios'
 
 const CASHED_LISTINGS = new Set<string>()
-const options = { addSuffix: true, includeSeconds: true }
 
 const MIN_PRICE = 2500
 const MAX_PRICE = 9000
@@ -39,6 +38,9 @@ const handler = async () => {
     const maxOfferDiscount = data.max_offer_discount || 0
     const createdAt = data.created_at
 
+    const stickers = data.item.stickers || []
+    const stickerTotal = stickers.reduce((acc, { reference }) => acc + (reference?.price || 0), 0)
+
     const overpayment = Number((((currentPrice - predictedPrice) / predictedPrice) * 100).toFixed(2))
 
     if (!isLessThanXMinutes(createdAt, 2)) {
@@ -68,8 +70,7 @@ const handler = async () => {
 
       message.push(`<b>Price</b>: <s>$${currentPrice / 100}</s> $${bargainPrice / 100}\n`)
       message.push(`<b>Lowest buy order</b>: $${simpleOrders[0].price / 100}\n`)
-
-      message.push(`<b>Created at</b>: ${formatDistance(new Date(createdAt), new Date(), options)}\n`)
+      if (stickerTotal !== 0) message.push(`<b>Stickers total</b>: $${stickerTotal / 100}\n\n`)
       message.push(`<b>Float</b>: ${floatValue}`)
 
       await postCreateBargain({ contract_id: data.id, price: bargainPrice })

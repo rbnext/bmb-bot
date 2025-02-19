@@ -36,7 +36,6 @@ const init = async () => {
         const steamMarketResponse: MapSteamMarketRenderResponse[] = await getVercelMarketRender({
           market_hash_name,
           proxy: `${process.env.STEAM_PROXY}-${proxyId}`,
-          count: 50,
         })
 
         for (const [index, item] of steamMarketResponse.entries()) {

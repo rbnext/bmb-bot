@@ -14,7 +14,7 @@ export const getVercelMarketRender = async ({
   proxy: string
   filter?: string
 }): Promise<MapSteamMarketRenderResponse[]> => {
-  const params = `start=${start}&count=${count}&country=BY&language=english&currency=1&filter=${filter ?? ''}`
+  const params = `start=${start}&count=${count}&country=BY&language=english&currency=1${filter ? `&filter=${filter}` : ''}`
 
   const { data } = await axios.post(`https://${proxy}.vercel.app/api/steam/render`, {
     url: `https://steamcommunity.com/market/listings/730/${encodeURIComponent(market_hash_name)}/render?${params}`,

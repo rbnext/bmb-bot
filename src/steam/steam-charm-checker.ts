@@ -63,7 +63,7 @@ const init = async () => {
       } catch (error) {
         console.log(format(new Date(), 'HH:mm:ss'), 'ERROR', error.message)
       } finally {
-        await sleep(2_500)
+        await sleep(3_000)
       }
     }
     // eslint-disable-next-line no-constant-condition

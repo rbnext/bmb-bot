@@ -38,7 +38,7 @@ const init = async () => {
           proxy: `${process.env.STEAM_PROXY}-${proxyId}`,
         })
 
-        if (steamMarketResponse.length === 0) {
+        if (steamMarketResponse.length === 0 || !Array.isArray(steamMarketResponse)) {
           throw new Error('No items found')
         }
 

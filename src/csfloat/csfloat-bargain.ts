@@ -80,10 +80,12 @@ const handler = async () => {
   }
 }
 
-schedule.scheduleJob(`${process.env.SPEC} * * * * *`, () => {
+schedule.scheduleJob(`${process.env.SPEC} * * * * *`, async () => {
   handler().catch((error) => {
     if (axios.isAxiosError(error)) {
       console.log(error.response?.data)
+
+      sendMessage(`CSFloat bargain error: ${error.response?.data?.message ?? error.message}`)
     }
 
     process.exit(1)

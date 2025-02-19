@@ -38,6 +38,10 @@ const init = async () => {
           proxy: `${process.env.STEAM_PROXY}-${proxyId}`,
         })
 
+        if (steamMarketResponse.length === 0) {
+          throw new Error('No items found')
+        }
+
         for (const [index, item] of steamMarketResponse.entries()) {
           if (!item.pattern || CASHED_LISTINGS.has(item.listingId)) continue
 

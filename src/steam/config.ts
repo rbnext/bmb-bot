@@ -114,3 +114,46 @@ export const configList2 = [
     proxyId: 7,
   },
 ]
+
+export const configList3 = [
+  {
+    market_hash_name: 'M4A1-S | Decimator (Field-Tested)',
+    proxyId: 1,
+  },
+  {
+    market_hash_name: 'M4A1-S | Guardian (Minimal Wear)',
+    proxyId: 2,
+  },
+  {
+    market_hash_name: 'M4A1-S | Cyrex (Field-Tested)',
+    proxyId: 3,
+  },
+  {
+    market_hash_name: 'M4A1-S | Guardian (Factory New)',
+    proxyId: 4,
+  },
+  {
+    market_hash_name: 'M4A1-S | Mecha Industries (Field-Tested)',
+    proxyId: 5,
+  },
+  {
+    market_hash_name: 'M4A1-S | Bright Water (Minimal Wear)',
+    proxyId: 1,
+  },
+  {
+    market_hash_name: 'M4A1-S | Cyrex (Factory New)',
+    proxyId: 2,
+  },
+  {
+    market_hash_name: 'Desert Eagle | Crimson Web (Field-Tested)',
+    proxyId: 3,
+  },
+  {
+    market_hash_name: 'Desert Eagle | Printstream (Field-Tested)',
+    proxyId: 4,
+  },
+  {
+    market_hash_name: 'AWP | Fever Dream (Field-Tested)',
+    proxyId: 5,
+  },
+]

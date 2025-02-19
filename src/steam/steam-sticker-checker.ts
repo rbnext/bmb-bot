@@ -10,13 +10,14 @@ import { readFileSync } from 'fs'
 import path from 'path'
 import { getVercelMarketRender } from '../api/versel'
 import { getSteamUrl, sleep } from '../utils'
-import { configList1, configList2 } from './config'
+import { configList1, configList2, configList3 } from './config'
 
 const CASHED_LISTINGS = new Set<string>()
 
 const configMapper = {
   1: configList1,
   2: configList2,
+  3: configList3,
 } as const
 
 const listId = Number(process.env.LIST_ID)

@@ -5,6 +5,7 @@ import { sleep } from '../utils'
 import { sendMessage } from '../api/telegram'
 import { format, formatDistance, isAfter, subMinutes } from 'date-fns'
 import { getBuyOrders, getCSFloatListings, postCreateBargain } from '../api/csfloat'
+import axios from 'axios'
 
 const CASHED_LISTINGS = new Set<string>()
 const options = { addSuffix: true, includeSeconds: true }
@@ -73,10 +74,18 @@ const handler = async () => {
 
       await postCreateBargain({ contract_id: data.id, price: bargainPrice })
       await sendMessage(message.join(''), undefined, process.env.TELEGRAM_REPORT_ID)
+      await sleep(10_000)
     }
-    await sleep(500)
     CASHED_LISTINGS.add(data.id)
   }
 }
 
-schedule.scheduleJob(`${process.env.SPEC} * * * * *`, handler)
+schedule.scheduleJob(`${process.env.SPEC} * * * * *`, () => {
+  handler().catch((error) => {
+    if (axios.isAxiosError(error)) {
+      console.log(error.response?.data)
+    }
+
+    process.exit(1)
+  })
+})

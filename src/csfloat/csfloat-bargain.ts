@@ -21,6 +21,10 @@ const hasStickerCombo = (stickers: CSFloatListingItemStickerItem[]) => {
   return Object.values(stickersGroupedById).some((count) => count === 4 || count === 5)
 }
 
+const isGoodFloat = (floatValue: number) => {
+  return floatValue < 0.3 || floatValue > 0.38
+}
+
 const isLessThanXMinutes = (date: string, minutes = 1) => {
   return isAfter(new Date(date), subMinutes(new Date(), minutes))
 }
@@ -63,7 +67,8 @@ const handler = async () => {
       maxOfferDiscount <= 250 ||
       market_hash_name.includes('M4A4 ') ||
       !isLessThanXMinutes(createdAt, 2) ||
-      hasBadWear
+      hasBadWear ||
+      !isGoodFloat(floatValue)
     ) {
       continue
     }

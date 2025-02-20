@@ -6,13 +6,22 @@ import { sendMessage } from '../api/telegram'
 import { format, isAfter, subMinutes } from 'date-fns'
 import { getBuyOrders, getCSFloatListings, postCreateBargain } from '../api/csfloat'
 import axios from 'axios'
+import { CSFloatListingItemStickerItem } from '../types'
 
 const CASHED_LISTINGS = new Set<string>()
 
 const MIN_PRICE = 2500
 const MAX_PRICE = 9000
 
-export const isLessThanXMinutes = (date: string, minutes = 1) => {
+const hasStickerCombo = (stickers: CSFloatListingItemStickerItem[]) => {
+  const stickersGroupedById = stickers.reduce<Record<string, number>>((acc, { name }) => {
+    acc[name] = (acc[name] || 0) + 1
+    return acc
+  }, {})
+  return Object.values(stickersGroupedById).some((count) => count === 4 || count === 5)
+}
+
+const isLessThanXMinutes = (date: string, minutes = 1) => {
   return isAfter(new Date(date), subMinutes(new Date(), minutes))
 }
 
@@ -41,12 +50,11 @@ const handler = async () => {
     const stickers = data.item.stickers || []
     const stickerTotal = stickers.reduce((acc, { reference }) => acc + (reference?.price || 0), 0)
     const hasBadWear = stickers.some((sticker) => !!sticker.wear)
+    const hasCombo = hasStickerCombo(stickers)
 
     const overpayment = Number((((currentPrice - predictedPrice) / predictedPrice) * 100).toFixed(2))
 
-    if (!isLessThanXMinutes(createdAt, 2)) {
-      continue
-    }
+    const SP = ((minOfferPrice + 10 - predictedPrice) / stickerTotal) * 100
 
     if (
       isSouvenir ||
@@ -54,8 +62,9 @@ const handler = async () => {
       quantity < 50 ||
       totalTrades >= 50 ||
       maxOfferDiscount <= 250 ||
-      hasBadWear ||
-      market_hash_name.includes('M4A4 ')
+      market_hash_name.includes('M4A4 ') ||
+      !isLessThanXMinutes(createdAt, 2) ||
+      hasBadWear
     ) {
       continue
     }
@@ -85,23 +94,21 @@ const handler = async () => {
       await postCreateBargain({ contract_id: data.id, price: bargainPrice })
       await sendMessage(message.join(''), undefined, process.env.TELEGRAM_REPORT_ID)
       await sleep(10_000)
+    } else if (SP < 2) {
+      console.log(market_hash_name, hasCombo, stickerTotal, SP)
+      //
     }
+
     CASHED_LISTINGS.add(data.id)
   }
 }
 
 schedule.scheduleJob(`${process.env.SPEC} * * * * *`, async () => {
   handler().catch((error) => {
-    if (axios.isAxiosError(error)) {
-      console.log(error.response?.data)
+    const errorMessage = axios.isAxiosError(error) ? error.response?.data?.message : error.message
 
-      sendMessage(`CSFloat bargain error: ${error.response?.data?.message}`).then(() => {
-        process.exit(1)
-      })
-    } else {
-      sendMessage(`CSFloat bargain error: ${error.message}`).then(() => {
-        process.exit(1)
-      })
-    }
+    sendMessage(`CSFloat bargain error: ${errorMessage}`).then(() => {
+      process.exit(1)
+    })
   })
 })

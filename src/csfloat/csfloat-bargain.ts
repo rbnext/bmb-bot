@@ -22,7 +22,7 @@ const hasStickerCombo = (stickers: CSFloatListingItemStickerItem[]) => {
 }
 
 const isGoodFloat = (floatValue: number) => {
-  return floatValue < 0.3 || floatValue > 0.38
+  return floatValue < 0.35 || floatValue > 0.38
 }
 
 const getStickerPercentage = (item: CSFloatListingItem, price: number) => {
@@ -75,8 +75,8 @@ const handler = async () => {
       maxOfferDiscount <= 250 ||
       market_hash_name.includes('M4A4 ') ||
       !isLessThanXMinutes(createdAt, 2) ||
-      hasBadWear
-      // !isGoodFloat(floatValue)
+      hasBadWear ||
+      !isGoodFloat(floatValue)
     ) {
       continue
     }

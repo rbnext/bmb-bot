@@ -79,7 +79,7 @@ const handler = async () => {
     const bargainPrice = minOfferPrice + 10
 
     const now = format(new Date(), 'HH:mm:ss')
-    console.log(now, market_hash_name, (currentPrice - bargainPrice) / 100, max - min)
+    console.log(now, market_hash_name, (currentPrice - bargainPrice) / 100, max - min, SP)
 
     if (simpleOrders[0].price > bargainPrice && max - min <= 30) {
       const message: string[] = []
@@ -95,7 +95,6 @@ const handler = async () => {
       await sendMessage(message.join(''), undefined, process.env.TELEGRAM_REPORT_ID)
       await sleep(10_000)
     } else if (SP < 2) {
-      console.log(market_hash_name, hasCombo, stickerTotal, SP)
       //
     }
 

@@ -30,7 +30,7 @@ const getStickerPercentage = (item: CSFloatListingItem, price: number) => {
   const predictedPrice = item.reference.predicted_price
   const stickerTotal = stickers.reduce((acc, { reference }) => acc + (reference?.price || 0), 0)
 
-  return price >= predictedPrice ? ((price - predictedPrice) / stickerTotal) * 100 : 0
+  return price >= predictedPrice && stickerTotal != 0 ? ((price - predictedPrice) / stickerTotal) * 100 : 0
 }
 
 const isLessThanXMinutes = (date: string, minutes = 1) => {

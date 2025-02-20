@@ -11,7 +11,7 @@ import { CSFloatListingItem, CSFloatListingItemStickerItem } from '../types'
 const CASHED_LISTINGS = new Set<string>()
 
 const MIN_PRICE = 2500
-const MAX_PRICE = 9000
+const MAX_PRICE = 6000
 
 const hasStickerCombo = (stickers: CSFloatListingItemStickerItem[]) => {
   const stickersGroupedById = stickers.reduce<Record<string, number>>((acc, { name }) => {
@@ -91,7 +91,7 @@ const handler = async () => {
     const bargainPrice = minOfferPrice + 10
 
     const now = format(new Date(), 'HH:mm:ss')
-    console.log(now, market_hash_name, (currentPrice - bargainPrice) / 100, max - min, SP)
+    console.log(now, market_hash_name, overpayment, SP)
 
     if (simpleOrders[0].price > bargainPrice && max - min <= 30) {
       const message: string[] = []

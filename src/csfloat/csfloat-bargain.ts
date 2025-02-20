@@ -6,7 +6,7 @@ import { sendMessage } from '../api/telegram'
 import { format, isAfter, subMinutes } from 'date-fns'
 import { getBuyOrders, getCSFloatListings, postCreateBargain } from '../api/csfloat'
 import axios from 'axios'
-import { CSFloatListingItemStickerItem } from '../types'
+import { CSFloatListingItem, CSFloatListingItemStickerItem } from '../types'
 
 const CASHED_LISTINGS = new Set<string>()
 
@@ -23,6 +23,14 @@ const hasStickerCombo = (stickers: CSFloatListingItemStickerItem[]) => {
 
 const isGoodFloat = (floatValue: number) => {
   return floatValue < 0.3 || floatValue > 0.38
+}
+
+const getStickerPercentage = (item: CSFloatListingItem, price: number) => {
+  const stickers = item.item.stickers || []
+  const predictedPrice = item.reference.predicted_price
+  const stickerTotal = stickers.reduce((acc, { reference }) => acc + (reference?.price || 0), 0)
+
+  return price >= predictedPrice ? ((price - predictedPrice) / stickerTotal) * 100 : 0
 }
 
 const isLessThanXMinutes = (date: string, minutes = 1) => {
@@ -57,7 +65,7 @@ const handler = async () => {
 
     const overpayment = Number((((currentPrice - predictedPrice) / predictedPrice) * 100).toFixed(2))
 
-    const SP = ((minOfferPrice + 10 - predictedPrice) / stickerTotal) * 100
+    const SP = getStickerPercentage(data, currentPrice)
 
     if (
       isSouvenir ||

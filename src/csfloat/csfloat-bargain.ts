@@ -50,7 +50,6 @@ const handler = async () => {
     const stickers = data.item.stickers || []
     const stickerTotal = stickers.reduce((acc, { reference }) => acc + (reference?.price || 0), 0)
     const hasBadWear = stickers.some((sticker) => !!sticker.wear)
-    const hasCombo = hasStickerCombo(stickers)
 
     const overpayment = Number((((currentPrice - predictedPrice) / predictedPrice) * 100).toFixed(2))
 
@@ -64,8 +63,7 @@ const handler = async () => {
       maxOfferDiscount <= 250 ||
       market_hash_name.includes('M4A4 ') ||
       !isLessThanXMinutes(createdAt, 2) ||
-      hasBadWear ||
-      !hasCombo
+      hasBadWear
     ) {
       continue
     }

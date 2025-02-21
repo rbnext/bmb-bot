@@ -48,7 +48,7 @@ const buffSelling = async () => {
   for (const page_num of pages) {
     const response = await getItemsOnSale({ page_num })
     for (const item of response.data.items) {
-      if (![5791, 23155].includes(item.goods_id)) sellingSet.add(item.goods_id)
+      if (![5791, 23155, 30505].includes(item.goods_id)) sellingSet.add(item.goods_id)
     }
     await sleep(5_000)
   }

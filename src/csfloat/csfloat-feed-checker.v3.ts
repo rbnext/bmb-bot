@@ -60,7 +60,7 @@ const floatFeedChecker = async () => {
         messages.push(`⚠️ RISK ALERT <a href="${floatLink}">${market_hash_name}</a> `)
         await sendMessage(messages.join(''))
 
-        await sleep(40_000)
+        await sleep(20_000)
 
         if (currentMarketOrder) {
           await removeBuyOrder({ id: currentMarketOrder.id })
@@ -71,7 +71,7 @@ const floatFeedChecker = async () => {
       const lowestOrderPrice = simpleOrders[0].price
       const estimatedMedianProfit = Number(((listingMedianPrice - lowestOrderPrice) / lowestOrderPrice) * 100)
 
-      await sleep(20_000)
+      await sleep(10_000)
 
       if (currentMarketOrder) {
         if (currentMarketOrder.price < simpleOrders[0].price) {
@@ -108,7 +108,7 @@ const floatFeedChecker = async () => {
         await sendMessage(messages.join(''))
       }
 
-      await sleep(45_000)
+      await sleep(20_000)
     }
   } catch (error) {
     console.log(error)

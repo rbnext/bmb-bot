@@ -45,7 +45,7 @@ const floatFeedChecker = async () => {
 
       const simpleOrders = orders.filter((i) => !!i.market_hash_name)
 
-      if (simpleOrders.length === 0 || listingMedianPrice >= 6000) {
+      if (simpleOrders.length === 0 || listingMedianPrice >= 3000) {
         await sleep(45_000)
         continue
       }

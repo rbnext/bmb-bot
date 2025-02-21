@@ -75,8 +75,8 @@ const handler = async () => {
       maxOfferDiscount <= 250 ||
       market_hash_name.includes('M4A4 ') ||
       !isLessThanXMinutes(createdAt, 2) ||
-      hasBadWear ||
-      !isGoodFloat(floatValue)
+      hasBadWear
+      // !isGoodFloat(floatValue)
     ) {
       continue
     }

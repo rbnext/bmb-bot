@@ -93,6 +93,10 @@ const handler = async () => {
     const now = format(new Date(), 'HH:mm:ss')
     console.log(now, market_hash_name, overpayment, SP)
 
+    if (simpleOrders.length === 0) {
+      continue
+    }
+
     if (simpleOrders[0].price > bargainPrice && max - min <= 30) {
       const message: string[] = []
       message.push(`🤝 <b>[BARGAIN][CSFLOAT]</b>` + ' ')
@@ -106,8 +110,6 @@ const handler = async () => {
       await postCreateBargain({ contract_id: data.id, price: bargainPrice })
       await sendMessage(message.join(''), undefined, process.env.TELEGRAM_REPORT_ID)
       await sleep(10_000)
-    } else if (SP < 2) {
-      //
     }
 
     CASHED_LISTINGS.add(data.id)

@@ -55,12 +55,7 @@ const floatFeedChecker = async () => {
       const max = Math.max(...top3Orders.map((i) => i.price))
 
       if (max - min >= 25) {
-        const messages: string[] = []
-        const floatLink = `https://csfloat.com/search?market_hash_name=${market_hash_name}&sort_by=lowest_price&type=buy_now`
-        messages.push(`⚠️ RISK ALERT <a href="${floatLink}">${market_hash_name}</a> `)
-        await sendMessage(messages.join(''))
-
-        await sleep(20_000)
+        await sleep(10_000)
 
         if (currentMarketOrder) {
           await removeBuyOrder({ id: currentMarketOrder.id })

@@ -86,6 +86,7 @@ export const executeBuffToSteamTrade = async (
   console.log(item.market_hash_name, estimated_profit.toFixed(2))
 
   if (
+    (current_price < 1 && estimated_profit > 100) ||
     (current_price < 2 && estimated_profit >= STEAM_PURCHASE_THRESHOLD + 10) ||
     (current_price >= 2 && estimated_profit >= STEAM_PURCHASE_THRESHOLD)
   ) {

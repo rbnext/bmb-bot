@@ -69,8 +69,6 @@ const microBuffSteam = async () => {
       }
     }
 
-    console.log(Object.keys(GOODS_CACHE).length)
-
     // eslint-disable-next-line no-constant-condition
   } while (true)
 }

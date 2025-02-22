@@ -13,9 +13,9 @@ export const GOODS_CACHE: Record<number, { price: number }> = {}
 export const GOODS_BLACKLIST_CACHE: number[] = [30431, 30235, 30259, 30269, 30350]
 
 const microBuffSteam = async () => {
-  do {
-    const pages = Array.from({ length: 60 }, (_, i) => i + 1)
+  const pages = Array.from({ length: 60 }, (_, i) => i + 1)
 
+  do {
     for (const page_num of pages) {
       try {
         const marketGoods = await getMarketGoods({

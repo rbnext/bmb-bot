@@ -25,10 +25,6 @@ const microBuffSteam = async () => {
           category_group: 'rifle,pistol,smg,shotgun,machinegun',
         })
 
-        if (marketGoods.data.items.length !== 50) {
-          break
-        }
-
         for (const item of marketGoods.data.items) {
           const now = format(new Date(), 'HH:mm:ss')
           const current_price = Number(item.sell_min_price)
@@ -52,6 +48,10 @@ const microBuffSteam = async () => {
           }
 
           GOODS_CACHE[item.id] = { price: current_price }
+        }
+
+        if (marketGoods.data.items.length !== 50) {
+          break
         }
 
         await sleep(2_500)

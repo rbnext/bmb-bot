@@ -51,7 +51,7 @@ export const getCSFloatListings = async ({
   stickers?: string
   keychains?: string
   filter?: string
-  def_index?: number
+  def_index?: string
   session?: string
 }): Promise<CSFloatListing> => {
   const { data, headers } = await http.get('/v1/listings', {

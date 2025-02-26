@@ -2,7 +2,7 @@ import dotenv from 'dotenv'
 
 dotenv.config()
 
-import { format } from 'date-fns'
+import { format, max } from 'date-fns'
 import { sendMessage } from '../api/telegram'
 import { getSteamUrl, sleep } from '../utils'
 
@@ -14,20 +14,16 @@ const CASHED_LISTINGS = new Set<string>()
 
 const configList = [
   {
-    market_hash_name: 'AWP | Asiimov (Battle-Scarred)',
-    isSweet: (float: number) => float >= 0.9,
-  },
-  {
-    market_hash_name: 'Glock-18 | Gold Toof (Minimal Wear)',
-    isSweet: (float: number) => float < 0.09,
+    market_hash_name: 'StatTrak™ AK-47 | Redline (Field-Tested)',
+    max_float: 0.25,
   },
   {
     market_hash_name: 'USP-S | Jawbreaker (Factory New)',
-    isSweet: (float: number) => float < 0.02,
+    max_float: 0.02,
   },
   {
     market_hash_name: 'Glock-18 | Vogue (Minimal Wear)',
-    isSweet: (float: number) => float < 0.08,
+    max_float: 0.08,
   },
 ]
 
@@ -51,14 +47,8 @@ const init = async () => {
 
           console.log(now, market_hash_name, floatValue, item.price)
 
-          if (config.isSweet(floatValue)) {
-            const response = await getCSFloatListings({
-              market_hash_name,
-              ...(market_hash_name.includes('Factory New') && { max_float: 0.02 }),
-              ...(market_hash_name.includes('Minimal Wear') && { max_float: 0.08 }),
-              ...(market_hash_name.includes('Field-Tested') && { max_float: 0.18 }),
-              ...(market_hash_name.includes('Battle-Scarred') && { min_float: 0.9 }),
-            })
+          if (floatValue < config.max_float) {
+            const response = await getCSFloatListings({ market_hash_name, max_float: config.max_float })
             const lowestPrice = response.data[0].price / 100
             const basePrice = response.data[0].reference.base_price / 100
 

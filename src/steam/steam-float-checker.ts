@@ -33,7 +33,7 @@ const configList2 = [
     max_float: 0.09,
   },
   {
-    mark: 'StatTrak™ M4A1-S | Nightmare (Minimal Wear)',
+    market_hash_name: 'StatTrak™ M4A1-S | Nightmare (Minimal Wear)',
     max_float: 0.08,
   },
 ]

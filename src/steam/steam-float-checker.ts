@@ -25,6 +25,10 @@ const configList = [
     market_hash_name: 'Glock-18 | Gold Toof (Minimal Wear)',
     max_float: 0.09,
   },
+  {
+    market_hash_name: 'Desert Eagle | Midnight Storm (Factory New)',
+    max_float: 0.02,
+  },
 ]
 
 const init = async () => {

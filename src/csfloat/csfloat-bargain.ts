@@ -38,7 +38,7 @@ const handler = async () => {
     sort_by: 'most_recent',
     min_price: MIN_PRICE,
     max_price: MAX_PRICE,
-    max_float: 0.5,
+    max_float: 0.6,
   })
 
   for (const data of response.data) {
@@ -69,10 +69,8 @@ const handler = async () => {
       quantity < 50 ||
       totalTrades >= 50 ||
       maxOfferDiscount <= 250 ||
-      // market_hash_name.includes('M4A4 ') ||
       !isLessThanXMinutes(createdAt, 2) ||
       hasBadWear
-      // !isGoodFloat(floatValue)
     ) {
       continue
     }

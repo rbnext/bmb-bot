@@ -12,14 +12,10 @@ import { getVercelMarketRender } from '../api/versel'
 
 const CASHED_LISTINGS = new Set<string>()
 
-const configList = [
+const configList1 = [
   {
     market_hash_name: 'StatTrak™ AK-47 | Redline (Field-Tested)',
     max_float: 0.25,
-  },
-  {
-    market_hash_name: 'USP-S | Jawbreaker (Factory New)',
-    max_float: 0.02,
   },
   {
     market_hash_name: 'Glock-18 | Gold Toof (Minimal Wear)',
@@ -30,6 +26,25 @@ const configList = [
     max_float: 0.02,
   },
 ]
+
+const configList2 = [
+  {
+    market_hash_name: 'USP-S | Whiteout (Minimal Wear)',
+    max_float: 0.09,
+  },
+  {
+    mark: 'StatTrak™ M4A1-S | Nightmare (Minimal Wear)',
+    max_float: 0.08,
+  },
+]
+
+const configMapper = {
+  1: configList1,
+  2: configList2,
+} as const
+
+const listId = Number(process.env.LIST_ID) ?? 1
+const configList = configMapper[listId as keyof typeof configMapper] || []
 
 const init = async () => {
   try {

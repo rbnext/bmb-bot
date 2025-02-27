@@ -11,7 +11,7 @@ import { CSFloatListingItem, CSFloatListingItemStickerItem } from '../types'
 const CASHED_LISTINGS = new Set<string>()
 
 const MIN_PRICE = 2500
-const MAX_PRICE = 8000
+const MAX_PRICE = 7000
 
 const hasStickerCombo = (stickers: CSFloatListingItemStickerItem[]) => {
   const stickersGroupedById = stickers.reduce<Record<string, number>>((acc, { name }) => {

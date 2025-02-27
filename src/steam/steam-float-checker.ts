@@ -36,6 +36,10 @@ const configList2 = [
     market_hash_name: 'StatTrak™ M4A1-S | Nightmare (Minimal Wear)',
     max_float: 0.08,
   },
+  {
+    market_hash_name: 'Glock-18 | Gold Toof (Factory New)',
+    max_float: 0.02,
+  },
 ]
 
 const configMapper = {

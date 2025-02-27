@@ -69,8 +69,7 @@ const handler = async () => {
       quantity < 50 ||
       totalTrades >= 50 ||
       maxOfferDiscount <= 250 ||
-      !isLessThanXMinutes(createdAt, 2) ||
-      hasBadWear
+      !isLessThanXMinutes(createdAt, 2)
     ) {
       continue
     }

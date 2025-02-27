@@ -2,7 +2,7 @@ import dotenv from 'dotenv'
 
 dotenv.config()
 
-import { format, max } from 'date-fns'
+import { format } from 'date-fns'
 import { sendMessage } from '../api/telegram'
 import { getSteamUrl, sleep } from '../utils'
 
@@ -51,11 +51,11 @@ const listId = Number(process.env.LIST_ID) ?? 1
 const configList = configMapper[listId as keyof typeof configMapper] || []
 
 const init = async () => {
-  try {
-    do {
-      for (const [index, config] of configList.entries()) {
-        const market_hash_name = config.market_hash_name
+  do {
+    for (const [index, config] of configList.entries()) {
+      const market_hash_name = config.market_hash_name
 
+      try {
         const steamMarketResponse: MapSteamMarketRenderResponse[] = await getVercelMarketRender({
           market_hash_name,
           proxy: `${process.env.STEAM_PROXY}${index + 1}`,
@@ -88,21 +88,15 @@ const init = async () => {
 
           await sleep(2_000)
         }
-
+      } catch (error) {
+        console.log(format(new Date(), 'HH:mm:ss'), 'ERROR', error.message)
+      } finally {
         await sleep(40_000 / configList.length)
       }
+    }
 
-      // eslint-disable-next-line no-constant-condition
-    } while (true)
-  } catch (error) {
-    console.log(format(new Date(), 'HH:mm:ss'), 'ERROR', error.message)
-
-    if (error.message?.includes('403')) await sleep(60_000 * 2)
-    if (error.message?.includes('401')) await sleep(60_000 * 2)
-    if (error.message?.includes('canceled')) await sleep(60_000)
-  }
-
-  init()
+    // eslint-disable-next-line no-constant-condition
+  } while (true)
 }
 
 init()

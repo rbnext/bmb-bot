@@ -57,10 +57,6 @@ const init = async () => {
           proxy: `${process.env.STEAM_PROXY}${index + 1}`,
         })
 
-        if (!Array.isArray(steamMarketResponse)) {
-          console.log(steamMarketResponse)
-        }
-
         for (const [index, item] of steamMarketResponse.entries()) {
           if (!item.price || CASHED_LISTINGS.has(item.listingId)) continue
 

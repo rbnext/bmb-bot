@@ -68,7 +68,7 @@ const init = async () => {
           const itemInfoResponse = await getCSFloatItemInfo({ url: item.inspectUrl })
           const floatValue = Number(itemInfoResponse.iteminfo.floatvalue)
 
-          console.log(now, market_hash_name, floatValue, item.price)
+          console.log(now, market_hash_name, floatValue.toFixed(10), item.price)
 
           if (floatValue < config.max_float) {
             const response = await getCSFloatListings({ market_hash_name, max_float: config.max_float })

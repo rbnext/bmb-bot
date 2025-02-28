@@ -25,6 +25,10 @@ const configList1 = [
     market_hash_name: 'Desert Eagle | Midnight Storm (Factory New)',
     max_float: 0.02,
   },
+  {
+    market_hash_name: 'Zeus x27 | Dragon Snore (Minimal Wear)',
+    max_float: 0.08,
+  },
 ]
 
 const configList2 = [

@@ -44,6 +44,10 @@ const configList2 = [
     market_hash_name: 'Glock-18 | Gold Toof (Factory New)',
     max_float: 0.02,
   },
+  {
+    market_hash_name: 'Desert Eagle | Night (Minimal Wear)',
+    max_float: 0.08,
+  },
 ]
 
 const configMapper = {

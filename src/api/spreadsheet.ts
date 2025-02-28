@@ -1,6 +1,5 @@
-import 'dotenv/config'
-import { GoogleSpreadsheet } from 'google-spreadsheet'
 import { JWT } from 'google-auth-library'
+import { GoogleSpreadsheet } from 'google-spreadsheet'
 import { BuffBlacklistItem } from '../types'
 
 const serviceAccountAuth = new JWT({

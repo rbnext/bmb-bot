@@ -28,6 +28,7 @@
     "csfloat-bargain": "ts-node src/csfloat/csfloat-bargain.ts",
     "cs-float-order-sync": "ts-node src/scripts/cs-float-order-sync.ts",
     "steam-buy-listing": "ts-node src/scripts/steam-buy-listing.ts",
+    "spreadsheet": "ts-node src/scripts/spreadsheet.ts",
     "steam": "ts-node src/steam/steam.ts",
     "steamv4": "ts-node src/steam/steam.v4.ts",
     "steamv3": "ts-node src/steam/steam.v3.ts",

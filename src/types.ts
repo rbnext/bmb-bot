@@ -816,3 +816,8 @@ export type Config = {
     sessions: ConfigFloatSessionsItem[]
   }
 }
+
+export type BuffBlacklistItem = {
+  goods_id: number
+  comment: string
+}

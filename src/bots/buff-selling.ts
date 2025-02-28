@@ -15,6 +15,7 @@ import { ButOrderItem, BuyOrderHistoryItem, CSFloatBuyOrderHistoryItem, SellOrde
 import { sendMessage } from '../api/telegram'
 import { getCSFloatTrades } from '../api/csfloat'
 import { format } from 'date-fns'
+import { getBuffBlacklist } from '../api/spreadsheet'
 
 const msgCache = new Set<string>()
 const buyOrderHistoryList: ButOrderItem[] = []
@@ -47,22 +48,29 @@ const buffSelling = async () => {
 
   for (const page_num of pages) {
     const response = await getItemsOnSale({ page_num })
-    for (const item of response.data.items) {
-      if (![5791, 23155, 30505, 14629, 14813, 11480, 15326].includes(item.goods_id)) sellingSet.add(item.goods_id)
-    }
+    for (const item of response.data.items) sellingSet.add(item.goods_id)
+
     await sleep(5_000)
   }
 
   for (const goods_id of sellingSet) {
+    const blacklistedItems = await getBuffBlacklist()
+
     const response = await getGoodsSellOrder({ goods_id })
 
     const current_index = response.data.items.findIndex(({ user_id }) => user_id === CURRENT_USER_ID)
 
     if (current_index === -1) await sleep(10_000)
 
-    if (current_index === -1 || !response.data.items[current_index + 1]) {
+    if (
+      current_index === -1 ||
+      !response.data.items[current_index + 1] ||
+      blacklistedItems.some((item) => item.goods_id === goods_id)
+    ) {
       continue
     }
+
+    console.log(blacklistedItems.map((item) => item.goods_id).join(', '))
 
     const item = response.data.items[current_index]
 

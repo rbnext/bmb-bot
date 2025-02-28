@@ -1,5 +1,5 @@
 import { JWT } from 'google-auth-library'
-import { GoogleSpreadsheet } from 'google-spreadsheet'
+import { GoogleSpreadsheet, GoogleSpreadsheetRow } from 'google-spreadsheet'
 import { BuffBlacklistItem } from '../types'
 
 const serviceAccountAuth = new JWT({
@@ -15,8 +15,11 @@ export const getBuffBlacklist = async (): Promise<BuffBlacklistItem[]> => {
 
   const sheet = doc.sheetsById['550718046']
 
-  const rows = await sheet.getRows()
-  const response = rows.map((row) => ({ goods_id: Number(row.get('goods_id')), comment: row.get('comment') }))
+  const rows: GoogleSpreadsheetRow[] = await sheet.getRows()
+  const response = rows.map((row) => ({
+    goods_id: Number(row.get('goods_id')),
+    comment: row.get('comment') as string,
+  }))
 
   return response
 }

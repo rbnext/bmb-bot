@@ -60,6 +60,8 @@
     "dotenv": "^16.4.5",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
+    "google-auth-library": "^9.15.1",
+    "google-spreadsheet": "^4.1.4",
     "https-proxy-agent": "^7.0.5",
     "i": "^0.3.7",
     "interceptors": "^1.0.2",

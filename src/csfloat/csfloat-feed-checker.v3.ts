@@ -32,7 +32,6 @@ const floatFeedChecker = async () => {
   try {
     for (const market_hash_name of Object.keys(mostPopularItems)) {
       if (BLACK_LIST.includes(market_hash_name)) continue
-      if (market_hash_name.includes('M4A4')) continue
 
       const response = await getCSFloatListings({ market_hash_name })
       const currentMarketOrder = activeMarketOrders.get(market_hash_name)
@@ -82,7 +81,7 @@ const floatFeedChecker = async () => {
         }
       }
 
-      console.log(market_hash_name, listingMedianPrice, estimatedMedianProfit)
+      console.log(market_hash_name, listingMedianPrice / 100, estimatedMedianProfit)
 
       if (estimatedMedianProfit >= 8) {
         await postBuyOrder({ market_hash_name, max_price: Math.round(lowestOrderPrice + 1) }).then(() => sleep(5_000))

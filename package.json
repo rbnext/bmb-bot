@@ -23,7 +23,7 @@
     "cs-float-order-checker": "ts-node src/scripts/cs-float-order-checker.ts",
     "csfloat-feed-checker": "ts-node src/csfloat/csfloat-feed-checker.ts",
     "csfloat-feed-checker.v2": "ts-node src/csfloat/csfloat-feed-checker.v2.ts",
-    "csfloat-order-cheker": "ts-node src/csfloat/csfloat-order-checker.ts",
+    "csfloat-order-checker": "ts-node src/csfloat/csfloat-order-checker.ts",
     "csfloat-feed-checker.v3": "ts-node src/csfloat/csfloat-feed-checker.v3.ts",
     "csfloat-checker": "ts-node src/csfloat/csfloat-checker.ts",
     "csfloat-bargain": "ts-node src/csfloat/csfloat-bargain.ts",

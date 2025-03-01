@@ -7,7 +7,7 @@ import { getBuyOrders, getCSFloatListings, getPlacedOrders } from '../api/csfloa
 import axios from 'axios'
 
 const regex =
-  /\(DefIndex == (\d+) and PaintIndex == (\d+) and FloatValue >= ([\d.]+) and FloatValue < ([\d.]+) and StatTrak == (true|false)\)/g
+  /\(DefIndex == (\d+) and PaintIndex == (\d+) and FloatValue >= ([\d.]+) and FloatValue < ([\d.]+) and StatTrak == (true|false)\)/
 
 const handler = async () => {
   const response = await getPlacedOrders({ page: 0, limit: 100 })
@@ -32,6 +32,8 @@ const handler = async () => {
     }
 
     const [, defIndex, paintIndex, minFloat, maxFloat, statTrak] = match
+
+    console.log(defIndex, paintIndex, minFloat, maxFloat, statTrak)
 
     const listings = await getCSFloatListings({
       def_index: defIndex,
@@ -76,7 +78,9 @@ const handler = async () => {
   }
 }
 
-schedule.scheduleJob(`33 * * * *`, async () => {
+handler()
+
+schedule.scheduleJob(`11,44 * * * *`, async () => {
   handler().catch((error) => {
     const errorMessage = axios.isAxiosError(error) ? error.response?.data?.message : error.message
 

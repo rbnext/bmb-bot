@@ -89,7 +89,7 @@ const init = async () => {
             message.push(`<b>Base price</b>: $${basePrice.toFixed(2)}\n`)
             message.push(`<b>Lowest price(by float)</b>: $${lowestPrice.toFixed(2)}\n`)
             message.push(`<b>Float</b>: ${itemInfoResponse.iteminfo.floatvalue}\n\n`)
-            await sendMessage(message.join(''))
+            await sendMessage(message.join(''), undefined, process.env.TELEGRAM_STEAM_ALERTS)
           }
 
           CASHED_LISTINGS.add(item.listingId)

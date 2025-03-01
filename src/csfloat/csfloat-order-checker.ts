@@ -55,7 +55,7 @@ const handler = async () => {
     messages.push('<b>[ADVANCED_ORDER]</b> ')
     messages.push(`<a href="https://csfloat.com/item/${listingId}">${marketHashName}</a> - `)
 
-    console.log(marketHashName, itemIndex)
+    console.log(marketHashName, itemIndex + 1)
 
     if (itemIndex === -1) {
       messages.push(`Expression not found`)

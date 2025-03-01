@@ -13,7 +13,7 @@ export const GOODS_CACHE: Record<number, { price: number }> = {}
 export const GOODS_BLACKLIST_CACHE: number[] = [30431, 30235, 30259, 30269, 30350]
 
 const microBuffSteam = async () => {
-  const pages = Array.from({ length: 60 }, (_, i) => i + 1)
+  const pages = Array.from({ length: 50 }, (_, i) => i + 1)
 
   do {
     for (const page_num of pages) {
@@ -22,7 +22,7 @@ const microBuffSteam = async () => {
           page_num,
           min_price: Number(process.env.MIN_BARGAIN_PRICE),
           max_price: Number(process.env.MAX_BARGAIN_PRICE),
-          category_group: 'rifle,pistol,smg,shotgun,machinegun',
+          category_group: 'rifle,pistol,smg',
         })
 
         for (const item of marketGoods.data.items) {
@@ -51,6 +51,7 @@ const microBuffSteam = async () => {
         }
 
         if (marketGoods.data.items.length !== 50) {
+          console.log(page_num, 'No more items to process.')
           break
         }
 

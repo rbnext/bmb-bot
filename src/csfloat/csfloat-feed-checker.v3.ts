@@ -32,10 +32,9 @@ const floatFeedChecker = async () => {
       const listingReferenceId = response.data[0].id
 
       const orders = await getBuyOrders({ id: listingReferenceId })
-
       const simpleOrders = orders.filter((i) => !!i.market_hash_name)
 
-      if (simpleOrders.length === 0 || listingMedianPrice >= 3000) {
+      if (simpleOrders.length === 0) {
         await sleep(45_000)
         continue
       }

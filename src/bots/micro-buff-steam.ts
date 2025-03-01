@@ -7,7 +7,7 @@ import { isLessThanThreshold, sleep } from '../utils'
 import { format } from 'date-fns'
 import { sendMessage } from '../api/telegram'
 import { Source } from '../types'
-import { executeBuffToSteamTrade } from '../helpers/executeBuffToSteamTrade'
+import { executeBuffToCSFloatTrade } from '../helpers/executeBuffToCSFloatTrade'
 
 export const GOODS_CACHE: Record<number, { price: number }> = {}
 export const GOODS_BLACKLIST_CACHE: number[] = [30431, 30235, 30259, 30269, 30350]
@@ -44,7 +44,7 @@ const microBuffSteam = async () => {
           }
 
           if (item.id in GOODS_CACHE && GOODS_CACHE[item.id].price > current_price) {
-            executeBuffToSteamTrade(item, { source: Source.BUFF_STEAM })
+            executeBuffToCSFloatTrade(item, { source: Source.BUFF_CSFLOAT })
           }
 
           GOODS_CACHE[item.id] = { price: current_price }

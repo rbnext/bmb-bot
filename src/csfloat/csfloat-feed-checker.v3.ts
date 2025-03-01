@@ -58,6 +58,8 @@ const floatFeedChecker = async () => {
 
       await sleep(10_000)
 
+      console.log(market_hash_name, estimatedMedianProfit.toFixed(2) + '%')
+
       if (currentMarketOrder) {
         if (currentMarketOrder.price < simpleOrders[0].price) {
           await removeBuyOrder({ id: currentMarketOrder.id })
@@ -71,8 +73,6 @@ const floatFeedChecker = async () => {
           else await removeBuyOrder({ id: currentMarketOrder.id })
         }
       }
-
-      console.log(market_hash_name, listingMedianPrice / 100, estimatedMedianProfit)
 
       if (estimatedMedianProfit >= 8) {
         await postBuyOrder({ market_hash_name, max_price: Math.round(lowestOrderPrice + 1) }).then(() => sleep(5_000))

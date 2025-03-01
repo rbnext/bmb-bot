@@ -10,17 +10,7 @@ import { CSFloatPlacedOrder } from '../types'
 const activeMarketOrders = new Map<string, CSFloatPlacedOrder>()
 const pathname = path.join(__dirname, '../../top-float-items.json')
 
-const BLACK_LIST = [
-  'AK-47 | The Outsiders (Field-Tested)',
-  'AK-47 | The Outsiders (Minimal Wear)',
-  'FAMAS | Commemoration (Factory New)',
-  'FAMAS | Commemoration (Minimal Wear)',
-  'FAMAS | Mecha Industries (Factory New)',
-  'M4A4 | The Coalition (Field-Tested)',
-  'M4A4 | Desolate Space (Factory New)',
-  'M4A4 | 龍王 (Dragon King) (Minimal Wear)',
-  'Dual Berettas | Sweet Little Angels (Minimal Wear)',
-]
+const BLACK_LIST = []
 
 const floatFeedChecker = async () => {
   activeMarketOrders.clear()

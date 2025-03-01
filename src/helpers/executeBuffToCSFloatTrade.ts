@@ -42,23 +42,21 @@ export const executeBuffToCSFloatTrade = async (
     source: options.source,
   }
 
-  if (payload.float) {
-    const response = await getCSFloatListings({ market_hash_name: item.market_hash_name })
+  const response = await getCSFloatListings({ market_hash_name: item.market_hash_name })
 
-    const cs_float_price = response.data[0].price / 100
-    const estimated_profit = ((cs_float_price - (current_price - k_total)) / (current_price - k_total)) * 100
+  const cs_float_price = response.data[0].price / 100
+  const estimated_profit = ((cs_float_price - (current_price - k_total)) / (current_price - k_total)) * 100
 
-    console.log(item.market_hash_name, estimated_profit + '%')
+  console.log(item.market_hash_name, estimated_profit + '%')
 
-    if (estimated_profit >= 30) {
-      sendMessage(
-        generateMessage({
-          ...payload,
-          csFloatPrice: cs_float_price,
-          estimatedProfit: estimated_profit,
-          medianPrice: cs_float_price,
-        })
-      )
-    }
+  if (estimated_profit >= 20) {
+    sendMessage(
+      generateMessage({
+        ...payload,
+        csFloatPrice: cs_float_price,
+        estimatedProfit: estimated_profit,
+        medianPrice: cs_float_price,
+      })
+    )
   }
 }

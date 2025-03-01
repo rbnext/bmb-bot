@@ -3,6 +3,7 @@ import { sendMessage } from '../api/telegram'
 import { MarketGoodsItem, MessageType, Source } from '../types'
 import { generateMessage } from '../utils'
 import { getCSFloatListings } from '../api/csfloat'
+import { STEAM_CHECK_THRESHOLD } from '../config'
 
 export const executeBuffToCSFloatTrade = async (
   item: MarketGoodsItem,
@@ -14,7 +15,7 @@ export const executeBuffToCSFloatTrade = async (
   const current_price = Number(item.sell_min_price)
   const steam_price = Number(item.goods_info.steam_price)
 
-  if (70 >= ((steam_price - current_price) / current_price) * 100) {
+  if (STEAM_CHECK_THRESHOLD >= ((steam_price - current_price) / current_price) * 100) {
     return
   }
 

@@ -45,7 +45,7 @@ export const executeBuffToCSFloatTrade = async (
   if (payload.float) {
     const response = await getCSFloatListings({ market_hash_name: item.market_hash_name })
 
-    const cs_float_price = response.data[0].price
+    const cs_float_price = response.data[0].price / 100
     const estimated_profit = ((cs_float_price - (current_price - k_total)) / (current_price - k_total)) * 100
 
     console.log(item.market_hash_name, estimated_profit + '%')

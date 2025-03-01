@@ -65,7 +65,7 @@ const findSteamItemInfo = async (
             templateId,
           }),
           undefined,
-          process.env.TELEGRAM_REPORT_ID
+          process.env.TELEGRAM_CSFLOAT_CHAT_ID
         )
       }
 

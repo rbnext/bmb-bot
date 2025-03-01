@@ -96,7 +96,7 @@ const handler = async () => {
     // )
     message.push(`<b>Float</b>: ${floatValue}`)
 
-    await sendMessage(message.join(''), undefined, process.env.TELEGRAM_REPORT_ID)
+    await sendMessage(message.join(''), undefined, process.env.TELEGRAM_CSFLOAT_CHAT_ID)
     // }
     // }
 

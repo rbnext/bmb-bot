@@ -101,7 +101,7 @@ const handler = async () => {
       message.push(`<b>Float</b>: ${floatValue}`)
 
       await postCreateBargain({ contract_id: data.id, price: bargainPrice })
-      await sendMessage(message.join(''), undefined, process.env.TELEGRAM_REPORT_ID)
+      await sendMessage(message.join(''), undefined, process.env.TELEGRAM_CSFLOAT_CHAT_ID)
       await sleep(10_000)
     }
 

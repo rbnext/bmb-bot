@@ -99,7 +99,7 @@ const floatFeedChecker = async () => {
           messages.push(`Profit ~${medianProfit}% / Order: ${(lowestOrderPrice + 1) / 100} / Median: $${medianPrice}`)
         }
 
-        await sendMessage(messages.join(''))
+        await sendMessage(messages.join(''), undefined, process.env.TELEGRAM_CSFLOAT_CHAT_ID)
       }
 
       await sleep(20_000)

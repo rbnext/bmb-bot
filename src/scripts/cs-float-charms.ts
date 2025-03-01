@@ -66,7 +66,7 @@ const csFloatCharms = async () => {
         message.push(`<b>Price</b>: $${currentPrice}\n`)
         message.push(`<b>Predicted price</b>: $${predictedPrice.toFixed(2)}\n`)
         message.push(`<b>Profit</b>: ~$${profit.toFixed(2)}\n\n`)
-        await sendMessage(message.join(''), undefined, process.env.TELEGRAM_REPORT_ID)
+        await sendMessage(message.join(''), undefined, process.env.TELEGRAM_CSFLOAT_CHAT_ID)
       }
     }
 

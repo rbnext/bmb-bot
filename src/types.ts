@@ -820,6 +820,5 @@ export type Config = {
 }
 
 export type BuffBlacklistItem = {
-  goods_id: number
-  comment: string
+  paintwear: string
 }

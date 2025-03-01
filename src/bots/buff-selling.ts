@@ -54,23 +54,15 @@ const buffSelling = async () => {
   }
 
   for (const goods_id of sellingSet) {
-    const blacklistedItems = await getBuffBlacklist()
-
     const response = await getGoodsSellOrder({ goods_id })
 
     const current_index = response.data.items.findIndex(({ user_id }) => user_id === CURRENT_USER_ID)
 
     if (current_index === -1) await sleep(10_000)
 
-    if (
-      current_index === -1 ||
-      !response.data.items[current_index + 1] ||
-      blacklistedItems.some((item) => item.goods_id === goods_id)
-    ) {
+    if (current_index === -1 || !response.data.items[current_index + 1]) {
       continue
     }
-
-    console.log(blacklistedItems.map((item) => item.goods_id).join(', '))
 
     const item = response.data.items[current_index]
 
@@ -89,6 +81,15 @@ const buffSelling = async () => {
     const buyOrderHistoryItem = buyOrderHistoryList.find((item) => {
       return paintwear && item.float === paintwear && item.marketHashName === market_hash_name
     })
+
+    const blacklistedItems = await getBuffBlacklist()
+
+    console.log(blacklistedItems.map((i) => i.paintwear).join(', '))
+    if (blacklistedItems.some((i) => paintwear.startsWith(i.paintwear))) {
+      console.log('Blacklisted item', market_hash_name, paintwear)
+      await sleep(10_000)
+      continue
+    }
 
     if (current_index === 0) {
       const next_price = Number(response.data.items[current_index + 1].price)
@@ -141,7 +142,11 @@ const buffSelling = async () => {
   }
 
   if (message.length !== 0) {
-    await sendMessage('<b>SELLING REPORT</b>\n\n' + message.map((msg, index) => `${index + 1}. ${msg}`).join('\n'))
+    await sendMessage(
+      '<b>SELLING REPORT</b>\n\n' + message.map((msg, index) => `${index + 1}. ${msg}`).join('\n'),
+      undefined,
+      process.env.TELEGRAM_BUFF_SELL_ALERTS
+    )
   }
 
   await sleep(60_000 * 20)

@@ -16,10 +16,7 @@ export const getBuffBlacklist = async (): Promise<BuffBlacklistItem[]> => {
   const sheet = doc.sheetsById['550718046']
 
   const rows: GoogleSpreadsheetRow[] = await sheet.getRows()
-  const response = rows.map((row) => ({
-    goods_id: Number(row.get('goods_id')),
-    comment: row.get('comment') as string,
-  }))
+  const response = rows.map((row) => ({ paintwear: row.get('paintwear') as string }))
 
   return response
 }

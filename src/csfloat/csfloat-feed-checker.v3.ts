@@ -19,6 +19,7 @@ const BLACK_LIST = [
   'M4A4 | The Coalition (Field-Tested)',
   'M4A4 | Desolate Space (Factory New)',
   'M4A4 | 龍王 (Dragon King) (Minimal Wear)',
+  'Dual Berettas | Sweet Little Angels (Minimal Wear)',
 ]
 
 const floatFeedChecker = async () => {

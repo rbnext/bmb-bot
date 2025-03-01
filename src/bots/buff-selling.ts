@@ -82,13 +82,14 @@ const buffSelling = async () => {
       return paintwear && item.float === paintwear && item.marketHashName === market_hash_name
     })
 
-    const blacklistedItems = await getBuffBlacklist()
+    if (paintwear) {
+      const blacklistedItems = await getBuffBlacklist()
 
-    console.log(blacklistedItems.map((i) => i.paintwear).join(', '))
-    if (blacklistedItems.some((i) => !!i.paintwear && paintwear.startsWith(i.paintwear))) {
-      console.log('Blacklisted item', market_hash_name, paintwear)
-      await sleep(10_000)
-      continue
+      if (blacklistedItems.some((i) => !!i.paintwear && paintwear.startsWith(i.paintwear))) {
+        console.log('Blacklisted item', market_hash_name, paintwear)
+        await sleep(10_000)
+        continue
+      }
     }
 
     if (current_index === 0) {

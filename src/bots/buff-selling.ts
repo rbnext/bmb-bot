@@ -85,7 +85,7 @@ const buffSelling = async () => {
     const blacklistedItems = await getBuffBlacklist()
 
     console.log(blacklistedItems.map((i) => i.paintwear).join(', '))
-    if (blacklistedItems.some((i) => paintwear.startsWith(i.paintwear))) {
+    if (blacklistedItems.some((i) => !!i.paintwear && paintwear.startsWith(i.paintwear))) {
       console.log('Blacklisted item', market_hash_name, paintwear)
       await sleep(10_000)
       continue

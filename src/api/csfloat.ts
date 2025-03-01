@@ -38,6 +38,7 @@ export const getCSFloatListings = async ({
   filter,
   session,
   def_index,
+  paint_index,
 }: {
   type?: string
   limit?: number
@@ -52,12 +53,14 @@ export const getCSFloatListings = async ({
   keychains?: string
   filter?: string
   def_index?: string
+  paint_index?: string
   session?: string
 }): Promise<CSFloatListing> => {
   const { data, headers } = await http.get('/v1/listings', {
     params: {
       limit,
       def_index,
+      paint_index,
       category,
       type,
       min_float,

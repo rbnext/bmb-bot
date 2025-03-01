@@ -290,6 +290,7 @@ export type CSFloatPlacedOrder = {
   id: string
   created_at: string
   market_hash_name: string
+  expression?: string
   qty: number
   price: number
 }
@@ -658,6 +659,7 @@ export type CSFloatMySellingList = {
 
 export type CSFloatBuyOrder = {
   market_hash_name?: string
+  expression?: string
   price: number
   qty: number
 }

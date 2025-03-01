@@ -10,7 +10,7 @@ import { CSFloatPlacedOrder } from '../types'
 const activeMarketOrders = new Map<string, CSFloatPlacedOrder>()
 const pathname = path.join(__dirname, '../../top-float-items.json')
 
-const BLACK_LIST: string[] = []
+const BLACK_LIST: string[] = ['SSG 08 | Dragonfire (Minimal Wear)']
 
 const floatFeedChecker = async () => {
   activeMarketOrders.clear()

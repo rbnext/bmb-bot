@@ -1,11 +1,11 @@
 import axios from 'axios'
-import { MapSteamMarketRenderResponse, SearchMarketRenderItem } from '../types'
 import { sleep } from '../utils'
 
 export const getVercelMarketRender = async ({
   market_hash_name,
   start = 0,
   count = 10,
+  retries = 2,
   proxy,
   filter,
 }: {
@@ -14,14 +14,25 @@ export const getVercelMarketRender = async ({
   count?: number
   proxy: string
   filter?: string
-}): Promise<MapSteamMarketRenderResponse[]> => {
+  retries?: number
+}) => {
   const params = `start=${start}&count=${count}&country=BY&language=english&currency=1${filter ? `&filter=${filter}` : ''}`
 
-  const { data } = await axios.post(`https://${proxy}.vercel.app/api/steam/render`, {
-    url: `https://steamcommunity.com/market/listings/730/${encodeURIComponent(market_hash_name)}/render?${params}`,
-  })
+  for (let attempt = 0; attempt < retries; attempt++) {
+    try {
+      const { data } = await axios.post(`https://${proxy}.vercel.app/api/steam/render`, {
+        url: `https://steamcommunity.com/market/listings/730/${encodeURIComponent(market_hash_name)}/render?${params}`,
+      })
 
-  return data
+      return data
+    } catch (error) {
+      if (attempt === retries - 1) {
+        throw error
+      }
+
+      await sleep(500)
+    }
+  }
 }
 
 export const getVercelSearchMarketRender = async ({

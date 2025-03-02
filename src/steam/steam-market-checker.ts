@@ -103,8 +103,7 @@ const marketSearchHandler = async (config: { start: number; count: number; proxy
           CASHED_LISTINGS.add(item.listingId)
         }
       } catch (error) {
-        console.log(format(new Date(), 'HH:mm:ss'), error.message)
-        if (error.message.includes('404')) console.log(config.proxy, market_hash_name)
+        console.log(format(new Date(), 'HH:mm:ss'), config.proxy, error.message)
 
         hasError = true
       }

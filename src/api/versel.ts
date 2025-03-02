@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { MapSteamMarketRenderResponse } from '../types'
+import { MapSteamMarketRenderResponse, SearchMarketRenderItem } from '../types'
 
 export const getVercelMarketRender = async ({
   market_hash_name,
@@ -24,26 +24,17 @@ export const getVercelMarketRender = async ({
 }
 
 export const getVercelSearchMarketRender = async ({
-  query,
-  start = 0,
-  count = 100,
-  quality = [],
-  exterior = ['tag_WearCategory1', 'tag_WearCategory2'],
   proxy,
+  start,
+  count,
 }: {
-  query?: string
-  start?: number
-  count?: number
-  quality?: string[]
-  exterior?: string[]
-  proxy?: string
-}) => {
-  const exteriorQuery = `${exterior.map((q) => `category_730_Exterior[]=${encodeURIComponent(q)}`).join('&')}`
-
-  const params = `appid=730&query=${query ?? ''}&start=${start}&count=${count}&search_descriptions=1&sort_column=price&sort_dir=asc&norender=1&${exteriorQuery}&category_730_Rarity[]=tag_Rarity_Mythical_Weapon&category_730_Rarity[]=tag_Rarity_Legendary_Weapon&category_730_Rarity[]=tag_Rarity_Ancient_Weapon&category_730_Weapon[]=any${quality.map((q) => `&category_730_Quality[]=${encodeURIComponent(q)}`).join('')}`
-
+  start: number
+  count: number
+  proxy: string
+}): Promise<SearchMarketRenderItem[]> => {
   const { data } = await axios.post(`https://${proxy}.vercel.app/api/steam/search`, {
-    url: `https://steamcommunity.com/market/search/render?${params}`,
+    start,
+    count,
   })
 
   return data

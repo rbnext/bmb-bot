@@ -822,3 +822,9 @@ export type Config = {
 export type BuffBlacklistItem = {
   paintwear: string
 }
+
+export type SearchMarketRenderItem = {
+  sellPrice: number
+  sellListings: number
+  marketHashName: string
+}

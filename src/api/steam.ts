@@ -106,7 +106,7 @@ export const getSearchMarketRender = async ({
             'tag_Rarity_Ancient_Weapon',
           ],
           'category_730_Weapon[]': ['any'],
-          'category_730_Quality[]': quality,
+          'category_730_Quality[]': ['tag_normal'],
         },
         headers: {
           Host: 'steamcommunity.com',

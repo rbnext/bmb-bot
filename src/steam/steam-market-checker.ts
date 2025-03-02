@@ -96,11 +96,12 @@ const marketSearchHandler = async (config: { start: number; count: number; proxy
 
           CASHED_LISTINGS.add(item.listingId)
         }
+
+        GOODS_CACHE[market_hash_name] = { price: item.sellPrice, listings: item.sellListings }
       } catch (error) {
         console.log(format(new Date(), 'HH:mm:ss'), 'STEAM_ERROR', config.proxy)
       }
     }
-    GOODS_CACHE[market_hash_name] = { price: item.sellPrice, listings: item.sellListings }
   }
 
   return config.proxy

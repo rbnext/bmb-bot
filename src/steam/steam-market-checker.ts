@@ -19,7 +19,10 @@ const marketSearchHandler = async (config: { start: number; count: number; proxy
   const response: SearchMarketRenderItem[] = await getVercelSearchMarketRender(config)
 
   for (const item of response) {
+    if (item.sellListings >= 500) continue
+
     let hasError = false
+
     const now = format(new Date(), 'HH:mm:ss')
     const market_hash_name = item.marketHashName
 
@@ -98,7 +101,7 @@ const marketSearchHandler = async (config: { start: number; count: number; proxy
           CASHED_LISTINGS.add(item.listingId)
         }
       } catch (error) {
-        console.log(format(new Date(), 'HH:mm:ss'), 'STEAM_ERROR', config.proxy)
+        console.log(format(new Date(), 'HH:mm:ss'), 'STEAM_ERROR', market_hash_name, item.sellListings)
         hasError = true
       }
     }

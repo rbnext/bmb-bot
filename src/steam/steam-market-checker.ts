@@ -1,3 +1,5 @@
+import 'dotenv/config'
+
 import { format } from 'date-fns'
 import { getVercelMarketRender, getVercelSearchMarketRender } from '../api/versel'
 import { sendMessage } from '../api/telegram'

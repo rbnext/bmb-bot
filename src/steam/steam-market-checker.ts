@@ -74,9 +74,7 @@ const marketSearchHandler = async (config: { start: number; count: number; proxy
             const basePrice = FLOAT_BASE_PRICES.get(market_hash_name) ?? 0
             const SP = ((item.price - basePrice) / stickerTotal) * 100
 
-            console.log(
-              `|___ ST: $${stickerTotal.toFixed(2)}; SP: ${SP.toFixed(2)}%; Combo: ${String(isStickerCombo(item.stickers))}`
-            )
+            console.log(`|___ ${market_hash_name} ST: $${stickerTotal.toFixed(2)}; SP: ${SP.toFixed(2)}%;`)
 
             if (SP < (isStickerCombo(item.stickers) ? 25 : 10)) {
               const itemInfoResponse = await getCSFloatItemInfo({ url: item.inspectUrl })

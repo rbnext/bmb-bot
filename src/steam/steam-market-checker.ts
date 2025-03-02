@@ -104,6 +104,10 @@ const marketSearchHandler = async (config: { start: number; count: number; proxy
         }
       } catch (error) {
         console.log(format(new Date(), 'HH:mm:ss'), 'STEAM_ERROR', error.message)
+
+        if (error.message.includes('429')) {
+          console.log({ market_hash_name, proxy: config.proxy, filter: 'Sticker' })
+        }
         hasError = true
       }
     }

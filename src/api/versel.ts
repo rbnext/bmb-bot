@@ -3,25 +3,20 @@ import { sleep } from '../utils'
 
 export const getVercelMarketRender = async ({
   market_hash_name,
-  start = 0,
-  count = 10,
   retries = 2,
   proxy,
   filter,
 }: {
   market_hash_name: string
-  start?: number
-  count?: number
   proxy: string
   filter?: string
   retries?: number
 }) => {
-  const params = `start=${start}&count=${count}&country=BY&language=english&currency=1${filter ? `&filter=${filter}` : ''}`
-
   for (let attempt = 0; attempt < retries; attempt++) {
     try {
       const { data } = await axios.post(`https://${proxy}.vercel.app/api/steam/render`, {
-        url: `https://steamcommunity.com/market/listings/730/${encodeURIComponent(market_hash_name)}/render?${params}`,
+        market_hash_name,
+        filter,
       })
 
       return data

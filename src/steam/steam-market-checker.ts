@@ -25,7 +25,11 @@ const marketSearchHandler = async (config: { start: number; count: number; proxy
     const now = format(new Date(), 'HH:mm:ss')
     const market_hash_name = item.marketHashName
 
-    if (item.sellListings >= 500 || market_hash_name.includes('AK-47 | Ice Coaled')) {
+    if (
+      item.sellListings >= 500 ||
+      market_hash_name.includes('AK-47 | Slate') ||
+      market_hash_name.includes('AK-47 | Ice Coaled')
+    ) {
       continue
     }
 

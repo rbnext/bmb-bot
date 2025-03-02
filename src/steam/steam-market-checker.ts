@@ -7,6 +7,7 @@ import path from 'path'
 import { getCSFloatItemInfo, getCSFloatListings } from '../api/csfloat'
 import { isStickerCombo } from './utils'
 import { getSteamUrl, sleep } from '../utils'
+import axios from 'axios'
 
 const CASHED_LISTINGS = new Set<string>()
 const GOODS_CACHE: Record<string, { price: number; listings: number }> = {}
@@ -19,8 +20,6 @@ const marketSearchHandler = async (config: { start: number; count: number; proxy
   const response: SearchMarketRenderItem[] = await getVercelSearchMarketRender(config)
 
   for (const item of response) {
-    let hasError = false
-
     const now = format(new Date(), 'HH:mm:ss')
     const market_hash_name = item.marketHashName
 
@@ -47,7 +46,7 @@ const marketSearchHandler = async (config: { start: number; count: number; proxy
             continue
           }
 
-          if (stickerTotal > 15) {
+          if (stickerTotal > 25) {
             if (!FLOAT_BASE_PRICES.has(market_hash_name)) {
               try {
                 const floatResponse = await getCSFloatListings({ market_hash_name })
@@ -63,7 +62,9 @@ const marketSearchHandler = async (config: { start: number; count: number; proxy
 
                 FLOAT_BASE_PRICES.set(market_hash_name, floatResponse.data[0].price / 100)
               } catch (error) {
-                await sendMessage(`Failed to retrieve the price for the ${market_hash_name} item.`)
+                const errorMessage = axios.isAxiosError(error) ? error.response?.data?.message : error.message
+                console.log(errorMessage)
+                await sendMessage(errorMessage)
               }
             }
 
@@ -103,14 +104,11 @@ const marketSearchHandler = async (config: { start: number; count: number; proxy
           CASHED_LISTINGS.add(item.listingId)
         }
       } catch (error) {
-        console.log(format(new Date(), 'HH:mm:ss'), config.proxy, error.message)
-
-        hasError = true
+        console.log(format(new Date(), 'HH:mm:ss'), error.message)
       }
     }
-    if (!hasError) {
-      GOODS_CACHE[market_hash_name] = { price: item.sellPrice, listings: item.sellListings }
-    }
+
+    GOODS_CACHE[market_hash_name] = { price: item.sellPrice, listings: item.sellListings }
   }
 
   return config.proxy

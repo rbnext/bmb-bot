@@ -22,7 +22,7 @@ const marketSearchHandler = async (config: { start: number; count: number; proxy
     const now = format(new Date(), 'HH:mm:ss')
     const market_hash_name = item.marketHashName
 
-    if (market_hash_name in GOODS_CACHE && GOODS_CACHE[market_hash_name].price !== item.sellPrice) {
+    if (market_hash_name in GOODS_CACHE && GOODS_CACHE[market_hash_name].price > item.sellPrice) {
       console.log(`${now} ${market_hash_name} ${GOODS_CACHE[market_hash_name].price / 100} -> ${item.sellPrice / 100}`)
     }
 

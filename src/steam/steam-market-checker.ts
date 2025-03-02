@@ -119,10 +119,9 @@ const marketSearchHandler = async (config: { start: number; count: number; proxy
       }))
 
       await Promise.allSettled(configs.map(marketSearchHandler)).then((results) => {
-        // for (const result of results) {
-        //   if (result.status === 'rejected') console.log(format(new Date(), 'HH:mm:ss'), result.status)
-        // }
-        console.log(results)
+        for (const result of results) {
+          if (result.status === 'rejected') console.log(format(new Date(), 'HH:mm:ss'), result.status)
+        }
       })
       await sleep(60_000 - 1_000)
     }

@@ -116,7 +116,9 @@ const marketSearchHandler = async (config: { start: number; count: number; proxy
       }))
 
       await Promise.allSettled(configs.map(marketSearchHandler)).then((results) => {
-        console.log(results.map((result) => result.status).join(', '))
+        for (const result of results) {
+          if (result.status !== 'fulfilled') console.log(result.status)
+        }
       })
       await sleep(60_000 - 1_000)
     }

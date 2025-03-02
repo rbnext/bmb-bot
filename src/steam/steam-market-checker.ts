@@ -41,9 +41,6 @@ const marketSearchHandler = async (config: { start: number; count: number; proxy
             continue
           }
 
-          const now = format(new Date(), 'HH:mm:ss')
-          console.log(now, market_hash_name, item.price, stickerTotal.toFixed(2))
-
           if (stickerTotal > 15) {
             if (!FLOAT_BASE_PRICES.has(market_hash_name)) {
               try {
@@ -100,7 +97,7 @@ const marketSearchHandler = async (config: { start: number; count: number; proxy
           CASHED_LISTINGS.add(item.listingId)
         }
       } catch (error) {
-        console.log(format(new Date(), 'HH:mm:ss'), 'STEAM_ERROR', error.message)
+        console.log(format(new Date(), 'HH:mm:ss'), 'STEAM_ERROR', config.proxy)
       }
     }
     GOODS_CACHE[market_hash_name] = { price: item.sellPrice, listings: item.sellListings }

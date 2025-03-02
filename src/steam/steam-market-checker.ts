@@ -65,6 +65,7 @@ const marketSearchHandler = async (config: { start: number; count: number; proxy
                 const errorMessage = axios.isAxiosError(error) ? error.response?.data?.message : error.message
                 console.log(errorMessage)
                 await sendMessage(errorMessage)
+                process.exit(1)
               }
             }
 

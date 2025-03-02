@@ -19,12 +19,14 @@ const marketSearchHandler = async (config: { start: number; count: number; proxy
   const response: SearchMarketRenderItem[] = await getVercelSearchMarketRender(config)
 
   for (const item of response) {
-    if (item.sellListings >= 500) continue
-
     let hasError = false
 
     const now = format(new Date(), 'HH:mm:ss')
     const market_hash_name = item.marketHashName
+
+    if (item.sellListings >= 500) {
+      continue
+    }
 
     if (market_hash_name in GOODS_CACHE && GOODS_CACHE[market_hash_name].listings < item.sellListings) {
       console.log(`${now} ${market_hash_name} ${GOODS_CACHE[market_hash_name].listings} -> ${item.sellListings}`)

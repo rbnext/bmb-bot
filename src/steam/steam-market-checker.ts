@@ -24,7 +24,7 @@ const marketSearchHandler = async (config: { start: number; count: number; proxy
     const now = format(new Date(), 'HH:mm:ss')
     const market_hash_name = item.marketHashName
 
-    if (item.sellListings >= 500) {
+    if (item.sellListings >= 500 || market_hash_name.includes('AK-47 | Ice Coaled')) {
       continue
     }
 
@@ -103,11 +103,9 @@ const marketSearchHandler = async (config: { start: number; count: number; proxy
           CASHED_LISTINGS.add(item.listingId)
         }
       } catch (error) {
-        console.log(format(new Date(), 'HH:mm:ss'), 'STEAM_ERROR', error.message)
+        console.log(format(new Date(), 'HH:mm:ss'), error.message)
+        if (error.message.includes('404')) console.log(config.proxy, market_hash_name)
 
-        if (error.message.includes('404')) {
-          console.log({ market_hash_name, proxy: config.proxy, filter: 'Sticker' })
-        }
         hasError = true
       }
     }

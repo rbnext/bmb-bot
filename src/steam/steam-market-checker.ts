@@ -103,7 +103,7 @@ const marketSearchHandler = async (config: { start: number; count: number; proxy
           CASHED_LISTINGS.add(item.listingId)
         }
       } catch (error) {
-        console.log(format(new Date(), 'HH:mm:ss'), 'STEAM_ERROR', config.proxy)
+        console.log(format(new Date(), 'HH:mm:ss'), 'STEAM_ERROR', error.message)
         hasError = true
       }
     }

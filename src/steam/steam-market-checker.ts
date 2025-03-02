@@ -1,7 +1,7 @@
 import { format } from 'date-fns'
 import { getVercelMarketRender, getVercelSearchMarketRender } from '../api/versel'
 import { sendMessage } from '../api/telegram'
-import { MapSteamMarketRenderResponse } from '../types'
+import { MapSteamMarketRenderResponse, SearchMarketRenderItem } from '../types'
 import { readFileSync } from 'fs'
 import path from 'path'
 import { getCSFloatItemInfo, getCSFloatListings } from '../api/csfloat'
@@ -16,7 +16,7 @@ const pathname = path.join(__dirname, '../../csfloat.json')
 const stickerData: Record<string, number> = JSON.parse(readFileSync(pathname, 'utf8'))
 
 const marketSearchHandler = async (config: { start: number; count: number; proxy: string }) => {
-  const response = await getVercelSearchMarketRender(config)
+  const response: SearchMarketRenderItem[] = await getVercelSearchMarketRender(config)
 
   for (const item of response) {
     const now = format(new Date(), 'HH:mm:ss')
@@ -26,7 +26,7 @@ const marketSearchHandler = async (config: { start: number; count: number; proxy
       console.log(`${now} ${market_hash_name} ${GOODS_CACHE[market_hash_name].price / 100} -> ${item.sellPrice / 100}`)
     }
 
-    if (market_hash_name in GOODS_CACHE && GOODS_CACHE[market_hash_name].price < item.sellPrice) {
+    if (market_hash_name in GOODS_CACHE && GOODS_CACHE[market_hash_name].price > item.sellPrice) {
       try {
         const steamMarketResponse: MapSteamMarketRenderResponse[] = await getVercelMarketRender({
           market_hash_name,

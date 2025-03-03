@@ -126,7 +126,7 @@ const marketSearchHandler = async (config: { start: number; count: number; proxy
     for (const num of [-1, 0, 1]) {
       const configs = Array.from({ length: 10 }, (_, i) => ({
         proxy: `${process.env.PROXY}-${i + 1}`,
-        start: (i + 7) * 100 + num,
+        start: (i + 9) * 100 + num,
         count: 100,
       }))
 

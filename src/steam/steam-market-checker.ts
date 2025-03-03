@@ -83,7 +83,7 @@ const marketSearchHandler = async (config: { start: number; count: number; proxy
 
             console.log(`|___ ${market_hash_name} ST: $${stickerTotal.toFixed(2)}; SP: ${SP.toFixed(2)}%;`)
 
-            if (SP < (isStickerCombo(item.stickers) ? 15 : 8)) {
+            if (item.price < basePrice * 2 && SP < (isStickerCombo(item.stickers) ? 15 : 8)) {
               const itemInfoResponse = await getCSFloatItemInfo({ url: item.inspectUrl })
 
               const message: string[] = []
@@ -104,6 +104,7 @@ const marketSearchHandler = async (config: { start: number; count: number; proxy
               message.push(`<b>Reference price</b>: $${basePrice.toFixed(2)}\n`)
               message.push(`<b>Stickers total</b>: $${stickerTotal.toFixed(2)}\n\n`)
               message.push(`<b>Float</b>: ${itemInfoResponse.iteminfo.floatvalue}\n\n`)
+              message.push(`<a href="https://screenshot.skinport.com/?link=${item.inspectUrl}">INSPECT</a>`)
 
               await sendMessage(message.join(''), undefined, process.env.TELEGRAM_STEAM_ALERTS)
             }
@@ -125,7 +126,7 @@ const marketSearchHandler = async (config: { start: number; count: number; proxy
 ;(async () => {
   do {
     for (const num of [-1, 0, 1]) {
-      const configs = Array.from({ length: 10 }, (_, i) => ({
+      const configs = Array.from({ length: 12 }, (_, i) => ({
         proxy: `${process.env.PROXY}-${i + 1}`,
         start: (i + 9) * 100 + num,
         count: 100,

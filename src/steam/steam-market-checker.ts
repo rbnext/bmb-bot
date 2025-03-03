@@ -82,7 +82,7 @@ const marketSearchHandler = async (config: { start: number; count: number; proxy
 
             console.log(`|___ ${market_hash_name} ST: $${stickerTotal.toFixed(2)}; SP: ${SP.toFixed(2)}%;`)
 
-            if (SP < (isStickerCombo(item.stickers) ? 25 : 10)) {
+            if (SP < (isStickerCombo(item.stickers) ? 15 : 8)) {
               const itemInfoResponse = await getCSFloatItemInfo({ url: item.inspectUrl })
 
               const message: string[] = []

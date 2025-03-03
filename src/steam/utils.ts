@@ -9,10 +9,7 @@ export const isStickerCombo = (stickers: string[]) => {
     return { ...acc, [name]: (acc[name] || 0) + 1 }
   }, {})
 
-  return (
-    (Object.keys(groupByStickerName).length === 1 || Object.keys(groupByStickerName).length === 2) &&
-    (stickers.length === 4 || stickers.length === 5)
-  )
+  return Object.values(groupByStickerName).some((count) => count === 4 || count === 5)
 }
 
 export function extractSteamItemInfo(input: string): string[] {

@@ -68,7 +68,7 @@ const marketSearchHandler = async (config: { start: number; count: number; proxy
                   }
                 }
 
-                FLOAT_BASE_PRICES.set(market_hash_name, floatResponse.data[0].price / 100)
+                FLOAT_BASE_PRICES.set(market_hash_name, floatResponse.data[0].reference.predicted_price / 100)
               } catch (error) {
                 const errorMessage = axios.isAxiosError(error) ? error.response?.data?.message : error.message
                 console.log(errorMessage)

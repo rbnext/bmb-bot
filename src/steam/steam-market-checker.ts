@@ -27,7 +27,6 @@ const marketSearchHandler = async (config: { start: number; count: number; proxy
 
     if (
       item.sellListings >= 500 ||
-      market_hash_name.includes('FAMAS') ||
       market_hash_name.includes('CZ75-Auto') ||
       (market_hash_name.includes('AK-47 | Slate') && !market_hash_name.includes('StatTrak')) ||
       (market_hash_name.includes('AK-47 | Ice Coaled') && !market_hash_name.includes('StatTrak')) ||

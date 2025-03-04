@@ -15,6 +15,7 @@ const BLACK_LIST: string[] = [
   'SSG 08 | Dragonfire (Field-Tested)',
   'SSG 08 | Dragonfire (Factory New)',
   'USP-S | The Traitor (Field-Tested)',
+  'USP-S | Whiteout (Minimal Wear)',
 ]
 
 const floatFeedChecker = async () => {

@@ -7,6 +7,7 @@ import { generateMessage, isLessThanThreshold, sleep } from '../utils'
 import { format } from 'date-fns'
 import { sendMessage } from '../api/telegram'
 import { MessageType, Source } from '../types'
+import { executeBuffToMicroSteamTrade } from '../helpers/executeBuffToMicroSteamTrade'
 
 export const GOODS_CACHE: Record<number, { price: number }> = {}
 export const GOODS_BLACKLIST_CACHE: number[] = [30431, 30235, 30259, 30269, 30350]
@@ -47,17 +48,7 @@ const microBuffSteam = async () => {
           }
 
           if (item.id in GOODS_CACHE && GOODS_CACHE[item.id].price > currentPrice && profitPercentage > 100) {
-            await sendMessage(
-              generateMessage({
-                id: item.id,
-                price: currentPrice,
-                name: item.market_hash_name,
-                source: Source.BUFF_STEAM,
-                type: MessageType.Review,
-                estimatedProfit: profitPercentage,
-                medianPrice: steamPrice,
-              })
-            )
+            executeBuffToMicroSteamTrade(item, { source: Source.BUFF_STEAM })
           }
 
           GOODS_CACHE[item.id] = { price: currentPrice }

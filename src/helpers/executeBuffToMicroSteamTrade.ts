@@ -1,7 +1,7 @@
 import { getGoodsSellOrder, postGoodsBuy } from '../api/buff'
 import { sendMessage } from '../api/telegram'
 import { MarketGoodsItem, MessageType, Source } from '../types'
-import { generateMessage } from '../utils'
+import { generateMessage, sleep } from '../utils'
 
 export const executeBuffToMicroSteamTrade = async (
   item: MarketGoodsItem,
@@ -45,8 +45,10 @@ export const executeBuffToMicroSteamTrade = async (
   if (response.code !== 'OK') {
     sendMessage(`[${options.source}] Failed to purchase the item ${item.market_hash_name}. Reason: ${response.code}`)
 
-    return
+    return process.exit(1)
   }
 
   sendMessage(generateMessage({ ...payload }))
+
+  await sleep(500)
 }

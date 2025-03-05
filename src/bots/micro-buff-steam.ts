@@ -41,11 +41,13 @@ const microBuffSteam = async () => {
             console.log(`${now}: ${item.market_hash_name} (${profitPercentage.toFixed(2)}%)`)
           }
 
-          if (item.id in GOODS_CACHE && GOODS_CACHE[item.id].price > currentPrice && profitPercentage > 110) {
+          if (profitPercentage > 110) {
             await executeBuffToMicroSteamTrade(item, { source: Source.BUFF_STEAM })
           }
 
-          GOODS_CACHE[item.id] = { price: currentPrice }
+          GOODS_CACHE[item.id] = {
+            price: currentPrice,
+          }
         }
 
         if (marketGoods.data.items.length !== 50) {

@@ -46,7 +46,7 @@ const microBuffSteam = async () => {
             console.log(`${now}: ${item.market_hash_name} - ${profitPercentage.toFixed(2)}%`)
           }
 
-          if (item.id in GOODS_CACHE && GOODS_CACHE[item.id].price > currentPrice && profitPercentage > 150) {
+          if (item.id in GOODS_CACHE && GOODS_CACHE[item.id].price > currentPrice && profitPercentage > 100) {
             await sendMessage(
               generateMessage({
                 id: item.id,

@@ -22,7 +22,7 @@ const microBuffSteam = async () => {
           page_num,
           min_price: Number(process.env.MIN_BARGAIN_PRICE),
           max_price: Number(process.env.MAX_BARGAIN_PRICE),
-          category_group: 'rifle,pistol,smg',
+          category_group: 'rifle,pistol,smg,shotgun,machinegun,other',
         })
 
         for (const item of marketGoods.data.items) {
@@ -55,6 +55,7 @@ const microBuffSteam = async () => {
         }
 
         if (marketGoods.data.items.length !== 50) {
+          console.log(page_num)
           break
         }
 

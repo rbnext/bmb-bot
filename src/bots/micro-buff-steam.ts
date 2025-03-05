@@ -64,7 +64,6 @@ const microBuffSteam = async () => {
         }
 
         if (marketGoods.data.items.length !== 50) {
-          console.log(`No more items to check. Page: ${page_num}`)
           break
         }
 

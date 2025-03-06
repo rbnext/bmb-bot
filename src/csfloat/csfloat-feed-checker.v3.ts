@@ -6,6 +6,8 @@ import { sendMessage } from '../api/telegram'
 import path from 'path'
 import { readFileSync } from 'fs'
 import { CSFloatPlacedOrder } from '../types'
+import { getGoodsSellOrder } from '../api/buff'
+import { format } from 'date-fns'
 
 const activeMarketOrders = new Map<string, CSFloatPlacedOrder>()
 const pathname = path.join(__dirname, '../../top-float-items.json')
@@ -34,6 +36,8 @@ const floatFeedChecker = async () => {
     for (const market_hash_name of Object.keys(mostPopularItems)) {
       if (BLACK_LIST.includes(market_hash_name)) continue
 
+      const now = format(new Date(), 'HH:mm:ss')
+
       const response = await getCSFloatListings({ market_hash_name })
       const currentMarketOrder = activeMarketOrders.get(market_hash_name)
 
@@ -45,6 +49,8 @@ const floatFeedChecker = async () => {
       const simpleOrders = orders.filter((i) => !!i.market_hash_name)
 
       if (simpleOrders.length < 3) {
+        console.log(now, market_hash_name, 'There are less than 3 orders')
+        await sleep(10_000)
         continue
       }
 
@@ -53,21 +59,35 @@ const floatFeedChecker = async () => {
       const max = Math.max(...top3Orders.map((i) => i.price))
 
       if (max - min >= 25) {
-        await sleep(10_000)
+        console.log(now, market_hash_name, 'There is a big gap between top 3 orders')
 
         if (currentMarketOrder) {
+          console.log(now, market_hash_name, 'Removing order due to big gap')
           await removeBuyOrder({ id: currentMarketOrder.id })
         }
 
+        await sleep(10_000)
         continue
       }
 
-      const lowestOrderPrice = simpleOrders[0].price
-      const estimatedMedianProfit = Number(((listingMedianPrice - lowestOrderPrice) / lowestOrderPrice) * 100)
-
       await sleep(10_000)
 
+      const buffSellOrders = await getGoodsSellOrder({
+        goods_id: mostPopularItems[market_hash_name],
+      })
+
+      const lowestOrderPrice = simpleOrders[0].price
+      const lowestBuffPrice = Number(buffSellOrders.data.items[0].price)
+
+      const estimatedMedianProfit = Number(((listingMedianPrice - lowestOrderPrice) / lowestOrderPrice) * 100)
+
       console.log(market_hash_name, estimatedMedianProfit.toFixed(2) + '%')
+
+      if (lowestBuffPrice - 0.1 <= lowestOrderPrice / 100) {
+        console.log(now, market_hash_name, 'Buff price is higher than CSFloat market price')
+        await sleep(10_000)
+        continue
+      }
 
       if (currentMarketOrder) {
         if (currentMarketOrder.price < simpleOrders[0].price) {
@@ -75,7 +95,7 @@ const floatFeedChecker = async () => {
         } else if (simpleOrders[0].price - simpleOrders[1].price > 1) {
           await removeBuyOrder({ id: currentMarketOrder.id })
           await postBuyOrder({ market_hash_name, max_price: Math.round(simpleOrders[1].price + 1) })
-          console.log(market_hash_name, lowestOrderPrice, '->', Math.round(simpleOrders[1].price + 1))
+          console.log(now, market_hash_name, lowestOrderPrice, '->', Math.round(simpleOrders[1].price + 1))
           continue
         } else if (currentMarketOrder.price === lowestOrderPrice) {
           if (estimatedMedianProfit >= 8) continue

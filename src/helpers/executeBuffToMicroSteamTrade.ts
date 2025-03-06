@@ -1,7 +1,8 @@
 import { getGoodsSellOrder, postGoodsBuy } from '../api/buff'
 import { sendMessage } from '../api/telegram'
 import { MarketGoodsItem, MessageType, Source } from '../types'
-import { generateMessage, sleep } from '../utils'
+import { generateMessage } from '../utils'
+import { getMaxPricesForXDays } from './getMaxPricesForXDays'
 
 export const executeBuffToMicroSteamTrade = async (
   item: MarketGoodsItem,
@@ -10,45 +11,47 @@ export const executeBuffToMicroSteamTrade = async (
   }
 ) => {
   const goods_id = item.id
-  const current_price = Number(item.sell_min_price)
-  const steam_price = Number(item.goods_info.steam_price)
 
-  const steamPriceAfterFee = Math.max(steam_price - 0.01 - steam_price * 0.15, steam_price - 0.01 - 0.02)
-  const profitPercentage = ((steamPriceAfterFee - current_price) / current_price) * 100
+  const prices = await getMaxPricesForXDays(item.market_hash_name)
+  const minSteamPrice = prices.length !== 0 ? Math.min(...prices) : 0
+
+  const currentPrice = Number(item.sell_min_price)
+  const steamPriceAfterFee = Math.max(minSteamPrice - 0.01 - minSteamPrice * 0.15, minSteamPrice - 0.01 - 0.02)
+  const profitPercentage = ((steamPriceAfterFee - currentPrice) / currentPrice) * 100
 
   const orders = await getGoodsSellOrder({ goods_id, exclude_current_user: 1 })
   const lowestPricedItem = orders.data.items.find((el) => el.price === item.sell_min_price)
 
-  if (!lowestPricedItem) return
+  console.log(item.market_hash_name, profitPercentage.toFixed(2) + '%')
 
-  const keychain = lowestPricedItem.asset_info.info?.keychains?.[0]
+  if (lowestPricedItem && profitPercentage > 100) {
+    const keychain = lowestPricedItem.asset_info.info?.keychains?.[0]
 
-  const stickerTotal = (lowestPricedItem.asset_info.info?.stickers || []).reduce((acc, sticker) => {
-    return sticker.wear === 0 ? acc + Number(sticker.sell_reference_price) : acc
-  }, 0)
+    const stickerTotal = (lowestPricedItem.asset_info.info?.stickers || []).reduce((acc, sticker) => {
+      return sticker.wear === 0 ? acc + Number(sticker.sell_reference_price) : acc
+    }, 0)
 
-  const payload = {
-    id: goods_id,
-    keychain: keychain,
-    price: current_price,
-    name: item.market_hash_name,
-    type: MessageType.Purchased,
-    medianPrice: steam_price - 0.01,
-    estimatedProfit: profitPercentage,
-    float: lowestPricedItem.asset_info.paintwear,
-    stickerTotal: stickerTotal,
-    source: options.source,
+    const payload = {
+      id: goods_id,
+      keychain: keychain,
+      price: currentPrice,
+      name: item.market_hash_name,
+      type: MessageType.Purchased,
+      medianPrice: minSteamPrice,
+      estimatedProfit: profitPercentage,
+      float: lowestPricedItem.asset_info.paintwear,
+      stickerTotal: stickerTotal,
+      source: options.source,
+    }
+
+    const response = await postGoodsBuy({ price: currentPrice, sell_order_id: lowestPricedItem.id })
+
+    if (response.code !== 'OK') {
+      sendMessage(`[${options.source}] Failed to purchase the item ${item.market_hash_name}. Reason: ${response.code}`)
+
+      return
+    }
+
+    sendMessage(generateMessage({ ...payload }))
   }
-
-  const response = await postGoodsBuy({ price: current_price, sell_order_id: lowestPricedItem.id })
-
-  if (response.code !== 'OK') {
-    sendMessage(`[${options.source}] Failed to purchase the item ${item.market_hash_name}. Reason: ${response.code}`)
-
-    return process.exit(1)
-  }
-
-  sendMessage(generateMessage({ ...payload }))
-
-  await sleep(500)
 }

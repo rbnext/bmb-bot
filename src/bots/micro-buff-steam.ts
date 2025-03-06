@@ -3,7 +3,7 @@ import dotenv from 'dotenv'
 dotenv.config()
 
 import { getMarketGoods } from '../api/buff'
-import { sleep } from '../utils'
+import { isLessThanThreshold, sleep } from '../utils'
 import { format } from 'date-fns'
 import { sendMessage } from '../api/telegram'
 import { Source } from '../types'
@@ -37,12 +37,18 @@ const microBuffSteam = async () => {
             continue
           }
 
-          if (item.id in GOODS_CACHE && currentPrice !== GOODS_CACHE[item.id].price) {
-            console.log(`${now}: ${item.market_hash_name} (${profitPercentage.toFixed(2)}%)`)
+          if (item.id in GOODS_CACHE && isLessThanThreshold(GOODS_CACHE[item.id].price, currentPrice, 0.01)) {
+            GOODS_CACHE[item.id].price = currentPrice
+
+            continue
           }
 
-          if (profitPercentage > 110) {
-            await executeBuffToMicroSteamTrade(item, { source: Source.BUFF_STEAM })
+          if (item.id in GOODS_CACHE) {
+            console.log(`${now}: ${item.market_hash_name} $${GOODS_CACHE[item.id].price} -> $${currentPrice}`)
+          }
+
+          if (item.id in GOODS_CACHE && GOODS_CACHE[item.id].price > currentPrice && profitPercentage > 50) {
+            executeBuffToMicroSteamTrade(item, { source: Source.BUFF_STEAM })
           }
 
           GOODS_CACHE[item.id] = {

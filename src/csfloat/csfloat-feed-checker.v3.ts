@@ -16,6 +16,10 @@ const BLACK_LIST: string[] = [
   'SSG 08 | Dragonfire (Factory New)',
   'USP-S | The Traitor (Field-Tested)',
   'USP-S | Whiteout (Minimal Wear)',
+  'AWP | Chrome Cannon (Battle-Scarred)',
+  'Desert Eagle | Mecha Industries (Minimal Wear)',
+  'StatTrak™ AK-47 | Ice Coaled (Minimal Wear)',
+  'M4A4 | Desolate Space (Minimal Wear)',
 ]
 
 const floatFeedChecker = async () => {
@@ -40,8 +44,7 @@ const floatFeedChecker = async () => {
       const orders = await getBuyOrders({ id: listingReferenceId })
       const simpleOrders = orders.filter((i) => !!i.market_hash_name)
 
-      if (simpleOrders.length === 0) {
-        await sleep(45_000)
+      if (simpleOrders.length < 3) {
         continue
       }
 
@@ -55,6 +58,7 @@ const floatFeedChecker = async () => {
         if (currentMarketOrder) {
           await removeBuyOrder({ id: currentMarketOrder.id })
         }
+
         continue
       }
 

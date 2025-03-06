@@ -66,7 +66,7 @@ const floatFeedChecker = async () => {
           await removeBuyOrder({ id: currentMarketOrder.id })
         }
 
-        await sleep(10_000)
+        await sleep(20_000)
         continue
       }
 
@@ -85,7 +85,7 @@ const floatFeedChecker = async () => {
 
       if (lowestBuffPrice - 0.1 <= lowestOrderPrice / 100) {
         console.log(now, market_hash_name, 'Buff price is higher than CSFloat market price')
-        await sleep(10_000)
+        await sleep(20_000)
         continue
       }
 

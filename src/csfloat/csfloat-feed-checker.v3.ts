@@ -80,6 +80,7 @@ const floatFeedChecker = async () => {
       const lowestBuffPrice = Number(buffSellOrders.data.items[0].price)
 
       const estimatedMedianProfit = Number(((listingMedianPrice - lowestOrderPrice) / lowestOrderPrice) * 100)
+      const estimatedBuffMedianProfit = Number(((lowestBuffPrice - lowestOrderPrice) / lowestOrderPrice) * 100)
 
       console.log(now, market_hash_name, estimatedMedianProfit.toFixed(2) + '%')
 
@@ -88,6 +89,8 @@ const floatFeedChecker = async () => {
         await sleep(20_000)
         continue
       }
+
+      console.log(now, market_hash_name, 'buff diff:', estimatedBuffMedianProfit.toFixed(2) + '%')
 
       if (currentMarketOrder) {
         if (currentMarketOrder.price < simpleOrders[0].price) {

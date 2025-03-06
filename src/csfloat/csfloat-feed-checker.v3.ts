@@ -80,7 +80,7 @@ const floatFeedChecker = async () => {
       const lowestBuffPrice = Number(buffSellOrders.data.items[0].price)
 
       const estimatedMedianProfit = Number(((listingMedianPrice - lowestOrderPrice) / lowestOrderPrice) * 100)
-      const estimatedBuffMedianProfit = Number(((lowestBuffPrice - lowestOrderPrice) / lowestOrderPrice) * 100)
+      const estimatedBuffMedianProfit = Number(((lowestBuffPrice * 100 - lowestOrderPrice) / lowestOrderPrice) * 100)
 
       console.log(now, market_hash_name, estimatedMedianProfit.toFixed(2) + '%')
 

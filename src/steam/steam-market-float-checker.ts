@@ -30,7 +30,9 @@ const marketSearchHandler = async (config: { start: number; count: number; proxy
         'Five-SeveN | Case Hardened (Factory New)',
         'StatTrak™ AWP | Chromatic Aberration (Minimal Wear)',
         'SSG 08 | Blood in the Water (Minimal Wear)',
-      ].includes(market_hash_name)
+        'Glock-18 | Dragon Tattoo (Factory New)',
+      ].includes(market_hash_name) ||
+      item.sellListings < 40
     ) {
       continue
     }

@@ -35,10 +35,12 @@ export const getVercelSearchMarketRender = async ({
   start,
   count,
   retries = 2,
+  query,
 }: {
   start: number
   count: number
   proxy: string
+  query?: string
   retries?: number
 }) => {
   for (let attempt = 0; attempt < retries; attempt++) {
@@ -46,6 +48,7 @@ export const getVercelSearchMarketRender = async ({
       const { data } = await axios.post(`https://${proxy}.vercel.app/api/steam/search`, {
         start,
         count,
+        query,
       })
 
       return data

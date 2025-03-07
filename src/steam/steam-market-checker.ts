@@ -18,7 +18,7 @@ const FLOAT_BASE_PRICES = new Map<string, number>()
 const pathname = path.join(__dirname, '../../csfloat.json')
 const stickerData: Record<string, number> = JSON.parse(readFileSync(pathname, 'utf8'))
 
-const marketSearchHandler = async (config: { start: number; count: number; proxy: string }) => {
+const marketSearchHandler = async (config: { start: number; count: number; proxy: string; query: string }) => {
   const response: SearchMarketRenderItem[] = await getVercelSearchMarketRender(config)
 
   for (const item of response) {
@@ -130,6 +130,7 @@ const marketSearchHandler = async (config: { start: number; count: number; proxy
         proxy: `${process.env.PROXY}-${i + 1}`,
         start: (i + 9) * 100 + num,
         count: 100,
+        query: 'Sticker',
       }))
 
       await Promise.allSettled(configs.map(marketSearchHandler)).then((results) => {

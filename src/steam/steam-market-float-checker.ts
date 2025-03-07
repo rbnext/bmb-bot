@@ -29,6 +29,7 @@ const marketSearchHandler = async (config: { start: number; count: number; proxy
         'AK-47 | Redline (Field-Tested)',
         'Five-SeveN | Case Hardened (Factory New)',
         'StatTrak™ AWP | Chromatic Aberration (Minimal Wear)',
+        'SSG 08 | Blood in the Water (Minimal Wear)',
       ].includes(market_hash_name)
     ) {
       continue

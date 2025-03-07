@@ -18,6 +18,7 @@ const BLACK_LIST: string[] = [
   'Desert Eagle | Mecha Industries (Minimal Wear)',
   'StatTrak™ AK-47 | Ice Coaled (Minimal Wear)',
   'M4A4 | Desolate Space (Minimal Wear)',
+  'M4A1-S | Nightmare (Field-Tested)',
 ]
 
 const floatFeedChecker = async () => {

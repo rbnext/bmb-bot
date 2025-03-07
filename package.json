@@ -25,6 +25,7 @@
     "csfloat-feed-checker.v2": "ts-node src/csfloat/csfloat-feed-checker.v2.ts",
     "csfloat-order-checker": "ts-node src/csfloat/csfloat-order-checker.ts",
     "steam-market-checker": "ts-node src/steam/steam-market-checker.ts",
+    "steam-market-float-checker": "ts-node src/steam/steam-market-float-checker.ts",
     "csfloat-feed-checker.v3": "ts-node src/csfloat/csfloat-feed-checker.v3.ts",
     "csfloat-checker": "ts-node src/csfloat/csfloat-checker.ts",
     "csfloat-bargain": "ts-node src/csfloat/csfloat-bargain.ts",

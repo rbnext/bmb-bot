@@ -72,7 +72,9 @@ const marketSearchHandler = async (config: { start: number; count: number; proxy
             const basePrice = response.data[0].reference.base_price / 100
 
             const message: string[] = []
-            message.push(`<a href="${getSteamUrl(market_hash_name, [])}">${market_hash_name}</a> | #${index + 1}\n\n`)
+            message.push(
+              `<a href="${getSteamUrl(market_hash_name, [])}">${market_hash_name}</a> | <a href="https://csfloat.com/search?market_hash_name=${market_hash_name}">FLOAT</a> | #${index + 1}\n\n`
+            )
             message.push(`<b>Steam price</b>: $${item.price}\n`)
             message.push(`<b>Base price</b>: $${basePrice.toFixed(2)}\n`)
             message.push(`<b>Lowest price(by float)</b>: $${lowestPrice.toFixed(2)}\n`)

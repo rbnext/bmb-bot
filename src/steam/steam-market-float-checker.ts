@@ -21,6 +21,10 @@ const marketSearchHandler = async (config: { start: number; count: number; proxy
       console.log(`${now} ${market_hash_name} ${GOODS_CACHE[market_hash_name].listings} -> ${item.sellListings}`)
     }
 
+    if (['AK-47 | The Empress (Field-Tested)', 'AK-47 | Redline (Field-Tested)'].includes(market_hash_name)) {
+      continue
+    }
+
     if (market_hash_name in GOODS_CACHE && GOODS_CACHE[market_hash_name].listings < item.sellListings) {
       try {
         const steamMarketResponse: MapSteamMarketRenderResponse[] = await getVercelMarketRender({
@@ -66,7 +70,7 @@ const marketSearchHandler = async (config: { start: number; count: number; proxy
 
           CASHED_LISTINGS.add(item.listingId)
 
-          await sleep(1_000)
+          await sleep(500)
         }
       } catch (error) {
         console.log(format(new Date(), 'HH:mm:ss'), error.message)

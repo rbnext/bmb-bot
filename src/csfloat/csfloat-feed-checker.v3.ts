@@ -13,10 +13,6 @@ const activeMarketOrders = new Map<string, CSFloatPlacedOrder>()
 const pathname = path.join(__dirname, '../../top-float-items.json')
 
 const BLACK_LIST: string[] = [
-  'SSG 08 | Dragonfire (Minimal Wear)',
-  'SSG 08 | Dragonfire (Field-Tested)',
-  'SSG 08 | Dragonfire (Factory New)',
-  'USP-S | The Traitor (Field-Tested)',
   'USP-S | Whiteout (Minimal Wear)',
   'AWP | Chrome Cannon (Battle-Scarred)',
   'Desert Eagle | Mecha Industries (Minimal Wear)',

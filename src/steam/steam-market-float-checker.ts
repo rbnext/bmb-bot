@@ -21,7 +21,16 @@ const marketSearchHandler = async (config: { start: number; count: number; proxy
       console.log(`${now} ${market_hash_name} ${GOODS_CACHE[market_hash_name].listings} -> ${item.sellListings}`)
     }
 
-    if (['AK-47 | The Empress (Field-Tested)', 'AK-47 | Redline (Field-Tested)'].includes(market_hash_name)) {
+    if (
+      [
+        'AK-47 | Cartel (Minimal Wear)',
+        'AK-47 | Bloodsport (Field-Tested)',
+        'AK-47 | The Empress (Field-Tested)',
+        'AK-47 | Redline (Field-Tested)',
+        'Five-SeveN | Case Hardened (Factory New)',
+        'StatTrak™ AWP | Chromatic Aberration (Minimal Wear)',
+      ].includes(market_hash_name)
+    ) {
       continue
     }
 

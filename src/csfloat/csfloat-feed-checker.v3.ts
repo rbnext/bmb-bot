@@ -84,7 +84,7 @@ const floatFeedChecker = async () => {
 
       console.log(now, market_hash_name, estimatedMedianProfit.toFixed(2) + '%')
 
-      if (lowestBuffPrice - 0.3 <= lowestOrderPrice / 100) {
+      if (lowestBuffPrice - 0.4 <= lowestOrderPrice / 100) {
         console.log(now, market_hash_name, 'Buff price is higher than CSFloat market price')
 
         if (currentMarketOrder) {

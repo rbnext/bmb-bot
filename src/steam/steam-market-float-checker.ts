@@ -6,14 +6,9 @@ import { sendMessage } from '../api/telegram'
 import { MapSteamMarketRenderResponse, SearchMarketRenderItem } from '../types'
 import { getCSFloatItemInfo, getCSFloatListings, getMarketHashNameHistory } from '../api/csfloat'
 import { getSteamUrl, sleep } from '../utils'
-import path from 'path'
-import { readFileSync } from 'fs'
 
 const CASHED_LISTINGS = new Set<string>()
 const GOODS_CACHE: Record<string, { price: number; listings: number }> = {}
-
-const pathname = path.join(__dirname, '../../csfloat.json')
-const stickerData: Record<string, number> = JSON.parse(readFileSync(pathname, 'utf8'))
 
 const roundUp = (num: number) => Math.ceil(num * 100) / 100
 
@@ -95,9 +90,8 @@ const marketSearchHandler = async (config: { start: number; count: number; proxy
             message.push(`<b>Float</b>: ${itemInfoResponse.iteminfo.floatvalue}\n\n`)
 
             if (filteredItemsByFloat.length !== 0) {
-              message.push(`<b>History</b>:\n`)
               for (const [index, floatItem] of filteredItemsByFloat.entries()) {
-                const float = floatItem.item.float_value.toFixed(10)
+                const float = floatItem.item.float_value
                 const price = Number((floatItem.price / 100).toFixed(2))
                 const stickerTotal = (floatItem.item.stickers ?? []).reduce(
                   (acc, cur) => acc + (cur.reference?.price ?? 0) / 100,

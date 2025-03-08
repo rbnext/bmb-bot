@@ -4,11 +4,13 @@ import { format } from 'date-fns'
 import { getVercelMarketRender, getVercelSearchMarketRender } from '../api/versel'
 import { sendMessage } from '../api/telegram'
 import { MapSteamMarketRenderResponse, SearchMarketRenderItem } from '../types'
-import { getCSFloatItemInfo, getCSFloatListings } from '../api/csfloat'
+import { getCSFloatItemInfo, getCSFloatListings, getMarketHashNameHistory } from '../api/csfloat'
 import { getSteamUrl, sleep } from '../utils'
 
 const CASHED_LISTINGS = new Set<string>()
 const GOODS_CACHE: Record<string, { price: number; listings: number }> = {}
+
+const roundUp = (num: number) => Math.ceil(num * 1000) / 1000
 
 const marketSearchHandler = async (config: { start: number; count: number; proxy: string }) => {
   const response: SearchMarketRenderItem[] = await getVercelSearchMarketRender(config)
@@ -63,24 +65,39 @@ const marketSearchHandler = async (config: { start: number; count: number; proxy
             (market_hash_name.includes('Minimal Wear') && itemFloatValue < 0.09) ||
             (market_hash_name.includes('Field-Tested') && itemFloatValue < 0.18)
           ) {
+            const history = await getMarketHashNameHistory({
+              market_hash_name,
+            })
+
             const response = await getCSFloatListings({
               market_hash_name,
-              ...(market_hash_name.includes('Factory New') && { max_float: 0.02 }),
-              ...(market_hash_name.includes('Minimal Wear') && { max_float: 0.09 }),
-              ...(market_hash_name.includes('Field-Tested') && { max_float: 0.18 }),
+              ...(market_hash_name.includes('Factory New') && { max_float: roundUp(itemFloatValue) }),
+              ...(market_hash_name.includes('Minimal Wear') && { max_float: roundUp(itemFloatValue) }),
+              ...(market_hash_name.includes('Field-Tested') && { max_float: roundUp(itemFloatValue) }),
             })
 
             const lowestPrice = response.data[0].price / 100
             const basePrice = response.data[0].reference.base_price / 100
+            const filteredItemsByFloat = history.filter((i) => i.item.float_value < roundUp(itemFloatValue))
 
             const message: string[] = []
             message.push(
               `<a href="${getSteamUrl(market_hash_name, [])}">${market_hash_name}</a> | <a href="https://csfloat.com/search?market_hash_name=${market_hash_name}">FLOAT</a> | #${index + 1}\n\n`
             )
             message.push(`<b>Steam price</b>: $${item.price}\n`)
-            message.push(`<b>Base price</b>: $${basePrice.toFixed(2)}\n`)
-            message.push(`<b>Lowest price(by float)</b>: $${lowestPrice.toFixed(2)}\n`)
+            message.push(`<b>Predicted price</b>: $${basePrice.toFixed(2)}\n`)
+            message.push(`<b>Lowest price(max_float: ${roundUp(itemFloatValue)})</b>: $${lowestPrice.toFixed(2)}\n`)
             message.push(`<b>Float</b>: ${itemInfoResponse.iteminfo.floatvalue}\n\n`)
+
+            if (filteredItemsByFloat.length !== 0) {
+              message.push(`<b>History</b>:\n`)
+              for (const [index, floatItem] of filteredItemsByFloat.entries()) {
+                message.push(
+                  `${index + 1} $${(floatItem.price / 100).toFixed(2)} ${floatItem.item.float_value.toFixed(10)}`
+                )
+              }
+            }
+
             await sendMessage(message.join(''), undefined, process.env.TELEGRAM_STEAM_ALERTS)
           }
 

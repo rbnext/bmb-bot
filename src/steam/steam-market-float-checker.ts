@@ -32,6 +32,7 @@ const marketSearchHandler = async (config: { start: number; count: number; proxy
         'AK-47 | The Outsiders (Minimal Wear)',
         'Five-SeveN | Case Hardened (Factory New)',
         'M4A4 | 龍王 (Dragon King) (Minimal Wear)',
+        'StatTrak™ M4A1-S | Black Lotus (Minimal Wear)',
         'StatTrak™ AWP | Chromatic Aberration (Minimal Wear)',
         'SSG 08 | Blood in the Water (Minimal Wear)',
         'Glock-18 | Dragon Tattoo (Factory New)',
@@ -87,7 +88,7 @@ const marketSearchHandler = async (config: { start: number; count: number; proxy
             message.push(`<b>Steam price</b>: $${item.price}\n`)
             message.push(`<b>Predicted price</b>: $${basePrice.toFixed(2)}\n`)
             message.push(`<b>Lowest price(max_float: ${roundUp(itemFloatValue)})</b>: $${lowestPrice.toFixed(2)}\n`)
-            message.push(`<b>Float</b>: ${itemInfoResponse.iteminfo.floatvalue}\n\n`)
+            message.push(`<b>Current float</b>: ${itemInfoResponse.iteminfo.floatvalue}\n\n`)
 
             if (filteredItemsByFloat.length !== 0) {
               for (const [index, floatItem] of filteredItemsByFloat.entries()) {
@@ -99,7 +100,7 @@ const marketSearchHandler = async (config: { start: number; count: number; proxy
                 )
 
                 message.push(
-                  `<b>${index + 1}.</b> ${float} - $${price} ${stickerTotal !== 0 ? `($${stickerTotal})` : ''}\n`
+                  `<b>${index + 1}.</b> ${float} - $${price} ${stickerTotal !== 0 ? `($${stickerTotal.toFixed(2)})` : ''}\n`
                 )
               }
             }

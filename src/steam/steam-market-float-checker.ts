@@ -98,7 +98,9 @@ const marketSearchHandler = async (config: { start: number; count: number; proxy
                   0
                 )
 
-                message.push(`<b>${index + 1}.</b> ${float} - $${price} ($${stickerTotal})\n`)
+                message.push(
+                  `<b>${index + 1}.</b> ${float} - $${price} ${stickerTotal !== 0 ? `($${stickerTotal})` : ''}\n`
+                )
               }
             }
 

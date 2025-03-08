@@ -15,6 +15,8 @@ const pathname = path.join(__dirname, '../../top-float-items.json')
 const BLACK_LIST: string[] = [
   'USP-S | Whiteout (Minimal Wear)',
   'AWP | Chrome Cannon (Battle-Scarred)',
+  'SSG 08 | Dragonfire (Field-Tested)',
+  'MAC-10 | Disco Tech (Minimal Wear)',
   'Desert Eagle | Mecha Industries (Minimal Wear)',
   'StatTrak™ AK-47 | Ice Coaled (Minimal Wear)',
   'AWP | Chrome Cannon (Well-Worn)',
@@ -84,6 +86,12 @@ const floatFeedChecker = async () => {
 
       if (lowestBuffPrice - 0.3 <= lowestOrderPrice / 100) {
         console.log(now, market_hash_name, 'Buff price is higher than CSFloat market price')
+
+        if (currentMarketOrder) {
+          console.log(now, market_hash_name, 'Removing order...')
+          await removeBuyOrder({ id: currentMarketOrder.id })
+        }
+
         await sleep(20_000)
         continue
       }

@@ -99,12 +99,12 @@ const floatFeedChecker = async () => {
           console.log(now, market_hash_name, lowestOrderPrice, '->', Math.round(simpleOrders[1].price + 1))
           continue
         } else if (currentMarketOrder.price === lowestOrderPrice) {
-          if (estimatedMedianProfit >= 7) continue
+          if (estimatedMedianProfit >= 8) continue
           else await removeBuyOrder({ id: currentMarketOrder.id })
         }
       }
 
-      if (estimatedMedianProfit >= 7) {
+      if (estimatedMedianProfit >= 8) {
         await postBuyOrder({ market_hash_name, max_price: Math.round(lowestOrderPrice + 1) }).then(() => sleep(5_000))
         const floatLink = `https://csfloat.com/search?market_hash_name=${market_hash_name}&sort_by=lowest_price&type=buy_now`
 

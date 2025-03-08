@@ -17,6 +17,7 @@ const BLACK_LIST: string[] = [
   'AWP | Chrome Cannon (Battle-Scarred)',
   'Desert Eagle | Mecha Industries (Minimal Wear)',
   'StatTrak™ AK-47 | Ice Coaled (Minimal Wear)',
+  'AWP | Chrome Cannon (Well-Worn)',
   'M4A4 | Desolate Space (Minimal Wear)',
   'M4A1-S | Nightmare (Field-Tested)',
 ]

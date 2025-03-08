@@ -100,7 +100,7 @@ const marketSearchHandler = async (config: { start: number; count: number; proxy
                 )
 
                 message.push(
-                  `<b>${index + 1}.</b> ${float} - $${price} ${stickerTotal !== 0 ? `($${stickerTotal.toFixed(2)})` : ''}\n`
+                  `<b>${index + 1}.</b> ${float} - $${price} ${stickerTotal > 1 ? `($${stickerTotal.toFixed(2)})` : ''}\n`
                 )
               }
             }

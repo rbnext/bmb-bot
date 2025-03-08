@@ -29,6 +29,7 @@ const marketSearchHandler = async (config: { start: number; count: number; proxy
       item.sellListings >= 500 ||
       market_hash_name.includes('CZ75-Auto') ||
       market_hash_name.includes('MP7 | Ocean Foam') ||
+      market_hash_name.includes('StatTrak™ AK-47 | Blue Laminate (Field-Tested)') ||
       (market_hash_name.includes('AK-47 | Slate') && !market_hash_name.includes('StatTrak')) ||
       (market_hash_name.includes('AK-47 | Ice Coaled') && !market_hash_name.includes('StatTrak')) ||
       (market_hash_name.includes('Legion of Anubis') && !market_hash_name.includes('StatTrak'))

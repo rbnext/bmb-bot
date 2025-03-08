@@ -81,7 +81,7 @@ const floatFeedChecker = async () => {
 
       console.log(now, market_hash_name, estimatedMedianProfit.toFixed(2) + '%')
 
-      if (lowestBuffPrice - 0.2 <= lowestOrderPrice / 100) {
+      if (lowestBuffPrice - 0.3 <= lowestOrderPrice / 100) {
         console.log(now, market_hash_name, 'Buff price is higher than CSFloat market price')
         await sleep(20_000)
         continue
@@ -98,12 +98,12 @@ const floatFeedChecker = async () => {
           console.log(now, market_hash_name, lowestOrderPrice, '->', Math.round(simpleOrders[1].price + 1))
           continue
         } else if (currentMarketOrder.price === lowestOrderPrice) {
-          if (estimatedMedianProfit >= 8) continue
+          if (estimatedMedianProfit >= 7) continue
           else await removeBuyOrder({ id: currentMarketOrder.id })
         }
       }
 
-      if (estimatedMedianProfit >= 8) {
+      if (estimatedMedianProfit >= 7) {
         await postBuyOrder({ market_hash_name, max_price: Math.round(lowestOrderPrice + 1) }).then(() => sleep(5_000))
         const floatLink = `https://csfloat.com/search?market_hash_name=${market_hash_name}&sort_by=lowest_price&type=buy_now`
 

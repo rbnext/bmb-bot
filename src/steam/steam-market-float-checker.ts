@@ -15,7 +15,7 @@ const GOODS_CACHE: Record<string, { price: number; listings: number }> = {}
 const pathname = path.join(__dirname, '../../csfloat.json')
 const stickerData: Record<string, number> = JSON.parse(readFileSync(pathname, 'utf8'))
 
-const roundUp = (num: number) => Math.ceil(num * 1000) / 1000
+const roundUp = (num: number) => Math.ceil(num * 100) / 100
 
 const marketSearchHandler = async (config: { start: number; count: number; proxy: string }) => {
   const response: SearchMarketRenderItem[] = await getVercelSearchMarketRender(config)

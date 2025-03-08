@@ -92,7 +92,7 @@ const marketSearchHandler = async (config: { start: number; count: number; proxy
 
             if (filteredItemsByFloat.length !== 0) {
               for (const [index, floatItem] of filteredItemsByFloat.entries()) {
-                const float = floatItem.item.float_value
+                const float = floatItem.item.float_value.toFixed(15)
                 const price = Number((floatItem.price / 100).toFixed(2))
                 const stickerTotal = (floatItem.item.stickers ?? []).reduce(
                   (acc, cur) => acc + (cur.reference?.price ?? 0) / 100,

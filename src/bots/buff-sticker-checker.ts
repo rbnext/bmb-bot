@@ -88,6 +88,10 @@ const buffSteam = async () => {
           ...(market_hash_name.includes('Field-Tested') && { max_float: roundUp(itemFloatValue) }),
         })
 
+        if (response.data.length === 0) {
+          continue
+        }
+
         const sales48h = marketHistoryResponse.filter((item) => {
           return differenceInHours(new Date(), toZonedTime(item.sold_at, 'Europe/Warsaw')) < 24 * 2
         })

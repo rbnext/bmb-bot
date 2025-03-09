@@ -32,9 +32,6 @@ const buffSteam = async () => {
         return sticker.wear === 0 ? acc + Number(sticker.sell_reference_price) : acc
       }, 0)
 
-      const now = format(new Date(), 'HH:mm:ss')
-      console.log(now, item.market_hash_name, stickerTotal, latestOrderItem.sticker_premium)
-
       if (typeof latestOrderItem.sticker_premium === 'number') {
         const now = format(new Date(), 'HH:mm:ss')
         const stickerPremium = Number((latestOrderItem.sticker_premium * 100).toFixed(1))

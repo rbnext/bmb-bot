@@ -39,14 +39,10 @@ const handler = async () => {
 
     const SP = getStickerPercentage(data, price)
 
-    const overpayment = Number((((price - predictedPrice) / predictedPrice) * 100).toFixed(2))
-
     const now = format(new Date(), 'HH:mm:ss')
 
     if (stickerTotal >= 500) {
-      console.log(
-        `${now} ${market_hash_name} OVP -> ${overpayment.toFixed(1)}%; SP -> ${SP.toFixed(1)}%; ST -> ${(stickerTotal / 100).toFixed(1)}`
-      )
+      console.log(`${now} ${market_hash_name} SP -> ${SP.toFixed(1)}%; ST -> $${(stickerTotal / 100).toFixed(1)}`)
     }
 
     if (stickerTotal > 1000 && SP < 5) {

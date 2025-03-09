@@ -66,7 +66,7 @@ const init = async () => {
 
                 marketPrices.set(market_hash_name, floatResponse.data[0].reference.base_price / 100)
               } catch (error) {
-                await sendMessage(`Failed to retrieve the price for the ${market_hash_name} item.`)
+                await sendMessage({ text: `Failed to retrieve the price for the ${market_hash_name} item.` })
               }
             }
 
@@ -99,7 +99,7 @@ const init = async () => {
               message.push(`<b>Stickers total</b>: $${stickerTotal.toFixed(2)}\n\n`)
               message.push(`<b>Float</b>: ${itemInfoResponse.iteminfo.floatvalue}\n\n`)
 
-              await sendMessage(message.join(''))
+              await sendMessage({ text: message.join('') })
             }
 
             await sleep(2_000)

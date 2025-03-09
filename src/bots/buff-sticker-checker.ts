@@ -41,7 +41,7 @@ const buffSteam = async () => {
 
         console.log(now, item.market_hash_name, stickerTotal, latestOrderItem.sticker_premium)
 
-        if (stickerTotal > 5 && latestOrderItem.sticker_premium < 0.1) {
+        if (stickerTotal > 10 && latestOrderItem.sticker_premium < 0.1) {
           await sendMessage({
             text: `<a href="https://buff.market/market/goods/${item.id}">${item.market_hash_name}</a> $${stickerTotal.toFixed(1)} SP: ${stickerPremium}%`,
           })

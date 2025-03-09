@@ -43,7 +43,7 @@ const handler = async () => {
 
     const now = format(new Date(), 'HH:mm:ss')
 
-    if (stickerTotal >= 100) {
+    if (stickerTotal >= 100 && overpayment < 5) {
       console.log(now, market_hash_name, overpayment.toFixed(2), SP.toFixed(2))
     }
 

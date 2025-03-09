@@ -17,10 +17,8 @@ const buffSteam = async () => {
       category_group: 'rifle,pistol,smg,shotgun,machinegun',
     })
 
-    const filteredItems = marketGoods.data.items.slice(
-      0,
-      marketGoods.data.items.findIndex((item) => (cursor ? item.market_hash_name === cursor : false))
-    )
+    const cursorIndex = marketGoods.data.items.findIndex((item) => (cursor ? item.market_hash_name === cursor : false))
+    const filteredItems = marketGoods.data.items.slice(0, cursorIndex === -1 ? 0 : cursorIndex)
 
     console.log(filteredItems.length, cursor)
 

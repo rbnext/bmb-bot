@@ -9,6 +9,7 @@ export type GoodsSellOrderItem = {
   sticker_premium?: number
   created_at: number
   updated_at: number
+  img_src: string
 
   asset_info: {
     classid: string

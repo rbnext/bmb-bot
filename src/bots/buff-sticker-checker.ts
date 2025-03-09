@@ -5,7 +5,7 @@ dotenv.config()
 import { getGoodsSellOrder, getMarketGoods } from '../api/buff'
 import { sleep } from '../utils'
 import { format } from 'date-fns'
-import { sendMessage } from '../api/telegram'
+import { sendMessage, sendPhoto } from '../api/telegram'
 
 let cursor: string = ''
 
@@ -43,9 +43,16 @@ const buffSteam = async () => {
           latestOrderItem.sticker_premium < 0.1 &&
           Number(item.sell_min_price) * 2 > Number(latestOrderItem.price)
         ) {
-          await sendMessage({
+          const response = await sendMessage({
             text: `<a href="https://buff.market/market/goods/${item.id}">${item.market_hash_name}</a> $${stickerTotal.toFixed(1)} SP: ${stickerPremium}%`,
           })
+
+          if (latestOrderItem.img_src?.includes('ovspect')) {
+            await sendPhoto({
+              photo: latestOrderItem.img_src.replace('/q/75', '/q/100'),
+              reply_to_message_id: response.result.message_id,
+            })
+          }
         }
       }
 

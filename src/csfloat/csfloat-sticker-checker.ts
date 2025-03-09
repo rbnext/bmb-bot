@@ -20,7 +20,7 @@ const getStickerPercentage = (item: CSFloatListingItem, price: number) => {
 const handler = async () => {
   const response = await getCSFloatListings({
     sort_by: 'most_recent',
-    min_price: 100,
+    min_price: 50,
     max_price: 1000,
     max_float: 0.6,
   })
@@ -44,7 +44,7 @@ const handler = async () => {
     const now = format(new Date(), 'HH:mm:ss')
 
     if (stickerTotal >= 100 && overpayment < 5) {
-      console.log(now, market_hash_name, overpayment.toFixed(2), SP.toFixed(2))
+      console.log(now, market_hash_name, overpayment.toFixed(2) + , SP.toFixed(2))
     }
 
     if (stickerTotal > 1000 && SP < 5 && overpayment < 3) {

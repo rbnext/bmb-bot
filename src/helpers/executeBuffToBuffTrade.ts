@@ -39,9 +39,9 @@ export const executeBuffToBuffTrade = async (
     const lowestPricedItem = orders.data.items.find((el) => el.price === item.sell_min_price)
 
     if (!lowestPricedItem) {
-      await sendMessage(
-        `[${options.source}] Someone already bought the ${item.market_hash_name} item for $${current_price}.`
-      )
+      await sendMessage({
+        text: `[${options.source}] Someone already bought the ${item.market_hash_name} item for $${current_price}.`,
+      })
 
       return
     }
@@ -70,14 +70,16 @@ export const executeBuffToBuffTrade = async (
       const response = await postGoodsBuy({ price: current_price, sell_order_id: lowestPricedItem.id })
 
       if (response.code !== 'OK') {
-        await sendMessage(
-          `[${options.source}] Failed to purchase the item ${item.market_hash_name}. Reason: ${response.code}`
-        )
+        await sendMessage({
+          text: `[${options.source}] Failed to purchase the item ${item.market_hash_name}. Reason: ${response.code}`,
+        })
 
         return
       }
 
-      await sendMessage(generateMessage({ type: MessageType.Purchased, ...payload }))
+      await sendMessage({
+        text: generateMessage({ type: MessageType.Purchased, ...payload }),
+      })
     }
   }
 }

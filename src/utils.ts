@@ -145,7 +145,7 @@ export const generateMessage = ({
   userId?: string
   updatedAt?: number
   stickerTotal?: number
-  float?: string
+  float?: string | number
   bargainPrice?: number
   stickerPremium?: number
   positions?: number

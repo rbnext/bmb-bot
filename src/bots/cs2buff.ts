@@ -32,11 +32,10 @@ const csPriceChecker = async () => {
         if (market_hash_name in GOODS_CACHE && current_price !== GOODS_CACHE[market_hash_name].price) {
           const prev_price = Number((GOODS_CACHE[market_hash_name].price / 100).toFixed(2))
           const next_price = Number((current_price / 100).toFixed(2))
-          await sendMessage(
-            `<a href="https://csfloat.com/item/${data.referenceId}">${market_hash_name}</a> | $${prev_price} -> $${next_price}`,
-            undefined,
-            process.env.TELEGRAM_CSFLOAT_ORDERS_ID
-          )
+          await sendMessage({
+            text: `<a href="https://csfloat.com/item/${data.referenceId}">${market_hash_name}</a> | $${prev_price} -> $${next_price}`,
+            chat_id: process.env.TELEGRAM_CSFLOAT_ORDERS_ID,
+          })
         }
 
         GOODS_CACHE[data.market_hash_name] = { price: current_price }

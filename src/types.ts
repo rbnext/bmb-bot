@@ -593,6 +593,7 @@ export type CSFloatListingItem = {
   max_offer_discount?: number
   min_offer_price?: number
   item: {
+    cs2_screenshot_id: string
     market_hash_name: string
     float_value: number
     is_stattrak: boolean

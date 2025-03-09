@@ -101,7 +101,7 @@ const handler = async () => {
       message.push(`<b>Float</b>: ${floatValue}`)
 
       await postCreateBargain({ contract_id: data.id, price: bargainPrice })
-      await sendMessage(message.join(''), undefined, process.env.TELEGRAM_CSFLOAT_CHAT_ID)
+      await sendMessage({ text: message.join(''), chat_id: process.env.TELEGRAM_CSFLOAT_CHAT_ID })
       await sleep(10_000)
     }
 
@@ -113,7 +113,7 @@ schedule.scheduleJob(`${process.env.SPEC} * * * * *`, async () => {
   handler().catch((error) => {
     const errorMessage = axios.isAxiosError(error) ? error.response?.data?.message : error.message
 
-    sendMessage(`CSFloat bargain error: ${errorMessage}`).then(() => {
+    sendMessage({ text: `CSFloat bargain error: ${errorMessage}` }).then(() => {
       process.exit(1)
     })
   })

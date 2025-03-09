@@ -58,7 +58,11 @@ const handler = async () => {
         message.push(`<b>${sticker.name}</b>: $${((sticker.reference?.price ?? 0) / 100).toFixed(2)}\n`)
       }
 
-      await sendMessage(message.join(''), undefined, process.env.TELEGRAM_CSFLOAT_CHAT_ID)
+      await sendMessage({
+        text: message.join(''),
+        chat_id: process.env.TELEGRAM_CSFLOAT_CHAT_ID,
+        photo: `https://s.csfloat.com/m/${data.item.cs2_screenshot_id}/playside.png?v=3`,
+      })
     }
 
     CASHED_LISTINGS.add(data.id)
@@ -69,7 +73,7 @@ schedule.scheduleJob(`${process.env.SPEC} * * * * *`, async () => {
   handler().catch((error) => {
     const errorMessage = axios.isAxiosError(error) ? error.response?.data?.message : error.message
 
-    sendMessage(`Sticker checker error: ${errorMessage}`).then(() => {
+    sendMessage({ text: `Sticker checker error: ${errorMessage}` }).then(() => {
       process.exit(1)
     })
   })

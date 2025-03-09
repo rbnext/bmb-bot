@@ -56,7 +56,7 @@ export const getCSFloatListings = async ({
   paint_index?: string
   session?: string
 }): Promise<CSFloatListing> => {
-  const { data, headers } = await http.get('/v1/listings', {
+  const { data } = await http.get('/v1/listings', {
     params: {
       limit,
       def_index,

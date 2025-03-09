@@ -66,12 +66,12 @@ const microBuffSteam = async () => {
         console.log('Something went wrong', error)
 
         if (error.message !== 'Request failed with status code 503') {
-          await sendMessage(error?.message ?? 'Something went wrong.')
+          await sendMessage({ text: error?.message ?? 'Something went wrong.' })
 
           return
         }
 
-        await sendMessage(`${error.message}. Restarting in 60 seconds...`)
+        await sendMessage({ text: `${error.message}. Restarting in 60 seconds...` })
         await sleep(60_000)
       }
     }

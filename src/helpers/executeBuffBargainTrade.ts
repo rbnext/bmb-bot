@@ -58,7 +58,10 @@ export const executeBuffBargainTrade = async (
       const bargain = bargains.data.items.find((item) => item.sell_order_id === sell_order_id)
 
       if (bargain && (bargain.state === 5 || bargain.state === 2 || bargain.state === 3)) {
-        await sendMessage(bargain.state_text, value.telegram_message_id).then(() => {
+        await sendMessage({
+          text: bargain.state_text,
+          reply_to_message_id: value.telegram_message_id,
+        }).then(() => {
           BARGAIN_NOTIFICATIONS.delete(sell_order_id)
           FLOAT_BLACKLIST.add(bargain.asset_info.paintwear)
         })
@@ -117,7 +120,7 @@ export const executeBuffBargainTrade = async (
         return
       }
 
-      sendMessage(generateMessage({ ...payload, type: MessageType.Purchased }))
+      sendMessage({ text: generateMessage({ ...payload, type: MessageType.Purchased }) })
     } else if (
       Number(lowestPricedItem.price) > bargain_price &&
       Number(lowestPricedItem.lowest_bargain_price) < bargain_price
@@ -158,7 +161,7 @@ export const executeBuffBargainTrade = async (
         return
       }
 
-      sendMessage(generateMessage({ ...payload, bargainPrice: bargain_price })).then((message) => {
+      sendMessage({ text: generateMessage({ ...payload, bargainPrice: bargain_price }) }).then((message) => {
         BARGAIN_NOTIFICATIONS.set(lowestPricedItem.id, {
           sell_order_id: lowestPricedItem.id,
           telegram_message_id: message.result.message_id,
@@ -182,7 +185,7 @@ export const executeBuffBargainTrade = async (
         return
       }
 
-      sendMessage(generateMessage({ ...payload, type: MessageType.Purchased }))
+      sendMessage({ text: generateMessage({ ...payload, type: MessageType.Purchased }) })
     } else if (
       Number(lowestPricedItem.price) > bargain_price &&
       Number(lowestPricedItem.lowest_bargain_price) < bargain_price
@@ -198,17 +201,17 @@ export const executeBuffBargainTrade = async (
         return
       }
 
-      sendMessage(generateMessage({ ...payload, bargainPrice: bargain_price, steamPrice: min_steam_price })).then(
-        (message) => {
-          BARGAIN_NOTIFICATIONS.set(lowestPricedItem.id, {
-            sell_order_id: lowestPricedItem.id,
-            telegram_message_id: message.result.message_id,
-          })
-          if (paintwear) {
-            FLOAT_BLACKLIST.add(paintwear)
-          }
+      sendMessage({
+        text: generateMessage({ ...payload, bargainPrice: bargain_price, steamPrice: min_steam_price }),
+      }).then((message) => {
+        BARGAIN_NOTIFICATIONS.set(lowestPricedItem.id, {
+          sell_order_id: lowestPricedItem.id,
+          telegram_message_id: message.result.message_id,
+        })
+        if (paintwear) {
+          FLOAT_BLACKLIST.add(paintwear)
         }
-      )
+      })
     }
   }
 }

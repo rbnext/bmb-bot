@@ -71,7 +71,7 @@ const handler = async () => {
     }
 
     if (messages.length === 3) {
-      await sendMessage(messages.join(''))
+      await sendMessage({ text: messages.join('') })
     }
 
     await sleep(10_000)

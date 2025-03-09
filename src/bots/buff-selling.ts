@@ -143,11 +143,10 @@ const buffSelling = async () => {
   }
 
   if (message.length !== 0) {
-    await sendMessage(
-      '<b>SELLING REPORT</b>\n\n' + message.map((msg, index) => `${index + 1}. ${msg}`).join('\n'),
-      undefined,
-      process.env.TELEGRAM_BUFF_SELL_ALERTS
-    )
+    await sendMessage({
+      text: '<b>SELLING REPORT</b>\n\n' + message.map((msg, index) => `${index + 1}. ${msg}`).join('\n'),
+      chat_id: process.env.TELEGRAM_BUFF_SELL_ALERTS,
+    })
   }
 
   await sleep(60_000 * 20)

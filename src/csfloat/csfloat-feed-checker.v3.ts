@@ -129,7 +129,7 @@ const floatFeedChecker = async () => {
           messages.push(`Profit ~${medianProfit}% / Order: ${(lowestOrderPrice + 1) / 100} / Median: $${medianPrice}`)
         }
 
-        await sendMessage(messages.join(''), undefined, process.env.TELEGRAM_CSFLOAT_CHAT_ID)
+        await sendMessage({ text: messages.join(''), chat_id: process.env.TELEGRAM_CSFLOAT_CHAT_ID })
       }
 
       await sleep(20_000)
@@ -139,7 +139,7 @@ const floatFeedChecker = async () => {
     console.log('Something went wrong:', error.message)
 
     if (error.message.includes('429') || error.message.includes('403') || error.message.includes('422')) {
-      await sendMessage(error?.data?.message ?? 'Something went wrong.')
+      await sendMessage({ text: error?.data?.message ?? 'Something went wrong.' })
 
       return
     }

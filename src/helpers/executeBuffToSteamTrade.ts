@@ -93,12 +93,16 @@ export const executeBuffToSteamTrade = async (
     const response = await postGoodsBuy({ price: current_price, sell_order_id: lowestPricedItem.id })
 
     if (response.code !== 'OK') {
-      sendMessage(`[${options.source}] Failed to purchase the item ${item.market_hash_name}. Reason: ${response.code}`)
+      sendMessage({
+        text: `[${options.source}] Failed to purchase the item ${item.market_hash_name}. Reason: ${response.code}`,
+      })
 
       return
     }
 
-    sendMessage(generateMessage({ ...payload, estimatedProfit: estimated_profit, medianPrice: min_steam_price }))
+    sendMessage({
+      text: generateMessage({ ...payload, estimatedProfit: estimated_profit, medianPrice: min_steam_price }),
+    })
   }
   // }
 }

@@ -21,7 +21,7 @@ const handler = async () => {
   const response = await getCSFloatListings({
     sort_by: 'most_recent',
     min_price: 50,
-    max_price: 1000,
+    max_price: 5000,
     max_float: 0.6,
   })
 

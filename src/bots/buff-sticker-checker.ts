@@ -101,7 +101,7 @@ const buffSteam = async () => {
 
           sendMessage({ text: generateMessage(payload) })
         } else {
-          console.log(now, item.market_hash_name, estimatedProfit.toFixed(1) + '%')
+          console.log(now, item.market_hash_name, estimatedProfit.toFixed(1) + '%', itemFloatValue)
         }
       }
 

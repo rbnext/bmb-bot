@@ -47,11 +47,15 @@ export const executeBuffToMicroSteamTrade = async (
     const response = await postGoodsBuy({ price: currentPrice, sell_order_id: lowestPricedItem.id })
 
     if (response.code !== 'OK') {
-      sendMessage(`[${options.source}] Failed to purchase the item ${item.market_hash_name}. Reason: ${response.code}`)
+      sendMessage({
+        text: `[${options.source}] Failed to purchase the item ${item.market_hash_name}. Reason: ${response.code}`,
+      })
 
       return
     }
 
-    sendMessage(generateMessage({ ...payload }))
+    sendMessage({
+      text: generateMessage({ ...payload }),
+    })
   }
 }

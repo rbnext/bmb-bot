@@ -28,7 +28,9 @@ export const getMaxPricesForXDays = async (
 
     return Object.keys(history).map((date) => Math[operation](...history[date]))
   } catch (error) {
-    await sendMessage('Error fetching price history from steam.')
+    await sendMessage({
+      text: 'Error fetching price history from steam.',
+    })
 
     return []
   }

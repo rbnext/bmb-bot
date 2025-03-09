@@ -47,7 +47,7 @@ export const executeBuffCharmTrade = async (
         pattern,
       }
 
-      await sendMessage(generateMessage({ ...payload }))
+      await sendMessage({ text: generateMessage({ ...payload }) })
 
       return
     }

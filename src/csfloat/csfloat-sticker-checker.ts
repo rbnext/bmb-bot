@@ -52,7 +52,7 @@ const handler = async () => {
     if (stickerTotal > 1000 && SP < 5) {
       const message: string[] = []
       message.push(`🤝 <b>[STICKER CHECKER]</b>` + ' ')
-      message.push(`<a href="https://csfloat.com/item/${data.id}">${market_hash_name}</a>\n\n`)
+      message.push(`<a href="https://csfloat.com/item/${data.id}">${market_hash_name}</a> ${SP.toFixed(1)}% SP\n\n`)
 
       for (const sticker of stickers) {
         message.push(`<b>${sticker.name}</b>: $${((sticker.reference?.price ?? 0) / 100).toFixed(2)}\n`)

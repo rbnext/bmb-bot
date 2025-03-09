@@ -24,7 +24,7 @@ export const executeBuffToMicroSteamTrade = async (
 
   console.log(item.market_hash_name, profitPercentage.toFixed(2) + '%')
 
-  if (lowestPricedItem && profitPercentage > 100) {
+  if (lowestPricedItem && profitPercentage > 80) {
     const keychain = lowestPricedItem.asset_info.info?.keychains?.[0]
 
     const stickerTotal = (lowestPricedItem.asset_info.info?.stickers || []).reduce((acc, sticker) => {

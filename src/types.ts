@@ -267,7 +267,9 @@ export type ButOrderItem = {
 }
 
 export type BuyOrderHistoryItem = {
+  id: string
   state: 'SUCCESS'
+  created_at: number
   asset_info: {
     paintwear: string
     assetid: string
@@ -827,4 +829,23 @@ export type SearchMarketRenderItem = {
   sellPrice: number
   sellListings: number
   marketHashName: string
+}
+
+export type GoogleSheetTradeRecord = {
+  id: string
+  market_hash_name: string
+  created_at: string
+  float?: string
+  buy_price: number
+  sold_price?: number
+  source: TradeRecordSource
+  sold_price_after_fee?: number
+  profit?: number
+  message?: string
+}
+
+export enum TradeRecordSource {
+  BuffMarket = 'BUFF.MARKET',
+  CSFloat = 'CSFLOAT',
+  Steam = 'STEAM',
 }

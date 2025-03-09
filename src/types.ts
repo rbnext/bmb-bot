@@ -6,6 +6,7 @@ export type GoodsSellOrderItem = {
   user_id: string
   allow_bargain: boolean
   lowest_bargain_price: string
+  sticker_premium?: number
   created_at: number
   updated_at: number
 
@@ -401,6 +402,7 @@ export type MarketGoodsBillOrderItem = {
   has_bargain: boolean
   seller_id: string
   original_price: string
+  sticker_premium?: number
 }
 
 export type MarketGoodsBillOrder = {

@@ -34,10 +34,10 @@ const buffSteam = async () => {
         return sticker.wear === 0 ? acc + Number(sticker.sell_reference_price) : acc
       }, 0)
 
-      if (typeof latestOrderItem.sticker_premium === 'number' && latestOrderItem.sticker_premium < 0.1) {
-        const now = format(new Date(), 'HH:mm:ss')
-        console.log(now, item.market_hash_name, stickerTotal, latestOrderItem.sticker_premium)
+      const now = format(new Date(), 'HH:mm:ss')
+      console.log(now, item.market_hash_name, stickerTotal, latestOrderItem.sticker_premium)
 
+      if (typeof latestOrderItem.sticker_premium === 'number' && latestOrderItem.sticker_premium < 0.1) {
         if (stickerTotal > 5) {
           await sendMessage({
             text: `<a href="https://buff.market/market/goods/${item.id}">${item.market_hash_name}</a> $${stickerTotal} SP: ${latestOrderItem.sticker_premium.toFixed(1)}%`,

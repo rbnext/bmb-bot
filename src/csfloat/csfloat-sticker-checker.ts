@@ -37,14 +37,17 @@ const handler = async () => {
       return acc + typeof wear === 'number' ? 0 : reference?.price || 0
     }, 0)
 
-    const overpayment = Number((((price - predictedPrice) / predictedPrice) * 100).toFixed(2))
-
     const SP = getStickerPercentage(data, price)
 
-    const now = format(new Date(), 'HH:mm:ss')
-    console.log(now, market_hash_name, overpayment, SP)
+    const overpayment = Number((((price - predictedPrice) / predictedPrice) * 100).toFixed(2))
 
-    if (stickerTotal > 1000 && SP < 5) {
+    const now = format(new Date(), 'HH:mm:ss')
+
+    if (stickerTotal >= 100) {
+      console.log(now, market_hash_name, overpayment.toFixed(2), SP.toFixed(2))
+    }
+
+    if (stickerTotal > 1000 && SP < 5 && overpayment < 3) {
       const message: string[] = []
       message.push(`🤝 <b>[STICKER CHECKER]</b>` + ' ')
       message.push(`<a href="https://csfloat.com/item/${data.id}">${market_hash_name}</a>\n\n`)

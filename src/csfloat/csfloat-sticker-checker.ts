@@ -45,7 +45,7 @@ const handler = async () => {
       console.log(`${now} ${market_hash_name} SP -> ${SP.toFixed(1)}%; ST -> $${(stickerTotal / 100).toFixed(1)}`)
     }
 
-    if (stickerTotal > 1000 && SP < 5) {
+    if (stickerTotal > 1000 && SP < 3) {
       const message: string[] = []
       message.push(`🤝 <b>[STICKER CHECKER]</b>` + ' ')
       message.push(`<a href="https://csfloat.com/item/${data.id}">${market_hash_name}</a> ${SP.toFixed(1)}% SP\n\n`)

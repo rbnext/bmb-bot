@@ -23,7 +23,11 @@ const buffSteam = async () => {
     console.log(filteredItems.length, cursor)
 
     for (const item of filteredItems) {
-      const latestOrders = await getGoodsSellOrder({ goods_id: item.id, exclude_current_user: 1 })
+      const latestOrders = await getGoodsSellOrder({
+        goods_id: item.id,
+        exclude_current_user: 1,
+        sort_by: 'created.desc',
+      })
 
       const latestOrderItem = latestOrders.data.items[0]
       const stickerTotal = (latestOrderItem.asset_info.info?.stickers || []).reduce((acc, sticker) => {

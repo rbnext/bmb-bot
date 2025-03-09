@@ -43,13 +43,13 @@ const handler = async () => {
 
     const now = format(new Date(), 'HH:mm:ss')
 
-    if (stickerTotal >= 100 && overpayment < 5) {
+    if (stickerTotal >= 100) {
       console.log(
         `${now} ${market_hash_name} OVP -> ${overpayment.toFixed(1)}%; SP -> ${SP.toFixed(1)}%; ST -> ${(stickerTotal / 100).toFixed(1)}`
       )
     }
 
-    if (stickerTotal > 1000 && SP < 5 && overpayment < 3) {
+    if (stickerTotal > 1000 && SP < 5) {
       const message: string[] = []
       message.push(`🤝 <b>[STICKER CHECKER]</b>` + ' ')
       message.push(`<a href="https://csfloat.com/item/${data.id}">${market_hash_name}</a>\n\n`)

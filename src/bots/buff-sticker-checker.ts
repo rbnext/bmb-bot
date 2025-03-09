@@ -92,7 +92,7 @@ const buffSteam = async () => {
           const response = await postGoodsBuy({ price: currentPrice, sell_order_id: latestOrderItem.id })
 
           if (response.code !== 'OK') {
-            await sendMessage({
+            sendMessage({
               text: `Failed to purchase the item ${item.market_hash_name}. Reason: ${response.code}`,
             })
 
@@ -105,7 +105,7 @@ const buffSteam = async () => {
         }
       }
 
-      console.log(now, item.market_hash_name, '$' + stickerTotal)
+      console.log(now, item.market_hash_name, '$' + latestOrderItem.price)
 
       await sleep(1_000)
     }

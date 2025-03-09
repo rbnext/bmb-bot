@@ -29,3 +29,23 @@ export const sendMessage = async ({
 
   return data
 }
+
+export const sendPhoto = async ({
+  reply_to_message_id,
+  chat_id,
+  photo,
+}: {
+  reply_to_message_id?: number
+  chat_id?: string
+  photo?: string
+}): Promise<TelegramResponse> => {
+  const { data } = await http.get(`/bot${process.env.BOT_TOKEN}/sendPhoto`, {
+    params: {
+      chat_id: chat_id ?? process.env.TELEGRAM_CHAT_ID,
+      reply_to_message_id,
+      photo,
+    },
+  })
+
+  return data
+}

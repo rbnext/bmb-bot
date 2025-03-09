@@ -1,7 +1,7 @@
 import 'dotenv/config'
 
 import schedule from 'node-schedule'
-import { sendMessage } from '../api/telegram'
+import { sendMessage, sendPhoto } from '../api/telegram'
 import { format } from 'date-fns'
 import { getCSFloatListings } from '../api/csfloat'
 import axios from 'axios'
@@ -54,11 +54,18 @@ const handler = async () => {
         message.push(`<b>${sticker.name}</b>: $${((sticker.reference?.price ?? 0) / 100).toFixed(2)}\n`)
       }
 
-      await sendMessage({
+      const response = await sendMessage({
         text: message.join(''),
         chat_id: process.env.TELEGRAM_CSFLOAT_CHAT_ID,
-        photo: `https://s.csfloat.com/m/${data.item.cs2_screenshot_id}/playside.png?v=3`,
       })
+
+      if (data.item.cs2_screenshot_id) {
+        await sendPhoto({
+          chat_id: process.env.TELEGRAM_CSFLOAT_CHAT_ID,
+          photo: `https://s.csfloat.com/m/${data.item.cs2_screenshot_id}/playside.png?v=3`,
+          reply_to_message_id: response.result.message_id,
+        })
+      }
     }
 
     CASHED_LISTINGS.add(data.id)

@@ -4,10 +4,11 @@ dotenv.config()
 
 import { getGoodsSellOrder, getMarketGoods, postGoodsBuy } from '../api/buff'
 import { generateMessage, sleep } from '../utils'
-import { format } from 'date-fns'
+import { differenceInHours, format } from 'date-fns'
 import { sendMessage, sendPhoto } from '../api/telegram'
-import { getCSFloatListings } from '../api/csfloat'
+import { getCSFloatListings, getMarketHashNameHistory } from '../api/csfloat'
 import { MessageType, Source } from '../types'
+import { toZonedTime } from 'date-fns-tz'
 
 let cursor: string = ''
 
@@ -78,6 +79,8 @@ const buffSteam = async () => {
         (market_hash_name.includes('Minimal Wear') && itemFloatValue > 0 && itemFloatValue < 0.08) ||
         (market_hash_name.includes('Field-Tested') && itemFloatValue > 0 && itemFloatValue < 0.17)
       ) {
+        const marketHistoryResponse = await getMarketHashNameHistory({ market_hash_name })
+
         const response = await getCSFloatListings({
           market_hash_name,
           ...(market_hash_name.includes('Factory New') && { max_float: roundUp(itemFloatValue) }),
@@ -85,10 +88,14 @@ const buffSteam = async () => {
           ...(market_hash_name.includes('Field-Tested') && { max_float: roundUp(itemFloatValue) }),
         })
 
+        const sales48h = marketHistoryResponse.filter((item) => {
+          return differenceInHours(new Date(), toZonedTime(item.sold_at, 'Europe/Warsaw')) < 24 * 2
+        })
+
         const lowestFloatPrice = response.data[0].price / 100
         const estimatedProfit = Number((((lowestFloatPrice - currentPrice) / currentPrice) * 100).toFixed(2))
 
-        if (estimatedProfit >= 20) {
+        if (sales48h.length >= 10 && estimatedProfit >= 20) {
           const response = await postGoodsBuy({ price: currentPrice, sell_order_id: latestOrderItem.id })
 
           if (response.code !== 'OK') {

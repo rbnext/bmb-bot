@@ -20,6 +20,7 @@ const getStickerPercentage = (item: CSFloatListingItem, price: number) => {
 const handler = async () => {
   const response = await getCSFloatListings({
     sort_by: 'most_recent',
+    filter: 'sticker_combos',
     min_price: 50,
     max_price: 5000,
     max_float: 0.6,
@@ -29,7 +30,6 @@ const handler = async () => {
     if (CASHED_LISTINGS.has(data.id) || data.item.is_souvenir) continue
 
     const price = data.price
-    const predictedPrice = data.reference.predicted_price
     const market_hash_name = data.item.market_hash_name
 
     const stickers = data.item.stickers || []
@@ -37,15 +37,14 @@ const handler = async () => {
       return acc + typeof wear === 'number' ? 0 : reference?.price || 0
     }, 0)
 
-    const SP = getStickerPercentage(data, price)
-
     const now = format(new Date(), 'HH:mm:ss')
+    const SP = getStickerPercentage(data, price)
 
     if (stickerTotal >= 500) {
       console.log(`${now} ${market_hash_name} SP -> ${SP.toFixed(1)}%; ST -> $${(stickerTotal / 100).toFixed(1)}`)
     }
 
-    if (stickerTotal > 1000 && SP < 3) {
+    if (stickerTotal > 1000 && SP < 10) {
       const message: string[] = []
       message.push(`🤝 <b>[STICKER CHECKER]</b>` + ' ')
       message.push(`<a href="https://csfloat.com/item/${data.id}">${market_hash_name}</a> ${SP.toFixed(1)}% SP\n\n`)

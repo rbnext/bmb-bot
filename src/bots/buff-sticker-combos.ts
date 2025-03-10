@@ -26,7 +26,7 @@ const buffSteam = async () => {
 
       if (
         stickerTotal > 4 &&
-        stickerTotal < 100 &&
+        stickerTotal < 40 &&
         typeof item.sticker_premium === 'number' &&
         item.sticker_premium < 0.01
       ) {

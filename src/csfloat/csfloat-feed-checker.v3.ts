@@ -28,13 +28,8 @@ const BLACK_LIST: string[] = [
 const floatFeedChecker = async () => {
   activeMarketOrders.clear()
   const response = await getPlacedOrders({ page: 0, limit: 100 })
-  // response.orders.forEach((order) => activeMarketOrders.set(order.market_hash_name, order))
+  response.orders.forEach((order) => activeMarketOrders.set(order.market_hash_name, order))
   const mostPopularItems: Record<string, number> = JSON.parse(readFileSync(pathname, 'utf8'))
-
-  for (const order of response.orders) {
-    await removeBuyOrder({ id: order.id })
-    await sleep(4_500)
-  }
 
   console.log('Blacklist size: ', BLACK_LIST.length)
 
@@ -153,4 +148,13 @@ const floatFeedChecker = async () => {
   floatFeedChecker()
 }
 
-floatFeedChecker()
+;(async () => {
+  const response = await getPlacedOrders({ page: 0, limit: 100 })
+
+  for (const order of response.orders) {
+    await removeBuyOrder({ id: order.id })
+    await sleep(5000)
+  }
+
+  floatFeedChecker()
+})()

@@ -79,31 +79,26 @@ const buffSteam = async () => {
         (market_hash_name.includes('Minimal Wear') && itemFloatValue > 0 && itemFloatValue < 0.08) ||
         (market_hash_name.includes('Field-Tested') && itemFloatValue > 0 && itemFloatValue < 0.17)
       ) {
-        const marketHistoryResponse = await getMarketHashNameHistory({ market_hash_name })
-
-        const response = await getCSFloatListings({
-          market_hash_name,
-          ...(market_hash_name.includes('Factory New') && { max_float: roundUp(itemFloatValue) }),
-          ...(market_hash_name.includes('Minimal Wear') && { max_float: roundUp(itemFloatValue) }),
-          ...(market_hash_name.includes('Field-Tested') && { max_float: roundUp(itemFloatValue) }),
-        })
-
-        if (response.data.length === 0) {
-          continue
-        }
-
-        const sales48h = marketHistoryResponse.filter((item) => {
-          return differenceInHours(new Date(), toZonedTime(item.sold_at, 'Europe/Warsaw')) < 24 * 2
-        })
-
-        const lowestFloatPrice = response.data[0].price / 100
-        const estimatedProfit = Number((((lowestFloatPrice - currentPrice) / currentPrice) * 100).toFixed(2))
-
-        if (sales48h.length >= 10 && estimatedProfit >= 20) {
-          sendMessage({ text: generateMessage(payload) })
-        } else {
-          console.log(now, item.market_hash_name, estimatedProfit.toFixed(1) + '%', itemFloatValue)
-        }
+        // const marketHistoryResponse = await getMarketHashNameHistory({ market_hash_name })
+        // const response = await getCSFloatListings({
+        //   market_hash_name,
+        //   ...(market_hash_name.includes('Factory New') && { max_float: roundUp(itemFloatValue) }),
+        //   ...(market_hash_name.includes('Minimal Wear') && { max_float: roundUp(itemFloatValue) }),
+        //   ...(market_hash_name.includes('Field-Tested') && { max_float: roundUp(itemFloatValue) }),
+        // })
+        // if (response.data.length === 0) {
+        //   continue
+        // }
+        // const sales48h = marketHistoryResponse.filter((item) => {
+        //   return differenceInHours(new Date(), toZonedTime(item.sold_at, 'Europe/Warsaw')) < 24 * 2
+        // })
+        // const lowestFloatPrice = response.data[0].price / 100
+        // const estimatedProfit = Number((((lowestFloatPrice - currentPrice) / currentPrice) * 100).toFixed(2))
+        // if (sales48h.length >= 10 && estimatedProfit >= 20) {
+        //   sendMessage({ text: generateMessage(payload) })
+        // } else {
+        //   console.log(now, item.market_hash_name, estimatedProfit.toFixed(1) + '%', itemFloatValue)
+        // }
       }
 
       console.log(now, item.market_hash_name, '$' + latestOrderItem.price)

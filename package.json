@@ -8,6 +8,7 @@
     "buffDefault": "ts-node src/bots/buffDefault.ts",
     "buff-sticker-checker": "ts-node src/bots/buff-sticker-checker.ts",
     "buff-sticker-combos": "ts-node src/bots/buff-sticker-combos.ts",
+    "buff-checker": "ts-node src/bots/buff-checker.ts",
     "buffBargain": "ts-node src/bots/buffBargain.ts",
     "steamMarketChecker": "ts-node src/bots/steamMarketChecker.ts",
     "steamMarketSearch": "ts-node src/bots/steamMarketSearch.ts",

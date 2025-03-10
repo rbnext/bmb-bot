@@ -50,7 +50,7 @@ const buffSteam = async () => {
         id: item.id,
         float: itemFloatValue,
         price: currentPrice,
-        type: MessageType.Purchased,
+        type: MessageType.Review,
         name: item.market_hash_name,
         source: Source.BUFF_CSFLOAT,
         stickerTotal: stickerTotal,
@@ -100,16 +100,6 @@ const buffSteam = async () => {
         const estimatedProfit = Number((((lowestFloatPrice - currentPrice) / currentPrice) * 100).toFixed(2))
 
         if (sales48h.length >= 10 && estimatedProfit >= 20) {
-          const response = await postGoodsBuy({ price: currentPrice, sell_order_id: latestOrderItem.id })
-
-          if (response.code !== 'OK') {
-            sendMessage({
-              text: `Failed to purchase the item ${item.market_hash_name}. Reason: ${response.code}`,
-            })
-
-            return
-          }
-
           sendMessage({ text: generateMessage(payload) })
         } else {
           console.log(now, item.market_hash_name, estimatedProfit.toFixed(1) + '%', itemFloatValue)

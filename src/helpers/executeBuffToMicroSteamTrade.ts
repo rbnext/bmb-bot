@@ -11,18 +11,14 @@ export const executeBuffToMicroSteamTrade = async (
   }
 ) => {
   const goods_id = item.id
+  const currentPrice = Number(item.sell_min_price)
 
   const prices = await getMaxPricesForXDays(item.market_hash_name)
   const minSteamPrice = prices.length !== 0 ? Math.min(...prices) : 0
-
-  const currentPrice = Number(item.sell_min_price)
-  const steamPriceAfterFee = Math.max(minSteamPrice - 0.01 - minSteamPrice * 0.15, minSteamPrice - 0.01 - 0.02)
-  const profitPercentage = ((steamPriceAfterFee - currentPrice) / currentPrice) * 100
+  const profitPercentage = ((minSteamPrice - currentPrice) / currentPrice) * 100
 
   const orders = await getGoodsSellOrder({ goods_id, exclude_current_user: 1 })
   const lowestPricedItem = orders.data.items.find((el) => el.price === item.sell_min_price)
-
-  console.log(item.market_hash_name, profitPercentage.toFixed(2) + '%')
 
   if (lowestPricedItem && profitPercentage > 80) {
     const keychain = lowestPricedItem.asset_info.info?.keychains?.[0]
@@ -54,8 +50,6 @@ export const executeBuffToMicroSteamTrade = async (
       return
     }
 
-    sendMessage({
-      text: generateMessage({ ...payload }),
-    })
+    sendMessage({ text: generateMessage({ ...payload }) })
   }
 }

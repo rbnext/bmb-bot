@@ -29,9 +29,7 @@ const microBuffSteam = async () => {
           const now = format(new Date(), 'HH:mm:ss')
           const currentPrice = Number(item.sell_min_price)
           const steamPrice = Number(item.goods_info.steam_price)
-
-          const steamPriceAfterFee = Math.max(steamPrice - 0.01 - steamPrice * 0.15, steamPrice - 0.01 - 0.02)
-          const profitPercentage = ((steamPriceAfterFee - currentPrice) / currentPrice) * 100
+          const profitPercentage = ((steamPrice - currentPrice) / currentPrice) * 100
 
           if (GOODS_BLACKLIST_CACHE.includes(item.id) || item.is_charm) {
             continue
@@ -51,9 +49,7 @@ const microBuffSteam = async () => {
             executeBuffToMicroSteamTrade(item, { source: Source.BUFF_STEAM })
           }
 
-          GOODS_CACHE[item.id] = {
-            price: currentPrice,
-          }
+          GOODS_CACHE[item.id] = { price: currentPrice }
         }
 
         if (marketGoods.data.items.length !== 50) {

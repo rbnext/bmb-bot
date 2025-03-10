@@ -20,6 +20,8 @@ export const executeBuffToMicroSteamTrade = async (
   const orders = await getGoodsSellOrder({ goods_id, exclude_current_user: 1 })
   const lowestPricedItem = orders.data.items.find((el) => el.price === item.sell_min_price)
 
+  console.log(`|__ ${item.market_hash_name} ${profitPercentage.toFixed(1)}%`)
+
   if (lowestPricedItem && profitPercentage > 80) {
     const keychain = lowestPricedItem.asset_info.info?.keychains?.[0]
 

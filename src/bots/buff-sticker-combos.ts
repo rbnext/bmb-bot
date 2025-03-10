@@ -39,8 +39,8 @@ const buffSteam = async () => {
           `<b>[STEAM_COMBOS]</b> <a href="https://buff.market/market/goods/${item.goods_id}">${market_hash_name}</a>\n\n`
         )
         messages.push(`<b>Price</b>: $${item.price}\n`)
-        messages.push(`<b>Steam price:</b>: $${minSteamPrice.toFixed(2)}\n`)
-        messages.push(`<b>Combo total:</b>: $${stickerTotal.toFixed(2)}\n\n`)
+        messages.push(`<b>Steam price</b>: $${minSteamPrice.toFixed(2)}\n`)
+        messages.push(`<b>Sticker premium</b>: ${(item.sticker_premium * 100).toFixed(1)}\n`)
 
         for (const sticker of item.asset_info.info?.stickers ?? []) {
           messages.push(`<b>${sticker.name}</b>: $${sticker.sell_reference_price}\n`)

@@ -58,7 +58,7 @@ const buffSteam = async () => {
         stickerTotal > 4 &&
         Number(item.sell_min_price) * 2 > Number(latestOrderItem.price) &&
         typeof latestOrderItem.sticker_premium === 'number' &&
-        latestOrderItem.sticker_premium < 0.05
+        latestOrderItem.sticker_premium < 0.02
       ) {
         const stickerPremium = Number((latestOrderItem.sticker_premium * 100).toFixed(1))
 

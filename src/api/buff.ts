@@ -23,6 +23,7 @@ import {
   SentBargain,
   ShopBillOrder,
   ShopSellOrder,
+  StickerCombos,
   TopBookmarked,
   UserStorePopup,
 } from '../types'
@@ -111,17 +112,7 @@ export const getMarketGoods = async ({
   sort_by?: string
 }): Promise<MarketGoods> => {
   const { data } = await http.get('/market/goods', {
-    params: {
-      game,
-      page_num,
-      page_size,
-      ...rest,
-    },
-    cache: rest.search
-      ? {
-          ttl: 1000 * 60 * 60 * 24, // 24 h
-        }
-      : false,
+    params: { game, page_num, page_size, ...rest },
   })
 
   return data
@@ -138,6 +129,25 @@ export const getKatowice14 = async ({
 }): Promise<Katowice14> => {
   const { data } = await http.get('/market/sell_order/katowice_14', {
     params: { game, page_num, page_size },
+  })
+
+  return data
+}
+
+export const getStickerCombos = async ({
+  game = 'csgo',
+  page_num = 1,
+  page_size = 50,
+  ...rest
+}: {
+  game?: string
+  page_num?: number
+  page_size?: number
+  min_price?: number
+  max_price?: number
+}): Promise<StickerCombos> => {
+  const { data } = await http.get('/market/sell_order/sticker_combos', {
+    params: { game, page_num, page_size, ...rest },
   })
 
   return data

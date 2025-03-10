@@ -161,6 +161,19 @@ export type Katowice14 = {
   }
 }
 
+export type StickerCombos = {
+  data: {
+    goods_infos: {
+      [key: number]: {
+        goods_id: number
+        market_hash_name: string
+        steam_price: string
+      }
+    }
+    items: MarketGoodsBillOrderItem[]
+  }
+}
+
 export type Sticker = {
   category: 'sticker' | 'patch'
   goods_id: number
@@ -397,6 +410,7 @@ export type MarketGoods = {
 }
 
 export type MarketGoodsBillOrderItem = {
+  id: string
   price: string
   updated_at: number
   type: number
@@ -404,6 +418,16 @@ export type MarketGoodsBillOrderItem = {
   seller_id: string
   original_price: string
   sticker_premium?: number
+  goods_id: number
+  asset_info: {
+    paintwear: string
+    assetid: string
+    classid: string
+    info: {
+      stickers: Sticker[]
+      keychains: string[]
+    }
+  }
 }
 
 export type MarketGoodsBillOrder = {

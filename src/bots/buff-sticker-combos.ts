@@ -32,6 +32,7 @@ const buffSteam = async () => {
       ) {
         const prices = await getMaxPricesForXDays(market_hash_name)
         const minSteamPrice = prices.length !== 0 ? Math.min(...prices) : 0
+        const stickerPremium = Number((item.sticker_premium * 100).toFixed(1))
 
         const messages: string[] = []
 
@@ -40,7 +41,7 @@ const buffSteam = async () => {
         )
         messages.push(`<b>Price</b>: $${item.price}\n`)
         messages.push(`<b>Steam price</b>: $${minSteamPrice.toFixed(2)}\n`)
-        messages.push(`<b>Sticker premium</b>: ${(item.sticker_premium * 100).toFixed(1)}\n`)
+        messages.push(`<b>Sticker premium</b>: ${stickerPremium}%\n\n`)
 
         for (const sticker of item.asset_info.info?.stickers ?? []) {
           messages.push(`<b>${sticker.name}</b>: $${sticker.sell_reference_price}\n`)

@@ -55,16 +55,14 @@ const buffSteam = async () => {
       }
 
       if (
-        stickerTotal > 4 &&
+        stickerTotal > 5 &&
         Number(item.sell_min_price) * 2 > Number(latestOrderItem.price) &&
         typeof latestOrderItem.sticker_premium === 'number' &&
         latestOrderItem.sticker_premium < 0.02
       ) {
         const stickerPremium = Number((latestOrderItem.sticker_premium * 100).toFixed(1))
 
-        const response = await sendMessage({
-          text: `<a href="https://buff.market/market/goods/${item.id}">${item.market_hash_name}</a> $${stickerTotal.toFixed(1)} SP: ${stickerPremium}%`,
-        })
+        const response = await sendMessage({ text: generateMessage({ ...payload, stickerPremium }) })
 
         if (latestOrderItem.img_src?.includes('ovspect')) {
           await sendPhoto({

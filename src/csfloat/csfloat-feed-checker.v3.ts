@@ -12,18 +12,7 @@ import { format } from 'date-fns'
 const activeMarketOrders = new Map<string, CSFloatPlacedOrder>()
 const pathname = path.join(__dirname, '../../top-float-items.json')
 
-const BLACK_LIST: string[] = [
-  'USP-S | Whiteout (Minimal Wear)',
-  'AWP | Chrome Cannon (Battle-Scarred)',
-  'SSG 08 | Dragonfire (Field-Tested)',
-  'MAC-10 | Disco Tech (Minimal Wear)',
-  'UMP-45 | Crimson Foil',
-  'Desert Eagle | Mecha Industries (Minimal Wear)',
-  'StatTrak™ AK-47 | Ice Coaled (Minimal Wear)',
-  'AWP | Chrome Cannon (Well-Worn)',
-  'M4A4 | Desolate Space (Minimal Wear)',
-  'M4A1-S | Nightmare (Field-Tested)',
-]
+const BLACK_LIST: string[] = []
 
 const floatFeedChecker = async () => {
   activeMarketOrders.clear()

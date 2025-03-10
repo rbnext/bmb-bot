@@ -105,7 +105,10 @@ const marketSearchHandler = async (config: { start: number; count: number; proxy
               }
             }
 
-            await sendMessage(message.join(''), undefined, process.env.TELEGRAM_STEAM_ALERTS)
+            await sendMessage({
+              text: message.join(''),
+              chat_id: process.env.TELEGRAM_STEAM_ALERTS,
+            })
           }
 
           CASHED_LISTINGS.add(item.listingId)

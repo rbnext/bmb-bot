@@ -75,6 +75,14 @@ const marketSearchHandler = async (config: { start: number; count: number; proxy
               market_hash_name,
             })
 
+            for (const data of history) {
+              for (const sticker of data.item?.stickers ?? []) {
+                if (sticker.reference?.price && sticker.name.includes('Sticker')) {
+                  stickerData[sticker.name] = Number((sticker.reference.price / 100).toFixed(2))
+                }
+              }
+            }
+
             const response = await getCSFloatListings({
               market_hash_name,
               ...(market_hash_name.includes('Factory New') && { max_float: roundUp(itemFloatValue) }),

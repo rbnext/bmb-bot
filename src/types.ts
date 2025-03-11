@@ -716,7 +716,7 @@ export type CSFloatItemInfo = {
 
 type CSFloatMarketHashNameHistorySticker = {
   stickerId: number
-  name: number
+  name: string
   wear?: number
   reference: {
     price: number

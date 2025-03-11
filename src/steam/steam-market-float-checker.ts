@@ -64,8 +64,6 @@ const marketSearchHandler = async (config: { start: number; count: number; proxy
           const itemInfoResponse = await getCSFloatItemInfo({ url: item.inspectUrl })
           const itemFloatValue = Number(itemInfoResponse.iteminfo.floatvalue)
 
-          console.log(`|___ ${market_hash_name} ${itemFloatValue.toFixed(10)}`)
-
           if (
             (market_hash_name.includes('Factory New') && itemFloatValue < 0.02) ||
             (market_hash_name.includes('Minimal Wear') && itemFloatValue < 0.09) ||

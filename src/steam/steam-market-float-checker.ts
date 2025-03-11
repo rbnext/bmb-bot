@@ -151,3 +151,24 @@ const marketSearchHandler = async (config: { start: number; count: number; proxy
 
   return config.proxy
 }
+
+;(async () => {
+  do {
+    for (const num of [-1, 0, 1]) {
+      const configs = Array.from({ length: 10 }, (_, i) => ({
+        proxy: `${process.env.PROXY}-${i + 1}`,
+        start: (i + 15) * 100 + num,
+        count: 100,
+      }))
+
+      await Promise.allSettled(configs.map(marketSearchHandler)).then((results) => {
+        for (const result of results) {
+          if (result.status !== 'fulfilled') console.log(result.status)
+        }
+      })
+      await sleep(60_000 - 1_000)
+    }
+
+    // eslint-disable-next-line no-constant-condition
+  } while (true)
+})()

@@ -116,10 +116,10 @@ const marketSearchHandler = async (config: { start: number; count: number; proxy
             message.push(`<b>Lowest price(max_float: ${roundUp(itemFloatValue)})</b>: $${lowestPrice.toFixed(2)}\n`)
             message.push(`<b>Current float</b>: ${itemInfoResponse.iteminfo.floatvalue}\n\n`)
 
-            for (const sticker of stickers) {
+            for (const [index, sticker] of stickers.entries()) {
               const name = `Sticker | ${sticker.name}`
               const stickerPrice = stickerData[name] ?? 0
-              message.push(`<b>${name}</b>: $${stickerPrice} ${sticker.wear === 0 ? '' : '❗'}\n`)
+              message.push(`<b>${index + 1}.</b> ${name} - $${stickerPrice} ${sticker.wear === 0 ? '' : '❗'}\n`)
             }
 
             if (filteredByFloatAndStickers.length !== 0) {
@@ -127,7 +127,7 @@ const marketSearchHandler = async (config: { start: number; count: number; proxy
               for (const [index, floatItem] of filteredByFloatAndStickers.slice(0, 3).entries()) {
                 const float = floatItem.item.float_value.toFixed(15)
                 const price = Number((floatItem.price / 100).toFixed(2))
-                message.push(`<b>${index + 1}.</b> ${float} $${price}\n`)
+                message.push(`<b>${index + 1}.</b> ${float} - $${price}\n`)
               }
             }
 

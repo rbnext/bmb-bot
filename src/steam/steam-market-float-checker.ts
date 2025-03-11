@@ -6,9 +6,14 @@ import { sendMessage } from '../api/telegram'
 import { MapSteamMarketRenderResponse, SearchMarketRenderItem } from '../types'
 import { getCSFloatItemInfo, getCSFloatListings, getMarketHashNameHistory } from '../api/csfloat'
 import { getSteamUrl, sleep } from '../utils'
+import path from 'path'
+import { readFileSync } from 'fs'
 
 const CASHED_LISTINGS = new Set<string>()
 const GOODS_CACHE: Record<string, { price: number; listings: number }> = {}
+
+const pathname = path.join(__dirname, '../../csfloat.json')
+const stickerData: Record<string, number> = JSON.parse(readFileSync(pathname, 'utf8'))
 
 const roundUp = (num: number) => Math.ceil(num * 100) / 100
 
@@ -77,9 +82,22 @@ const marketSearchHandler = async (config: { start: number; count: number; proxy
               ...(market_hash_name.includes('Field-Tested') && { max_float: roundUp(itemFloatValue) }),
             })
 
+            for (const data of response.data) {
+              for (const sticker of data.item?.stickers ?? []) {
+                if (sticker.reference?.price && sticker.name.includes('Sticker')) {
+                  stickerData[sticker.name] = Number((sticker.reference.price / 100).toFixed(2))
+                }
+              }
+            }
+
             const lowestPrice = response.data[0].price / 100
             const basePrice = response.data[0].reference.base_price / 100
-            const filteredItemsByFloat = history.filter((i) => i.item.float_value < roundUp(itemFloatValue))
+            const stickers = itemInfoResponse.iteminfo?.stickers ?? []
+
+            const filteredByFloatAndStickers = history.filter(({ item }) => {
+              const st = (item.stickers ?? []).reduce((acc, { reference }) => acc + (reference?.price || 0), 0)
+              return item.float_value < roundUp(itemFloatValue) && st < 1000
+            })
 
             const message: string[] = []
             message.push(
@@ -90,18 +108,18 @@ const marketSearchHandler = async (config: { start: number; count: number; proxy
             message.push(`<b>Lowest price(max_float: ${roundUp(itemFloatValue)})</b>: $${lowestPrice.toFixed(2)}\n`)
             message.push(`<b>Current float</b>: ${itemInfoResponse.iteminfo.floatvalue}\n\n`)
 
-            if (filteredItemsByFloat.length !== 0) {
-              for (const [index, floatItem] of filteredItemsByFloat.entries()) {
+            for (const sticker of stickers) {
+              const name = `Sticker | ${sticker.name}`
+              const stickerPrice = stickerData[name] ?? 0
+              message.push(`<b>${name}</b>: $${stickerPrice} ${sticker.wear === 0 ? '' : '❗'}\n`)
+            }
+
+            if (filteredByFloatAndStickers.length !== 0) {
+              if (stickers.length !== 0) message.push('\n')
+              for (const [index, floatItem] of filteredByFloatAndStickers.slice(0, 3).entries()) {
                 const float = floatItem.item.float_value.toFixed(15)
                 const price = Number((floatItem.price / 100).toFixed(2))
-                const stickerTotal = (floatItem.item.stickers ?? []).reduce(
-                  (acc, cur) => acc + (cur.reference?.price ?? 0) / 100,
-                  0
-                )
-
-                message.push(
-                  `<b>${index + 1}.</b> ${float} - $${price} ${stickerTotal > 1 ? `($${stickerTotal.toFixed(2)})` : ''}\n`
-                )
+                message.push(`<b>${index + 1}.</b> ${float} $${price}\n`)
               }
             }
 
@@ -125,24 +143,3 @@ const marketSearchHandler = async (config: { start: number; count: number; proxy
 
   return config.proxy
 }
-
-;(async () => {
-  do {
-    for (const num of [-1, 0, 1]) {
-      const configs = Array.from({ length: 10 }, (_, i) => ({
-        proxy: `${process.env.PROXY}-${i + 1}`,
-        start: (i + 15) * 100 + num,
-        count: 100,
-      }))
-
-      await Promise.allSettled(configs.map(marketSearchHandler)).then((results) => {
-        for (const result of results) {
-          if (result.status !== 'fulfilled') console.log(result.status)
-        }
-      })
-      await sleep(60_000 - 1_000)
-    }
-
-    // eslint-disable-next-line no-constant-condition
-  } while (true)
-})()

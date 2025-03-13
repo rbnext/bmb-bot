@@ -13,7 +13,7 @@ const init = async () => {
   for (const item of response.items) {
     const now = format(new Date(), 'HH:mm:ss')
 
-    if (CASHED_LISTINGS.has(item.id)) {
+    if (CASHED_LISTINGS.has(item.asset.id)) {
       continue
     }
 
@@ -23,7 +23,7 @@ const init = async () => {
       await sendMessage({ text: `${item.asset.names.full} - $${item.pricing.basePrice}` })
     }
 
-    CASHED_LISTINGS.add(item.id)
+    CASHED_LISTINGS.add(item.asset.id)
   }
 
   await sleep(2_000)

@@ -10,8 +10,8 @@ import { readFileSync, writeFileSync } from 'fs'
 
 const CASHED_LISTINGS = new Set<number>()
 
-const topFloatItemsPath = path.join(__dirname, '../../top-float-items.json')
-const itemsIdsPath = path.join(__dirname, '../../items-ids.json')
+const topFloatItemsPath = path.join(__dirname, '../top-float-items.json')
+const itemsIdsPath = path.join(__dirname, '../items-ids.json')
 
 const mostPopularItems: Record<string, number> = JSON.parse(readFileSync(topFloatItemsPath, 'utf8'))
 

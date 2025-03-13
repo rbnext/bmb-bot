@@ -44,7 +44,7 @@ const init = async () => {
       continue
     }
 
-    CS_FLOAT_PRICES[name] = Number((simpleOrders[0].price / 2).toFixed(2))
+    CS_FLOAT_PRICES[name] = Number((simpleOrders[0].price / 100).toFixed(2))
 
     console.log(name, CS_FLOAT_PRICES[name])
 

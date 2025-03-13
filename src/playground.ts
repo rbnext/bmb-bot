@@ -1,36 +1,34 @@
 import 'dotenv/config'
 
-import { getBuyOrderHistory } from './api/buff'
-import { addTradeRecord } from './api/spreadsheet'
 import { sleep } from './utils'
-import { GoogleSheetTradeRecord, TradeRecordSource } from './types'
+import { getCSMoneyListings } from './api/cs'
+import { sendMessage } from './api/telegram'
+import { format } from 'date-fns'
+
+const CASHED_LISTINGS = new Set<number>()
 
 const init = async () => {
-  const pages = Array.from({ length: 5 }, (_, i) => i + 1)
+  const response = await getCSMoneyListings({ limit: 60, offset: 0, minPrice: 10, maxPrice: 40 })
 
-  const tradeRecords: GoogleSheetTradeRecord[] = []
+  for (const item of response.items) {
+    const now = format(new Date(), 'HH:mm:ss')
 
-  for (const page_num of pages) {
-    const goods = await getBuyOrderHistory({
-      page_num,
-    })
+    if (CASHED_LISTINGS.has(item.id)) {
+      continue
+    }
 
-    const records = goods.data.items
-      .filter((item) => item.state === 'SUCCESS')
-      .map((item) => ({
-        id: item.id,
-        market_hash_name: goods.data.goods_infos[item.goods_id].market_hash_name,
-        float: item.asset_info.paintwear,
-        buy_price: Number(item.price),
-        source: TradeRecordSource.BuffMarket,
-        created_at: new Date(item.created_at * 1000).toDateString(),
-      }))
+    console.log(now, item.asset.names.full, item.pricing.basePrice)
 
-    tradeRecords.push(...records)
-    await sleep(5_000)
+    if (item.pricing.discount > 0.1) {
+      await sendMessage({ text: `${item.asset.names.full} - $${item.pricing.basePrice}` })
+    }
+
+    CASHED_LISTINGS.add(item.id)
   }
 
-  await addTradeRecord(tradeRecords.reverse())
+  await sleep(2_000)
+
+  init()
 }
 
 init()

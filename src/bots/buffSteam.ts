@@ -39,7 +39,7 @@ const buffSteam = async () => {
         continue
       }
 
-      if (item.id in GOODS_CACHE) {
+      if (item.id in GOODS_CACHE && GOODS_CACHE[item.id].price > current_price) {
         console.log(`${now}: ${item.market_hash_name} $${GOODS_CACHE[item.id].price} -> $${current_price}`)
       }
 

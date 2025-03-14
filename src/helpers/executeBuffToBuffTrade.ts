@@ -52,7 +52,7 @@ export const executeBuffToBuffTrade = async (
     const threshold_price = Number((Math.min(median_price, reference_price) * 0.9).toFixed(2))
 
     console.log(
-      `|__ ${item.market_hash_name} current price: $${lowestPricedItem.price}; threshold price: $${threshold_price}`
+      `|__ ${item.market_hash_name} current price: $${lowestPricedItem.price}; purchase price: $${threshold_price}`
     )
 
     if (threshold_price >= Number(lowestPricedItem.price)) {

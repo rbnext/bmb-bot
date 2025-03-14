@@ -73,6 +73,8 @@ export const executeBuffBargainTrade = async (
   const orders = await getGoodsSellOrder({ goods_id, exclude_current_user: 1 })
   const lowestPricedItem = orders.data.items.find((el) => el.price === item.sell_min_price)
 
+  console.log('lowestPricedItem', lowestPricedItem)
+
   if (!lowestPricedItem) return
   if (!lowestPricedItem.allow_bargain) return
   if (!isLessThanXMinutes(lowestPricedItem.created_at, 1)) return
@@ -80,6 +82,8 @@ export const executeBuffBargainTrade = async (
   if (SELLER_BLACKLIST.includes(lowestPricedItem.user_id)) return
 
   const userStorePopup = await getUserStorePopup({ user_id: lowestPricedItem.user_id })
+
+  console.log('userStorePopup', userStorePopup)
 
   if (userStorePopup.code !== 'OK') return
   if (Number(userStorePopup.data.bookmark_count) > 2) return

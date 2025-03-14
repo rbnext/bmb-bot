@@ -34,11 +34,12 @@ const floatFeedChecker = async () => {
       const top5Items = response.data.slice(0, 5)
       const listingMedianPrice = median(top5Items.map((i) => i.price))
       const listingReferenceId = response.data[0].id
+      const listingBasePrice = response.data[0].reference.base_price
 
       const orders = await getBuyOrders({ id: listingReferenceId })
       const simpleOrders = orders.filter((i) => !!i.market_hash_name)
 
-      if (simpleOrders.length < 3) {
+      if (simpleOrders.length < 3 || listingBasePrice < 1000) {
         console.log(now, market_hash_name, 'There are less than 3 orders')
         await sleep(10_000)
         continue

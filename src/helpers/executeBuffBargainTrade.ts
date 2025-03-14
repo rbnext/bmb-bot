@@ -80,9 +80,6 @@ export const executeBuffBargainTrade = async (
 
   const userStorePopup = await getUserStorePopup({ user_id: lowestPricedItem.user_id })
 
-  console.log('User store popup code:', userStorePopup.code)
-  console.log('User store bookmark count:', userStorePopup?.data?.bookmark_count ?? 'unknown')
-
   if (userStorePopup.code !== 'OK') return
   if (Number(userStorePopup.data.bookmark_count) > 2) return
 
@@ -104,6 +101,8 @@ export const executeBuffBargainTrade = async (
     source: options.source,
     stickerTotal: stickerTotal,
   }
+
+  console.log(item.market_hash_name, salesLastWeek.length)
 
   if (salesLastWeek.length >= GOODS_SALES_THRESHOLD) {
     const sales = salesLastWeek.map(({ price }) => Number(price))

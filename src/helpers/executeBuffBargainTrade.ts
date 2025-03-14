@@ -80,6 +80,9 @@ export const executeBuffBargainTrade = async (
 
   const userStorePopup = await getUserStorePopup({ user_id: lowestPricedItem.user_id })
 
+  console.log('User store popup code:', userStorePopup.code)
+  console.log('User store bookmark count:', userStorePopup?.data?.bookmark_count ?? 'unknown')
+
   if (userStorePopup.code !== 'OK') return
   if (Number(userStorePopup.data.bookmark_count) > 2) return
 
@@ -124,31 +127,6 @@ export const executeBuffBargainTrade = async (
       Number(lowestPricedItem.price) > bargain_price &&
       Number(lowestPricedItem.lowest_bargain_price) < bargain_price
     ) {
-      // if ((isMinimalWear && Number(paintwear) < 0.08) || (isFieldTested && Number(paintwear) < 0.17)) {
-      //   const response = await getCSFloatListings({
-      //     market_hash_name: item.market_hash_name,
-      //     ...(isMinimalWear && { min_float: 0.07, max_float: 0.08 }),
-      //     ...(isFieldTested && { min_float: 0.15, max_float: 0.17 }),
-      //   })
-
-      //   const cs_float_price = getCSFloatItemPrice(response)
-      //   const estimated_profit = ((cs_float_price - current_price) / current_price) * 100
-
-      //   if (estimated_profit >= 15) {
-      //     const response = await postGoodsBuy({ price: current_price, sell_order_id: lowestPricedItem.id })
-
-      //     if (response.code !== 'OK') {
-      //       console.log('Error:', JSON.stringify(response))
-
-      //       return
-      //     }
-
-      //     sendMessage(generateMessage({ ...payload, type: MessageType.Purchased, csFloatPrice: cs_float_price }))
-
-      //     return
-      //   }
-      // }
-
       const response = await postCreateBargain({
         price: bargain_price,
         sell_order_id: lowestPricedItem.id,
@@ -169,6 +147,10 @@ export const executeBuffBargainTrade = async (
           FLOAT_BLACKLIST.add(paintwear)
         }
       })
+    } else {
+      console.log(
+        `No bargain: Lowest bargain price: $${lowestPricedItem.lowest_bargain_price}; Current bargain price: $${bargain_price}; Current price: $${current_price}`
+      )
     }
   } else {
     const prices = await getMaxPricesForXDays(item.market_hash_name)

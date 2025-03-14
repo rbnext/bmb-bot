@@ -10,6 +10,7 @@ import { Source } from '../types'
 import { executeBuffToSteamTrade } from '../helpers/executeBuffToSteamTrade'
 import { BARGAIN_PROFIT_THRESHOLD } from '../config'
 import { executeBuffBargainTrade } from '../helpers/executeBuffBargainTrade'
+import { executeBuffToBuffTrade } from '../helpers/executeBuffToBuffTrade'
 
 export const GOODS_CACHE: Record<number, { price: number }> = {}
 export const GOODS_BLACKLIST_CACHE: number[] = [30431, 30235, 30259, 30269, 30350]
@@ -45,9 +46,9 @@ const buffSteam = async () => {
       if (item.id in GOODS_CACHE && GOODS_CACHE[item.id].price > current_price) {
         if (current_price >= BARGAIN_PROFIT_THRESHOLD) {
           executeBuffBargainTrade(item, { source: Source.BUFF_DEFAULT })
-        }
-
-        if (current_price < BARGAIN_PROFIT_THRESHOLD) {
+        } else if (current_price >= 5) {
+          executeBuffToBuffTrade(item, { source: Source.BUFF_BUFF })
+        } else {
           executeBuffToSteamTrade(item, { source: Source.BUFF_STEAM })
         }
       }

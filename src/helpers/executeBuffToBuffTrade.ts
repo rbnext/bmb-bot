@@ -49,9 +49,13 @@ export const executeBuffToBuffTrade = async (
 
     const goodsInfo = await getGoodsInfo({ goods_id })
     const reference_price = Number(goodsInfo.data.goods_info.goods_ref_price)
-    const bargain_price = Number((Math.min(median_price, reference_price) * 0.9).toFixed(1))
+    const threshold_price = Number((Math.min(median_price, reference_price) * 0.9).toFixed(2))
 
-    if (bargain_price >= Number(lowestPricedItem.price)) {
+    console.log(
+      `|__ ${item.market_hash_name} current price: $${lowestPricedItem.price}; threshold price: $${threshold_price}`
+    )
+
+    if (threshold_price >= Number(lowestPricedItem.price)) {
       const response = await postGoodsBuy({ price: current_price, sell_order_id: lowestPricedItem.id })
 
       if (response.code !== 'OK') {
@@ -63,6 +67,6 @@ export const executeBuffToBuffTrade = async (
       sendMessage({ text: generateMessage({ ...payload, type: MessageType.Purchased }) })
     }
   } else {
-    console.log('Not enough sales:', item.market_hash_name, salesLastWeek.length)
+    console.log(`|__ ${item.market_hash_name} not enough sales ${salesLastWeek.length}`)
   }
 }

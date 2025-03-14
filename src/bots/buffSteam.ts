@@ -74,7 +74,7 @@ const buffSteam = async () => {
 }
 
 ;(async () => {
-  const pages = Array.from({ length: 60 }, (_, i) => i + 1)
+  const pages = Array.from({ length: 80 }, (_, i) => i + 1)
 
   for (const page_num of pages) {
     const goods = await getMarketGoods({

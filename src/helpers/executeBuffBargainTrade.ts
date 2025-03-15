@@ -76,6 +76,7 @@ export const executeBuffBargainTrade = async (
 
   if (!lowestPricedItem) return
   if (!lowestPricedItem.allow_bargain) return
+  if (!isLessThanXMinutes(lowestPricedItem.created_at, 1)) return
   if (FLOAT_BLACKLIST.has(lowestPricedItem.asset_info.paintwear)) return
   if (SELLER_BLACKLIST.includes(lowestPricedItem.user_id)) return
 

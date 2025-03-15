@@ -159,8 +159,13 @@ export const executeBuffBargainTrade = async (
 
     const lowestItemPrice = lowestCSFloatItem.price
     const highestBuyOrder = Math.max(...simpleBuyOrders.map((i) => i.price))
+    const predictedPrice = lowestCSFloatItem.reference.predicted_price
 
-    if (simpleBuyOrders.length < 3 || lowestCSFloatItem.reference.quantity < 100) {
+    const overpayment = Number((((lowestCSFloatItem.price - predictedPrice) / predictedPrice) * 100).toFixed(2))
+
+    console.log('Overpayment:', overpayment)
+
+    if (simpleBuyOrders.length < 3 || overpayment >= 5) {
       return
     }
 

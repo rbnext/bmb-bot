@@ -100,7 +100,7 @@ const floatFeedChecker = async () => {
         await sendMessage({ text: messages.join(''), chat_id: process.env.TELEGRAM_CSFLOAT_CHAT_ID })
       }
 
-      await sleep(20_000)
+      await sleep(30_000)
     }
   } catch (error) {
     console.log(error)

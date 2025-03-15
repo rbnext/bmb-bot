@@ -63,31 +63,10 @@ const floatFeedChecker = async () => {
 
       await sleep(10_000)
 
-      const buffSellOrders = await getGoodsSellOrder({
-        goods_id: mostPopularItems[market_hash_name],
-      })
-
       const lowestOrderPrice = simpleOrders[0].price
-      const lowestBuffPrice = Number(buffSellOrders.data.items[0].price)
-
       const estimatedMedianProfit = Number(((listingMedianPrice - lowestOrderPrice) / lowestOrderPrice) * 100)
-      const estimatedBuffMedianProfit = Number(((lowestBuffPrice * 100 - lowestOrderPrice) / lowestOrderPrice) * 100)
 
       console.log(now, market_hash_name, estimatedMedianProfit.toFixed(2) + '%')
-
-      if (lowestBuffPrice - 0.4 <= lowestOrderPrice / 100) {
-        console.log(now, market_hash_name, 'Buff price is higher than CSFloat market price')
-
-        if (currentMarketOrder) {
-          console.log(now, market_hash_name, 'Removing order...')
-          await removeBuyOrder({ id: currentMarketOrder.id })
-        }
-
-        await sleep(20_000)
-        continue
-      }
-
-      console.log(now, market_hash_name, 'buff diff:', estimatedBuffMedianProfit.toFixed(2) + '%')
 
       if (currentMarketOrder) {
         if (currentMarketOrder.price < simpleOrders[0].price) {

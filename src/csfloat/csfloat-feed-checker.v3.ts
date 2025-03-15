@@ -1,12 +1,11 @@
 import 'dotenv/config'
 
-import { getBuyOrders, getCSFloatListings, getPlacedOrders, postBuyOrder, removeBuyOrder } from '../api/csfloat'
+import { getBuyOrders, getCSFloatListings, getPlacedOrders, postBuyOrder, removeBuyOrder } from '../api/csFloat'
 import { median, sleep } from '../utils'
 import { sendMessage } from '../api/telegram'
 import path from 'path'
 import { readFileSync } from 'fs'
 import { CSFloatPlacedOrder } from '../types'
-import { getGoodsSellOrder } from '../api/buff'
 import { format } from 'date-fns'
 
 const activeMarketOrders = new Map<string, CSFloatPlacedOrder>()
@@ -117,13 +116,4 @@ const floatFeedChecker = async () => {
   floatFeedChecker()
 }
 
-;(async () => {
-  const response = await getPlacedOrders({ page: 0, limit: 100 })
-
-  for (const order of response.orders) {
-    await removeBuyOrder({ id: order.id })
-    await sleep(5000)
-  }
-
-  floatFeedChecker()
-})()
+floatFeedChecker()

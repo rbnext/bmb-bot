@@ -155,16 +155,18 @@ export const executeBuffBargainTrade = async (
     const response = await getCSFloatListings({ market_hash_name: item.market_hash_name })
     const currentActiveBuyOrders = await getBuyOrders({ id: response.data[0].id })
     const simpleBuyOrders = currentActiveBuyOrders.filter((i) => !!i.market_hash_name)
+    const lowestCSFloatItem = response.data[0]
 
-    const top3BuyOrders = simpleBuyOrders.slice(0, 3)
-    const min = Math.min(...top3BuyOrders.map((i) => i.price))
-    const max = Math.max(...top3BuyOrders.map((i) => i.price))
+    const lowestItemPrice = lowestCSFloatItem.price
+    const highestBuyOrder = Math.max(...simpleBuyOrders.map((i) => i.price))
 
-    if (simpleBuyOrders.length < 3 || max - min >= 25) {
+    if (simpleBuyOrders.length < 3 || lowestCSFloatItem.reference.quantity < 100) {
       return
     }
 
-    const bargain_price = Number(((max / 100) * 0.95).toFixed(1))
+    const bargain_price = Number((Math.min(highestBuyOrder, lowestItemPrice * 0.9) / 100).toFixed(1))
+
+    console.log('Bargain price:', bargain_price)
 
     if (Number(keychain?.sell_reference_price || 0) + bargain_price >= Number(lowestPricedItem.price)) {
       const response = await postGoodsBuy({ price: current_price, sell_order_id: lowestPricedItem.id })

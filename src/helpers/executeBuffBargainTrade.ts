@@ -13,6 +13,7 @@ import { sendMessage } from '../api/telegram'
 import { differenceInDays } from 'date-fns'
 import { GOODS_SALES_THRESHOLD, STEAM_PURCHASE_THRESHOLD } from '../config'
 import { getMaxPricesForXDays } from './getMaxPricesForXDays'
+import { getBuyOrders, getCSFloatListings } from '../api/csfloat'
 
 type BargainNotification = {
   sell_order_id: string
@@ -102,8 +103,6 @@ export const executeBuffBargainTrade = async (
     stickerTotal: stickerTotal,
   }
 
-  console.log(item.market_hash_name, salesLastWeek.length)
-
   if (salesLastWeek.length >= GOODS_SALES_THRESHOLD) {
     const sales = salesLastWeek.map(({ price }) => Number(price))
     const median_price = median(sales.filter((price) => current_price * 2 > price))
@@ -152,9 +151,19 @@ export const executeBuffBargainTrade = async (
       )
     }
   } else {
-    const prices = await getMaxPricesForXDays(item.market_hash_name)
-    const min_steam_price = prices.length !== 0 ? Math.min(...prices) : 0
-    const bargain_price = Number((min_steam_price / (1 + STEAM_PURCHASE_THRESHOLD / 100)).toFixed(1))
+    const response = await getCSFloatListings({ market_hash_name: item.market_hash_name })
+    const currentActiveBuyOrders = await getBuyOrders({ id: response.data[0].id })
+    const simpleBuyOrders = currentActiveBuyOrders.filter((i) => !!i.market_hash_name)
+
+    const top3BuyOrders = simpleBuyOrders.slice(0, 3)
+    const min = Math.min(...top3BuyOrders.map((i) => i.price))
+    const max = Math.max(...top3BuyOrders.map((i) => i.price))
+
+    if (simpleBuyOrders.length < 3 || max - min >= 25) {
+      return
+    }
+
+    const bargain_price = Number(((max / 100) * 0.95).toFixed(1))
 
     if (Number(keychain?.sell_reference_price || 0) + bargain_price >= Number(lowestPricedItem.price)) {
       const response = await postGoodsBuy({ price: current_price, sell_order_id: lowestPricedItem.id })
@@ -165,7 +174,9 @@ export const executeBuffBargainTrade = async (
         return
       }
 
-      sendMessage({ text: generateMessage({ ...payload, type: MessageType.Purchased }) })
+      sendMessage({
+        text: generateMessage({ ...payload, source: Source.BUFF_EXPERIMENT, type: MessageType.Purchased }),
+      })
     } else if (
       Number(lowestPricedItem.price) > bargain_price &&
       Number(lowestPricedItem.lowest_bargain_price) < bargain_price
@@ -181,16 +192,14 @@ export const executeBuffBargainTrade = async (
         return
       }
 
-      sendMessage({
-        text: generateMessage({ ...payload, bargainPrice: bargain_price, steamPrice: min_steam_price }),
-      }).then((message) => {
-        BARGAIN_NOTIFICATIONS.set(lowestPricedItem.id, {
-          sell_order_id: lowestPricedItem.id,
-          telegram_message_id: message.result.message_id,
-        })
-        if (paintwear) {
-          FLOAT_BLACKLIST.add(paintwear)
-        }
+      const message = await sendMessage({
+        text: generateMessage({ ...payload, bargainPrice: bargain_price, source: Source.BUFF_EXPERIMENT }),
+      })
+
+      if (paintwear) FLOAT_BLACKLIST.add(paintwear)
+      BARGAIN_NOTIFICATIONS.set(lowestPricedItem.id, {
+        sell_order_id: lowestPricedItem.id,
+        telegram_message_id: message.result.message_id,
       })
     }
   }

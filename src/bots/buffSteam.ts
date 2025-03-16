@@ -26,14 +26,11 @@ const buffSteam = async () => {
       const now = format(new Date(), 'HH:mm:ss')
       const current_price = Number(item.sell_min_price)
 
-      if (GOODS_BLACKLIST_CACHE.includes(item.id) || item.is_charm) {
+      if (GOODS_BLACKLIST_CACHE.includes(item.id) || item.is_charm || item.market_hash_name.includes('Sticker')) {
         continue
       }
 
-      if (
-        item.id in GOODS_CACHE &&
-        isLessThanThreshold(GOODS_CACHE[item.id].price, current_price, current_price >= 1 ? 0.1 : 0.02)
-      ) {
+      if (item.id in GOODS_CACHE && isLessThanThreshold(GOODS_CACHE[item.id].price, current_price, 0.1)) {
         GOODS_CACHE[item.id].price = current_price
 
         continue

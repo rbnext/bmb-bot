@@ -37,6 +37,16 @@ const floatFeedChecker = async () => {
       const orders = await getBuyOrders({ id: listingReferenceId })
       const simpleOrders = orders.filter((i) => !!i.market_hash_name)
 
+      const currentPrice = response.data[0].price
+      const predictedPrice = response.data[0].reference.predicted_price
+      const overpayment = Number((((currentPrice - predictedPrice) / predictedPrice) * 100).toFixed(2))
+
+      if (overpayment > 10) {
+        console.log(now, market_hash_name, 'Overpayment is too high', overpayment)
+        await sleep(30_000)
+        continue
+      }
+
       if (simpleOrders.length < 3) {
         console.log(now, market_hash_name, 'There are less than 3 orders')
         await sleep(30_000)

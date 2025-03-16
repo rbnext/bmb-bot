@@ -23,7 +23,7 @@ const floatFeedChecker = async () => {
 
   try {
     for (const market_hash_name of Object.keys(mostPopularItems)) {
-      if (BLACK_LIST.includes(market_hash_name)) continue
+      if (BLACK_LIST.includes(market_hash_name) || market_hash_name.includes('Black Lotus')) continue
 
       const now = format(new Date(), 'HH:mm:ss')
 

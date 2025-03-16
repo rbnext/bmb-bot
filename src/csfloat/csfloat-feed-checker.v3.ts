@@ -41,7 +41,7 @@ const floatFeedChecker = async () => {
       const predictedPrice = response.data[0].reference.predicted_price
       const overpayment = Number((((currentPrice - predictedPrice) / predictedPrice) * 100).toFixed(2))
 
-      if (overpayment > 10) {
+      if (overpayment > 5) {
         console.log(now, market_hash_name, 'Overpayment is too high', overpayment)
         await sleep(30_000)
         continue
@@ -53,21 +53,21 @@ const floatFeedChecker = async () => {
         continue
       }
 
-      const top3Orders = simpleOrders.slice(0, 3)
-      const min = Math.min(...top3Orders.map((i) => i.price))
-      const max = Math.max(...top3Orders.map((i) => i.price))
+      // const top3Orders = simpleOrders.slice(0, 3)
+      // const min = Math.min(...top3Orders.map((i) => i.price))
+      // const max = Math.max(...top3Orders.map((i) => i.price))
 
-      if (max - min >= 25) {
-        console.log(now, market_hash_name, 'There is a big gap between top 3 orders')
+      // if (max - min >= 25) {
+      //   console.log(now, market_hash_name, 'There is a big gap between top 3 orders')
 
-        if (currentMarketOrder) {
-          console.log(now, market_hash_name, 'Removing order due to big gap')
-          await removeBuyOrder({ id: currentMarketOrder.id })
-        }
+      //   if (currentMarketOrder) {
+      //     console.log(now, market_hash_name, 'Removing order due to big gap')
+      //     await removeBuyOrder({ id: currentMarketOrder.id })
+      //   }
 
-        await sleep(30_000)
-        continue
-      }
+      //   await sleep(30_000)
+      //   continue
+      // }
 
       await sleep(10_000)
 

@@ -58,6 +58,8 @@ const buffStickerCombos = async () => {
         const medianPrice = simpleMedianPrice + stickerTotal * 0.15
         const estimatedProfit = Number((((medianPrice - currentPrice) / currentPrice) * 100).toFixed(2))
 
+        console.log(`${now}: ${market_hash_name}`, estimatedProfit + '%')
+
         if (estimatedProfit > 10) {
           const response = await postGoodsBuy({ price: currentPrice, sell_order_id: item.id })
 

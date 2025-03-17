@@ -1,5 +1,5 @@
 import { differenceInDays } from 'date-fns'
-import { getGoodsInfo, getGoodsSellOrder, getMarketGoodsBillOrder } from '../api/buff'
+import { getGoodsSellOrder, getMarketGoodsBillOrder } from '../api/buff'
 import { MarketGoodsItem, MessageType, Source } from '../types'
 import { generateMessage, median } from '../utils'
 import { GOODS_SALES_THRESHOLD } from '../config'
@@ -48,17 +48,13 @@ export const executeBuffToBuffTrade = async (
 
   if (salesLastWeek.length >= GOODS_SALES_THRESHOLD) {
     const sales = salesLastWeek.map(({ price }) => Number(price))
-    const median_price = median(sales.filter((price) => currentPrice * 2 > price))
-
-    const goodsInfo = await getGoodsInfo({ goods_id })
-    const referencePrice = Number(goodsInfo.data.goods_info.goods_ref_price)
-    const purchasePrice = Number((Math.min(median_price, referencePrice) * 0.9).toFixed(2))
-    const estimatedProfit = Number((((median_price - currentPrice) / currentPrice) * 100).toFixed(2))
+    const medianPrice = median(sales.filter((price) => currentPrice * 2 > price))
+    const estimatedProfit = Number((((medianPrice - currentPrice) / currentPrice) * 100).toFixed(2))
 
     console.log(item.market_hash_name, estimatedProfit.toFixed(2))
 
-    if (purchasePrice >= currentPrice) {
-      sendMessage({ text: generateMessage({ ...payload, medianPrice: median_price, estimatedProfit }) })
+    if (estimatedProfit >= 12) {
+      sendMessage({ text: generateMessage({ ...payload, medianPrice, estimatedProfit }) })
     }
   } else if (options.csFloatEnabled && payload.float) {
     const response = await getCSFloatListings({ market_hash_name: item.market_hash_name })
@@ -66,23 +62,20 @@ export const executeBuffToBuffTrade = async (
     const simpleBuyOrders = currentActiveBuyOrders.filter((i) => !!i.market_hash_name)
     const lowestCSFloatItem = response.data[0]
 
-    const lowestItemPrice = lowestCSFloatItem.price / 100
-    const highestBuyOrder = Math.max(...simpleBuyOrders.map((i) => i.price / 100))
+    const medianPrice = lowestCSFloatItem.price / 100
     const predictedPrice = lowestCSFloatItem.reference.predicted_price / 100
 
-    const overpayment = Number((((lowestItemPrice - predictedPrice) / predictedPrice) * 100).toFixed(2))
+    const overpayment = Number((((medianPrice - predictedPrice) / predictedPrice) * 100).toFixed(2))
+    const estimatedProfit = Number((((medianPrice - currentPrice) / currentPrice) * 100).toFixed(2))
 
     if (simpleBuyOrders.length < 3 || overpayment >= 5) {
       return
     }
 
-    const purchasePrice = Number((Math.min(highestBuyOrder, lowestItemPrice * 0.9) / 100).toFixed(1))
-    const estimatedProfit = Number((((lowestItemPrice - currentPrice) / currentPrice) * 100).toFixed(2))
-
     console.log(item.market_hash_name, estimatedProfit.toFixed(2))
 
-    if (purchasePrice >= currentPrice) {
-      sendMessage({ text: generateMessage({ ...payload, medianPrice: lowestItemPrice / 100, estimatedProfit }) })
+    if (estimatedProfit >= 12) {
+      sendMessage({ text: generateMessage({ ...payload, medianPrice, estimatedProfit }) })
     }
   }
 }

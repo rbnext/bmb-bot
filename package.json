@@ -14,6 +14,7 @@
     "steamMarketSearch": "ts-node src/bots/steamMarketSearch.ts",
     "steamCharmsChecker": "ts-node src/bots/steamCharmsChecker.ts",
     "buffSteam": "ts-node src/bots/buffSteam.ts",
+    "buff-buff": "ts-node src/bots/buff-buff.ts",
     "micro-buff-steam": "ts-node src/bots/micro-buff-steam.ts",
     "sellBuff": "ts-node src/bots/sellBuff.ts",
     "buff-selling": "ts-node src/bots/buff-selling.ts",

@@ -4,11 +4,13 @@ import { MarketGoodsItem, MessageType, Source } from '../types'
 import { generateMessage, median } from '../utils'
 import { GOODS_SALES_THRESHOLD } from '../config'
 import { sendMessage } from '../api/telegram'
+import { getBuyOrders, getCSFloatListings } from '../api/csfloat'
 
 export const executeBuffToBuffTrade = async (
   item: MarketGoodsItem,
   options: {
     source: Source
+    csFloatEnabled?: boolean
   }
 ) => {
   const goods_id = item.id
@@ -41,7 +43,11 @@ export const executeBuffToBuffTrade = async (
     updatedAt: lowestPricedItem.updated_at,
     source: options.source,
     stickerTotal: stickerTotal,
+    type: MessageType.Review,
+    estimatedProfit: 10,
   }
+
+  console.log(item.market_hash_name, payload.price)
 
   if (salesLastWeek.length >= GOODS_SALES_THRESHOLD) {
     const sales = salesLastWeek.map(({ price }) => Number(price))
@@ -51,22 +57,29 @@ export const executeBuffToBuffTrade = async (
     const reference_price = Number(goodsInfo.data.goods_info.goods_ref_price)
     const threshold_price = Number((Math.min(median_price, reference_price) * 0.9).toFixed(2))
 
-    console.log(
-      `|__ ${item.market_hash_name} current price: $${lowestPricedItem.price}; purchase price: $${threshold_price}`
-    )
-
     if (threshold_price >= Number(lowestPricedItem.price)) {
-      const response = await postGoodsBuy({ price: current_price, sell_order_id: lowestPricedItem.id })
-
-      if (response.code !== 'OK') {
-        console.log('Error:', JSON.stringify(response))
-
-        return
-      }
-
-      sendMessage({ text: generateMessage({ ...payload, type: MessageType.Purchased }) })
+      sendMessage({ text: generateMessage({ ...payload, medianPrice: median_price }) })
     }
-  } else {
-    console.log(`|__ ${item.market_hash_name} not enough sales ${salesLastWeek.length}`)
+  } else if (options.csFloatEnabled && payload.float) {
+    const response = await getCSFloatListings({ market_hash_name: item.market_hash_name })
+    const currentActiveBuyOrders = await getBuyOrders({ id: response.data[0].id })
+    const simpleBuyOrders = currentActiveBuyOrders.filter((i) => !!i.market_hash_name)
+    const lowestCSFloatItem = response.data[0]
+
+    const lowestItemPrice = lowestCSFloatItem.price
+    const highestBuyOrder = Math.max(...simpleBuyOrders.map((i) => i.price))
+    const predictedPrice = lowestCSFloatItem.reference.predicted_price
+
+    const overpayment = Number((((lowestItemPrice - predictedPrice) / predictedPrice) * 100).toFixed(2))
+
+    if (simpleBuyOrders.length < 3 || overpayment >= 5) {
+      return
+    }
+
+    const purchasePrice = Number((Math.min(highestBuyOrder, lowestItemPrice * 0.9) / 100).toFixed(1))
+
+    if (purchasePrice >= Number(lowestPricedItem.price)) {
+      sendMessage({ text: generateMessage({ ...payload, medianPrice: lowestItemPrice / 100 }) })
+    }
   }
 }

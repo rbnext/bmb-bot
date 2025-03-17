@@ -52,30 +52,22 @@ export const executeBuffToBuffTrade = async (
     const medianPrice = median(sales.filter((price) => currentPrice * 2 > price))
     const estimatedProfit = Number((((medianPrice - currentPrice) / currentPrice) * 100).toFixed(2))
 
-    console.log(item.market_hash_name, estimatedProfit.toFixed(2), options.pageNum)
+    console.log(item.market_hash_name, estimatedProfit.toFixed(2))
 
-    if (estimatedProfit >= 12) {
+    if (estimatedProfit >= 10) {
       sendMessage({ text: generateMessage({ ...payload, medianPrice, estimatedProfit }) })
     }
   } else if (options.csFloatEnabled && payload.float) {
-    const response = await getCSFloatListings({ market_hash_name: item.market_hash_name })
-    const currentActiveBuyOrders = await getBuyOrders({ id: response.data[0].id })
-    const simpleBuyOrders = currentActiveBuyOrders.filter((i) => !!i.market_hash_name)
-    const lowestCSFloatItem = response.data[0]
+    const listings = await getCSFloatListings({ market_hash_name: item.market_hash_name })
 
-    const medianPrice = lowestCSFloatItem.price / 100
-    const predictedPrice = lowestCSFloatItem.reference.predicted_price / 100
-
-    const overpayment = Number((((medianPrice - predictedPrice) / predictedPrice) * 100).toFixed(2))
+    const price = listings.data[3].price
+    const basePrice = listings.data[0].reference.base_price
+    const medianPrice = Math.min(basePrice, price) / 100
     const estimatedProfit = Number((((medianPrice - currentPrice) / currentPrice) * 100).toFixed(2))
 
-    if (simpleBuyOrders.length < 3 || overpayment >= 5) {
-      return
-    }
+    console.log(item.market_hash_name, estimatedProfit.toFixed(2))
 
-    console.log(item.market_hash_name, estimatedProfit.toFixed(2), options.pageNum)
-
-    if (estimatedProfit >= 12) {
+    if (estimatedProfit >= 10) {
       sendMessage({ text: generateMessage({ ...payload, medianPrice, estimatedProfit }) })
     }
   }

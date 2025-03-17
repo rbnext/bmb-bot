@@ -37,7 +37,7 @@ const buffSteam = async () => {
         }
 
         if (item.id in GOODS_CACHE && GOODS_CACHE[item.id].price > current_price) {
-          executeBuffToBuffTrade(item, { source: Source.BUFF_BUFF })
+          executeBuffToBuffTrade(item, { source: Source.BUFF_BUFF, csFloatEnabled: true })
         }
 
         GOODS_CACHE[item.id] = { price: current_price }

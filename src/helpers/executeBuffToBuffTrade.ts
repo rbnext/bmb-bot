@@ -1,5 +1,5 @@
 import { differenceInDays } from 'date-fns'
-import { getGoodsInfo, getGoodsSellOrder, getMarketGoodsBillOrder, postGoodsBuy } from '../api/buff'
+import { getGoodsInfo, getGoodsSellOrder, getMarketGoodsBillOrder } from '../api/buff'
 import { MarketGoodsItem, MessageType, Source } from '../types'
 import { generateMessage, median } from '../utils'
 import { GOODS_SALES_THRESHOLD } from '../config'
@@ -14,7 +14,7 @@ export const executeBuffToBuffTrade = async (
   }
 ) => {
   const goods_id = item.id
-  const current_price = Number(item.sell_min_price)
+  const currentPrice = Number(item.sell_min_price)
 
   const history = await getMarketGoodsBillOrder({ goods_id })
 
@@ -37,7 +37,7 @@ export const executeBuffToBuffTrade = async (
     id: goods_id,
     float: paintwear,
     keychain: keychain,
-    price: current_price,
+    price: currentPrice,
     name: item.market_hash_name,
     createdAt: lowestPricedItem.created_at,
     updatedAt: lowestPricedItem.updated_at,
@@ -47,18 +47,19 @@ export const executeBuffToBuffTrade = async (
     estimatedProfit: 10,
   }
 
-  console.log(item.market_hash_name, payload.price)
-
   if (salesLastWeek.length >= GOODS_SALES_THRESHOLD) {
     const sales = salesLastWeek.map(({ price }) => Number(price))
-    const median_price = median(sales.filter((price) => current_price * 2 > price))
+    const median_price = median(sales.filter((price) => currentPrice * 2 > price))
 
     const goodsInfo = await getGoodsInfo({ goods_id })
     const reference_price = Number(goodsInfo.data.goods_info.goods_ref_price)
     const threshold_price = Number((Math.min(median_price, reference_price) * 0.9).toFixed(2))
+    const estimatedProfit = Number((((median_price - currentPrice) / currentPrice) * 100).toFixed(2))
+
+    console.log(item.market_hash_name, estimatedProfit.toFixed(2))
 
     if (threshold_price >= Number(lowestPricedItem.price)) {
-      sendMessage({ text: generateMessage({ ...payload, medianPrice: median_price }) })
+      sendMessage({ text: generateMessage({ ...payload, medianPrice: median_price, estimatedProfit }) })
     }
   } else if (options.csFloatEnabled && payload.float) {
     const response = await getCSFloatListings({ market_hash_name: item.market_hash_name })
@@ -66,9 +67,9 @@ export const executeBuffToBuffTrade = async (
     const simpleBuyOrders = currentActiveBuyOrders.filter((i) => !!i.market_hash_name)
     const lowestCSFloatItem = response.data[0]
 
-    const lowestItemPrice = lowestCSFloatItem.price
-    const highestBuyOrder = Math.max(...simpleBuyOrders.map((i) => i.price))
-    const predictedPrice = lowestCSFloatItem.reference.predicted_price
+    const lowestItemPrice = lowestCSFloatItem.price / 100
+    const highestBuyOrder = Math.max(...simpleBuyOrders.map((i) => i.price / 100))
+    const predictedPrice = lowestCSFloatItem.reference.predicted_price / 100
 
     const overpayment = Number((((lowestItemPrice - predictedPrice) / predictedPrice) * 100).toFixed(2))
 
@@ -77,9 +78,12 @@ export const executeBuffToBuffTrade = async (
     }
 
     const purchasePrice = Number((Math.min(highestBuyOrder, lowestItemPrice * 0.9) / 100).toFixed(1))
+    const estimatedProfit = Number((((lowestItemPrice - currentPrice) / currentPrice) * 100).toFixed(2))
+
+    console.log(item.market_hash_name, estimatedProfit.toFixed(2))
 
     if (purchasePrice >= Number(lowestPricedItem.price)) {
-      sendMessage({ text: generateMessage({ ...payload, medianPrice: lowestItemPrice / 100 }) })
+      sendMessage({ text: generateMessage({ ...payload, medianPrice: lowestItemPrice / 100, estimatedProfit }) })
     }
   }
 }

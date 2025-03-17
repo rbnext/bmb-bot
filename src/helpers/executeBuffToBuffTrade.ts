@@ -44,7 +44,6 @@ export const executeBuffToBuffTrade = async (
     source: options.source,
     stickerTotal: stickerTotal,
     type: MessageType.Review,
-    estimatedProfit: 10,
   }
 
   if (salesLastWeek.length >= GOODS_SALES_THRESHOLD) {

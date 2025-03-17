@@ -182,6 +182,9 @@ export type Sticker = {
   sell_reference_price: string
   sticker_name: string
   wear?: number
+  rotation?: number
+  offset_x?: number
+  offset_y?: number
 }
 
 export type MarketItemDetail = {
@@ -533,6 +536,7 @@ export enum Source {
   BUFF_REDLINE = 'BUFF_REDLINE',
   BUFF_STEAM = 'BUFF_STEAM',
   BUFF_BARGAIN = 'BUFF_BARGAIN',
+  BUFF_COMBO = 'BUFF_COMBO',
   BUFF_KATOWICE = 'BUFF_KATOWICE',
   BUFF_CSFLOAT = 'BUFF_CSFLOAT',
   BUFF_EXPERIMENT = 'BUFF_EXPERIMENT',

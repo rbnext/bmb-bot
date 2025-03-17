@@ -11,6 +11,7 @@ export const executeBuffToBuffTrade = async (
   options: {
     source: Source
     csFloatEnabled?: boolean
+    pageNum?: number
   }
 ) => {
   const goods_id = item.id
@@ -51,7 +52,7 @@ export const executeBuffToBuffTrade = async (
     const medianPrice = median(sales.filter((price) => currentPrice * 2 > price))
     const estimatedProfit = Number((((medianPrice - currentPrice) / currentPrice) * 100).toFixed(2))
 
-    console.log(item.market_hash_name, estimatedProfit.toFixed(2))
+    console.log(item.market_hash_name, estimatedProfit.toFixed(2), options.pageNum)
 
     if (estimatedProfit >= 12) {
       sendMessage({ text: generateMessage({ ...payload, medianPrice, estimatedProfit }) })
@@ -72,7 +73,7 @@ export const executeBuffToBuffTrade = async (
       return
     }
 
-    console.log(item.market_hash_name, estimatedProfit.toFixed(2))
+    console.log(item.market_hash_name, estimatedProfit.toFixed(2), options.pageNum)
 
     if (estimatedProfit >= 12) {
       sendMessage({ text: generateMessage({ ...payload, medianPrice, estimatedProfit }) })

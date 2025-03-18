@@ -60,6 +60,10 @@ export const executeBuffToBuffTrade = async (
   } else if (options.csFloatEnabled && payload.float) {
     const listings = await getCSFloatListings({ market_hash_name: item.market_hash_name })
 
+    if (listings.data.length < 10) {
+      return
+    }
+
     const price = listings.data[3].price
     const basePrice = listings.data[0].reference.base_price
     const medianPrice = Math.min(basePrice, price) / 100

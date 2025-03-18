@@ -75,10 +75,6 @@ const buffMarketTrade = async (item: MarketGoodsItem) => {
     sell_order_id: lowestPricedItem.id,
   }
 
-  if (FLOAT_BLACK_LIST.includes(payload.float)) {
-    return
-  }
-
   // Buff.market -> Steam check
   if (steamEstimatedProfit > STEAM_CHECK_THRESHOLD) {
     const prices = await getMaxPricesForXDays(item.market_hash_name)
@@ -171,9 +167,9 @@ const buffMarketTrade = async (item: MarketGoodsItem) => {
   // Buff.market -> (Buff.market) bargain
   if (
     currentPrice >= 15 &&
-    currentPrice > buffPurchaseThreshold &&
     isLessThanXMinutes(lowestPricedItem.created_at, 1) &&
     salesLastWeek.length >= GOODS_SALES_THRESHOLD &&
+    !FLOAT_BLACK_LIST.includes(payload.float) &&
     lowestBargainPrice < buffPurchaseThreshold
   ) {
     const userStorePopup = await getUserStorePopup({ user_id: lowestPricedItem.user_id })

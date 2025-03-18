@@ -107,7 +107,7 @@ const buffMarketTrade = async (item: MarketGoodsItem) => {
   const sales = salesLastWeek.map(({ price }) => Number(price))
   const referencePrice = Number(goodsInfo.data.goods_info.goods_ref_price)
   const medianPrice = median(sales.filter((price) => currentPrice * 2 > price))
-  const buffPurchaseThreshold = Number((Math.min(medianPrice, referencePrice) * 0.9).toFixed(2))
+  const buffPurchaseThreshold = Number((Math.min(medianPrice, referencePrice) * 0.9).toFixed(1))
   const lowestBargainPrice = Number(lowestPricedItem.lowest_bargain_price)
 
   // Buff.market -> Buff.market check

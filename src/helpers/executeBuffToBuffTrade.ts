@@ -4,7 +4,8 @@ import { MarketGoodsItem, MessageType, Source } from '../types'
 import { generateMessage, median } from '../utils'
 import { GOODS_SALES_THRESHOLD } from '../config'
 import { sendMessage } from '../api/telegram'
-import { getBuyOrders, getCSFloatListings } from '../api/csfloat'
+import { getCSFloatListings } from '../api/csfloat'
+import { executeBuffToSteamTrade } from './executeBuffToSteamTrade'
 
 export const executeBuffToBuffTrade = async (
   item: MarketGoodsItem,
@@ -47,7 +48,9 @@ export const executeBuffToBuffTrade = async (
     type: MessageType.Review,
   }
 
-  if (salesLastWeek.length >= GOODS_SALES_THRESHOLD) {
+  if (item.market_hash_name.includes(' Pin') || item.market_hash_name.includes('Music Kit')) {
+    await executeBuffToSteamTrade(item, { source: Source.BUFF_STEAM })
+  } else if (salesLastWeek.length >= GOODS_SALES_THRESHOLD) {
     const sales = salesLastWeek.map(({ price }) => Number(price))
     const medianPrice = median(sales.filter((price) => currentPrice * 2 > price))
     const estimatedProfit = Number((((medianPrice - currentPrice) / currentPrice) * 100).toFixed(2))

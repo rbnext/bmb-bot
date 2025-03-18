@@ -43,7 +43,7 @@ const csMoney = async () => {
       csMoneyTrade(item)
     }
 
-    GOODS_CACHE[item.id] = {
+    GOODS_CACHE[name] = {
       price: currentPrice,
     }
   }

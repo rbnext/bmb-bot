@@ -115,7 +115,7 @@ const buffMarketTrade = async (item: MarketGoodsItem) => {
   const lowestBargainPrice = Number(lowestPricedItem.lowest_bargain_price)
 
   // Buff.market -> Buff.market check
-  if (salesLastWeek.length >= GOODS_SALES_THRESHOLD) {
+  if (currentPrice >= 2 && salesLastWeek.length >= GOODS_SALES_THRESHOLD) {
     const estimatedProfit = Number((((medianPrice - currentPrice) / currentPrice) * 100).toFixed(2))
 
     if (buffPurchaseThreshold >= currentPrice) {
@@ -138,6 +138,7 @@ const buffMarketTrade = async (item: MarketGoodsItem) => {
     isZeroWear &&
     isTrueCombo &&
     stickerTotal > 5 &&
+    currentPrice < 30 &&
     [4, 5].includes(stickers.length) &&
     typeof stickerPremium === 'number' &&
     stickerPremium < 0.01

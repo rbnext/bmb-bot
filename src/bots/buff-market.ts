@@ -15,10 +15,19 @@ import { sendMessage } from '../api/telegram'
 import { MarketGoodsItem, MessageType, Source } from '../types'
 import { GOODS_SALES_THRESHOLD, STEAM_CHECK_THRESHOLD, STEAM_PURCHASE_THRESHOLD } from '../config'
 import { getMaxPricesForXDays } from '../helpers/getMaxPricesForXDays'
-import { differenceInDays } from 'date-fns'
+import { differenceInDays, format } from 'date-fns'
+import { getCSFloatListings } from '../api/csfloat'
 
 export const GOODS_CACHE: Record<number, { price: number }> = {}
 export const GOODS_BLACKLIST_CACHE: number[] = [30431, 30235, 30259, 30269, 30350]
+export const FLOAT_BLACK_LIST: string[] = []
+
+/*
+  1.  Buff.market -> Steam check; Threshold: 75%
+  2.  Buff.market -> Buff.market check; Threshold: 10%
+  3.  Buff.market -> (Buff.market,CSFloat.com) sticker combos check; Threshold: 10%; Min combo price: $5
+  4.  Buff.market -> (Buff.market) check; Threshold: 10%
+*/
 
 const buffMarketTrade = async (item: MarketGoodsItem) => {
   const goods_id = item.id
@@ -38,6 +47,7 @@ const buffMarketTrade = async (item: MarketGoodsItem) => {
   const stickers = lowestPricedItem.asset_info.info?.stickers || []
   const isZeroWear = stickers.every((sticker) => sticker.wear === 0)
   const isTrueCombo = stickers.every((item) => item.name === stickers[0].name)
+  const stickerPremium = lowestPricedItem.sticker_premium
 
   const keychain = lowestPricedItem.asset_info.info?.keychains?.[0]
   const k_total = keychain ? Number(keychain.sell_reference_price) - 0.33 : 0
@@ -64,6 +74,11 @@ const buffMarketTrade = async (item: MarketGoodsItem) => {
     sell_order_id: lowestPricedItem.id,
   }
 
+  if (FLOAT_BLACK_LIST.includes(payload.float)) {
+    return
+  }
+
+  // Buff.market -> Steam check
   if (steamEstimatedProfit > STEAM_CHECK_THRESHOLD) {
     const prices = await getMaxPricesForXDays(item.market_hash_name)
 
@@ -98,6 +113,7 @@ const buffMarketTrade = async (item: MarketGoodsItem) => {
   const buffPurchaseThreshold = Number((Math.min(medianPrice, referencePrice) * 0.9).toFixed(2))
   const lowestBargainPrice = Number(lowestPricedItem.lowest_bargain_price)
 
+  // Buff.market -> Buff.market check
   if (salesLastWeek.length >= GOODS_SALES_THRESHOLD) {
     const estimatedProfit = Number((((medianPrice - currentPrice) / currentPrice) * 100).toFixed(2))
 
@@ -116,6 +132,41 @@ const buffMarketTrade = async (item: MarketGoodsItem) => {
     }
   }
 
+  // Buff.market -> (Buff.market,CSFloat.com) sticker combos check
+  if (
+    isZeroWear &&
+    isTrueCombo &&
+    stickerTotal > 5 &&
+    [4, 5].includes(stickers.length) &&
+    typeof stickerPremium === 'number' &&
+    stickerPremium < 0.01
+  ) {
+    const listings = await getCSFloatListings({ market_hash_name: payload.name })
+
+    if (listings.data.length >= 20) {
+      const price = listings.data[3].price
+      const basePrice = listings.data[0].reference.base_price
+      const simpleMedianPrice = Math.min(basePrice, price) / 100
+      const medianPrice = simpleMedianPrice + stickerTotal * 0.15
+      const estimatedProfit = Number((((medianPrice - currentPrice) / currentPrice) * 100).toFixed(2))
+
+      if (estimatedProfit > 10) {
+        const response = await postGoodsBuy(purchasePayload)
+
+        if (response.code !== 'OK') {
+          return
+        }
+
+        sendMessage({
+          text: generateMessage({ ...payload, estimatedProfit, medianPrice, source: Source.BUFF_COMBO }),
+        })
+
+        return
+      }
+    }
+  }
+
+  // Buff.market -> (Buff.market) check
   if (
     currentPrice >= 15 &&
     currentPrice > buffPurchaseThreshold &&
@@ -128,8 +179,17 @@ const buffMarketTrade = async (item: MarketGoodsItem) => {
       return
     }
 
+    if (payload.float) {
+      FLOAT_BLACK_LIST.push(payload.float)
+    }
+
     sendMessage({
-      text: generateMessage({ ...payload, bargainPrice: buffPurchaseThreshold, source: Source.BUFF_BARGAIN }),
+      text: generateMessage({
+        ...payload,
+        source: Source.BUFF_BARGAIN,
+        bargainPrice: buffPurchaseThreshold,
+        type: MessageType.Bargain,
+      }),
     })
 
     return
@@ -146,6 +206,7 @@ const buffMarket = async () => {
     })
 
     for (const item of marketGoods.data.items) {
+      const now = format(new Date(), 'HH:mm:ss')
       const current_price = Number(item.sell_min_price)
 
       if (GOODS_BLACKLIST_CACHE.includes(item.id) || item.is_charm) {
@@ -159,10 +220,16 @@ const buffMarket = async () => {
       }
 
       if (item.id in GOODS_CACHE && GOODS_CACHE[item.id].price > current_price) {
+        console.log(`${now}: ${item.market_hash_name} $${GOODS_CACHE[item.id].price} -> $${current_price}`)
+      }
+
+      if (item.id in GOODS_CACHE && GOODS_CACHE[item.id].price > current_price) {
         buffMarketTrade(item)
       }
 
-      GOODS_CACHE[item.id] = { price: current_price }
+      GOODS_CACHE[item.id] = {
+        price: current_price,
+      }
     }
 
     await sleep(2_500)

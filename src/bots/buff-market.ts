@@ -7,10 +7,11 @@ import {
   getGoodsSellOrder,
   getMarketGoods,
   getMarketGoodsBillOrder,
+  getUserStorePopup,
   postCreateBargain,
   postGoodsBuy,
 } from '../api/buff'
-import { generateMessage, isLessThanThreshold, median, sleep } from '../utils'
+import { generateMessage, isLessThanThreshold, isLessThanXMinutes, median, sleep } from '../utils'
 import { sendMessage } from '../api/telegram'
 import { MarketGoodsItem, MessageType, Source } from '../types'
 import { GOODS_SALES_THRESHOLD, STEAM_CHECK_THRESHOLD, STEAM_PURCHASE_THRESHOLD } from '../config'
@@ -166,14 +167,20 @@ const buffMarketTrade = async (item: MarketGoodsItem) => {
     }
   }
 
-  // Buff.market -> (Buff.market) check
+  // Buff.market -> (Buff.market) bargain
   if (
     currentPrice >= 15 &&
     currentPrice > buffPurchaseThreshold &&
+    isLessThanXMinutes(lowestPricedItem.created_at, 1) &&
     salesLastWeek.length >= GOODS_SALES_THRESHOLD &&
     lowestBargainPrice < buffPurchaseThreshold
   ) {
-    const response = await postCreateBargain({ price: buffPurchaseThreshold, sell_order_id: lowestPricedItem.id })
+    const userStorePopup = await getUserStorePopup({ user_id: lowestPricedItem.user_id })
+
+    if (userStorePopup.code !== 'OK') return
+    if (Number(userStorePopup.data.bookmark_count) > 2) return
+
+    const response = await postCreateBargain({ ...purchasePayload, price: buffPurchaseThreshold })
 
     if (response.code !== 'OK') {
       return

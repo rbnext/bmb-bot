@@ -113,6 +113,7 @@ export const getMarketGoods = async ({
 }): Promise<MarketGoods> => {
   const { data } = await http.get('/market/goods', {
     params: { game, page_num, page_size, ...rest },
+    cache: false,
   })
 
   return data

@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "buff2buff": "ts-node src/bots/buff2buff.ts",
+    "cs-money": "ts-node src/bots/cs-money.ts",
     "buffDefault": "ts-node src/bots/buffDefault.ts",
     "buff-market": "ts-node src/bots/buff-market.ts",
     "buff-sticker-checker": "ts-node src/bots/buff-sticker-checker.ts",

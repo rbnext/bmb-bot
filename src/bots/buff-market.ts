@@ -36,6 +36,8 @@ const buffMarketTrade = async (item: MarketGoodsItem) => {
   }
 
   const stickers = lowestPricedItem.asset_info.info?.stickers || []
+  const isZeroWear = stickers.every((sticker) => sticker.wear === 0)
+  const isTrueCombo = stickers.every((item) => item.name === stickers[0].name)
 
   const keychain = lowestPricedItem.asset_info.info?.keychains?.[0]
   const k_total = keychain ? Number(keychain.sell_reference_price) - 0.33 : 0
@@ -93,13 +95,13 @@ const buffMarketTrade = async (item: MarketGoodsItem) => {
   const sales = salesLastWeek.map(({ price }) => Number(price))
   const referencePrice = Number(goodsInfo.data.goods_info.goods_ref_price)
   const medianPrice = median(sales.filter((price) => currentPrice * 2 > price))
-  const purchaseThreshold = Number((Math.min(medianPrice, referencePrice) * 0.9).toFixed(2))
+  const buffPurchaseThreshold = Number((Math.min(medianPrice, referencePrice) * 0.9).toFixed(2))
   const lowestBargainPrice = Number(lowestPricedItem.lowest_bargain_price)
 
   if (salesLastWeek.length >= GOODS_SALES_THRESHOLD) {
     const estimatedProfit = Number((((medianPrice - currentPrice) / currentPrice) * 100).toFixed(2))
 
-    if (purchaseThreshold >= currentPrice) {
+    if (buffPurchaseThreshold >= currentPrice) {
       const response = await postGoodsBuy(purchasePayload)
 
       if (response.code !== 'OK') {
@@ -116,18 +118,18 @@ const buffMarketTrade = async (item: MarketGoodsItem) => {
 
   if (
     currentPrice >= 15 &&
-    currentPrice > purchaseThreshold &&
+    currentPrice > buffPurchaseThreshold &&
     salesLastWeek.length >= GOODS_SALES_THRESHOLD &&
-    lowestBargainPrice < purchaseThreshold
+    lowestBargainPrice < buffPurchaseThreshold
   ) {
-    const response = await postCreateBargain({ price: purchaseThreshold, sell_order_id: lowestPricedItem.id })
+    const response = await postCreateBargain({ price: buffPurchaseThreshold, sell_order_id: lowestPricedItem.id })
 
     if (response.code !== 'OK') {
       return
     }
 
     sendMessage({
-      text: generateMessage({ ...payload, bargainPrice: purchaseThreshold, source: Source.BUFF_BARGAIN }),
+      text: generateMessage({ ...payload, bargainPrice: buffPurchaseThreshold, source: Source.BUFF_BARGAIN }),
     })
 
     return

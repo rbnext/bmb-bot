@@ -1,29 +1,45 @@
 import 'dotenv/config'
 
-import { getBuyOrders, getCSFloatListings, getPlacedOrders, postBuyOrder, removeBuyOrder } from '../api/csFloat'
+import {
+  getBuyOrders,
+  getCSFloatListings,
+  getCSFloatTrades,
+  getPlacedOrders,
+  postBuyOrder,
+  removeBuyOrder,
+} from '../api/csFloat'
 import { median, sleep } from '../utils'
 import { sendMessage } from '../api/telegram'
 import path from 'path'
 import { readFileSync } from 'fs'
 import { CSFloatPlacedOrder } from '../types'
-import { format } from 'date-fns'
+import { format, isAfter, subHours } from 'date-fns'
 
 const activeMarketOrders = new Map<string, CSFloatPlacedOrder>()
 const pathname = path.join(__dirname, '../../top-float-items.json')
 
-const BLACK_LIST: string[] = []
+const orderBlackList = new Set<string>()
 
 const floatFeedChecker = async () => {
   activeMarketOrders.clear()
+
   const response = await getPlacedOrders({ page: 0, limit: 100 })
+  const verifiedTrades = await getCSFloatTrades({ page: 0, limit: 100 })
+
   response.orders.forEach((order) => activeMarketOrders.set(order.market_hash_name, order))
   const mostPopularItems: Record<string, number> = JSON.parse(readFileSync(pathname, 'utf8'))
 
-  console.log('Blacklist size: ', BLACK_LIST.length)
+  for (const item of verifiedTrades.trades) {
+    if (isAfter(item.created_at, subHours(new Date(), 24))) {
+      orderBlackList.add(item.contract.item.market_hash_name)
+    }
+  }
+
+  console.log('Blacklist size: ', orderBlackList.size)
 
   try {
     for (const market_hash_name of Object.keys(mostPopularItems)) {
-      if (BLACK_LIST.includes(market_hash_name) || market_hash_name.includes('Black Lotus')) continue
+      if (orderBlackList.has(market_hash_name)) continue
 
       const now = format(new Date(), 'HH:mm:ss')
 
@@ -52,22 +68,6 @@ const floatFeedChecker = async () => {
         await sleep(30_000)
         continue
       }
-
-      // const top3Orders = simpleOrders.slice(0, 3)
-      // const min = Math.min(...top3Orders.map((i) => i.price))
-      // const max = Math.max(...top3Orders.map((i) => i.price))
-
-      // if (max - min >= 25) {
-      //   console.log(now, market_hash_name, 'There is a big gap between top 3 orders')
-
-      //   if (currentMarketOrder) {
-      //     console.log(now, market_hash_name, 'Removing order due to big gap')
-      //     await removeBuyOrder({ id: currentMarketOrder.id })
-      //   }
-
-      //   await sleep(30_000)
-      //   continue
-      // }
 
       await sleep(10_000)
 

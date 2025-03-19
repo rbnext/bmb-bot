@@ -328,6 +328,8 @@ export type CSFloatBuyOrderHistoryItem = {
       market_hash_name: string
     }
   }
+  accepted_at: string
+  created_at: string
 }
 
 export type BuyOrderHistory = {

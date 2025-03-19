@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-import { CSMoneyResponse } from '../types'
+import { CSMoneyPurchase, CSMoneyResponse } from '../types'
 
 const http = axios.create({
   baseURL: 'https://cs.money/1.0',
@@ -36,6 +36,16 @@ export const getCSMoneyListings = async ({
     },
     headers: {
       Cookie: `${process.env.CS_MONEY_TOKEN}`,
+    },
+  })
+
+  return data
+}
+
+export const csMoneyPurchase = async (payload: { items: CSMoneyPurchase[] }) => {
+  const { data } = await http.post('/market/purchase', payload, {
+    headers: {
+      Cookie: `${process.env.CS_MONEY_TOKEN_PROD}`,
     },
   })
 

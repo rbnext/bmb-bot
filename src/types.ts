@@ -332,6 +332,11 @@ export type CSFloatBuyOrderHistoryItem = {
   created_at: string
 }
 
+export type CSMoneyPurchase = {
+  id: string
+  price: number
+}
+
 export type BuyOrderHistory = {
   data: {
     items: BuyOrderHistoryItem[]
@@ -542,7 +547,7 @@ export enum Source {
   BUFF_KATOWICE = 'BUFF_KATOWICE',
   BUFF_CSFLOAT = 'BUFF_CSFLOAT',
   BUFF_EXPERIMENT = 'BUFF_EXPERIMENT',
-  CSMONEY_CSFLOAT = 'CSMONEY_BUFF',
+  CSMONEY = 'CSMONEY',
   STEAM = 'STEAM',
 }
 

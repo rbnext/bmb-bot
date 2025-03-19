@@ -1,7 +1,7 @@
 import 'dotenv/config'
 
 import { format } from 'date-fns'
-import { getCSMoneyListings } from '../api/cs'
+import { csMoneyPurchase, getCSMoneyListings } from '../api/cs'
 import { generateMessage, sleep } from '../utils'
 import { getMarketGoods } from '../api/buff'
 import { CSMoneyItem, MessageType, Source } from '../types'
@@ -26,7 +26,7 @@ const csMoneyTrade = async (item: CSMoneyItem) => {
     name: market_hash_name,
     float: item.asset.float,
     type: MessageType.Review,
-    source: Source.CSMONEY_CSFLOAT,
+    source: Source.CSMONEY,
   }
 
   const listings = await getCSFloatListings({ market_hash_name })
@@ -39,7 +39,23 @@ const csMoneyTrade = async (item: CSMoneyItem) => {
 
     console.log('-', market_hash_name, estimatedProfit + '%')
 
-    if (estimatedProfit > 5) {
+    if (estimatedProfit > 10) {
+      try {
+        await csMoneyPurchase({
+          items: [{ id: String(item.id), price: currentPrice }],
+        })
+
+        sendMessage({
+          text: generateMessage({ ...payload, estimatedProfit, medianPrice, type: MessageType.Purchased }),
+        })
+      } catch (error) {
+        console.log(error)
+
+        sendMessage({
+          text: error.message ?? 'Failed to purchase item on CSMoney',
+        })
+      }
+    } else if (estimatedProfit > 5) {
       const extra: string[] = []
       extra.push(`<a href="https://cs.money/market/buy/?search=${market_hash_name}">CSMoney</a>`)
       extra.push(`<a href="https://csfloat.com/search?market_hash_name=${market_hash_name}">CSFloat</a>`)

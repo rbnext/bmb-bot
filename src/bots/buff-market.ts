@@ -175,7 +175,7 @@ const buffMarketTrade = async (item: MarketGoodsItem) => {
     const userStorePopup = await getUserStorePopup({ user_id: lowestPricedItem.user_id })
 
     if (userStorePopup.code !== 'OK') return
-    if (Number(userStorePopup.data.bookmark_count) > 10) return
+    if (Number(userStorePopup.data.bookmark_count) > 3) return
 
     const response = await postCreateBargain({ ...purchasePayload, price: buffPurchaseThreshold })
 

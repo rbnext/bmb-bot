@@ -17,7 +17,7 @@ import { format, isAfter, subHours } from 'date-fns'
 
 const orderBlackList = new Set<string>()
 const activeMarketOrders = new Map<string, CSFloatPlacedOrder>()
-const pathname = path.join(__dirname, '../../top-float-items.json')
+const pathname = path.join(__dirname, '../../cs2-trends.json')
 
 const floatFeedChecker = async () => {
   orderBlackList.clear()

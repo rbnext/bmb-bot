@@ -23,6 +23,7 @@
     "float-selling": "ts-node src/bots/float-selling.ts",
     "playground": "ts-node src/playground.ts",
     "loadBuffRef": "ts-node src/scripts/loadReferencePrices.ts",
+    "skin-trends": "ts-node src/scripts/skin-trends.ts",
     "load-buff-liquid": "ts-node src/scripts/load-buff-liquid.ts",
     "cs-float-orders": "ts-node src/scripts/cs-float-orders.ts",
     "cs-float-orders-overview": "ts-node src/scripts/cs-float-orders-overview.ts",

@@ -912,3 +912,18 @@ export type CSMoneyItem = {
 export type CSMoneyResponse = {
   items: CSMoneyItem[]
 }
+
+export type PriceEmpireTrendResponse = {
+  items: PriceEmpireTrendItem[]
+}
+
+export type PriceEmpireTrendItem = {
+  type: string
+  marketHashName: string
+  buff: number
+  buff_percent_d1: number
+  buff_percent_d7: number
+  buff_percent_d30: number
+  liquidity: string
+  trades_30d: number
+}

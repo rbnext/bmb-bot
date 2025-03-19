@@ -891,6 +891,10 @@ export type CSMoneyItem = {
       full: string
     }
   }
+  seller: {
+    botId: number | null
+    steamId64: string
+  }
   pricing: {
     basePrice: number
     discount: number

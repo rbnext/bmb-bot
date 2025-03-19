@@ -129,6 +129,7 @@ export const generateMessage = ({
   keychain,
   csFloatPrice,
   pattern,
+  extra,
 }: {
   id: number
   name: string
@@ -152,6 +153,7 @@ export const generateMessage = ({
   keychain?: KeychainItem
   csFloatPrice?: number
   pattern?: number
+  extra?: string
 }) => {
   const message: string[] = []
 
@@ -207,14 +209,8 @@ export const generateMessage = ({
     message.push(`<b>Keychain</b>: ${keychain.name} ($${keychain.sell_reference_price})\n`)
   }
 
-  if (stickerPremium) {
-    message.push(`<b>Sticker premium</b>: ${stickerPremium}%\n`)
-  }
-
-  if (userId && userAcceptBargains) {
-    message.push(
-      `<b><a href="https://buff.market/user_store/${userId}/selling">${userId}</a> accept bargains</b>: YES\n`
-    )
+  if (extra) {
+    message.push(extra)
   }
 
   return message.join('')

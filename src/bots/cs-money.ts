@@ -40,8 +40,12 @@ const csMoneyTrade = async (item: CSMoneyItem) => {
     console.log('-', market_hash_name, estimatedProfit + '%')
 
     if (estimatedProfit > 5) {
+      const extra: string[] = []
+      extra.push(`<a href="https://cs.money/market/buy/?search=${market_hash_name}">CSMoney</a>`)
+      extra.push(`<a href="https://csfloat.com/search?market_hash_name=${market_hash_name}">CSFloat</a>`)
+
       sendMessage({
-        text: generateMessage({ ...payload, estimatedProfit, medianPrice }),
+        text: generateMessage({ ...payload, estimatedProfit, medianPrice, extra: extra.join(' | ') }),
       })
     } else if (estimatedProfit < 0) {
       buffGoodsPrices[market_hash_name].price = currentPrice

@@ -43,6 +43,8 @@ const csMoneyTrade = async (item: CSMoneyItem) => {
       sendMessage({
         text: generateMessage({ ...payload, estimatedProfit, medianPrice }),
       })
+    } else if (estimatedProfit < 0) {
+      buffGoodsPrices[market_hash_name].price = currentPrice
     }
   }
 }

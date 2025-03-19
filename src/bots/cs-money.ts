@@ -41,7 +41,7 @@ const csMoneyTrade = async (item: CSMoneyItem) => {
 
     if (estimatedProfit > 5) {
       sendMessage({
-        text: generateMessage({ ...payload, estimatedProfit, medianPrice, source: Source.BUFF_COMBO }),
+        text: generateMessage({ ...payload, estimatedProfit, medianPrice }),
       })
     }
   }

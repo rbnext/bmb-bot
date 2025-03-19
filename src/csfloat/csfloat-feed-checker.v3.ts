@@ -15,12 +15,12 @@ import { readFileSync } from 'fs'
 import { CSFloatPlacedOrder } from '../types'
 import { format, isAfter, subHours } from 'date-fns'
 
+const orderBlackList = new Set<string>()
 const activeMarketOrders = new Map<string, CSFloatPlacedOrder>()
 const pathname = path.join(__dirname, '../../top-float-items.json')
 
-const orderBlackList = new Set<string>()
-
 const floatFeedChecker = async () => {
+  orderBlackList.clear()
   activeMarketOrders.clear()
 
   const response = await getPlacedOrders({ page: 0, limit: 100 })

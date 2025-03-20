@@ -91,7 +91,6 @@ const csMoney = async () => {
     const currentPrice = Number(item.pricing.basePrice)
 
     if (
-      !item.asset.float ||
       goodsCache.has(item.id) ||
       steamUsersBlacklist.has(item.seller.steamId64) ||
       !buffGoodsPrices[market_hash_name] ||

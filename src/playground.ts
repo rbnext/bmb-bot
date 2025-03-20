@@ -1,7 +1,7 @@
 import 'dotenv/config'
 
 import { sleep } from './utils'
-import { csMoneyAddToCart, getCSMoneyListings } from './api/cs'
+import { csMoneyAddToCart, csMoneyPurchase, getCSMoneyListings } from './api/cs'
 import { getBuyOrders, getCSFloatListings } from './api/csFloat'
 import { sendMessage } from './api/telegram'
 import { format } from 'date-fns'
@@ -17,6 +17,7 @@ const init = async () => {
 
   try {
     await csMoneyAddToCart(csMoneyPayload)
+    await csMoneyPurchase(csMoneyPayload)
   } catch (error) {
     if (axios.isAxiosError(error)) {
       console.log(error.response?.data)

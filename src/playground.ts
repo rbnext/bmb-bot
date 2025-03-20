@@ -7,13 +7,21 @@ import { sendMessage } from './api/telegram'
 import { format } from 'date-fns'
 import path from 'path'
 import { readFileSync, writeFileSync } from 'fs'
+import axios from 'axios'
 
 const CASHED_LISTINGS = new Set<number>()
 const CS_FLOAT_PRICES: Record<string, number> = {}
 
 const init = async () => {
   const csMoneyPayload = { items: [{ id: String(36287812), price: 0.02 }] }
-  await csMoneyAddToCart(csMoneyPayload)
+
+  try {
+    await csMoneyAddToCart(csMoneyPayload)
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.log(error.response?.data)
+    }
+  }
 }
 
 init()

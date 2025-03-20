@@ -42,10 +42,9 @@ const csMoneyTrade = async (item: CSMoneyItem) => {
 
     if (estimatedProfit > (currentPrice >= 5 ? 15 : 25)) {
       try {
-        const csMoneyPayload = { items: [{ id: String(item.id), price: currentPrice }] }
-
-        await csMoneyAddToCart(csMoneyPayload)
-        await csMoneyPurchase(csMoneyPayload)
+        await csMoneyPurchase({
+          items: [{ id: String(item.id), price: currentPrice }],
+        })
 
         sendMessage({
           text: generateMessage({ ...payload, estimatedProfit, medianPrice, type: MessageType.Purchased }),

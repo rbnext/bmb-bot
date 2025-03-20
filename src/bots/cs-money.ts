@@ -39,7 +39,7 @@ const csMoneyTrade = async (item: CSMoneyItem) => {
 
     console.log('-', market_hash_name, estimatedProfit + '%')
 
-    if (estimatedProfit > 10) {
+    if (estimatedProfit > 15) {
       try {
         const csMoneyPayload = { items: [{ id: String(item.id), price: currentPrice }] }
 

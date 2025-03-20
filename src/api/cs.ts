@@ -64,5 +64,7 @@ export const csMoneyAddToCart = async (payload: { items: CSMoneyPurchase[] }) =>
     },
   })
 
+  console.log(data)
+
   return data
 }

@@ -21,6 +21,7 @@ const init = async () => {
 
     console.log(response)
   } catch (error) {
+    console.log(error)
     if (axios.isAxiosError(error)) {
       console.log(error.response?.data)
     }

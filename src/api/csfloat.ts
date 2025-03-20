@@ -221,18 +221,52 @@ export const removeBuyOrder = async ({ id }: { id: string }) => {
 export const getMySellingList = async ({
   userId = FL_CURRENT_USER_ID,
   limit = 100,
+  cursor,
 }: {
   userId?: string
   limit?: number
+  cursor?: string
 }): Promise<CSFloatMySellingList> => {
   const { data } = await axios.get(`https://csfloat.com/api/v1/users/${userId}/stall`, {
     params: {
       limit,
+      cursor,
     },
     headers: {
       Authorization: process.env.CSFLOAT_AUTH_KEY,
     },
   })
+
+  return data
+}
+
+export const deleteListing = async ({ id }: { id: string }) => {
+  const { data } = await axios.delete(`https://csfloat.com/api/v1/listings/${id}`, {
+    headers: {
+      Authorization: process.env.CSFLOAT_AUTH_KEY,
+    },
+  })
+
+  return data
+}
+
+export const createListing = async ({
+  type = 'buy_now',
+  ...rest
+}: {
+  type?: string
+  asset_id: string
+  price: number
+}) => {
+  const { data } = await axios.post(
+    'https://csfloat.com/api/v1/listings',
+    { type, ...rest },
+    {
+      headers: {
+        Authorization: process.env.CSFLOAT_AUTH_KEY,
+      },
+    }
+  )
 
   return data
 }

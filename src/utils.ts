@@ -1,4 +1,4 @@
-import { differenceInMinutes, formatDistance, isAfter, subHours, subMinutes } from 'date-fns'
+import { differenceInMinutes, formatDistance, isAfter, isBefore, subHours, subMinutes } from 'date-fns'
 import { CSFloatListing, KeychainItem, MessageType, Source, SteamInventoryHelperSticker } from './types'
 
 export const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms))
@@ -13,8 +13,12 @@ export const median = (array: number[]): number => {
   return sorted[middle]
 }
 
-export const isLessThanXHours = (date: number, hours = 24) => {
-  return isAfter(new Date(date * 1000), subHours(new Date(), hours))
+export const isLessThanXHours = (date: number | string, hours = 24) => {
+  return isAfter(new Date(date), subHours(new Date(), hours))
+}
+
+export const isMoreThanXHours = (date: number | string, hours = 24) => {
+  return isBefore(new Date(date), subHours(new Date(), hours))
 }
 
 export const isLessThanXMinutes = (date: number, minutes = 1) => {

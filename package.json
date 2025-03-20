@@ -24,6 +24,7 @@
     "playground": "ts-node src/playground.ts",
     "loadBuffRef": "ts-node src/scripts/loadReferencePrices.ts",
     "skin-trends": "ts-node src/scripts/skin-trends.ts",
+    "csfloat-my-stall": "ts-node src/scripts/csfloat-my-stall.ts",
     "load-buff-liquid": "ts-node src/scripts/load-buff-liquid.ts",
     "cs-float-orders": "ts-node src/scripts/cs-float-orders.ts",
     "cs-float-orders-overview": "ts-node src/scripts/cs-float-orders-overview.ts",

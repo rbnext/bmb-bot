@@ -45,6 +45,18 @@ export const getCSMoneyListings = async ({
 export const csMoneyPurchase = async (payload: { items: CSMoneyPurchase[] }) => {
   const { data } = await http.post('/market/purchase', payload, {
     headers: {
+      origin: 'https://cs.money',
+      Cookie: `${process.env.CS_MONEY_TOKEN_PROD}`,
+    },
+  })
+
+  return data
+}
+
+export const csMoneyAddToCart = async (payload: { items: CSMoneyPurchase[] }) => {
+  const { data } = await http.post('/market/cart/items', payload, {
+    headers: {
+      origin: 'https://cs.money',
       Cookie: `${process.env.CS_MONEY_TOKEN_PROD}`,
     },
   })

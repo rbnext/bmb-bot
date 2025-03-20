@@ -690,13 +690,17 @@ export type CSFloatMySellingListItem = {
   created_at: string
   price: number
   watchers: number
+  state: 'listed'
   item: {
+    asset_id: string
     float_value: number
     market_hash_name: string
+    stickers: CSFloatItemInfoStickerItem[]
   }
 }
 
 export type CSFloatMySellingList = {
+  cursor: string
   data: CSFloatMySellingListItem[]
 }
 
@@ -711,6 +715,10 @@ export type CSFloatItemInfoStickerItem = {
   name: string
   wear: number
   stickerId: number
+  reference: {
+    price: number
+    updated_at: string
+  }
 }
 
 export type CSFloatItemInfoKeychainItem = {

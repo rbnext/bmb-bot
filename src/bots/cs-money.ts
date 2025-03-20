@@ -1,7 +1,7 @@
 import 'dotenv/config'
 
 import { format } from 'date-fns'
-import { csMoneyPurchase, getCSMoneyListings } from '../api/cs'
+import { csMoneyAddToCart, csMoneyPurchase, getCSMoneyListings } from '../api/cs'
 import { generateMessage, sleep } from '../utils'
 import { getMarketGoods } from '../api/buff'
 import { CSMoneyItem, MessageType, Source } from '../types'
@@ -41,9 +41,10 @@ const csMoneyTrade = async (item: CSMoneyItem) => {
 
     if (estimatedProfit > 100) {
       try {
-        await csMoneyPurchase({
-          items: [{ id: String(item.id), price: currentPrice }],
-        })
+        const csMoneyPayload = { items: [{ id: String(item.id), price: currentPrice }] }
+
+        await csMoneyAddToCart(csMoneyPayload)
+        await csMoneyPurchase(csMoneyPayload)
 
         sendMessage({
           text: generateMessage({ ...payload, estimatedProfit, medianPrice, type: MessageType.Purchased }),

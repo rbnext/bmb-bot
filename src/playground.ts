@@ -17,7 +17,9 @@ const init = async () => {
 
   try {
     await csMoneyAddToCart(csMoneyPayload)
-    await csMoneyPurchase(csMoneyPayload)
+    const response = await csMoneyPurchase(csMoneyPayload)
+
+    console.log(response)
   } catch (error) {
     if (axios.isAxiosError(error)) {
       console.log(error.response?.data)

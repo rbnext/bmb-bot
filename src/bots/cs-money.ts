@@ -12,7 +12,7 @@ const goodsCache = new Set<number>()
 const steamUsersBlacklist = new Set<string>()
 const buffGoodsPrices: Record<string, { price: number; goods_id: number }> = {}
 
-const MIN_PRICE = 5
+const MIN_PRICE = 2
 const MAX_PRICE = 30
 
 const csMoneyTrade = async (item: CSMoneyItem) => {
@@ -39,7 +39,7 @@ const csMoneyTrade = async (item: CSMoneyItem) => {
 
     console.log('-', market_hash_name, estimatedProfit + '%')
 
-    if (estimatedProfit > 15) {
+    if (estimatedProfit > (currentPrice >= 5 ? 15 : 25)) {
       try {
         const csMoneyPayload = { items: [{ id: String(item.id), price: currentPrice }] }
 

@@ -13,10 +13,10 @@ const CASHED_LISTINGS = new Set<number>()
 const CS_FLOAT_PRICES: Record<string, number> = {}
 
 const init = async () => {
-  const csMoneyPayload = { items: [{ id: String(33464993), price: 0.02 }] }
+  const csMoneyPayload = { items: [{ id: String(36353848), price: 0.02 }] }
 
   try {
-    await csMoneyAddToCart(csMoneyPayload)
+    // await csMoneyAddToCart(csMoneyPayload)
     const response = await csMoneyPurchase(csMoneyPayload)
 
     console.log(response)

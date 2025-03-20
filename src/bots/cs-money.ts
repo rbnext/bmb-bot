@@ -7,6 +7,7 @@ import { getMarketGoods } from '../api/buff'
 import { CSMoneyItem, MessageType, Source } from '../types'
 import { getCSFloatListings } from '../api/csfloat'
 import { sendMessage } from '../api/telegram'
+import axios from 'axios'
 
 const goodsCache = new Set<number>()
 const steamUsersBlacklist = new Set<string>()
@@ -50,11 +51,10 @@ const csMoneyTrade = async (item: CSMoneyItem) => {
           text: generateMessage({ ...payload, estimatedProfit, medianPrice, type: MessageType.Purchased }),
         })
       } catch (error) {
-        console.log(error)
-
-        sendMessage({
-          text: error.message ?? 'Failed to purchase item on CSMoney',
-        })
+        if (axios.isAxiosError(error)) {
+          console.log(error.response?.data)
+          sendMessage({ text: JSON.stringify(error.response?.data) })
+        }
       }
     } else if (estimatedProfit > 5) {
       const extra: string[] = []

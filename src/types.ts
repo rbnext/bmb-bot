@@ -898,6 +898,15 @@ export enum TradeRecordSource {
   CSFloat = 'CSFLOAT',
   Steam = 'STEAM',
 }
+
+export type CSMoneyStickerItem = {
+  wear: number
+  name: string
+  pricing: {
+    default: number
+  }
+}
+
 export type CSMoneyItem = {
   id: number
   asset: {
@@ -915,6 +924,7 @@ export type CSMoneyItem = {
     basePrice: number
     discount: number
   }
+  stickers?: CSMoneyStickerItem[]
 }
 
 export type CSMoneyResponse = {

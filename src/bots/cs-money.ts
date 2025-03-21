@@ -20,6 +20,12 @@ const csMoneyTrade = async (item: CSMoneyItem) => {
   const market_hash_name = item.asset.names.full
   const currentPrice = Number(item.pricing.basePrice)
   const goods_id = buffGoodsPrices[market_hash_name].goods_id
+  const stickers = item.stickers || []
+
+  const stickerTotal = stickers.reduce(
+    (acc, sticker) => (sticker.wear === 0 ? acc + Number(sticker.pricing.default) : acc),
+    0
+  )
 
   const payload = {
     id: goods_id,
@@ -28,6 +34,7 @@ const csMoneyTrade = async (item: CSMoneyItem) => {
     float: item.asset.float,
     type: MessageType.Review,
     source: Source.CSMONEY,
+    stickerTotal,
   }
 
   const listings = await getCSFloatListings({ market_hash_name })

@@ -22,10 +22,9 @@ const csMoneyTrade = async (item: CSMoneyItem) => {
   const goods_id = buffGoodsPrices[market_hash_name].goods_id
   const stickers = item.stickers || []
 
-  const stickerTotal = stickers.reduce(
-    (acc, sticker) => (sticker.wear === 0 ? acc + Number(sticker.pricing.default) : acc),
-    0
-  )
+  const stickerTotal = stickers.reduce((acc, sticker) => {
+    return sticker ? (sticker.wear === 0 ? acc + Number(sticker.pricing.default) : acc) : acc
+  }, 0)
 
   const payload = {
     id: goods_id,
@@ -45,7 +44,7 @@ const csMoneyTrade = async (item: CSMoneyItem) => {
     const medianPrice = Math.min(basePrice, price) / 100
     const estimatedProfit = Number((((medianPrice - currentPrice) / currentPrice) * 100).toFixed(2))
 
-    console.log('-', market_hash_name, estimatedProfit + '%')
+    console.log('-', market_hash_name, estimatedProfit + '%', stickerTotal.toFixed(2))
 
     if (estimatedProfit > (currentPrice >= 5 ? 15 : 25)) {
       try {

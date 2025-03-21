@@ -915,6 +915,8 @@ export type CSMoneyItem = {
     names: {
       full: string
     }
+    quality?: 'fn' | 'mw' | 'ft' | 'ww' | 'bs'
+    type: number
   }
   seller: {
     botId: number | null

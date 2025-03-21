@@ -76,7 +76,7 @@ const csMoneyTrade = async (item: CSMoneyItem) => {
 }
 
 const csMoney = async () => {
-  const response = await getCSMoneyListings({ limit: 60, offset: 0, minPrice: MIN_PRICE, maxPrice: MAX_PRICE })
+  const response = await getCSMoneyListings({ minPrice: MIN_PRICE, maxPrice: MAX_PRICE })
 
   const groupedBySteamId = response.items.reduce<Record<string, number>>((acc, item) => {
     if (!item.seller.botId) {
@@ -104,11 +104,20 @@ const csMoney = async () => {
       continue
     }
 
-    if (buffGoodsPrices[market_hash_name].price > currentPrice) {
-      csMoneyTrade(item)
-    }
+    if (
+      item.asset.quality === 'fn' ||
+      item.asset.quality === 'mw' ||
+      item.asset.quality === 'ft' ||
+      item.asset.quality === 'ww' ||
+      item.asset.quality === 'bs' ||
+      item.asset.type === 18
+    ) {
+      console.log(`${now}: ${market_hash_name} $${currentPrice}`)
 
-    console.log(`${now}: ${market_hash_name} $${currentPrice}`)
+      if (buffGoodsPrices[market_hash_name].price > currentPrice) {
+        csMoneyTrade(item)
+      }
+    }
 
     goodsCache.add(item.id)
   }

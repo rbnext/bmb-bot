@@ -16,7 +16,6 @@ export const getCSMoneyListings = async ({
   limit = 60,
   offset = 0,
   order = 'desc',
-  quality = ['fn', 'mw', 'ft', 'ww', 'bs'],
   sort = 'insertDate',
 }: {
   minPrice?: number
@@ -35,7 +34,6 @@ export const getCSMoneyListings = async ({
       sort,
       minPrice,
       maxPrice,
-      quality,
     },
     headers: {
       Cookie: `${process.env.CS_MONEY_TOKEN}`,

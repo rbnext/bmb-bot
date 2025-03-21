@@ -14,7 +14,7 @@ const pathname = path.join(__dirname, '../../cs2-trends.json')
 
   await page.setCookie(...cookies)
 
-  const pages = Array.from({ length: 10 }, (_, i) => 2 + i)
+  const pages = Array.from({ length: 10 }, (_, i) => 3 + i)
   const trendingItems: PriceEmpireTrendItem[] = []
 
   for (const page_num of pages) {
@@ -34,11 +34,11 @@ const pathname = path.join(__dirname, '../../cs2-trends.json')
   for (const item of trendingItems) {
     if (
       item.buff_percent_d1 >= -3.5 &&
-      item.buff_percent_d1 <= 5 &&
+      item.buff_percent_d1 <= 3 &&
       item.buff_percent_d7 >= -3.5 &&
-      item.buff_percent_d7 <= 10 &&
+      item.buff_percent_d7 <= 8 &&
       item.buff_percent_d30 > 0 &&
-      Number(item.liquidity) > 95
+      Number(item.liquidity) > 90
     ) {
       console.log(
         item.marketHashName,

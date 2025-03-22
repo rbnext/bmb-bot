@@ -77,7 +77,7 @@ const csMoneyTrade = async (item: CSMoneyItem) => {
           sendMessage({ text: JSON.stringify(error.response?.data) })
         }
       }
-    } else if (estimatedProfit > 5) {
+    } else if (estimatedProfit > 10) {
       const extra: string[] = []
       extra.push(`<a href="https://cs.money/market/buy/?search=${market_hash_name}">CSMoney</a>`)
       extra.push(`<a href="https://csfloat.com/search?market_hash_name=${market_hash_name}">CSFloat</a>`)
@@ -85,8 +85,8 @@ const csMoneyTrade = async (item: CSMoneyItem) => {
       sendMessage({
         text: generateMessage({ ...payload, estimatedProfit, medianPrice, extra: extra.join(' | ') }),
       })
-    } else if (estimatedProfit < 0) {
-      buffGoodsPrices[market_hash_name].price = medianPrice
+    } else if (estimatedProfit < 5) {
+      buffGoodsPrices[market_hash_name].price = medianPrice + 0.1
     }
   }
 }

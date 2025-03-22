@@ -129,8 +129,15 @@ const csMoney = async () => {
         item.asset.float < 0.08 &&
         currentPrice < 34
       ) {
-        await csMoneyPurchase({ items: [{ id: String(item.id), price: currentPrice }] })
-        await sendMessage({ text: generateMessage({ ...payload, id: 30505, type: MessageType.Purchased }) })
+        try {
+          await csMoneyPurchase({ items: [{ id: String(item.id), price: currentPrice }] })
+          await sendMessage({ text: generateMessage({ ...payload, id: 30505, type: MessageType.Purchased }) })
+        } catch (error) {
+          if (axios.isAxiosError(error)) {
+            console.log(error.response?.data)
+            sendMessage({ text: JSON.stringify(error.response?.data) })
+          }
+        }
       } else if (buffGoodsPrices[market_hash_name].price > currentPrice) {
         csMoneyTrade(item)
       }

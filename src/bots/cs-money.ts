@@ -16,6 +16,22 @@ const buffGoodsPrices: Record<string, { price: number; goods_id: number }> = {}
 const MIN_PRICE = 2
 const MAX_PRICE = 40
 
+const isSweetItem = (item: CSMoneyItem) => {
+  const name = item.asset.names.full
+  const price = Number(item.pricing.basePrice)
+  const float = item.asset.float
+
+  if (name === 'Glock-18 | Gold Toof (Minimal Wear)' && float > 0.07 && float < 0.08 && price < 32) {
+    return true
+  }
+
+  if (name === 'Glock-18 | Gold Toof (Field-Tested)' && float > 0.15 && float < 0.16 && price < 14) {
+    return true
+  }
+
+  return false
+}
+
 const csMoneyTrade = async (item: CSMoneyItem) => {
   const market_hash_name = item.asset.names.full
   const currentPrice = Number(item.pricing.basePrice)
@@ -123,15 +139,10 @@ const csMoney = async () => {
         source: Source.CSMONEY,
       }
 
-      if (
-        market_hash_name === 'Glock-18 | Gold Toof (Minimal Wear)' &&
-        item.asset.float > 0.07 &&
-        item.asset.float < 0.08 &&
-        currentPrice < 32
-      ) {
+      if (isSweetItem(item)) {
         try {
           await csMoneyPurchase({ items: [{ id: String(item.id), price: currentPrice }] })
-          await sendMessage({ text: generateMessage({ ...payload, id: 30505, type: MessageType.Purchased }) })
+          await sendMessage({ text: generateMessage({ ...payload, id: 0, type: MessageType.Purchased }) })
         } catch (error) {
           if (axios.isAxiosError(error)) {
             console.log(error.response?.data)

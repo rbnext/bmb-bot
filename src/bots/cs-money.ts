@@ -127,7 +127,7 @@ const csMoney = async () => {
         market_hash_name === 'Glock-18 | Gold Toof (Minimal Wear)' &&
         item.asset.float > 0.07 &&
         item.asset.float < 0.08 &&
-        currentPrice < 34
+        currentPrice < 33
       ) {
         try {
           await csMoneyPurchase({ items: [{ id: String(item.id), price: currentPrice }] })

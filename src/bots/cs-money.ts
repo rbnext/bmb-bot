@@ -115,7 +115,23 @@ const csMoney = async () => {
     ) {
       console.log(`${now}: ${market_hash_name} $${currentPrice}`)
 
-      if (buffGoodsPrices[market_hash_name].price > currentPrice) {
+      const payload = {
+        price: currentPrice,
+        name: market_hash_name,
+        float: item.asset.float,
+        type: MessageType.Review,
+        source: Source.CSMONEY,
+      }
+
+      if (
+        market_hash_name === 'Glock-18 | Gold Toof (Minimal Wear)' &&
+        item.asset.float > 0.07 &&
+        item.asset.float < 0.08 &&
+        currentPrice < 34
+      ) {
+        await csMoneyPurchase({ items: [{ id: String(item.id), price: currentPrice }] })
+        await sendMessage({ text: generateMessage({ ...payload, id: 30505, type: MessageType.Purchased }) })
+      } else if (buffGoodsPrices[market_hash_name].price > currentPrice) {
         csMoneyTrade(item)
       }
     }

@@ -14,7 +14,7 @@ const steamUsersBlacklist = new Set<string>()
 const buffGoodsPrices: Record<string, { price: number; goods_id: number }> = {}
 
 const MIN_PRICE = 2
-const MAX_PRICE = 30
+const MAX_PRICE = 40
 
 const csMoneyTrade = async (item: CSMoneyItem) => {
   const market_hash_name = item.asset.names.full
@@ -70,7 +70,7 @@ const csMoneyTrade = async (item: CSMoneyItem) => {
         text: generateMessage({ ...payload, estimatedProfit, medianPrice, extra: extra.join(' | ') }),
       })
     } else if (estimatedProfit < 0) {
-      buffGoodsPrices[market_hash_name].price -= 0.1
+      buffGoodsPrices[market_hash_name].price = medianPrice
     }
   }
 }
@@ -110,7 +110,8 @@ const csMoney = async () => {
       item.asset.quality === 'ft' ||
       item.asset.quality === 'ww' ||
       item.asset.quality === 'bs' ||
-      item.asset.type === 18
+      item.asset.type === 18 ||
+      item.asset.type === 10
     ) {
       console.log(`${now}: ${market_hash_name} $${currentPrice}`)
 
@@ -127,7 +128,7 @@ const csMoney = async () => {
 }
 
 ;(async () => {
-  const pages = Array.from({ length: 80 }, (_, i) => i + 1)
+  const pages = Array.from({ length: 100 }, (_, i) => i + 1)
 
   for (const page_num of pages) {
     const goods = await getMarketGoods({ page_num, min_price: MIN_PRICE, max_price: MAX_PRICE })
